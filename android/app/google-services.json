@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "62096811307",
+    "project_id": "kreplfieldasistence",
+    "storage_bucket": "kreplfieldasistence.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62096811307:android:a6f77163cae87cef50516e",
+        "android_client_info": {
+          "package_name": "com.krepl.field_asistence"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW54rszVf8lSyTr0slvfxLWCjrOaYqcz4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
