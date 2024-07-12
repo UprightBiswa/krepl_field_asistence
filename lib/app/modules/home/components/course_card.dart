@@ -1,12 +1,12 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/models/course.dart';
-import 'package:eden_learning_app/app/modules/course_detail/course_detail_view.dart';
-import 'package:eden_learning_app/app/modules/home/components/saved_icon.dart';
-import 'package:eden_learning_app/app/modules/widgets/containers/primary_container.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../../model/home/course.dart';
+import '../../widgets/containers/primary_container.dart';
+import 'saved_icon.dart';
 
 class CourseCard extends StatelessWidget {
   final Course course;
@@ -16,9 +16,9 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to<Widget>(() => CourseDetailView(
-              course: course,
-            ));
+        // Get.to<Widget>(() => CourseDetailView(
+        //       course: course,
+        //     ));
       },
       child: PrimaryContainer(
         width: 264.w,

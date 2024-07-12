@@ -1,12 +1,13 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/modules/widgets/animations/custom_switch.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../widgets/animations/custom_switch.dart';
 
 class SettingTile extends StatefulWidget {
   final String title;
   final String? subtitle;
-  final String icon;
+  final IconData icon;
   final bool isSwitch;
   final VoidCallback? onTap;
   final bool? switchValue;
@@ -35,7 +36,7 @@ class _SettingTileState extends State<SettingTile> {
 
     return ListTile(
       onTap: widget.onTap,
-      leading: SvgPicture.asset(widget.icon),
+      leading: Icon(widget.icon),
       title: Text(widget.title, style: AppTypography.kBold16),
       subtitle: widget.isSwitch
           ? null
@@ -50,8 +51,8 @@ class _SettingTileState extends State<SettingTile> {
                   : AppColors.kPrimary,
               onChanged: widget.onChanged!,
             )
-          : SvgPicture.asset(
-              AppAssets.kArrowBackForward,
+          :Icon(
+              AppAssets.kArrowForward,
               color: AppColors.kSecondary.withOpacity(0.4),
             ),
       contentPadding: EdgeInsets.zero,

@@ -1,9 +1,11 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/models/course.dart';
-import 'package:eden_learning_app/app/modules/widgets/widgets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../../model/home/course.dart';
+import '../../widgets/widgets.dart';
 
 class FlexibleHeader extends StatelessWidget {
   final Course course;

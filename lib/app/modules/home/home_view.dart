@@ -1,19 +1,23 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/modules/home/components/best_teachers.dart';
-import 'package:eden_learning_app/app/modules/home/components/course_list.dart';
-import 'package:eden_learning_app/app/modules/home/components/custom_menu_card.dart';
-import 'package:eden_learning_app/app/modules/home/components/earning_card.dart';
-import 'package:eden_learning_app/app/modules/home/components/refer_friend_sheet.dart';
-import 'package:eden_learning_app/app/modules/home/components/search_field.dart';
-import 'package:eden_learning_app/app/modules/schedule/course_schedule.dart';
-import 'package:eden_learning_app/app/modules/search/search_view.dart';
-import 'package:eden_learning_app/app/modules/statistics/statistics_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../data/constrants/constants.dart';
+import '../../model/login/user_details_reponse.dart';
+import 'components/best_teachers.dart';
+import 'components/course_list.dart';
+import 'components/custom_menu_card.dart';
+import 'components/earning_card.dart';
+import 'components/refer_friend_sheet.dart';
+import 'components/search_field.dart';
+
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+   final UserDetails userDetails;
+  const HomeView({
+    super.key,
+    required this.userDetails,
+  });
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -37,9 +41,9 @@ class _HomeViewState extends State<HomeView> {
               ),
               SizedBox(height: AppSpacing.thirtyVertical),
               GestureDetector(
-                onTap: () {
-                  Get.to<void>(() => const SearchView());
-                },
+                // onTap: () {
+                //   Get.to<void>(() => const SearchView());
+                // },
                 child: SearchField(
                   controller: TextEditingController(),
                 ),
@@ -53,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
               SizedBox(height: 60.h),
               Text(
                 'Latest on Emmy Design',
-                style: AppTypography.kBold18,
+                style: AppTypography.kBold16,
               ),
               SizedBox(height: AppSpacing.twentyVertical),
               Row(
@@ -96,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 child: Text(
                   'Refer a Friend',
-                  style: AppTypography.kBold18,
+                  style: AppTypography.kBold14,
                 ),
               ),
               SizedBox(height: AppSpacing.twentyVertical),
@@ -137,12 +141,12 @@ class _HomeViewState extends State<HomeView> {
         selectedIndex = index;
         if (selectedIndex == 1) {
           Future.delayed(const Duration(milliseconds: 500), () {
-            Get.to<void>(() => const CourseSchedule());
+            // Get.to<void>(() => const CourseSchedule());
           });
         }
         if (selectedIndex == 2) {
           Future.delayed(const Duration(milliseconds: 500), () {
-            Get.to<void>(() => const StatisticsView());
+            // Get.to<void>(() => const StatisticsView());
           });
         }
       }

@@ -1,9 +1,11 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/models/best_teachers_model.dart';
-import 'package:eden_learning_app/app/modules/home/components/best_teachers_card.dart';
-import 'package:eden_learning_app/app/modules/onboarding/components/custom_indicator.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../../model/home/best_dealers_model.dart';
+import '../../onboarding_scrrens.dart/components/custom_indicator.dart';
+import 'best_teachers_card.dart';
 
 class BestTeachers extends StatefulWidget {
   const BestTeachers({super.key});
@@ -37,7 +39,7 @@ class _BestTeachersState extends State<BestTeachers> {
         SizedBox(height: AppSpacing.thirtyVertical),
         Text(
           'Teachers of the Week',
-          style: AppTypography.kBold18,
+          style: AppTypography.kBold14,
         ),
         SizedBox(height: AppSpacing.twentyVertical),
         SizedBox(

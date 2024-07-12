@@ -10,6 +10,8 @@ class PrimaryContainer extends StatelessWidget {
   final Color? color;
   final double? width;
   final double? height;
+  final double? radius;
+
   const PrimaryContainer({
     required this.child,
     this.padding,
@@ -17,6 +19,7 @@ class PrimaryContainer extends StatelessWidget {
     this.color,
     this.width,
     this.height,
+    this.radius,
     Key? key,
   }) : super(key: key);
 
@@ -37,7 +40,7 @@ class PrimaryContainer extends StatelessWidget {
           else
             AppColors.defaultShadow,
         ],
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(radius ?? 10.r),
       ),
       child: child,
     );

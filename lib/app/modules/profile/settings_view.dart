@@ -1,10 +1,12 @@
-import 'package:eden_learning_app/app/controllers/theme_controller.dart';
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/modules/profile/components/setting_tile.dart';
-import 'package:eden_learning_app/app/modules/widgets/widgets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/theme_controller.dart';
+import '../../data/constrants/constants.dart';
+import '../widgets/buttons/buttons.dart';
+import 'components/setting_tile.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});

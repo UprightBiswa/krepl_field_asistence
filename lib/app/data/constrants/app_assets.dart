@@ -64,6 +64,17 @@ class AppAssets {
   static const IconData kGoogle = Icons.g_translate;
   static const IconData kMail = Icons.mail;
   static const IconData kHome = Icons.home;
+  static const IconData kHomeOutlined = Icons.home_outlined;
+
+  static const IconData kDashboard = Icons.dashboard;
+  static const IconData kDashboardOutlied = Icons.dashboard_outlined;
+
+  static const IconData kPersion = Icons.person;
+  static const IconData kPersionOutliend = Icons.person_outline;
+
+
+
+
   static const IconData kSearch = Icons.search;
   static const IconData kPopular = Icons.trending_up;
   static const IconData kRecords = Icons.library_books;
@@ -126,12 +137,14 @@ class AppAssets {
   static String kUser6 = 'assets/images/user6.jpg';
   static String kUser7 = 'assets/images/user7.jpg';
   static String kNoData = 'assets/images/no_data.png';
-  static String kOnboarding1 = 'assets/images/onboarding_1.png';
-  static String kOnboarding2 = 'assets/images/onboarding_2.png';
-  static String kOnboarding3 = 'assets/images/onboarding_3.png';
+  static String kOnboardingFirst = 'assets/images/onboarding_first.png';
+  static String kOnboardingSecond = 'assets/images/onboarding_second.png';
+  static String kOnboardingThird = 'assets/images/onboarding_third.png';
   static String kStudent = 'assets/images/student.png';
   static String kTeacher = 'assets/images/teacher.png';
   static String kStoreSetup = 'assets/images/store_setup.png';
   static String kStoreSet = 'assets/images/store_set.png';
   static String kProject = 'assets/images/project.png';
+  static String kLogo = 'assets/images/app_icon.png';
+
 }

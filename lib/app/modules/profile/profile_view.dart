@@ -1,17 +1,18 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/models/course.dart';
-import 'package:eden_learning_app/app/modules/home/components/course_card.dart';
-import 'package:eden_learning_app/app/modules/home/components/custom_menu_card.dart';
-import 'package:eden_learning_app/app/modules/message/message_view.dart';
-import 'package:eden_learning_app/app/modules/profile/components/profile_image_card.dart';
-import 'package:eden_learning_app/app/modules/widgets/widgets.dart';
-import 'package:eden_learning_app/app/routes/app_routes.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../data/constrants/constants.dart';
+import '../../model/login/user_details_reponse.dart';
+import '../home/components/custom_menu_card.dart';
+import '../widgets/buttons/buttons.dart';
+import 'components/profile_image_card.dart';
+import 'settings_view.dart';
+
 class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
+   final UserDetails userDetails;
+  const ProfileView({super.key,  required this.userDetails,});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,8 @@ class ProfileView extends StatelessWidget {
         actions: [
           CustomIconButton(
             onTap: () {
-              Get.toNamed<dynamic>(AppRoutes.getSettingPageRoute());
+              Get.to<dynamic>(const SettingsView(),
+                  transition: Transition.rightToLeftWithFade);
             },
             icon: AppAssets.kMoreVert,
             iconColor: AppColors.kWhite,
@@ -76,7 +78,7 @@ class ProfileView extends StatelessWidget {
                           isSelected: false,
                           icon: AppAssets.kMessage,
                           onTap: () {
-                            Get.to<dynamic>(() => const MessageView());
+                            // Get.to<dynamic>(() => const MessageView());
                           },
                           title: 'Message',
                         ),
@@ -105,7 +107,7 @@ class ProfileView extends StatelessWidget {
                           SizedBox(height: AppSpacing.thirtyVertical),
                           Text(
                             'About',
-                            style: AppTypography.kBold18,
+                            style: AppTypography.kBold14,
                           ),
                           Text(
                             'I’m a web design enthusiast. I love\nteaching and creating experiences that\nadd value to people’s lives. ',
@@ -117,29 +119,29 @@ class ProfileView extends StatelessWidget {
                             children: [
                               Text(
                                 'Featured Courses',
-                                style: AppTypography.kBold18,
+                                style: AppTypography.kBold14,
                               ),
                               CustomTextButton(
                                   onPressed: () {}, text: 'See All'),
                             ],
                           ),
                           SizedBox(height: 10.h),
-                          SizedBox(
-                            height: 280.h,
-                            child: ListView.separated(
-                              clipBehavior: Clip.none,
-                              separatorBuilder: (context, index) => SizedBox(
-                                width: 30.w,
-                              ),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: coursesList.length,
-                              itemBuilder: (context, index) {
-                                return CourseCard(
-                                  course: coursesList[index],
-                                );
-                              },
-                            ),
-                          ),
+                          // SizedBox(
+                          //   height: 280.h,
+                          //   child: ListView.separated(
+                          //     clipBehavior: Clip.none,
+                          //     separatorBuilder: (context, index) => SizedBox(
+                          //       width: 30.w,
+                          //     ),
+                          //     scrollDirection: Axis.horizontal,
+                          //     itemCount: coursesList.length,
+                          //     itemBuilder: (context, index) {
+                          //       return CourseCard(
+                          //         course: coursesList[index],
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
                           SizedBox(height: 90.h),
                         ],
                       ),

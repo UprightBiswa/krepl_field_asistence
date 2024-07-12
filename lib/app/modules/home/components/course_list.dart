@@ -1,9 +1,11 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/models/course.dart';
-import 'package:eden_learning_app/app/modules/home/components/course_card.dart';
-import 'package:eden_learning_app/app/modules/widgets/widgets.dart';
+
+import 'package:field_asistence/app/modules/home/components/course_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../../model/home/course.dart';
+import '../../widgets/widgets.dart';
 
 class CourseList extends StatelessWidget {
   const CourseList({super.key});
@@ -14,7 +16,7 @@ class CourseList extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text('Trending Courses', style: AppTypography.kBold18),
+            Text('Trending Courses', style: AppTypography.kBold14),
             const Spacer(),
             CustomTextButton(
               onPressed: () {},

@@ -1,14 +1,15 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/modules/widgets/widgets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../widgets/buttons/buttons.dart';
 
 class CustomMenuCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
   final String title;
-  final String icon;
+  final IconData icon;
 
   const CustomMenuCard({
     required this.isSelected,
@@ -40,7 +41,7 @@ class CustomMenuCard extends StatelessWidget {
                       : AppColors.kPrimary.withOpacity(0.15)),
               boxShadow: isSelected ? [AppColors.defaultShadow] : null,
             ),
-            child: SvgPicture.asset(icon),
+            child: Icon(icon),
           ),
           SizedBox(height: 10.h),
           Text(title, style: AppTypography.kLight14),

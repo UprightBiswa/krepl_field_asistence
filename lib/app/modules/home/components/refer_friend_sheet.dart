@@ -1,12 +1,43 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/models/chat_model.dart';
-import 'package:eden_learning_app/app/modules/home/components/social_share_card.dart';
-import 'package:eden_learning_app/app/modules/profile/components/profile_image_card.dart';
-import 'package:eden_learning_app/app/modules/widgets/custom_painter/dotted_divider.dart';
-import 'package:eden_learning_app/app/modules/widgets/widgets.dart';
+
+import 'package:field_asistence/app/modules/home/components/social_share_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../profile/components/profile_image_card.dart';
+import '../../widgets/custom_painter/dotted_divider.dart';
+import '../../widgets/widgets.dart';
+
+class OnlinePeople {
+  String image;
+  String name;
+
+  OnlinePeople({required this.image, required this.name});
+}
+
+List<OnlinePeople> onlinePeople = [
+  OnlinePeople(
+    image: AppAssets.kUser1,
+    name: 'Alex',
+  ),
+  OnlinePeople(
+    image: AppAssets.kUser2,
+    name: 'Qin',
+  ),
+  OnlinePeople(
+    image: AppAssets.kUser3,
+    name: 'Harinder',
+  ),
+  OnlinePeople(
+    image: AppAssets.kUser5,
+    name: 'Lilah',
+  ),
+  OnlinePeople(
+    image: AppAssets.kUser6,
+    name: 'Martin',
+  ),
+];
 
 class ReferFriendSheet extends StatelessWidget {
   const ReferFriendSheet({super.key});
@@ -74,7 +105,7 @@ class ReferFriendSheet extends StatelessWidget {
                 ),
               ),
               SizedBox(height: AppSpacing.thirtyVertical),
-              Text('Invite a Friend', style: AppTypography.kBold18),
+              Text('Invite a Friend', style: AppTypography.kBold14),
               SizedBox(height: AppSpacing.twentyVertical),
               SizedBox(
                 height: 50.h,
@@ -107,7 +138,7 @@ class ReferFriendSheet extends StatelessWidget {
                 ),
               ),
               SizedBox(height: AppSpacing.thirtyVertical),
-              Text('Share your Friend', style: AppTypography.kBold18),
+              Text('Share your Friend', style: AppTypography.kBold14),
               SizedBox(height: AppSpacing.twentyVertical),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

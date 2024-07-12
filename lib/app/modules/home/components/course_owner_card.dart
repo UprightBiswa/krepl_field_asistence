@@ -1,7 +1,9 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/models/user_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../../model/home/course.dart';
 
 class CourseOwnerCard extends StatelessWidget {
   final UserModel user;

@@ -1,7 +1,8 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/modules/widgets/containers/primary_container.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../widgets/containers/primary_container.dart';
 
 class SearchField extends StatelessWidget {
   final TextEditingController controller;
@@ -29,12 +30,11 @@ class SearchField extends StatelessWidget {
           hintText: 'Search courses, names, etc.',
           prefixIcon: IconButton(
             onPressed: null,
-            icon: SvgPicture.asset(
+            icon: Icon(
               AppAssets.kSearch,
-              colorFilter: ColorFilter.mode(
+              color: 
                 isDarkMode(context) ? Colors.white : Colors.black,
-                BlendMode.srcIn,
-              ),
+                
             ),
           ),
         ),

@@ -1,8 +1,10 @@
-import 'package:eden_learning_app/app/data/constants/constants.dart';
-import 'package:eden_learning_app/app/modules/widgets/containers/primary_container.dart';
-import 'package:eden_learning_app/app/modules/widgets/widgets.dart';
+
+import 'package:field_asistence/app/modules/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../data/constrants/constants.dart';
+import '../../widgets/containers/primary_container.dart';
 
 class EarningCard extends StatelessWidget {
   final String title;
@@ -23,7 +25,7 @@ class EarningCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: AppTypography.kLight16),
-          Text(amount, style: AppTypography.kLight30),
+          Text(amount, style: AppTypography.kExtraLight18),
           SizedBox(height: AppSpacing.thirtyVertical),
           CustomSwipeButton(
             onSwipe: onSwipe,
