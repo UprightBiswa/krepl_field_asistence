@@ -21,13 +21,13 @@ class CustomSwipeButton extends StatelessWidget {
           isDarkMode(context) ? AppColors.kSecondary : AppColors.kPrimary,
       thumb: Padding(
         padding: EdgeInsets.all(15.h),
-       child: Icon(
+        child: Icon(
           AppAssets.kArrowForward,
-          color: isDarkMode(context) ? Colors.grey : Colors.blue,
+          color:
+              isDarkMode(context) ? AppColors.kPrimary : AppColors.kSecondary,
         ),
       ),
       onSwipe: onSwipe,
-
       child: const SizedBox(),
     );
   }

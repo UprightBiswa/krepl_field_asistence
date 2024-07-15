@@ -1,14 +1,19 @@
 // ignore_for_file: constant_identifier_names
 
-
 import 'package:field_asistence/app/data/constrants/app_assets.dart';
 import 'package:field_asistence/app/data/constrants/app_colors.dart';
 import 'package:field_asistence/app/data/constrants/app_typography.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../model/login/user_details_reponse.dart';
+import '../profile/settings_view.dart';
 
 class HomeDrawer extends StatefulWidget {
+  final UserDetails userDetails;
   const HomeDrawer(
       {super.key,
+      required this.userDetails,
       this.screenIndex,
       this.iconAnimationController,
       this.callBackIndex});
@@ -39,7 +44,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
       DrawerList(
         index: DrawerIndex.Help,
         labelName: 'Help',
-       icon: const Icon(Icons.support),
+        icon: const Icon(Icons.support),
       ),
       DrawerList(
         index: DrawerIndex.FeedBack,
@@ -64,12 +69,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
     ];
   }
 
+  bool isDarkMode(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool isLightMode = brightness == Brightness.light;
     return Scaffold(
-      backgroundColor: AppColors.kWhite.withOpacity(0.5),
+      // backgroundColor: AppColors.kWhite.withOpacity(0.2),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -98,13 +103,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                   .value /
                               360),
                           child: Container(
-                            height: 120,
-                            width: 120,
+                            height: 80,
+                            width: 80,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
-                                    color:  AppColors.kHint.withOpacity(0.6),
+                                    color: AppColors.kHint.withOpacity(0.6),
                                     offset: const Offset(2.0, 4.0),
                                     blurRadius: 8),
                               ],
@@ -119,17 +124,17 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       );
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 4),
-                    child: Text(
-                      'Field Asistence',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: isLightMode ?  AppColors.kHint :  AppColors.kWhite,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 8, left: 4),
+                  //   child: Text(
+                  //     'Field Asistence',
+                  //     style: TextStyle(
+                  //       fontWeight: FontWeight.w600,
+                  //       color: isLightMode ?  AppColors.kHint :  AppColors.kWhite,
+                  //       fontSize: 18,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -139,7 +144,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Divider(
             height: 1,
-            color:  AppColors.kHint.withOpacity(0.6),
+            color: AppColors.kHint.withOpacity(0.6),
           ),
           Expanded(
             child: ListView.builder(
@@ -153,21 +158,24 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Divider(
             height: 1,
-            color:  AppColors.kHint.withOpacity(0.6),
+            color: AppColors.kHint.withOpacity(0.6),
           ),
           Column(
             children: <Widget>[
               ListTile(
                 title: Text(
-                  'Sign Out',
+                  'Settings',
                   style: AppTypography.kBold12.copyWith(
-                    color:  AppColors.kAccent7,
+                    color: isDarkMode(context)
+                        ? AppColors.kWhite
+                        : AppColors.kGrey,
                   ),
                   textAlign: TextAlign.left,
                 ),
-                trailing: const Icon(
-                  Icons.power_settings_new,
-                  color: Colors.red,
+                trailing: Icon(
+                  AppAssets.kSetting,
+                  color:
+                      isDarkMode(context) ? AppColors.kWhite : AppColors.kGrey,
                 ),
                 onTap: () {
                   onTapped();
@@ -184,7 +192,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
   }
 
   void onTapped() {
-    print('Doing Something...'); // Print to console.
+    Get.to<dynamic>(
+      SettingsView(
+        userDetails: widget.userDetails,
+      ),
+      transition: Transition.rightToLeftWithFade,
+    );
   }
 
   Widget inkwell(DrawerList listData) {
@@ -202,50 +215,47 @@ class _HomeDrawerState extends State<HomeDrawer> {
               padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
               child: Row(
                 children: <Widget>[
-                  const SizedBox(
+                  Container(
                     width: 6.0,
                     height: 46.0,
-                    // decoration: BoxDecoration(
-                    //   color: widget.screenIndex == listData.index
-                    //       ? Colors.blue
-                    //       : Colors.transparent,
-                    //   borderRadius: new BorderRadius.only(
-                    //     topLeft: Radius.circular(0),
-                    //     topRight: Radius.circular(16),
-                    //     bottomLeft: Radius.circular(0),
-                    //     bottomRight: Radius.circular(16),
-                    //   ),
-                    // ),
+                    decoration: BoxDecoration(
+                      color: widget.screenIndex == listData.index
+                          ? AppColors.kPrimary
+                          : Colors.transparent,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(16),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(16),
+                      ),
+                    ),
                   ),
                   const Padding(
                     padding: EdgeInsets.all(4.0),
                   ),
-                  // listData.isAssetsImage
-                  //     ? SizedBox(
-                  //         width: 24,
-                  //         height: 24,
-                  //         child: Image.asset(listData.imageName,
-                  //             color: widget.screenIndex == listData.index
-                  //                 ? Colors.blue
-                  //                 :  AppColors.kDarkHint),
-                  //       )
-                  //     : 
-                      Icon(listData.icon?.icon,
-                          color: widget.screenIndex == listData.index
-                              ? Colors.blue
-                              :  AppColors.kDarkHint),
+                  Icon(
+                    listData.icon?.icon,
+                    color: widget.screenIndex == listData.index
+                        ? AppColors.kPrimary
+                        : isDarkMode(context)
+                            ? AppColors.kWhite
+                            : AppColors.kDarkHint,
+                  ),
                   const Padding(
                     padding: EdgeInsets.all(4.0),
                   ),
                   Text(
                     listData.labelName,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: widget.screenIndex == listData.index
-                          ? Colors.black
-                          :  AppColors.kDarkHint,
-                    ),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: widget.screenIndex == listData.index
+                            ? isDarkMode(context)
+                                ? AppColors.kPrimary
+                                : AppColors.kPrimary
+                            : isDarkMode(context)
+                                ? AppColors.kWhite
+                                : AppColors.kDarkHint),
                     textAlign: TextAlign.left,
                   ),
                 ],
@@ -270,7 +280,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                 MediaQuery.of(context).size.width * 0.75 - 64,
                             height: 46,
                             decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(0.2),
+                              color: isDarkMode(context)
+                                  ? AppColors.kPrimary.withOpacity(0.2)
+                                  : AppColors.kPrimary.withOpacity(0.2),
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(0),
                                 topRight: Radius.circular(28),
@@ -311,12 +323,10 @@ class DrawerList {
     this.labelName = '',
     this.icon,
     this.index,
-    // this.imageName = '',
   });
 
   String labelName;
   Icon? icon;
   bool isAssetsImage;
-  // String imageName;
   DrawerIndex? index;
 }

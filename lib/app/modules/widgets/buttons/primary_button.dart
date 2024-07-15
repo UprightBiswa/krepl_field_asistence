@@ -11,6 +11,8 @@ class PrimaryButton extends StatefulWidget {
   final double? borderRadius;
   final double? fontSize;
   final Color? color;
+  final bool isBorder;
+
   const PrimaryButton({
     required this.onTap,
     required this.text,
@@ -19,8 +21,9 @@ class PrimaryButton extends StatefulWidget {
     this.borderRadius,
     this.fontSize,
     this.color,
-    Key? key,
-  }) : super(key: key);
+    this.isBorder = false,
+    super.key,
+  });
 
   @override
   State<PrimaryButton> createState() => _PrimaryButtonState();
@@ -69,12 +72,14 @@ class _PrimaryButtonState extends State<PrimaryButton>
           ),
         ),
         child: Container(
-          height: widget.height ?? 60.h,
+          height: widget.height ?? 55.h,
           alignment: Alignment.center,
           width: widget.width ?? double.maxFinite,
           decoration: BoxDecoration(
             color: widget.color ??
-                (isDarkMode(context) ? Colors.black : AppColors.kPrimary),
+                (isDarkMode(context)
+                    ? AppColors.kContentColor
+                    : AppColors.kPrimary),
             boxShadow: [
               if (isDarkMode(context))
                 AppColors.darkShadow
@@ -84,10 +89,11 @@ class _PrimaryButtonState extends State<PrimaryButton>
             borderRadius: BorderRadius.circular(
               widget.borderRadius ?? AppSpacing.radiusTen,
             ),
+            border: widget.isBorder ? Border.all(color: AppColors.kHint) : null,
           ),
           child: Text(
             widget.text,
-            style: AppTypography.kBold20.copyWith(
+            style: AppTypography.kBold15.copyWith(
               color: widget.color == null ? Colors.white : Colors.black,
               fontSize: widget.fontSize,
             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 import '../../../data/constrants/constants.dart';
 import '../../../model/onboarding/onboarding_list_model.dart';
 import '../../widgets/animations/onboarding_animation.dart';
@@ -71,10 +70,13 @@ class _OnboardingCardState extends State<OnboardingCard>
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 12.h),
-          Text(
-            widget.onboarding.description,
-            style: AppTypography.kLight14,
-            textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              widget.onboarding.description,
+              style: AppTypography.kLight14,
+              textAlign: TextAlign.center,
+            ),
           )
         ],
       ),

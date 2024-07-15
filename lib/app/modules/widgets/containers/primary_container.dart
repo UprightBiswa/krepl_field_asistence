@@ -20,8 +20,8 @@ class PrimaryContainer extends StatelessWidget {
     this.width,
     this.height,
     this.radius,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,8 @@ class PrimaryContainer extends StatelessWidget {
       padding: padding,
       margin: margin,
       decoration: BoxDecoration(
-        color: color ?? (isDarkMode(context) ? Colors.black : AppColors.kWhite),
+        color: color ??
+            (isDarkMode(context) ? AppColors.kDarkContiner : AppColors.kWhite),
         boxShadow: [
           if (isDarkMode(context))
             AppColors.darkShadow

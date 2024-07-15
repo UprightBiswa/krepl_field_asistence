@@ -10,8 +10,11 @@ import 'help_screen.dart';
 import 'invite_friend_screen.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
-    final UserDetails? userDetails;
-  const NavigationHomeScreen({super.key,   this.userDetails,});
+  final UserDetails userDetails;
+  const NavigationHomeScreen({
+    super.key,
+    required this.userDetails,
+  });
 
   @override
   State<NavigationHomeScreen> createState() => _NavigationHomeScreenState();
@@ -24,7 +27,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView =  LandingPage(userDetails: widget.userDetails!);
+    screenView = LandingPage(userDetails: widget.userDetails);
     super.initState();
   }
 
@@ -38,6 +41,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         child: Scaffold(
           backgroundColor: AppColors.kInput,
           body: DrawerUserController(
+            userDetails: widget.userDetails,
             screenIndex: drawerIndex,
             drawerWidth: MediaQuery.of(context).size.width * 0.75,
             onDrawerCall: (DrawerIndex drawerIndexdata) {
@@ -58,7 +62,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       switch (drawerIndex) {
         case DrawerIndex.HOME:
           setState(() {
-            screenView = LandingPage(userDetails: widget.userDetails!);
+            screenView = LandingPage(userDetails: widget.userDetails);
           });
           break;
         case DrawerIndex.Help:

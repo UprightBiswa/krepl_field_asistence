@@ -1,10 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
+import '../landing_screens/components/gradient_appbar.dart';
+import '../profile/settings_view.dart';
+import '../widgets/widgets.dart';
 import 'components/best_teachers.dart';
 import 'components/course_list.dart';
 import 'components/custom_menu_card.dart';
@@ -13,7 +15,7 @@ import 'components/refer_friend_sheet.dart';
 import 'components/search_field.dart';
 
 class HomeView extends StatefulWidget {
-   final UserDetails userDetails;
+  final UserDetails userDetails;
   const HomeView({
     super.key,
     required this.userDetails,
@@ -24,9 +26,39 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  bool isDarkMode(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        flexibleSpace: GradientContainer(
+          child: Container(),
+        ),
+        title: Text(
+          'Home',
+          style: AppTypography.kLight16.copyWith(
+            color: isDarkMode(context) ? AppColors.kWhite : AppColors.kGrey,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          CustomIconButton(
+            onTap: () {
+              Get.to<dynamic>(
+                  SettingsView(
+                    userDetails: widget.userDetails,
+                  ),
+                  transition: Transition.rightToLeftWithFade);
+            },
+            icon: AppAssets.kSetting,
+            iconColor: AppColors.kWhite,
+            color: AppColors.kWhite.withOpacity(0.15),
+          ),
+          SizedBox(width: AppSpacing.twentyHorizontal),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),

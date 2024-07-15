@@ -11,10 +11,13 @@ class AppColors {
   static const Color kAccent4 = Color(0xFF6AC6C5);
   static const Color kAccent7 = Color(0xFFFF0000);
   static const Color kAccent8 = Color(0xFFFB9B9B);
+  // static const Color kSecondary = Color(0xFF1D2445);
   static const Color kSecondary = Color(0xFF1D2445);
+  static const Color kDarkContiner = Color(0xFF18202E);
+
   static const Color kSuccess = Color(0xFF329447);
   static const Color kGrey = Color(0xFF00004D);
-  static const Color kLine = Color(0xFF1D244533);
+  static const Color kLine = Color(0xFF1D2453);
   static const Color kWhite = Color(0xFFFFFFFF);
   static const Color kInput = Color(0xFFF5F5F5);
   static const Color kHint = Color(0xFFBDBDBD);
@@ -25,6 +28,8 @@ class AppColors {
   static const Color kNeutral01 = Color(0xFFFCFCFC);
   static const Color kNeutral03 = Color(0xFFEFEFEF);
   static const Color kNeutral04 = Color(0xFF6F767E);
+  static const Color kGradienttop = Color(0xFFFFFFED);
+  static const Color kGradientbottom = Color(0xFFD0EFCE);
 
   // Dark.
   static const Color kDarkBackground = Color(0xFF0F1621);

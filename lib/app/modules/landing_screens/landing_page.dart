@@ -7,15 +7,14 @@ import '../dashboard/dashboard_table_view.dart';
 import '../home/home_view.dart';
 import '../profile/profile_view.dart';
 
-
 class LandingPage extends StatefulWidget {
   final UserDetails? userDetails;
   final int? pageIndex;
   const LandingPage({
-    Key? key,
+    super.key,
     this.userDetails,
     this.pageIndex,
-  }) : super(key: key);
+  });
 
   @override
   State<LandingPage> createState() => LandingPageState();
@@ -59,42 +58,10 @@ class LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-      bool isDarkMode(BuildContext context) =>
+    bool isDarkMode(BuildContext context) =>
         Theme.of(context).brightness == Brightness.dark;
     print('Landing Page Index in build: $_currentIndex');
-    // List<PreferredSizeWidget> appBarList = [
-    //   PreferredSize(
-    //     preferredSize: const Size.fromHeight(kToolbarHeight),
-    //     child: HomeAppBar(
-    //       title: 'Dashboard',
-    //       onLeadingPressed: () {
-    //         scaffoldKey.currentState?.openDrawer();
-    //       },
-    //       userDetails: userDetails!,
-    //     ),
-    //   ),
-    //   PreferredSize(
-    //     preferredSize: const Size.fromHeight(kToolbarHeight),
-    //     child: HomeAppBar(
-    //       title: 'Home',
-    //       onLeadingPressed: () {
-    //         scaffoldKey.currentState?.openDrawer();
-    //       },
-    //       userDetails: userDetails!,
-    //     ),
-    //   ),
-    //   // PreferredSize(
-    //   //   preferredSize: const Size.fromHeight(kToolbarHeight),
-    //   //   child: HomeAppBar(
-    //   //     title: 'Products',
-    //   //     onLeadingPressed: () {
-    //   //       scaffoldKey.currentState?.openDrawer();
-    //   //     },
-    //   //     userDetails: userDetails!,
-    //   //   ),
-    //   // ),
-    // ];
-    // ignore: deprecated_member_use
+
     return WillPopScope(
       onWillPop: () async {
         if (_currentIndex == 0) {
@@ -120,57 +87,58 @@ class LandingPageState extends State<LandingPage> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        // appBar: appBarList[_currentIndex],
-        //  body: _widgetOptions.elementAt(_currentIndex),
         body: _widgetOptions[_currentIndex],
-        // drawer: CustomDrawer(
-        //   userDetails: userDetails!,
-        // ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: _onItemTapped,
-          items: const <BottomNavigationBarItem>[
-             BottomNavigationBarItem(
+        bottomNavigationBar: NavigationBar(
+          elevation: 2,
+          height: 60,
+          animationDuration: const Duration(milliseconds: 500),
+          backgroundColor: AppColors.kPrimary.withOpacity(0),
+          selectedIndex: _currentIndex,
+          onDestinationSelected: _onItemTapped,
+          indicatorColor: AppColors.kPrimary.withOpacity(0.2),
+          destinations: const <Widget>[
+            NavigationDestination(
               label: 'Dashboard',
               tooltip: 'Dashboard',
-              icon:   Icon(
+              icon: Icon(
+                AppAssets.kDashboardOutlied,
+                size: 24,
+                color: AppColors.kNeutral04,
+              ),
+              selectedIcon: Icon(
                 AppAssets.kDashboard,
                 size: 24,
-                 color: AppColors.kNeutral04,
-              ),
-               activeIcon: Icon(
-                AppAssets.kDashboard,
-                 size: 24,
                 color: AppColors.kPrimary,
               ),
             ),
-             BottomNavigationBarItem(
+            NavigationDestination(
               label: 'Home',
               tooltip: 'Home',
-               icon:   Icon(
+              icon: Icon(
                 AppAssets.kHomeOutlined,
                 size: 24,
-                 color: AppColors.kNeutral04,
+                color: AppColors.kNeutral04,
               ),
-               activeIcon: Icon(
+              selectedIcon: Icon(
                 AppAssets.kHome,
-                 size: 24,
+                size: 24,
                 color: AppColors.kPrimary,
               ),
             ),
-
-            BottomNavigationBarItem(
-                icon:  Icon( AppAssets.kPersionOutliend, 
-                 size: 24,
-                color: AppColors.kNeutral04,),
-                label: 'Profile',
-                tooltip: 'Profile',
-                activeIcon:  Icon(
-                  AppAssets.kPersion,
-                   size: 24,
-                    color: AppColors.kPrimary,
-                ),
+            NavigationDestination(
+              icon: Icon(
+                AppAssets.kPersionOutliend,
+                size: 24,
+                color: AppColors.kNeutral04,
               ),
+              label: 'Profile',
+              tooltip: 'Profile',
+              selectedIcon: Icon(
+                AppAssets.kPersion,
+                size: 24,
+                color: AppColors.kPrimary,
+              ),
+            ),
           ],
         ),
       ),

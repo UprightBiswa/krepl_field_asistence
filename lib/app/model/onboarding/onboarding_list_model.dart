@@ -13,17 +13,17 @@ class Onboarding {
 List<Onboarding> onboardingList = [
   Onboarding(
       description:
-          'Manage your attendance, TADA expenses, reimbursement, make tour plans for client visits,\norder products for clients, and more!',
+          'Plan visits to villages, meet with farmers, onboard new farmers, and demonstrate product usage effectively.',
       image: AppAssets.kOnboardingFirst,
-      title: 'Manage Your Tasks'),
+      title: 'Engage with Farmers'),
   Onboarding(
       description:
-          'Stay connected with fellow employees, receive important updates and announcements, and collaborate efficiently!',
+          'Field assistants can plan and execute sales promotion campaigns, organize product demonstrations, and increase sales.',
       image: AppAssets.kOnboardingSecond,
-      title: 'Connect with Colleagues'),
+      title: 'Boost Your Sales'),
   Onboarding(
       description:
-          'Access all your essential tools and resources in one place, making your work more convenient and productive!',
+          'Build trust among village farmers by showcasing our company’s products and supporting their growth in farming.',
       image: AppAssets.kOnboardingThird,
-      title: 'Access Tools and Resources')
+      title: 'Foster Farmer Trust')
 ];

@@ -16,7 +16,6 @@ import '../../provider/connction_provider/connectivity_provider.dart';
 import '../../provider/login_provider/login_provider.dart';
 import '../../repository/auth/auth_token.dart';
 import '../auth/sign_in_page.dart';
-import '../landing_screens/landing_page.dart';
 import '../navigation/navigation_home_screen.dart';
 import '../onboarding_scrrens.dart/onboarding_screen.dart';
 import 'components/place_holder_dialog.dart';

@@ -59,6 +59,8 @@ import 'package:flutter/material.dart';
 class AppAssets {
   // Icons
   static const IconData kArrowBackIos = Icons.arrow_back_ios;
+  static const IconData kArrowBack = Icons.arrow_back;
+
   static const IconData kArrowForward = Icons.arrow_forward_ios;
   static const IconData kFaceBook = Icons.facebook;
   static const IconData kGoogle = Icons.g_translate;
@@ -88,6 +90,8 @@ class AppAssets {
   static const IconData kUser = Icons.person;
   static const IconData kUserFilled = Icons.person;
   static const IconData kMoreVert = Icons.more_vert;
+  static const IconData kSetting = Icons.settings;
+
   static const IconData kProfile = Icons.person;
   static const IconData kEmail = Icons.email;
   static const IconData kPassword = Icons.lock;
@@ -137,8 +141,8 @@ class AppAssets {
   static String kUser6 = 'assets/images/user6.jpg';
   static String kUser7 = 'assets/images/user7.jpg';
   static String kNoData = 'assets/images/no_data.png';
-  static String kOnboardingFirst = 'assets/images/onboarding_first.png';
-  static String kOnboardingSecond = 'assets/images/onboarding_second.png';
+  static String kOnboardingFirst = 'assets/images/onboarding_second.png';
+  static String kOnboardingSecond = 'assets/images/onboarding_first.png';
   static String kOnboardingThird = 'assets/images/onboarding_third.png';
   static String kStudent = 'assets/images/student.png';
   static String kTeacher = 'assets/images/teacher.png';

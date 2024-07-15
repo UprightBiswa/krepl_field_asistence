@@ -1,12 +1,14 @@
-
 import 'package:field_asistence/app/data/constrants/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/login/user_details_reponse.dart';
 import 'home_drawer.dart';
 
 class DrawerUserController extends StatefulWidget {
+  final UserDetails userDetails;
   const DrawerUserController({
     super.key,
+    required this.userDetails,
     this.drawerWidth = 250,
     this.onDrawerCall,
     this.screenView,
@@ -42,46 +44,43 @@ class _DrawerUserControllerState extends State<DrawerUserController>
         duration: const Duration(milliseconds: 2000), vsync: this);
     iconAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 0));
-    iconAnimationController
-      ?.animateTo(1.0,
-          duration: const Duration(milliseconds: 0),
-          curve: Curves.fastOutSlowIn);
+    iconAnimationController?.animateTo(1.0,
+        duration: const Duration(milliseconds: 0), curve: Curves.fastOutSlowIn);
     scrollController =
         ScrollController(initialScrollOffset: widget.drawerWidth);
-    scrollController!
-      .addListener(() {
-        if (scrollController!.offset <= 0) {
-          if (scrolloffset != 1.0) {
-            setState(() {
-              scrolloffset = 1.0;
-              try {
-                widget.drawerIsOpen!(true);
-              } catch (_) {}
-            });
-          }
-          iconAnimationController?.animateTo(0.0,
-              duration: const Duration(milliseconds: 0),
-              curve: Curves.fastOutSlowIn);
-        } else if (scrollController!.offset > 0 &&
-            scrollController!.offset < widget.drawerWidth.floor()) {
-          iconAnimationController?.animateTo(
-              (scrollController!.offset * 100 / (widget.drawerWidth)) / 100,
-              duration: const Duration(milliseconds: 0),
-              curve: Curves.fastOutSlowIn);
-        } else {
-          if (scrolloffset != 0.0) {
-            setState(() {
-              scrolloffset = 0.0;
-              try {
-                widget.drawerIsOpen!(false);
-              } catch (_) {}
-            });
-          }
-          iconAnimationController?.animateTo(1.0,
-              duration: const Duration(milliseconds: 0),
-              curve: Curves.fastOutSlowIn);
+    scrollController!.addListener(() {
+      if (scrollController!.offset <= 0) {
+        if (scrolloffset != 1.0) {
+          setState(() {
+            scrolloffset = 1.0;
+            try {
+              widget.drawerIsOpen!(true);
+            } catch (_) {}
+          });
         }
-      });
+        iconAnimationController?.animateTo(0.0,
+            duration: const Duration(milliseconds: 0),
+            curve: Curves.fastOutSlowIn);
+      } else if (scrollController!.offset > 0 &&
+          scrollController!.offset < widget.drawerWidth.floor()) {
+        iconAnimationController?.animateTo(
+            (scrollController!.offset * 100 / (widget.drawerWidth)) / 100,
+            duration: const Duration(milliseconds: 0),
+            curve: Curves.fastOutSlowIn);
+      } else {
+        if (scrolloffset != 0.0) {
+          setState(() {
+            scrolloffset = 0.0;
+            try {
+              widget.drawerIsOpen!(false);
+            } catch (_) {}
+          });
+        }
+        iconAnimationController?.animateTo(1.0,
+            duration: const Duration(milliseconds: 0),
+            curve: Curves.fastOutSlowIn);
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) => getInitState());
     super.initState();
   }
@@ -98,7 +97,8 @@ class _DrawerUserControllerState extends State<DrawerUserController>
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isLightMode = brightness == Brightness.light;
     return Scaffold(
-      backgroundColor: isLightMode ? AppColors.kWhite : AppColors.kDarkBackground,
+      backgroundColor:
+          isLightMode ? AppColors.kWhite : AppColors.kDarkBackground,
       body: SingleChildScrollView(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
@@ -121,6 +121,7 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                       transform: Matrix4.translationValues(
                           scrollController!.offset, 0.0, 0.0),
                       child: HomeDrawer(
+                        userDetails: widget.userDetails,
                         screenIndex: widget.screenIndex ?? DrawerIndex.HOME,
                         iconAnimationController: iconAnimationController,
                         callBackIndex: (DrawerIndex indexType) {
@@ -166,11 +167,10 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                       // this just menu and arrow icon animation
                       Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).padding.top + 8,
-                            left: 8),
+                            top: MediaQuery.of(context).padding.top),
                         child: SizedBox(
-                          width: AppBar().preferredSize.height - 8,
-                          height: AppBar().preferredSize.height - 8,
+                          width: AppBar().preferredSize.height - 0,
+                          height: AppBar().preferredSize.height - 0,
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
@@ -178,7 +178,8 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                                   AppBar().preferredSize.height),
                               child: Center(
                                 // if you use your own menu view UI you add form initialization
-                                child: widget.menuView ?? AnimatedIcon(
+                                child: widget.menuView ??
+                                    AnimatedIcon(
                                         color: isLightMode
                                             ? AppColors.kDarkHint
                                             : AppColors.kWhite,

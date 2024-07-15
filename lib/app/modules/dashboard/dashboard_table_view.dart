@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
 import '../../provider/connction_provider/connectivity_provider.dart';
+import '../landing_screens/components/gradient_appbar.dart';
+import '../profile/settings_view.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/texts/custom_header_text.dart';
+import '../widgets/widgets.dart';
 import 'component/common_chart.dart';
 import 'component/expense_comparison_chart.dart';
 import 'model/expense_data_model.dart';
@@ -18,8 +22,7 @@ import 'model/sales_dara_model.dart';
 class DashboardTableView extends StatefulWidget {
   final UserDetails userDetails;
 
-  const DashboardTableView({Key? key, required this.userDetails})
-      : super(key: key);
+  const DashboardTableView({super.key, required this.userDetails});
 
   @override
   State<DashboardTableView> createState() => _DashboardTableViewState();
@@ -55,6 +58,34 @@ class _DashboardTableViewState extends State<DashboardTableView> {
     connectivityProvider = Provider.of<ConnectivityProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        flexibleSpace: GradientContainer(
+          child: Container(),
+        ),
+        title: Text(
+          'Dashboard',
+          style: AppTypography.kLight16.copyWith(
+            color: isDarkMode(context) ? AppColors.kWhite : AppColors.kGrey,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          CustomIconButton(
+            onTap: () {
+              Get.to<dynamic>(
+                  SettingsView(
+                    userDetails: widget.userDetails,
+                  ),
+                  transition: Transition.rightToLeftWithFade);
+            },
+            icon: AppAssets.kSetting,
+            iconColor: AppColors.kWhite,
+            color: AppColors.kWhite.withOpacity(0.15),
+          ),
+          SizedBox(width: AppSpacing.twentyHorizontal),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
