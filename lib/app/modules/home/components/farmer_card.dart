@@ -1,26 +1,30 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../../model/home/course.dart';
+import '../../farmer/farmer_details_view.dart';
+import '../../farmer/model/farmer_list.dart';
 import '../../widgets/containers/primary_container.dart';
-import 'saved_icon.dart';
+import 'action_menue.dart';
 
-class CourseCard extends StatelessWidget {
-  final Course course;
-  const CourseCard({required this.course, super.key});
+class FarmerCard extends StatelessWidget {
+  final Farmer farmer;
+  const FarmerCard({required this.farmer, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Get.to<Widget>(() => CourseDetailView(
-        //       course: course,
-        //     ));
+        Get.to<dynamic>(
+          FarmerDetailView(
+            farmer: farmer,
+          ),
+          transition: Transition.rightToLeftWithFade,
+        );
       },
       child: PrimaryContainer(
+        padding: const EdgeInsets.all(0.0),
         width: 264.w,
         height: 280.h,
         child: Column(
@@ -28,7 +32,7 @@ class CourseCard extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Hero(
-                tag: course.image,
+                tag: farmer.farmersName,
                 child: Container(
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.all(10.h),
@@ -37,11 +41,18 @@ class CourseCard extends StatelessWidget {
                       top: Radius.circular(AppSpacing.radiusFifteen),
                     ),
                     image: DecorationImage(
-                      image: AssetImage(course.image),
+                      image: NetworkImage(farmer.image),
                       fit: BoxFit.cover,
                     ),
                   ),
-                  child: SavedIcon(course: course),
+                  child: ActionMenuIcon(
+                    onEdit: () {
+                      // Add logic to edit the farmer details or icon
+                    },
+                    onDelete: () {
+                      // Add logic to delete the farmer
+                    },
+                  ),
                 ),
               ),
             ),
@@ -53,13 +64,13 @@ class CourseCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      course.category.name,
+                      farmer.promotionActivity,
                       style: AppTypography.kBold14
                           .copyWith(color: AppColors.kPrimary),
                     ),
                     SizedBox(height: AppSpacing.tenVertical),
                     Text(
-                      course.name,
+                      farmer.farmersName,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.kBold20,
@@ -68,12 +79,12 @@ class CourseCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '\$ ${course.price}',
+                          '🏠${farmer.acre}',
                           style: AppTypography.kBold14,
                         ),
                         const Spacer(),
                         Text(
-                          'By ${course.owner.name}',
+                          'Contact: ${farmer.mobileNumber}',
                           style: AppTypography.kLight16,
                         ),
                       ],

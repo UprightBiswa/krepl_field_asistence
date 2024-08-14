@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color kPrimary = Color(0xFF329494);
-  // static const Color kSecondary = Color(0xFF8BC34A); //0xFFCABDFF
+  static const Color kSecondary = Color(0xFF8BC34A);
   static const Color kWarning = Color(0xFFF4BF4B);
   static const Color kBackground = Color(0xFFF9F9F9);
   static const Color kAccent1 = Color(0xFFFCCBB9);
@@ -12,12 +12,11 @@ class AppColors {
   static const Color kAccent7 = Color(0xFFFF0000);
   static const Color kAccent8 = Color(0xFFFB9B9B);
   // static const Color kSecondary = Color(0xFF1D2445);
-  static const Color kSecondary = Color(0xFF1D2445);
-  static const Color kDarkContiner = Color(0xFF18202E);
+  static const Color kDarkContiner = Color(0xFF1D2445);
 
   static const Color kSuccess = Color(0xFF329447);
-  static const Color kGrey = Color(0xFF00004D);
-  static const Color kLine = Color(0xFF1D2453);
+  static const Color kLime = Color(0xFFB5E4CA);
+  static const Color kGrey = Color(0xFF636A75);
   static const Color kWhite = Color(0xFFFFFFFF);
   static const Color kInput = Color(0xFFF5F5F5);
   static const Color kHint = Color(0xFFBDBDBD);
@@ -37,6 +36,8 @@ class AppColors {
   static const Color kDarkInput = Color(0xFF18202E);
   static const Color kDarkHint = Color(0xFF2F3643);
   static const Color kContentColor = Color(0xFF2F3643);
+  //black
+  static const Color kBlack = Color(0xFF000000);
 
   static BoxShadow defaultShadow = BoxShadow(
     color: AppColors.kPrimary.withOpacity(0.2),
@@ -45,7 +46,7 @@ class AppColors {
   );
 
   static BoxShadow darkShadow = BoxShadow(
-    color: AppColors.kSecondary.withOpacity(0.2),
+    color: AppColors.kDarkContiner.withOpacity(0.2),
     blurRadius: 7,
     offset: const Offset(0, 5),
   );

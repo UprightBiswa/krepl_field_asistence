@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
+import '../landing_screens/components/gradient_appbar.dart';
+import '../profile/settings_view.dart';
+import '../widgets/widgets.dart';
 import 'component/dashboard_mtd.dart';
 import 'component/dashboard_ytd.dart';
-
 
 class DashboardView extends StatefulWidget {
   final UserDetails userDetails;
@@ -23,6 +26,34 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        flexibleSpace: GradientContainer(
+          child: Container(),
+        ),
+        title: Text(
+          'Dashboard',
+          style: AppTypography.kLight16.copyWith(
+            color: isDarkMode(context) ? AppColors.kWhite : AppColors.kGrey,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          CustomIconButton(
+            onTap: () {
+              Get.to<dynamic>(
+                  SettingsView(
+                    userDetails: widget.userDetails,
+                  ),
+                  transition: Transition.rightToLeftWithFade);
+            },
+            icon: AppAssets.kSetting,
+            iconColor: AppColors.kWhite,
+            color: AppColors.kWhite.withOpacity(0.15),
+          ),
+          SizedBox(width: AppSpacing.twentyHorizontal),
+        ],
+      ),
       body: DefaultTabController(
         length: 2,
         child: Column(

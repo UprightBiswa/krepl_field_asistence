@@ -2,12 +2,13 @@ import 'package:field_asistence/app/data/constrants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.teal,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: AppColors.kWhite,
+    scaffoldBackgroundColor: AppColors.kBackground,
     appBarTheme: AppBarTheme(
       iconTheme: const IconThemeData(
         color: Colors.black,
@@ -23,31 +24,31 @@ class AppTheme {
       ),
       indicatorSize: TabBarIndicatorSize.label,
       labelStyle: AppTypography.kBold20,
-      labelColor: AppColors.kSecondary,
+      labelColor: AppColors.kDarkContiner,
       unselectedLabelColor: AppColors.kLightBrown,
     ),
-    fontFamily: 'Hanken Grotesk',
+    textTheme: GoogleFonts.poppinsTextTheme(),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.symmetric(
         horizontal: AppSpacing.twentyHorizontal,
         vertical: 16.h,
       ),
-      enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      border: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      errorBorder: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
+      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
+      focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
+      border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
+      errorBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.kWhite,
+      backgroundColor: AppColors.kPrimary,
       elevation: 0,
       showSelectedLabels: false,
       showUnselectedLabels: false,
@@ -55,15 +56,15 @@ class AppTheme {
   );
 
   static ThemeData darkTheme = ThemeData(
-    primarySwatch: Colors.teal,
+    primarySwatch: Colors.grey,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppColors.kSecondary,
+    scaffoldBackgroundColor: AppColors.kDarkBackground,
     appBarTheme: AppBarTheme(
       iconTheme: const IconThemeData(
         color: Colors.white,
       ),
       titleTextStyle: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
-      backgroundColor: AppColors.kSecondary,
+      backgroundColor: AppColors.kDarkSurfaceColor,
       elevation: 0,
     ),
     tabBarTheme: TabBarTheme(
@@ -76,28 +77,28 @@ class AppTheme {
       labelColor: AppColors.kWhite,
       unselectedLabelColor: Colors.grey,
     ),
-    fontFamily: 'Hanken Grotesk',
+    textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.symmetric(
         horizontal: AppSpacing.twentyHorizontal,
         vertical: 16.h,
       ),
-      enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      border: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      errorBorder: const OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
+      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
+      focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
+      border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
+      errorBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.kDarkSurfaceColor,
       elevation: 0,
       showSelectedLabels: false,
       showUnselectedLabels: false,

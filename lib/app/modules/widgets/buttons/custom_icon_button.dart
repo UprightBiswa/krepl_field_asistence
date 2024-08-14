@@ -15,8 +15,8 @@ class CustomIconButton extends StatefulWidget {
     this.size,
     this.color,
     this.iconColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<CustomIconButton> createState() => _CustomIconButtonState();
@@ -76,7 +76,10 @@ class _CustomIconButtonState extends State<CustomIconButton>
           child: Icon(
             widget.icon,
             size: widget.size != null ? widget.size! - 10.h : 24.h,
-            color: widget.iconColor ?? Theme.of(context).primaryColor,
+            // color: widget.iconColor ?? Theme.of(context).primaryColor,
+            color: isDarkMode(context)
+                ? AppColors.kInput
+                : AppColors.kContentColor,
           ),
         ),
       ),

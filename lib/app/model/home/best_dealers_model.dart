@@ -1,4 +1,3 @@
-
 import '../../data/constrants/constants.dart';
 
 class BestTeachersModel {
@@ -17,19 +16,19 @@ class BestTeachersModel {
 List<BestTeachersModel> bestTeachers = [
   BestTeachersModel(
     name: 'Martín Abasto',
-    bio: 'Illustrator',
+    bio: 'KREPL',
     image: AppAssets.kUser3,
     position: 1,
   ),
   BestTeachersModel(
     name: 'Emmy Elsner',
-    bio: 'Design Expert',
+    bio: 'AGRO',
     image: AppAssets.kUser6,
     position: 2,
   ),
   BestTeachersModel(
     name: 'Meng Ru',
-    bio: 'Esports Coach',
+    bio: 'KREPL',
     image: AppAssets.kUser7,
     position: 3,
   ),

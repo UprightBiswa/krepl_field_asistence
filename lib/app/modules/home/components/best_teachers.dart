@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -38,7 +37,7 @@ class _BestTeachersState extends State<BestTeachers> {
       children: [
         SizedBox(height: AppSpacing.thirtyVertical),
         Text(
-          'Teachers of the Week',
+          'Dealer of the Week',
           style: AppTypography.kBold14,
         ),
         SizedBox(height: AppSpacing.twentyVertical),
@@ -64,9 +63,7 @@ class _BestTeachersState extends State<BestTeachers> {
           dotsLength: 3,
         ),
         SizedBox(height: 40.h),
-       
       ],
     );
   }
 }
-

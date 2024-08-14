@@ -70,7 +70,7 @@ class LoginProvider extends ChangeNotifier {
         print('Error requesting OTP: $error');
       }
       // ignore: use_build_context_synchronously
-      ToastService.show(context, 'Error requesting OTP: $error');
+      ToastService.show(context, 'Error requesting OTP');
 
       // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
@@ -114,7 +114,7 @@ class LoginProvider extends ChangeNotifier {
         print('Error verifying OTP: $error');
       }
       // ignore: use_build_context_synchronously
-      ToastService.show(context, 'Error verifying OTP: $error');
+      ToastService.show(context, 'Error verifying OTP');
 
       // ignore: use_build_context_synchronously
       Navigator.of(context).pop();

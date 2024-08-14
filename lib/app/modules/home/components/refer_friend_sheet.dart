@@ -1,4 +1,3 @@
-
 import 'package:field_asistence/app/modules/home/components/social_share_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,7 +50,7 @@ class ReferFriendSheet extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(AppSpacing.twentyVertical),
           child: CustomIconButton(
-            icon: AppAssets.kArrowBackIos,
+            icon: AppAssets.kArrowBack,
             onTap: () {
               Get.back<void>();
             },
@@ -154,17 +153,14 @@ class ReferFriendSheet extends StatelessWidget {
                   SocialShareCard(
                     onTap: () {},
                     icon: AppAssets.kComment,
-                    iconColor: AppColors.kSecondary.withOpacity(0.3),
                   ),
                   SocialShareCard(
                     onTap: () {},
                     icon: AppAssets.kMail,
-                    iconColor: AppColors.kSecondary.withOpacity(0.09),
                   ),
                   SocialShareCard(
                     onTap: () {},
                     icon: AppAssets.kMoreVert,
-                    iconColor: AppColors.kSecondary,
                   ),
                 ],
               ),

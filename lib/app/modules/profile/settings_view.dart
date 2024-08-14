@@ -172,7 +172,7 @@ class _SettingsViewState extends State<SettingsView> {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: EdgeInsets.all(8.h),
+          padding: EdgeInsets.all(10.h),
           child: CustomIconButton(
             color: isDarkMode(context)
                 ? Colors.black

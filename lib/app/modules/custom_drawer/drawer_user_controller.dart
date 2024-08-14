@@ -1,5 +1,6 @@
 import 'package:field_asistence/app/data/constrants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../model/login/user_details_reponse.dart';
 import 'home_drawer.dart';
@@ -94,11 +95,14 @@ class _DrawerUserControllerState extends State<DrawerUserController>
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool isLightMode = brightness == Brightness.light;
+    // var brightness = MediaQuery.of(context).platformBrightness;
+    // bool isLightMode = brightness == Brightness.light;
+    bool isDarkMode(BuildContext context) =>
+        Theme.of(context).brightness == Brightness.dark;
+    print(isDarkMode);
     return Scaffold(
       backgroundColor:
-          isLightMode ? AppColors.kWhite : AppColors.kDarkBackground,
+          isDarkMode(context) ? AppColors.kWhite : AppColors.kDarkBackground,
       body: SingleChildScrollView(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
@@ -175,17 +179,28 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                             color: Colors.transparent,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(
-                                  AppBar().preferredSize.height),
-                              child: Center(
-                                // if you use your own menu view UI you add form initialization
-                                child: widget.menuView ??
-                                    AnimatedIcon(
-                                        color: isLightMode
-                                            ? AppColors.kDarkHint
-                                            : AppColors.kWhite,
+                                AppBar().preferredSize.height,
+                              ),
+                              child: Container(
+                                height: 40.h,
+                                width: 40.w,
+                                margin: EdgeInsets.all(10.h),
+                                decoration: BoxDecoration(
+                                  color: AppColors.kWhite.withOpacity(0.15),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  // if you use your own menu view UI you add form initialization
+                                  child: widget.menuView ??
+                                      AnimatedIcon(
+                                        color: isDarkMode(context)
+                                            ? AppColors.kWhite
+                                            : AppColors.kDarkHint,
                                         icon: widget.animatedIconData ??
                                             AnimatedIcons.arrow_menu,
-                                        progress: iconAnimationController!),
+                                        progress: iconAnimationController!,
+                                      ),
+                                ),
                               ),
                               onTap: () {
                                 FocusScope.of(context)

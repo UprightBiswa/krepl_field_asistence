@@ -12,10 +12,10 @@ class CommonChart extends StatelessWidget {
   final String title;
 
   const CommonChart({
-    Key? key,
+    super.key,
     required this.data,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

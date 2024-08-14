@@ -81,7 +81,7 @@ class _SettingTileState extends State<SettingTile> {
                 )
               : Icon(
                   AppAssets.kArrowForward,
-                  color: AppColors.kSecondary.withOpacity(0.4),
+                  color: AppColors.kDarkContiner.withOpacity(0.4),
                 )),
       contentPadding: EdgeInsets.zero,
       minVerticalPadding: 0,

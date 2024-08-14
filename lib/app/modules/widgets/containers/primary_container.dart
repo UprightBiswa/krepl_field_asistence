@@ -30,11 +30,13 @@ class PrimaryContainer extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      padding: padding,
+      padding: padding ?? EdgeInsets.all(16.h),
       margin: margin,
       decoration: BoxDecoration(
         color: color ??
-            (isDarkMode(context) ? AppColors.kDarkContiner : AppColors.kWhite),
+            (isDarkMode(context)
+                ? AppColors.kDarkSurfaceColor
+                : AppColors.kWhite),
         boxShadow: [
           if (isDarkMode(context))
             AppColors.darkShadow

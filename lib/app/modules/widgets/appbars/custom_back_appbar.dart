@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,12 +8,16 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback leadingCallback;
   final Color? iconColor;
   final Widget? title;
+  final List<Widget>? action;
+  final bool centerTitle;
   const CustomBackAppBar({
     required this.leadingCallback,
     this.iconColor,
     this.title,
-    Key? key,
-  }) : super(key: key);
+    this.action,
+    this.centerTitle = true,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +30,13 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: EdgeInsets.all(7.h),
         child: CustomIconButton(
           onTap: leadingCallback,
-          icon: AppAssets.kArrowBackIos,
+          icon: AppAssets.kArrowBack,
           color: iconColor,
         ),
       ),
-      centerTitle: true,
+      centerTitle: centerTitle,
       title: title,
+      actions: action,
     );
   }
 

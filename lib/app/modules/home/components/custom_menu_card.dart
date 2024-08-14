@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,8 +15,8 @@ class CustomMenuCard extends StatelessWidget {
     required this.onTap,
     required this.icon,
     required this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +40,19 @@ class CustomMenuCard extends StatelessWidget {
                       : AppColors.kPrimary.withOpacity(0.15)),
               boxShadow: isSelected ? [AppColors.defaultShadow] : null,
             ),
-            child: Icon(icon),
+            child: Icon(
+              icon,
+              color: AppColors.kPrimary,
+            ),
           ),
           SizedBox(height: 10.h),
-          Text(title, style: AppTypography.kLight14),
+          Text(
+            title,
+            style: AppTypography.kLight14,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

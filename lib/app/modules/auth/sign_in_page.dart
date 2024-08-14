@@ -1,3 +1,4 @@
+import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
 import '../../provider/login_provider/login_provider.dart';
-import '../landing_screens/landing_page.dart';
+import '../navigation/navigation_home_screen.dart';
 import '../widgets/animations/shake_animation.dart';
 import '../widgets/dividers/custom_vertical_divider.dart';
 import '../widgets/widgets.dart';
@@ -129,7 +130,7 @@ class _SignInState extends State<SignIn> {
               userDetails = response.data!;
             });
             print('User details saved: $userDetails');
-            Get.offAll(() => LandingPage(userDetails: userDetails!));
+            Get.offAll(() => NavigationHomeScreen(userDetails: userDetails!));
           } else {
             // Display an error message if OTP request failed
             final errorMessage = loginProvider.cacheRsponse != null
@@ -192,12 +193,8 @@ class _SignInState extends State<SignIn> {
               Text('Phone Number / User Id', style: AppTypography.kMedium15),
               SizedBox(height: 8.h),
               // Number Field.
-              Container(
-                decoration: BoxDecoration(
-                    color: isDarkMode(context)
-                        ? AppColors.kContentColor
-                        : AppColors.kInput,
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusTen)),
+              PrimaryContainer(
+                padding: EdgeInsets.all(0.h),
                 child: Row(
                   children: [
                     SizedBox(
@@ -221,7 +218,9 @@ class _SignInState extends State<SignIn> {
                       child: AuthField(
                         controller: _phoneController,
                         onChanged: (value) {
-                          if (value!.isNotEmpty) {
+                          if (value!.isNotEmpty &&
+                              value.length >= 10 &&
+                              value.length <= 11) {
                             setState(() {});
                             isUserIdValidated = true;
                             return value;
@@ -256,7 +255,7 @@ class _SignInState extends State<SignIn> {
                       ? null
                       : isDarkMode(context)
                           ? AppColors.kDarkHint
-                          : AppColors.kInput,
+                          : AppColors.kWhite,
                 ),
               ),
             ],
@@ -269,8 +268,24 @@ class _SignInState extends State<SignIn> {
                 keyboardType: TextInputType.number,
                 controller: _pinController,
                 focusNode: _pinFocusNode,
+                defaultPinTheme: PinTheme(
+                  width: 56.w,
+                  height: 56.h,
+                  decoration: BoxDecoration(
+                    color: isDarkMode(context)
+                        ? AppColors.kDarkSurfaceColor
+                        : AppColors.kWhite,
+                    boxShadow: [
+                      if (isDarkMode(context))
+                        AppColors.darkShadow
+                      else
+                        AppColors.defaultShadow,
+                    ],
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                ),
                 onChanged: (value) {
-                  if (value.isNotEmpty) {
+                  if (value.isNotEmpty && value.length == 6) {
                     setState(() {
                       isOTPValidated = true;
                     });
@@ -293,7 +308,7 @@ class _SignInState extends State<SignIn> {
                       ? null
                       : isDarkMode(context)
                           ? AppColors.kDarkHint
-                          : AppColors.kInput,
+                          : AppColors.kWhite,
                 ),
               ),
               SizedBox(height: 63.h),

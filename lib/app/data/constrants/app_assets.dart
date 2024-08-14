@@ -62,6 +62,8 @@ class AppAssets {
   static const IconData kArrowBack = Icons.arrow_back;
 
   static const IconData kArrowForward = Icons.arrow_forward_ios;
+  //double_arrow_rounded
+  static const IconData kArrowForwardRounded = Icons.double_arrow_rounded;
   static const IconData kFaceBook = Icons.facebook;
   static const IconData kGoogle = Icons.g_translate;
   static const IconData kMail = Icons.mail;
