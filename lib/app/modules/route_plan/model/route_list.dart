@@ -1,7 +1,7 @@
 
 // ignore: constant_identifier_names
 import '../../../model/employee/employee_model.dart';
-import '../../../model/village/villages_model.dart';
+import '../../../model/master/villages_model.dart';
 import '../../../model/workplace/workplace_model.dart';
 
 enum RouteStatus { Active, Deactive, Delete }

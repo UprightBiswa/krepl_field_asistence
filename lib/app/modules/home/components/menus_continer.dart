@@ -84,11 +84,11 @@ class ReportView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ReportViewgroup(
-          menuGroup: reportMenuGroup,
+          menuGroup: activityFormGroup,
         ),
         const SizedBox(height: 20),
         ReportViewgroup(
-          menuGroup: activityFormGroup,
+          menuGroup: reportMenuGroup,
         ),
       ],
     );

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../activity/formA/form_a_manage_page.dart';
 import '../../farmer/farmer_managment_page.dart';
 import '../../route_plan/route_managment_page.dart';
 
@@ -107,7 +108,12 @@ List<MenuItem> formMenuItems = [
   MenuItem(
     title: 'Form A',
     icon: Icons.document_scanner, // Example icon
-    onTap: () {},
+    onTap: () {
+      Get.to<void>(
+        () => FormAManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
+    },
   ),
   MenuItem(
     title: 'Form B',

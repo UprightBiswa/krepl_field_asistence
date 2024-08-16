@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
@@ -84,67 +83,57 @@ class LandingPageState extends State<LandingPage> {
       child: Scaffold(
         key: scaffoldKey,
         body: _widgetOptions[_currentIndex],
-        bottomNavigationBar: Container(
-          margin: EdgeInsets.all(8.h),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: _onItemTapped,
-              selectedLabelStyle: const TextStyle(
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: _onItemTapped,
+          type: BottomNavigationBarType.shifting,
+          items: const [
+            BottomNavigationBarItem(
+              label: 'Dashboard',
+              tooltip: 'Dashboard',
+              icon: Icon(
+                AppAssets.kDashboardOutlied,
+                size: 24,
+                color: AppColors.kBlack,
+              ),
+              activeIcon: Icon(
+                AppAssets.kDashboard,
+                size: 24,
                 color: AppColors.kWhite,
               ),
-              unselectedLabelStyle: const TextStyle(
-                color: AppColors.kGrey,
-              ),
-              selectedFontSize: 14.sp,
-              unselectedFontSize: 12.sp,
-              items: const [
-                BottomNavigationBarItem(
-                  label: 'Dashboard',
-                  tooltip: 'Dashboard',
-                  icon: Icon(
-                    AppAssets.kDashboardOutlied,
-                    size: 24,
-                    color: AppColors.kGrey,
-                  ),
-                  activeIcon: Icon(
-                    AppAssets.kDashboard,
-                    size: 24,
-                    color: AppColors.kWhite,
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: 'Home',
-                  tooltip: 'Home',
-                  icon: Icon(
-                    AppAssets.kHomeOutlined,
-                    size: 24,
-                    color: AppColors.kGrey,
-                  ),
-                  activeIcon: Icon(
-                    AppAssets.kHome,
-                    size: 24,
-                    color: AppColors.kWhite,
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    AppAssets.kPersionOutliend,
-                    size: 24,
-                    color: AppColors.kGrey,
-                  ),
-                  label: 'Profile',
-                  tooltip: 'Profile',
-                  activeIcon: Icon(
-                    AppAssets.kPersion,
-                    size: 24,
-                    color: AppColors.kWhite,
-                  ),
-                ),
-              ],
+              backgroundColor: AppColors.kPrimary,
             ),
-          ),
+            BottomNavigationBarItem(
+              label: 'Home',
+              tooltip: 'Home',
+              icon: Icon(
+                AppAssets.kHomeOutlined,
+                size: 24,
+                color: AppColors.kBlack,
+              ),
+              activeIcon: Icon(
+                AppAssets.kHome,
+                size: 24,
+                color: AppColors.kWhite,
+              ),
+              backgroundColor: AppColors.kPrimary,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                AppAssets.kPersionOutliend,
+                size: 24,
+                color: AppColors.kBlack,
+              ),
+              label: 'Profile',
+              tooltip: 'Profile',
+              activeIcon: Icon(
+                AppAssets.kPersion,
+                size: 24,
+                color: AppColors.kWhite,
+              ),
+              backgroundColor: AppColors.kPrimary,
+            ),
+          ],
         ),
       ),
     );

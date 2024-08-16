@@ -29,6 +29,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +67,8 @@ class _HomeViewState extends State<HomeView> {
               decoration: BoxDecoration(
                 color: AppColors.kPrimary,
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -79,33 +80,42 @@ class _HomeViewState extends State<HomeView> {
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.twentyHorizontal,
+                  horizontal: AppSpacing.tenHorizontal,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 10.h),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Welcome,',
-                            style: AppTypography.kBold16.copyWith(
-                              color: isDarkMode(context)
-                                  ? AppColors.kWhite
-                                  : AppColors.kDarkBackground,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 24.r,
+                          backgroundColor: AppColors.kWhite.withOpacity(0.8),
+                          child: Text(
+                            widget.userDetails.employeeName[0].toUpperCase(),
+                            style: AppTypography.kBold20.copyWith(
+                              color: AppColors.kPrimary,
                             ),
                           ),
-                          TextSpan(
-                            text: ' ${widget.userDetails.employeeName} 👋',
-                            style: AppTypography.kBold14.copyWith(
-                              color: isDarkMode(context)
-                                  ? AppColors.kWhite
-                                  : AppColors.kInput,
+                        ),
+                        SizedBox(width: 10.w),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome back,',
+                              style: AppTypography.kLight14
+                                  .copyWith(color: AppColors.kWhite),
                             ),
-                          ),
-                        ],
-                      ),
+                            Text(
+                              '${widget.userDetails.employeeName} 👋',
+                              style: AppTypography.kBold16
+                                  .copyWith(color: AppColors.kWhite),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10.w),
+                      ],
                     ),
                     SizedBox(height: 10.h),
                     GestureDetector(
@@ -119,12 +129,12 @@ class _HomeViewState extends State<HomeView> {
                         controller: TextEditingController(),
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 10.h),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 10.h),
             Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
