@@ -197,7 +197,7 @@ class _SettingsViewState extends State<SettingsView> {
                   SettingTile(
                     icon: AppAssets.kProfile,
                     title: widget.userDetails.employeeName,
-                    subtitle: widget.userDetails.employeeCode,
+                    subtitle: widget.userDetails.hrEmployeeCode,
                     onTap: () {},
                   ),
                   const Divider(height: 0.5),

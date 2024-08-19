@@ -86,7 +86,6 @@ class LandingPageState extends State<LandingPage> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: _onItemTapped,
-          type: BottomNavigationBarType.shifting,
           items: const [
             BottomNavigationBarItem(
               label: 'Dashboard',

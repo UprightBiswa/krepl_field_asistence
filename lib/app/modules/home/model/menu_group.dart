@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../activity/formA/form_a_manage_page.dart';
+import '../../activity/formB/form_b_manage_page.dart';
+import '../../activity/formC/form_c_manage_page.dart';
+import '../../activity/formD/form_d_manage_page.dart';
+import '../../activity/formE/form_e_manage_page.dart';
 import '../../farmer/farmer_managment_page.dart';
 import '../../route_plan/route_managment_page.dart';
 
@@ -55,6 +59,36 @@ class MenuItem {
 
 List<MenuItem> reportMenuItems = [
   MenuItem(
+    title: 'Farmer Registration',
+    icon: Icons.agriculture, // Example icon
+    onTap: () {
+      Get.to<void>(
+        () => FarmerManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
+    },
+  ),
+  MenuItem(
+    title: 'Doctor Registration',
+    icon: Icons.local_hospital, // Example icon
+    onTap: () {
+      Get.to<void>(
+        () => FarmerManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
+    },
+  ),
+  MenuItem(
+    title: 'Tour Plan Management',
+    icon: Icons.map, // Example icon
+    onTap: () {
+      Get.to<void>(
+        () => RoutePlanManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
+    },
+  ),
+  MenuItem(
     title: 'Activity Summary',
     icon: Icons.analytics,
     onTap: () {
@@ -69,13 +103,10 @@ List<MenuItem> reportMenuItems = [
     },
   ),
   MenuItem(
-    title: 'Farmer',
-    icon: Icons.agriculture, // Example icon
+    title: 'Customer',
+    icon: Icons.person_pin, // Example icon
     onTap: () {
-      Get.to<void>(
-        () => FarmerManagementPage(),
-        transition: Transition.rightToLeftWithFade,
-      );
+      // Handle navigation to Retailer page
     },
   ),
   MenuItem(
@@ -87,7 +118,7 @@ List<MenuItem> reportMenuItems = [
   ),
   MenuItem(
     title: 'Route Plan',
-    icon: Icons.map, // Example icon
+    icon: Icons.route, // Example icon
     onTap: () {
       Get.to<void>(
         () => RoutePlanManagementPage(),
@@ -119,35 +150,49 @@ List<MenuItem> formMenuItems = [
     title: 'Form B',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
-      // Handle navigation to Form B page
+      //
+      Get.to<void>(
+        () => FormBManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
     title: 'Form C',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
-      // Handle navigation to Form C page
+      Get.to<void>(
+        () => FormCManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
     title: 'Form D',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
-      // Handle navigation to Form D page
+      Get.to<void>(
+        () => FormDManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
     title: 'Form E',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
-      // Handle navigation to Form E page
+      Get.to<void>(
+        () => FormEManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
     title: 'Form F',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
-      // Handle navigation to Form F page
+      Get.to(() => FarmerManagementPage(),
+          transition: Transition.rightToLeftWithFade);
     },
   ),
 ];

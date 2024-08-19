@@ -459,7 +459,7 @@ class _ProfileViewState extends State<ProfileView> {
                       style: AppTypography.kBold20,
                     ),
                     Text(
-                      widget.userDetails.employeeCode,
+                      widget.userDetails.hrEmployeeCode,
                       style: AppTypography.kLight14,
                     ),
                     SizedBox(height: 30.h),
@@ -591,17 +591,17 @@ class _ProfileViewState extends State<ProfileView> {
           icon: Icons.work,
           title: 'Work Place',
           subtitle:
-              '${userDetails.workPlaceName} (${userDetails.workPlaceCode})',
+              '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
         ),
         buildAnimatedListTile(
           icon: Icons.location_city,
           title: 'HQ',
-          subtitle: '${userDetails.hqName} (${userDetails.hqCode})',
+          subtitle: '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
         ),
         buildAnimatedListTile(
           icon: Icons.grade,
           title: 'Grade',
-          subtitle: '${userDetails.gradeName} (${userDetails.gradeCode})',
+          subtitle: '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
         ),
       ],
     );
@@ -615,22 +615,22 @@ class _ProfileViewState extends State<ProfileView> {
           icon: Icons.terrain,
           title: 'Territory',
           subtitle:
-              '${userDetails.territoryName} (${userDetails.territoryCode})',
+              '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
         ),
         buildAnimatedListTile(
           icon: Icons.group,
           title: 'Customer',
-          subtitle: '${userDetails.customerName} (${userDetails.customerCode})',
+          subtitle: '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
         ),
         buildAnimatedListTile(
           icon: Icons.villa,
           title: 'Village',
-          subtitle: '${userDetails.villageName} (${userDetails.villageCode})',
+          subtitle: '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
         ),
         buildAnimatedListTile(
           icon: Icons.store,
           title: 'Retailer',
-          subtitle: '${userDetails.retailerName} (${userDetails.retailerCode})',
+          subtitle: '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
         ),
       ],
     );
@@ -648,7 +648,7 @@ class _ProfileViewState extends State<ProfileView> {
         buildAnimatedListTile(
           icon: Icons.email,
           title: 'Email',
-          subtitle: userDetails.emailAddress,
+          subtitle: userDetails.email,
         ),
       ],
     );
@@ -681,7 +681,7 @@ class _ProfileViewState extends State<ProfileView> {
         buildAnimatedListTile(
           icon: Icons.check_circle,
           title: 'Status',
-          subtitle: userDetails.isActive ? "Active" : "Inactive",
+          subtitle:  "Active"  "Inactive",
         ),
       ],
     );
@@ -694,17 +694,17 @@ class _ProfileViewState extends State<ProfileView> {
         buildAnimatedListTile(
           icon: Icons.calendar_view_day,
           title: 'Attendance',
-          subtitle: userDetails.attendanceRecords,
+          subtitle: userDetails.hrEmployeeCode,
         ),
         buildAnimatedListTile(
           icon: Icons.flight,
           title: 'Tour Plan',
-          subtitle: userDetails.tourPlan,
+          subtitle: userDetails.hrEmployeeCode,
         ),
         buildAnimatedListTile(
           icon: Icons.flag,
           title: 'Targets',
-          subtitle: userDetails.targetAchievements,
+          subtitle: userDetails.hrEmployeeCode,
         ),
       ],
     );

@@ -141,7 +141,7 @@ class _DashboardTableViewState extends State<DashboardTableView> {
                           ),
                           SizedBox(height: 5.h),
                           Text(
-                            'ID: ${widget.userDetails.employeeCode}',
+                            'ID: ${widget.userDetails.hrEmployeeCode}',
                             style: AppTypography.kLight14.copyWith(
                               color: isDarkMode(context)
                                   ? AppColors.kWhite
@@ -149,14 +149,14 @@ class _DashboardTableViewState extends State<DashboardTableView> {
                             ),
                           ),
                           //show teretory
-                          Text(
-                            'Territory: ${widget.userDetails.territory}',
-                            style: AppTypography.kLight14.copyWith(
-                              color: isDarkMode(context)
-                                  ? AppColors.kWhite
-                                  : AppColors.kGrey,
-                            ),
-                          ),
+                          // Text(
+                          //   'Territory: ${widget.userDetails.}',
+                          //   style: AppTypography.kLight14.copyWith(
+                          //     color: isDarkMode(context)
+                          //         ? AppColors.kWhite
+                          //         : AppColors.kGrey,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],

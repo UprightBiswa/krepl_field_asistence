@@ -50,7 +50,7 @@ class CustomTextField extends StatelessWidget {
         fillColor:
             isDarkMode(context) ? AppColors.kContentColor : AppColors.kInput,
         filled: true,
-        prefixIcon: Icon(icon),
+        prefixIcon: Icon(icon, color: AppColors.kPrimary),
         border: OutlineInputBorder(
           borderSide: BorderSide(
             color: isDarkMode(context)

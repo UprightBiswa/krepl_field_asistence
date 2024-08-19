@@ -108,11 +108,11 @@ class _SignInState extends State<SignIn> {
     }
 
     Future<void> handleVerifyOTP() async {
-      Future<void> userInfoRequest(String username) async {
+      Future<void> userInfoRequest(String deviceToken) async {
         try {
           UserDetailsResponse response =
-              await loginProvider.getUserInfo(username, context);
-          print('User info fetched successfully: ${response.data!.accessType}');
+              await loginProvider.getUserInfo(deviceToken, context);
+          print('User info fetched successfully: ${response.data!.employeeName}');
           // if (loginProvider.cacheRsponse != null &&
           //     loginProvider.cacheRsponse!.success &&
           //     response.data != null) {
@@ -159,9 +159,9 @@ class _SignInState extends State<SignIn> {
           if (loginProvider.loginResponse != null &&
               loginProvider.loginResponse!.success) {
             // Get the user code from the login response
-            String username =
-                loginProvider.loginResponse!.data['employee_code'];
-            await userInfoRequest(username);
+            String deviceToken =
+                loginProvider.loginResponse!.data['device_token'];
+            await userInfoRequest(deviceToken);
           } else {
             final errorMessage = loginProvider.loginResponse != null
                 ? loginProvider.loginResponse!.message

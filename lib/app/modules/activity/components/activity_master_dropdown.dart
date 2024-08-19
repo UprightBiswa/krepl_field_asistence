@@ -22,7 +22,7 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
   @override
   void initState() {
     super.initState();
-    _activityMasterController.fetchActivityMasterData();
+    _activityMasterController.fetchActivityMasterData(widget.formType);
   }
 
   @override
@@ -60,19 +60,17 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
         // Show error message
         return const Center(child: Text('Error loading activities.'));
       } else {
-        var activities = _activityMasterController
-            .fetchActivitiesByFormType(widget.formType);
         // Show the dropdown
         return SingleSelectDropdown<ActivityMaster>(
           labelText: "Select Activity",
-          items: activities,
+          items: _activityMasterController.activityMasterList,
           selectedItem: null,
-          itemAsString: (activity) => activity.activityName,
+          itemAsString: (activity) => activity.promotionalActivity,
           onChanged: (selected) {
             widget.onActivitySelected(selected);
           },
           searchableFields: {
-            "Activity Name": (activity) => activity.activityName,
+            "promotional_activity": (activity) => activity.promotionalActivity,
             "Form": (activity) => activity.form,
           },
           validator: (selected) {

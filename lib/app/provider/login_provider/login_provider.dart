@@ -13,14 +13,13 @@ import '../../modules/widgets/loading/custom_login_widget.dart';
 import '../../repository/auth/auth_token.dart';
 import '../../repository/auth/login_repository.dart';
 
-
 class LoginProvider extends ChangeNotifier {
   final LoginRepository _loginRepository = LoginRepository();
   final UserDatabase _userDatabase = UserDatabase();
   final Dio _dio = Dio();
   Future<bool> _checkInternet() async {
     var connectivityResult = await Connectivity().checkConnectivity();
-    return connectivityResult != ConnectivityResult.none;
+    return connectivityResult != [ConnectivityResult.none];
   }
 
   bool _isLoading = false;
@@ -121,30 +120,19 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-
-
   Future<UserDetailsResponse> getUserInfo(
-    String username,
+    String deviceToken,
     BuildContext context,
   ) async {
     try {
       print('Fetching user info...');
-      // Step 1: Check for cached data in the database
       var userDetailsMap =
-          await _userDatabase.getUserDetailsByUsername(username);
+          await _userDatabase.getUserDetailsByUsername(deviceToken);
       _cachedResponse = UserDetailsResponse.fromJson(userDetailsMap ?? {});
 
-      // if (!_isLoading) {
-      //   print('Running API in the background');
-      //   _isLoading = true;
-      //   notifyListeners();
-      //   _runApiInBackground(username);
-      // }
-
       if (_cachedResponse.data != null) {
-        // Use cached response
         print('Using cached response');
-        _runApiInBackground(username);
+        _runApiInBackground(deviceToken);
         print('Call Background Response');
         return _cachedResponse;
       }
@@ -167,8 +155,8 @@ class LoginProvider extends ChangeNotifier {
       }
 
       Response response = await _dio.post(
-        '${BaseURL.baseUrl}sf_user_info',
-        queryParameters: {'username': username},
+        '${BaseURL.baseUrl}fa_details',
+        queryParameters: {'device_token': deviceToken},
       );
       if (response.statusCode == 200 && response.data != null) {
         print('Successful Response');
@@ -178,30 +166,24 @@ class LoginProvider extends ChangeNotifier {
         print('Parsed user details: $_userDetails');
 
         // Log each field of the UserDetails before saving
-        print('Emp Access Type: ${_userDetails?.accessType}');
-        print('Emp Valid From: ${_userDetails?.validFrom}');
-        print('Emp Valid To: ${_userDetails?.validTo}');
-        print('Emp Status: ${_userDetails?.status}');
-        print('Region: ${_userDetails?.region}');
-        print('Place Code: ${_userDetails?.placeCode}');
-        print('Company Code: ${_userDetails?.companyCode}');
-        print('Company Name: ${_userDetails?.companyName}');
-        print('Emp Status: ${_userDetails?.status}');
-        await _userDatabase.saveUserDetails(username, response.data!);
+
+        await _userDatabase.saveUserDetails(deviceToken, response.data!);
         AuthState().setToken(
-          _userDetails!.userType,
-          _userDetails!.employeeCode,
+          _userDetails!.workplaceCode,
+          _userDetails!.hrEmployeeCode,
           _userDetails!.employeeName,
-          _userDetails!.accessType,
-          _userDetails!.validFrom,
-          _userDetails!.validTo,
-          _userDetails!.status,
-          _userDetails!.region,
-          _userDetails!.placeCode,
-          _userDetails!.companyCode,
-          _userDetails!.companyName,
-          _userDetails!.plant,
+          _userDetails!.fatherName,
+          _userDetails!.designation,
+          _userDetails!.dateOfJoining,
+          _userDetails!.headquarter,
+          _userDetails!.mobileNumber,
+          _userDetails!.email,
+          _userDetails!.company,
+          _userDetails!.dateOfLeaving,
+          _userDetails!.staffType,
+          _userDetails!.deviceToken,
         );
+
         return UserDetailsResponse.fromJson(response.data);
       } else {
         print('Background Error Response: ${response.data}');
@@ -229,44 +211,37 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _runApiInBackground(String username) async {
+  Future<void> _runApiInBackground(String deviceToken) async {
     try {
       print('calllllling Background Response');
       bool isConnected = await _checkInternet();
 
       if (isConnected) {
         Response response = await _dio.post(
-          '${BaseURL.baseUrl}sf_user_info',
-          queryParameters: {'username': username},
+          '${BaseURL.baseUrl}fa_details',
+          queryParameters: {'device_token': deviceToken},
         );
         if (response.statusCode == 200 && response.data != null) {
           print('Successful Background Response');
           var responseData = response.data as Map<String, dynamic>;
           var userData = responseData['data'];
           _userDetails = UserDetails.fromJson(userData);
-          print('Data: $userData');
-          print('Emp Access Type: ${_userDetails?.accessType}');
-          print('Emp Valid From: ${_userDetails?.validFrom}');
-          print('Emp Valid To: ${_userDetails?.validTo}');
-          print('Emp Status: ${_userDetails?.status}');
-          print('Region: ${_userDetails?.region}');
-          print('Place Code: ${_userDetails?.placeCode}');
-          print('Company Code: ${_userDetails?.companyCode}');
-          print('Company Name: ${_userDetails?.companyName}');
-          await _userDatabase.saveUserDetails(username, response.data!);
+          print('Parsed user details: $_userDetails');
+          await _userDatabase.saveUserDetails(deviceToken, response.data!);
           AuthState().setToken(
-            _userDetails!.userType,
-            _userDetails!.employeeCode,
+            _userDetails!.workplaceCode,
+            _userDetails!.hrEmployeeCode,
             _userDetails!.employeeName,
-            _userDetails!.accessType,
-            _userDetails!.validFrom,
-            _userDetails!.validTo,
-            _userDetails!.status,
-            _userDetails!.region,
-            _userDetails!.placeCode,
-            _userDetails!.companyCode,
-            _userDetails!.companyName,
-            _userDetails!.plant,
+            _userDetails!.fatherName,
+            _userDetails!.designation,
+            _userDetails!.dateOfJoining,
+            _userDetails!.headquarter,
+            _userDetails!.mobileNumber,
+            _userDetails!.email,
+            _userDetails!.company,
+            _userDetails!.dateOfLeaving,
+            _userDetails!.staffType,
+            _userDetails!.deviceToken,
           );
         } else {
           print('Background Error Response: ${response.data}');

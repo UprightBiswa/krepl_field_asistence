@@ -29,19 +29,17 @@ import '../components/stages_selection_dropdown.dart';
 import '../components/village_selecton_dropdown.dart';
 import '../model/activity_master_model.dart';
 
-class CreateFormApage extends StatefulWidget {
-  const CreateFormApage({super.key});
+class CreateFormDpage extends StatefulWidget {
+  const CreateFormDpage({super.key});
 
   @override
-  State<CreateFormApage> createState() => _CreateFormApageState();
+  State<CreateFormDpage> createState() => _CreateFormApageState();
 }
 
-class _CreateFormApageState extends State<CreateFormApage> {
+class _CreateFormApageState extends State<CreateFormDpage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _expenseController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
-  final TextEditingController _selectionCountController =
-      TextEditingController();
 
   ActivityMaster? _selectedActivity;
   String? selectedPartyType;
@@ -109,26 +107,13 @@ class _CreateFormApageState extends State<CreateFormApage> {
     );
   }
 
-  void _updateSelectionCount() {
-    int count = 0;
-    if (selectedPartyType == "Farmer") {
-      count = selectedFarmers.length;
-    } else if (selectedPartyType == "Village") {
-      count = selectedVillages.length;
-    } else if (selectedPartyType == "Doctor") {
-      count = selectedDoctors.length;
-    }
-
-    _selectionCountController.text = count.toString();
-  }
-
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Form A"),
+        title: const Text("Create Form D"),
       ),
       body: Form(
         key: _formKey,
@@ -139,7 +124,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ActivitySelectionWidget(
-                  formType: "A",
+                  formType: "D",
                   onActivitySelected: (selectedActivity) {
                     setState(() {
                       _selectedActivity = selectedActivity;
@@ -164,7 +149,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
                     onSelectionChanged: (selectedFarmersitems) {
                       setState(() {
                         selectedFarmers = selectedFarmersitems;
-                        _updateSelectionCount();
                       });
                     },
                   ),
@@ -173,7 +157,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
                     onSelectionChanged: (selectedVillagesitems) {
                       setState(() {
                         selectedVillages = selectedVillagesitems;
-                        _updateSelectionCount();
                       });
                     },
                   ),
@@ -182,30 +165,12 @@ class _CreateFormApageState extends State<CreateFormApage> {
                     onSelectionChanged: (selectedDoctorsitems) {
                       setState(() {
                         selectedDoctors = selectedDoctorsitems;
-                        _updateSelectionCount();
                       });
                     },
                   ),
                 ],
                 const SizedBox(height: 16),
 
-                TextFormField(
-                  controller: _selectionCountController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    fillColor: isDarkMode(context)
-                        ? AppColors.kContentColor
-                        : AppColors.kInput,
-                    filled: true,
-                    prefixIcon: const Icon(Icons.bar_chart_outlined,
-                        color: AppColors.kPrimary),
-                    labelText: 'Total Selected Items',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
                 SeasionSelectionScreen(
                   onSelectionChanged: (selectedSeasionsitems) {
                     setState(() {
@@ -294,7 +259,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
                             child: Icon(
                               Icons.camera_alt,
                               size: 50.sp,
-                              color: AppColors.kPrimary,
+                              color: Colors.grey,
                             ),
                           )
                         : Image.file(
@@ -312,6 +277,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
                     });
                   },
                 ),
+
               ],
             ),
           ),

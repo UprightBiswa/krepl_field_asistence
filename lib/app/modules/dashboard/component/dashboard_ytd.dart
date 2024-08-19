@@ -72,7 +72,7 @@ class _DashboardYTDState extends State<DashboardYTD> {
                         ),
                         SizedBox(height: 5.h),
                         Text(
-                          'ID: ${widget.userDetails.employeeCode}',
+                          'ID: ${widget.userDetails.hrEmployeeCode}',
                           style: AppTypography.kLight14.copyWith(
                             color: isDarkMode(context)
                                 ? AppColors.kWhite

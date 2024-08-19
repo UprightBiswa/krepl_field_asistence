@@ -16,7 +16,7 @@ class LoginRepository {
       }
 
       final response = await _dio.post(
-        '${BaseURL.baseUrl}sf_request_otp',
+        '${BaseURL.baseUrl}fa_request_otp',
         data: {'username': username},
       );
       return response.data;
@@ -34,7 +34,7 @@ class LoginRepository {
       }
 
       final response = await _dio.post(
-        '${BaseURL.baseUrl}sf_verify_otp',
+        '${BaseURL.baseUrl}fa_verify_otp',
         data: {'username': username, 'otp': otp, 'fcm_token': fcmToken},
       );
       return response.data;

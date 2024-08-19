@@ -39,7 +39,7 @@ class Farmer {
 List<Farmer> farmersList = [
   Farmer(
     image:
-        'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZcaNJcoE9hJ20j1K8H7Ml6872NyPN5zaJjQ&s',
     promotionActivity: 'Activity 1',
     farmersName: 'Farmer 1',
     fatherName: 'Father 1',
@@ -58,7 +58,7 @@ List<Farmer> farmersList = [
   ),
   Farmer(
     image:
-        'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZcaNJcoE9hJ20j1K8H7Ml6872NyPN5zaJjQ&s',
     promotionActivity: 'Activity 2',
     farmersName: 'Farmer 2',
     fatherName: 'Father 2',
@@ -77,7 +77,7 @@ List<Farmer> farmersList = [
   ),
   Farmer(
     image:
-        'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZcaNJcoE9hJ20j1K8H7Ml6872NyPN5zaJjQ&s',
     promotionActivity: 'Activity 3',
     farmersName: 'Farmer 3',
     fatherName: 'Father 3',
@@ -96,7 +96,7 @@ List<Farmer> farmersList = [
   ),
   Farmer(
     image:
-        'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZcaNJcoE9hJ20j1K8H7Ml6872NyPN5zaJjQ&s',
     promotionActivity: 'Activity 4',
     farmersName: 'Farmer 4',
     fatherName: 'Father 4',
@@ -115,7 +115,7 @@ List<Farmer> farmersList = [
   ),
   Farmer(
     image:
-        'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZcaNJcoE9hJ20j1K8H7Ml6872NyPN5zaJjQ&s',
     promotionActivity: 'Activity 5',
     farmersName: 'Farmer 5',
     fatherName: 'Father 5',
@@ -134,7 +134,7 @@ List<Farmer> farmersList = [
   ),
   Farmer(
     image:
-        'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZcaNJcoE9hJ20j1K8H7Ml6872NyPN5zaJjQ&s',
     promotionActivity: 'Activity 6',
     farmersName: 'Farmer 6',
     fatherName: 'Father 6',
