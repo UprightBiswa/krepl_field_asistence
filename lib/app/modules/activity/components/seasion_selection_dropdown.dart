@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../controllers/master_controller.dart/season_controller.dart';
 import '../../../model/master/season_model.dart';
 import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import 'activity_master_dropdown.dart';
 
 class SeasionSelectionScreen extends StatefulWidget {
   final void Function(List<Season>)
@@ -23,9 +24,7 @@ class _SeasionSelectionScreenState extends State<SeasionSelectionScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (seasonController.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const ShimmerLoading();
       } else if (seasonController.error.isNotEmpty) {
         return const Center(
           child: Text('Error loading Season.'),

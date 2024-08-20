@@ -34,24 +34,20 @@ class CustomChips extends StatelessWidget {
               : isDarkMode(context)
                   ? Colors.black
                   : AppColors.kWhite,
-          padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 14.h),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 menuItem.icon,
                 color: colorGenerator.generateColor(),
               ),
-              SizedBox(
-                width: index == 0
-                    ? 37.w
-                    : index == 2
-                        ? 20.w
-                        : 27.w,
-              ),
+              SizedBox(height: 8.h),
               Text(
                 menuItem.title,
-                style: AppTypography.kBold14.copyWith(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: AppTypography.kBold12.copyWith(
                   color: isSelected
                       ? AppColors.kWhite
                       : isDarkMode(context)
@@ -59,7 +55,6 @@ class CustomChips extends StatelessWidget {
                           : AppColors.kDarkContiner,
                 ),
               ),
-              SizedBox(width: 10.w),
             ],
           ),
         ),

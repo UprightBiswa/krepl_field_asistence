@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 import '../../../controllers/master_controller.dart/Pest_controller.dart';
 import '../../../model/master/pest_master.dart';
 import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import 'activity_master_dropdown.dart';
 
 class PestSelectionScreen extends StatefulWidget {
   final void Function(List<Pest>)
@@ -24,9 +24,7 @@ class _PestSelectionScreenState extends State<PestSelectionScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (pestController.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const ShimmerLoading();
       } else if (pestController.error.isNotEmpty) {
         return const Center(
           child: Text('Error loading Pests.'),

@@ -1,3 +1,4 @@
+import 'package:field_asistence/app/modules/widgets/buttons/buttons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/constrants/constants.dart';
@@ -13,8 +14,6 @@ class MultiSelectDropdown<T> extends StatefulWidget {
   final IconData icon;
   final int maxChipsToShow;
   final String? Function(List<T>)? validator;
-  // final bool isRequired; // Add this
-  // final String validationMessage;
 
   const MultiSelectDropdown({
     required this.labelText,
@@ -26,8 +25,6 @@ class MultiSelectDropdown<T> extends StatefulWidget {
     this.icon = Icons.arrow_drop_down,
     this.maxChipsToShow = 1,
     this.validator,
-    // this.isRequired = false, // Add this
-    // this.validationMessage = 'Please select at least one item.', // Add this
     super.key,
   });
 
@@ -60,7 +57,6 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: validationError != null ? Colors.red : AppColors.kGrey,
-                // color: AppColors.kGrey,
               ),
               color: isDarkMode(context)
                   ? AppColors.kContentColor
@@ -115,6 +111,7 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
 
   Widget _buildChip(T item) {
     return Chip(
+      padding: const EdgeInsets.all(0),
       label: Text(widget.itemAsString(item)),
       onDeleted: () {
         setState(() {
@@ -128,6 +125,7 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
 
   Widget _buildSeeAllChip(BuildContext context) {
     return ActionChip(
+      padding: const EdgeInsets.all(0),
       label: const Text("See All"),
       onPressed: () => _showModalBottomSheet(context),
     );
@@ -165,22 +163,6 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
       });
     }
   }
-  // bool _validateSelection() {
-  //   if (widget.isRequired && selectedItems.isEmpty) {
-  //     setState(() {
-  //       validationError = widget.validationMessage;
-  //     });
-  //     return false;
-  //   }
-  //   setState(() {
-  //     validationError = null;
-  //   });
-  //   return true;
-  // }
-
-  // bool validate() {
-  //   return _validateSelection();
-  // }
 }
 
 class MultiSelectModal<T> extends StatefulWidget {
@@ -235,28 +217,7 @@ class _MultiSelectModalState<T> extends State<MultiSelectModal<T>> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          TextButton(
-            onPressed: () {
-              widget.onChanged(selectedItems);
-              // Navigator.pop(context);
-            },
-            child: const Text(
-              "Done",
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                selectedItems.clear();
-              });
-            },
-            child: const Text(
-              "Clear",
-            ),
-          ),
-        ],
+        title: Text(widget.title, style: AppTypography.kBold14),
       ),
       body: Column(
         children: [
@@ -295,6 +256,34 @@ class _MultiSelectModalState<T> extends State<MultiSelectModal<T>> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Expanded(
+              child: PrimaryButton(
+                onTap: () {
+                  setState(() {
+                    selectedItems.clear();
+                  });
+                },
+                text: "Clear",
+                color: AppColors.kAccent7.withOpacity(0.4),
+                isBorder: true,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: PrimaryButton(
+                onTap: () {
+                  widget.onChanged(selectedItems);
+                },
+                text: "Done",
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

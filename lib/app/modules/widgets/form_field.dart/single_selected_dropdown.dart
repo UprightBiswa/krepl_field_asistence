@@ -1,4 +1,5 @@
 import 'package:field_asistence/app/modules/home/components/search_field.dart';
+import 'package:field_asistence/app/modules/widgets/buttons/buttons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/constrants/constants.dart';
@@ -66,12 +67,14 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    selectedItem != null
-                        ? widget.itemAsString(selectedItem as T)
-                        : "Select ${widget.labelText}",
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
+                  child: selectedItem != null
+                      ? Text(
+                          widget.itemAsString(selectedItem as T),
+                        )
+                      : Text(
+                          "Select ${widget.labelText}",
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                 ),
                 Icon(widget.icon),
               ],
@@ -176,15 +179,7 @@ class _SingleSelectModalState<T> extends State<SingleSelectModal<T>> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          TextButton(
-            onPressed: () {
-              widget.onChanged(selectedItem as T);
-            },
-            child: const Text("Done"),
-          ),
-        ],
+        title: Text(widget.title, style: AppTypography.kBold14),
       ),
       body: Column(
         children: [
@@ -219,6 +214,21 @@ class _SingleSelectModalState<T> extends State<SingleSelectModal<T>> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Expanded(
+              child: PrimaryButton(
+                onTap: () {
+                  widget.onChanged(selectedItem as T);
+                },
+                text: "Done",
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

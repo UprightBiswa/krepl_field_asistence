@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:field_asistence/app/data/constrants/constants.dart';
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
@@ -100,6 +102,7 @@ class ReportViewgroup extends StatelessWidget {
   const ReportViewgroup({super.key, required this.menuGroup});
   @override
   Widget build(BuildContext context) {
+    final isSelectedvalue = isSelected();
     return PrimaryContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,12 +124,13 @@ class ReportViewgroup extends StatelessWidget {
             itemCount: menuGroup.menuItems.length,
             itemBuilder: (context, index) {
               final menuItem = menuGroup.menuItems[index];
+
               return GestureDetector(
                 onTap: () => menuItem.onTap(),
                 child: FadeIn(
                   delay: const Duration(milliseconds: 200) * index,
                   child: CustomMenuCard(
-                    isSelected: true,
+                    isSelected: isSelectedvalue,
                     onTap: () => menuItem.onTap(),
                     icon: menuItem.icon,
                     title: menuItem.title,
@@ -138,5 +142,10 @@ class ReportViewgroup extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool isSelected() {
+    final Random random = Random();
+    return random.nextBool();
   }
 }

@@ -98,7 +98,8 @@ class AppTheme {
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.kDarkSurfaceColor,
+      // backgroundColor: AppColors.kDarkSurfaceColor,
+      backgroundColor: AppColors.kPrimary,
       elevation: 0,
       showSelectedLabels: false,
       showUnselectedLabels: false,

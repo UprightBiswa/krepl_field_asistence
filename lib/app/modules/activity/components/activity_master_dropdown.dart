@@ -29,33 +29,8 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (_activityMasterController.isLoading.value) {
+        return const ShimmerLoading();
         // Show loading shimmer
-        return Center(
-          child: Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(color: Colors.grey),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.search, color: Colors.grey),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Container(
-                      height: 48.0,
-                      color: Colors.transparent,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
       } else if (_activityMasterController.isError.value) {
         // Show error message
         return const Center(child: Text('Error loading activities.'));
@@ -82,5 +57,39 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
         );
       }
     });
+  }
+}
+
+class ShimmerLoading extends StatelessWidget {
+  const ShimmerLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(color: Colors.grey),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Row(
+            children: [
+              const Icon(Icons.search, color: Colors.grey),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: Container(
+                  height: 48.0,
+                  color: Colors.transparent,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

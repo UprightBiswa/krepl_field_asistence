@@ -48,7 +48,7 @@ class CustomMenuCard extends StatelessWidget {
           SizedBox(height: 10.h),
           Text(
             title,
-            style: AppTypography.kLight14,
+            style: AppTypography.kLight12,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -55,7 +54,7 @@ class _HomeViewState extends State<HomeView> {
                 : AppColors.kDarkSurfaceColor,
             color: AppColors.kWhite.withOpacity(0.15),
           ),
-          SizedBox(width: AppSpacing.twentyHorizontal),
+          SizedBox(width: AppSpacing.tenHorizontal),
         ],
       ),
       body: SafeArea(
@@ -80,7 +79,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.tenHorizontal,
+                  horizontal: AppSpacing.twentyHorizontal,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

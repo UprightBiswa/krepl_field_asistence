@@ -137,7 +137,7 @@ List<MenuItem> reportMenuItems = [
 
 List<MenuItem> formMenuItems = [
   MenuItem(
-    title: 'Form A',
+    title: 'Activity Management',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
       Get.to<void>(
@@ -147,7 +147,7 @@ List<MenuItem> formMenuItems = [
     },
   ),
   MenuItem(
-    title: 'Form B',
+    title: 'Jeep Campaign',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
       //
@@ -158,7 +158,7 @@ List<MenuItem> formMenuItems = [
     },
   ),
   MenuItem(
-    title: 'Form C',
+    title: 'Dealer Stock',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
       Get.to<void>(
@@ -168,7 +168,7 @@ List<MenuItem> formMenuItems = [
     },
   ),
   MenuItem(
-    title: 'Form D',
+    title: 'Demonstration Management',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
       Get.to<void>(
@@ -178,7 +178,7 @@ List<MenuItem> formMenuItems = [
     },
   ),
   MenuItem(
-    title: 'Form E',
+    title: 'POP Management',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
       Get.to<void>(
@@ -188,7 +188,7 @@ List<MenuItem> formMenuItems = [
     },
   ),
   MenuItem(
-    title: 'Form F',
+    title: 'Farmer Management',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
       Get.to(() => FarmerManagementPage(),
@@ -200,7 +200,7 @@ List<MenuItem> formMenuItems = [
 // Menu Items for the new group
 List<MenuItem> shortcutMenuItems = [
   MenuItem(
-    title: 'Farmer Registration',
+    title: 'Farmer Management',
     icon: Icons.person_add,
     onTap: () {
       Get.to<void>(

@@ -83,56 +83,77 @@ class LandingPageState extends State<LandingPage> {
       child: Scaffold(
         key: scaffoldKey,
         body: _widgetOptions[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: _onItemTapped,
-          items: const [
-            BottomNavigationBarItem(
-              label: 'Dashboard',
-              tooltip: 'Dashboard',
-              icon: Icon(
-                AppAssets.kDashboardOutlied,
-                size: 24,
-                color: AppColors.kBlack,
+        bottomNavigationBar: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+            boxShadow: [
+              if (!isDarkMode(context))
+                BoxShadow(
+                  color: AppColors.kPrimary.withOpacity(0.2),
+                  blurRadius: 7,
+                  offset: const Offset(0, -5),
+                )
+              else
+                BoxShadow(
+                  color: AppColors.kDarkContiner.withOpacity(0.2),
+                  blurRadius: 7,
+                  offset: const Offset(0, -5),
+                ),
+            ],
+          ),
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: _onItemTapped,
+            items: const [
+              BottomNavigationBarItem(
+                label: 'Dashboard',
+                tooltip: 'Dashboard',
+                icon: Icon(
+                  AppAssets.kDashboardOutlied,
+                  size: 24,
+                  color: AppColors.kBlack,
+                ),
+                activeIcon: Icon(
+                  AppAssets.kDashboard,
+                  size: 24,
+                  color: AppColors.kWhite,
+                ),
+                backgroundColor: AppColors.kPrimary,
               ),
-              activeIcon: Icon(
-                AppAssets.kDashboard,
-                size: 24,
-                color: AppColors.kWhite,
+              BottomNavigationBarItem(
+                label: 'Home',
+                tooltip: 'Home',
+                icon: Icon(
+                  AppAssets.kHomeOutlined,
+                  size: 24,
+                  color: AppColors.kBlack,
+                ),
+                activeIcon: Icon(
+                  AppAssets.kHome,
+                  size: 24,
+                  color: AppColors.kWhite,
+                ),
+                backgroundColor: AppColors.kPrimary,
               ),
-              backgroundColor: AppColors.kPrimary,
-            ),
-            BottomNavigationBarItem(
-              label: 'Home',
-              tooltip: 'Home',
-              icon: Icon(
-                AppAssets.kHomeOutlined,
-                size: 24,
-                color: AppColors.kBlack,
+              BottomNavigationBarItem(
+                icon: Icon(
+                  AppAssets.kPersionOutliend,
+                  size: 24,
+                  color: AppColors.kBlack,
+                ),
+                label: 'Profile',
+                tooltip: 'Profile',
+                activeIcon: Icon(
+                  AppAssets.kPersion,
+                  size: 24,
+                  color: AppColors.kWhite,
+                ),
+                backgroundColor: AppColors.kPrimary,
               ),
-              activeIcon: Icon(
-                AppAssets.kHome,
-                size: 24,
-                color: AppColors.kWhite,
-              ),
-              backgroundColor: AppColors.kPrimary,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                AppAssets.kPersionOutliend,
-                size: 24,
-                color: AppColors.kBlack,
-              ),
-              label: 'Profile',
-              tooltip: 'Profile',
-              activeIcon: Icon(
-                AppAssets.kPersion,
-                size: 24,
-                color: AppColors.kWhite,
-              ),
-              backgroundColor: AppColors.kPrimary,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

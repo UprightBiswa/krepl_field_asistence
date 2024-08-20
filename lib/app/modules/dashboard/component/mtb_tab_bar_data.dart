@@ -16,9 +16,9 @@ class MTDTabBarData extends StatefulWidget {
   final UserDetails userDetails;
 
   const MTDTabBarData({
-    Key? key,
+    super.key,
     required this.userDetails,
-  }) : super(key: key);
+  });
 
   @override
   State<MTDTabBarData> createState() => _MTDTabBarDataState();
@@ -43,7 +43,9 @@ class _MTDTabBarDataState extends State<MTDTabBarData> {
     bool isDarkMode(BuildContext context) =>
         Theme.of(context).brightness == Brightness.dark;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10.h),
         Row(
           children: [
             Text(
@@ -74,7 +76,7 @@ class _MTDTabBarDataState extends State<MTDTabBarData> {
             ),
           ],
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 10.h),
         Visibility(
           visible: _showData,
           child: const PrimaryContainer(
@@ -132,7 +134,7 @@ class _MTDTabBarDataState extends State<MTDTabBarData> {
             ),
           ),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 10.h),
         Visibility(
           visible: !_showData,
           child: GridView.count(
@@ -152,17 +154,17 @@ class _MTDTabBarDataState extends State<MTDTabBarData> {
             ],
           ),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 10.h),
         SalesComparisonChart(
           title: 'Sales Comparison (Trending) MTD',
           line: salesData,
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 10.h),
         ExpenseComparisonChart(
           title: 'Expense Comparison MTD',
           data: expensesData,
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 10.h),
       ],
     );
   }

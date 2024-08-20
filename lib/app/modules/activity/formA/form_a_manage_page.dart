@@ -30,7 +30,7 @@ class FormAManagementPage extends StatelessWidget {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'FormA Management',
+          'Activity Management',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -41,7 +41,7 @@ class FormAManagementPage extends StatelessWidget {
         action: [
           CustomButton(
             icon: Icons.add,
-            text: 'Add FormA',
+            text: 'Add Activity',
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormApage(),

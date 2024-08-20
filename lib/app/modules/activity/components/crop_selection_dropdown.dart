@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../controllers/master_controller.dart/crop_controller.dart';
 import '../../../model/master/crop_model.dart';
 import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import 'activity_master_dropdown.dart';
 
 class CropSelectionScreen extends StatefulWidget {
   final void Function(List<Crop>)
@@ -23,9 +24,7 @@ class _CropSelectionScreenState extends State<CropSelectionScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (cropController.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const ShimmerLoading();
       } else if (cropController.error.isNotEmpty) {
         return const Center(
           child: Text('Error loading crops.'),

@@ -8,9 +8,14 @@ import '../home/controller/search_page_controller.dart';
 import '../widgets/widgets.dart';
 import 'components/custom_chips.dart';
 
-class SearchView extends StatelessWidget {
+class SearchView extends StatefulWidget {
   const SearchView({super.key});
 
+  @override
+  State<SearchView> createState() => _SearchViewState();
+}
+
+class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     final SearchPageController searchPageController =
@@ -30,7 +35,7 @@ class SearchView extends StatelessWidget {
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'Search',
-          style: AppTypography.kBold20.copyWith(
+          style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
                 : AppColors.kDarkContiner,
@@ -42,58 +47,60 @@ class SearchView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                SearchField(
+        return SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: AppSpacing.twentyVertical),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: SearchField(
                   controller: textController,
                   onChanged: (query) {
                     searchPageController.updateSearchQuery(query);
                   },
                   isEnabled: true,
                 ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Text('Menu Items', style: AppTypography.kBold16),
-                    const Spacer(),
-                    CustomTextButton(
-                      onPressed: () {},
-                      text: 'See All',
-                      color: AppColors.kDarkContiner.withOpacity(0.3),
-                    ),
-                  ],
-                ),
-                SizedBox(height: AppSpacing.tenVertical),
-                if (searchPageController.errorMessage.value.isNotEmpty)
-                  Center(child: Text(searchPageController.errorMessage.value))
-                else
-                  Wrap(
-                    spacing: 15.w,
-                    runSpacing: 20.h,
-                    alignment: WrapAlignment.spaceBetween,
-                    children: List.generate(
-                      searchPageController.filteredItems.length,
-                      (index) {
-                        final menuItem =
-                            searchPageController.filteredItems[index];
-                        return CustomChips(
-                          isSelected: false, // Update selection logic as needed
-                          menuItem: menuItem, // Pass MenuItem to CustomChips
-                          index: index,
-                          onTap: () {
-                            menuItem.onTap();
-                          },
-                        );
-                      },
-                    ),
+              ),
+              SizedBox(height: AppSpacing.twentyVertical),
+              if (searchPageController.errorMessage.value.isNotEmpty)
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(searchPageController.errorMessage.value),
                   ),
-                SizedBox(height: AppSpacing.tenVertical),
-              ],
-            ),
+                )
+              else
+                Expanded(
+                  child: GridView.builder(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 20.h,
+                    ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Display two items per row
+                      mainAxisSpacing: 15.h,
+                      crossAxisSpacing: 15.w,
+                      childAspectRatio: 2.0,
+                    ),
+                    itemBuilder: (context, index) {
+                      final menuItem =
+                          searchPageController.filteredItems[index];
+                      return CustomChips(
+                        isSelected:
+                            searchPageController.selectedIndex.value == index,
+                        menuItem: menuItem,
+                        index: index,
+                        onTap: () {
+                          searchPageController.selectItem(index);
+                          menuItem.onTap();
+                        },
+                      );
+                    },
+                    itemCount: searchPageController.filteredItems.length,
+                  ),
+                ),
+            ],
           ),
         );
       }),

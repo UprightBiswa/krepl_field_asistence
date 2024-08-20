@@ -242,32 +242,32 @@ class _YTDTabBarDataState extends State<YTDTabBarData> {
             physics: const NeverScrollableScrollPhysics(),
             controller: _scrollController,
             children: [
-              SizedBox(height: 8.h),
+              SizedBox(height: 10.h),
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: controller.ytdData.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 8.dg,
-                  crossAxisSpacing: 8.dg,
+                  mainAxisSpacing: 10.dg,
+                  crossAxisSpacing: 10.dg,
                 ),
                 itemBuilder: (context, index) {
                   ActivityData activity = controller.ytdData[index];
                   return ActivityCard(activity: activity);
                 },
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 10.h),
               SalesComparisonChart(
                 title: 'Sales Comparison (Trending) YTD',
                 line: salesData,
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 10.h),
               ExpenseComparisonChart(
                 title: 'Expense Comparison YTD',
                 data: expensesData,
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 10.h),
             ],
           );
         }

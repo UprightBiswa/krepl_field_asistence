@@ -1,32 +1,25 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:field_asistence/app/model/master/product_master.dart';
 import 'package:field_asistence/app/model/master/season_model.dart';
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../../model/master/doctor_master_model.dart';
 import '../../../model/master/crop_model.dart';
 import '../../../model/master/crop_stage.dart';
 import '../../../model/master/pest_master.dart';
-import '../../../model/master/villages_model.dart';
-import '../../farmer/model/farmer_list.dart';
+
+import '../../route_plan/model/route_list.dart';
 import '../../widgets/form_field.dart/form_field.dart';
 import '../../widgets/widgets.dart';
 import '../components/activity_master_dropdown.dart';
 import '../components/crop_selection_dropdown.dart';
-import '../components/doctor_selection_dropdown.dart';
-import '../components/farmer_selection_dropdown.dart';
-import '../components/geo_location_selection_page.dart';
 import '../components/pest_selection_dropdown.dart';
 import '../components/products_selection_drodown.dart';
+import '../components/route_selection_dropdown.dart';
 import '../components/seasion_selection_dropdown.dart';
 import '../components/stages_selection_dropdown.dart';
-import '../components/village_selecton_dropdown.dart';
 import '../model/activity_master_model.dart';
 
 class CreateFormBpage extends StatefulWidget {
@@ -38,15 +31,12 @@ class CreateFormBpage extends StatefulWidget {
 
 class _CreateFormBpageState extends State<CreateFormBpage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _expenseController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
 
   ActivityMaster? _selectedActivity;
   String? selectedPartyType;
+  List<RouteMap> selectedRoutes = [];
 
-  List<Village> selectedVillages = [];
-  List<Farmer> selectedFarmers = [];
-  List<Doctor> selectedDoctors = [];
   List<Season> selectedSeasions = [];
   List<Crop> selectedCrops = [];
   List<CropStage> selectedCropStages = [];
@@ -54,180 +44,121 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
   List<Pest> selectedPests = [];
 
   String? totalSelectedPertyType;
-  String? _selectedImagePath;
-  LocationData? gioLocation;
-
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-    if (pickedFile != null) {
-      log('Picked file path: ${pickedFile.path}');
-
-      setState(() {
-        _selectedImagePath = pickedFile.path;
-      });
-
-      // Pass the image path to the callback
-      // You can store this path to send it in an API later.
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No image selected'),
-        ),
-      );
-    }
-  }
-
-  void _showImagePickerOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Pick from gallery'),
-                onTap: () {
-                  _pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Take a photo'),
-                onTap: () {
-                  _pickImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Create Form A"),
+      appBar: CustomBackAppBar(
+        leadingCallback: () {
+          Get.back<void>();
+        },
+        iconColor: isDarkMode(context)
+            ? Colors.black
+            : AppColors.kPrimary.withOpacity(0.15),
+        title: Text(
+          'Create Jeep Campaign',
+          style: AppTypography.kBold14.copyWith(
+            color: isDarkMode(context)
+                ? AppColors.kWhite
+                : AppColors.kDarkContiner,
+          ),
+        ),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: PrimaryContainer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ActivitySelectionWidget(
-                  formType: "B",
-                  onActivitySelected: (selectedActivity) {
-                    setState(() {
-                      _selectedActivity = selectedActivity;
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PrimaryContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ActivitySelectionWidget(
+                      formType: "B",
+                      onActivitySelected: (selectedActivity) {
+                        setState(() {
+                          _selectedActivity = selectedActivity;
 
-                      if (_selectedActivity != null) {
-                        selectedPartyType = _selectedActivity!.masterLink;
-                      }
-                    });
-                  },
+                          if (_selectedActivity != null) {
+                            selectedPartyType = _selectedActivity!.masterLink;
+                          }
+                        });
+                      },
+                    ),
+                    if (_selectedActivity != null) ...[
+                      SizedBox(height: 16.h),
+                      Text(
+                        'Selected Partytype: ${_selectedActivity!.masterLink}',
+                      ),
+                    ],
+                    SizedBox(height: 16.h),
+                    RouteSelectionScreen(
+                      onSelectionChanged: (selectedRoutes) {
+                        setState(() {
+                          selectedRoutes = selectedRoutes;
+                        });
+                      },
+                    ),
+                    
+                    SizedBox(height: 16.h),
+                    
+                  ],
                 ),
-
-                if (_selectedActivity != null) ...[
-                  SizedBox(height: 16.h),
-                  Text(
-                    'Selected Partytype: ${_selectedActivity!.masterLink}',
-                  ),
-                  SizedBox(height: 16.h),
-                ],
-                // Conditional Fields based on the selected party type
-                if (selectedPartyType == "Farmer") ...[
-                  FarmerSelectionScreen(
-                    onSelectionChanged: (selectedFarmersitems) {
-                      setState(() {
-                        selectedFarmers = selectedFarmersitems;
-                      });
-                    },
-                  ),
-                ] else if (selectedPartyType == "Village") ...[
-                  VillageSelectionScreen(
-                    onSelectionChanged: (selectedVillagesitems) {
-                      setState(() {
-                        selectedVillages = selectedVillagesitems;
-                      });
-                    },
-                  ),
-                ] else if (selectedPartyType == "Doctor") ...[
-                  DoctorSelectionScreen(
-                    onSelectionChanged: (selectedDoctorsitems) {
-                      setState(() {
-                        selectedDoctors = selectedDoctorsitems;
-                      });
-                    },
-                  ),
-                ],
-                const SizedBox(height: 16),
-
-                SeasionSelectionScreen(
-                  onSelectionChanged: (selectedSeasionsitems) {
-                    setState(() {
-                      selectedSeasions = selectedSeasionsitems;
-                    });
-                  },
+              ),
+              const SizedBox(height: 16),
+              PrimaryContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SeasionSelectionScreen(
+                      onSelectionChanged: (selectedSeasionsitems) {
+                        setState(() {
+                          selectedSeasions = selectedSeasionsitems;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CropSelectionScreen(
+                      onSelectionChanged: (selectedCropsitems) {
+                        setState(() {
+                          selectedCrops = selectedCropsitems;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CropStageSelectionScreen(
+                      onSelectionChanged: (selectedCropStagesitems) {
+                        setState(() {
+                          selectedCropStages = selectedCropStagesitems;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    ProductMasterSelectionScreen(
+                      onSelectionChanged: (selectedProductsitems) {
+                        setState(() {
+                          selectedProducts = selectedProductsitems;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    PestSelectionScreen(
+                      onSelectionChanged: (selectedPestsitems) {
+                        setState(() {
+                          selectedPests = selectedPestsitems;
+                        });
+                      },
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                CropSelectionScreen(
-                  onSelectionChanged: (selectedCropsitems) {
-                    setState(() {
-                      selectedCrops = selectedCropsitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                CropStageSelectionScreen(
-                  onSelectionChanged: (selectedCropStagesitems) {
-                    setState(() {
-                      selectedCropStages = selectedCropStagesitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                ProductMasterSelectionScreen(
-                  onSelectionChanged: (selectedProductsitems) {
-                    setState(() {
-                      selectedProducts = selectedProductsitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                PestSelectionScreen(
-                  onSelectionChanged: (selectedPestsitems) {
-                    setState(() {
-                      selectedPests = selectedPestsitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  labelText: 'Expense',
-                  hintText: 'Enter the expense',
-                  icon: Icons.attach_money,
-                  controller: _expenseController,
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the expense';
-                    }
-                    return null;
-                  },
-                  maxLines: 1,
-                ),
-                const SizedBox(height: 16),
-
-                CustomTextField(
+              ),
+              const SizedBox(height: 16),
+              PrimaryContainer(
+                child: CustomTextField(
                   labelText: 'Remarks',
                   hintText: 'Enter remarks',
                   icon: Icons.comment,
@@ -241,44 +172,8 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                   },
                   maxLines: 3,
                 ),
-                const SizedBox(height: 16),
-
-                GestureDetector(
-                  onTap: () => _showImagePickerOptions(context),
-                  child: Container(
-                    height: 150.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: isDarkMode(context)
-                          ? Colors.grey[800]
-                          : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: _selectedImagePath == null
-                        ? Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 50.sp,
-                              color: Colors.grey,
-                            ),
-                          )
-                        : Image.file(
-                            File(_selectedImagePath!),
-                            fit: BoxFit.cover,
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                GeoLocationInputField(
-                  // initialAddress: gioLocation,
-                  onLocationSelected: (selectedAddress) {
-                    setState(() {
-                      gioLocation = selectedAddress;
-                    });
-                  },
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

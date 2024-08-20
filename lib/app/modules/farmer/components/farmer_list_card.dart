@@ -53,9 +53,7 @@ class FarmerListCard extends StatelessWidget {
                   children: [
                     Text(
                       farmer.farmersName,
-                      style: AppTypography.kBold20.copyWith(
-                        color: AppColors.kDarkContiner,
-                      ),
+                      style: AppTypography.kBold20,
                     ),
                     SizedBox(height: 4.h),
                     Text(

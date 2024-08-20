@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../controllers/master_controller.dart/Doctor_controller.dart';
 
 import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import 'activity_master_dropdown.dart';
 
 class DoctorSelectionScreen extends StatefulWidget {
   final void Function(List<Doctor>)
@@ -24,9 +25,7 @@ class _DoctorSelectionScreenState extends State<DoctorSelectionScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (doctorController.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const ShimmerLoading();
       } else if (doctorController.error.isNotEmpty) {
         return const Center(
           child: Text('Error loading Doctors.'),

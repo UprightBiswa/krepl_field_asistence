@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/master_controller.dart/Village_controller.dart';
 import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import 'activity_master_dropdown.dart';
 
 class VillageSelectionScreen extends StatefulWidget {
   final void Function(List<Village>) onSelectionChanged;
@@ -22,9 +23,7 @@ class _VillageSelectionScreenState extends State<VillageSelectionScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (villageController.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const ShimmerLoading();
       } else if (villageController.error.isNotEmpty) {
         return const Center(
           child: Text('Error loading Villages.'),

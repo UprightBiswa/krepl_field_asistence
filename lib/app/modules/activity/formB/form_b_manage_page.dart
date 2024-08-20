@@ -7,11 +7,11 @@ import '../../home/components/search_field.dart';
 import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/widgets.dart';
 import '../components/form_a_list_view.dart';
-import '../controller/form_a_controller.dart';
+import '../controller/form_b_controller.dart';
 import 'form_b_create_form_page.dart';
 
 class FormBManagementPage extends StatelessWidget {
-  final FormAController formBController = Get.put(FormAController());
+  final FormBController formBController = Get.put(FormBController());
   final TextEditingController textController = TextEditingController();
 
   FormBManagementPage({super.key});
@@ -30,7 +30,7 @@ class FormBManagementPage extends StatelessWidget {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'FormB Management',
+          'Jeep Campaign',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -41,7 +41,7 @@ class FormBManagementPage extends StatelessWidget {
         action: [
           CustomButton(
             icon: Icons.add,
-            text: 'Add FormB',
+            text: 'Add Campaign',
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormBpage(),
@@ -73,7 +73,7 @@ class FormBManagementPage extends StatelessWidget {
                           formBController.filterFormAList(query);
                         },
                         isEnabled: true,
-                        hintText: 'Search FormB',
+                        hintText: 'Search Campaign',
                       ),
                     ),
                     SizedBox(width: 10.w),
