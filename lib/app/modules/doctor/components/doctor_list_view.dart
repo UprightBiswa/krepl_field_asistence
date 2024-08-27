@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../model/doctor_list.dart';
 import 'doctor_list_card.dart';
 
-class FarmerListView extends StatelessWidget {
-  final List<Farmer> farmers;
+class DoctorListView extends StatelessWidget {
+  final List<Doctor> doctors;
 
-  const FarmerListView({super.key, required this.farmers});
+  const DoctorListView({super.key, required this.doctors});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +18,13 @@ class FarmerListView extends StatelessWidget {
         scrollDirection: Axis.vertical,
         clipBehavior: Clip.none,
         itemBuilder: (context, index) {
-          return FarmerListCard(
-            farmer: farmers[index],
+          return DoctorListCard(
+            doctor: doctors[index],
             index: index,
           );
         },
         separatorBuilder: (context, index) => SizedBox(height: 20.w),
-        itemCount: farmers.length,
+        itemCount: doctors.length,
       ),
     );
   }

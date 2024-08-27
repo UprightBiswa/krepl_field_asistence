@@ -8,6 +8,7 @@ import '../../activity/formB/form_b_manage_page.dart';
 import '../../activity/formC/form_c_manage_page.dart';
 import '../../activity/formD/form_d_manage_page.dart';
 import '../../activity/formE/form_e_manage_page.dart';
+import '../../doctor/doctor_managment_page.dart';
 import '../../farmer/farmer_managment_page.dart';
 import '../../route_plan/route_managment_page.dart';
 
@@ -73,7 +74,7 @@ List<MenuItem> reportMenuItems = [
     icon: Icons.local_hospital, // Example icon
     onTap: () {
       Get.to<void>(
-        () => FarmerManagementPage(),
+        () => DoctorManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },

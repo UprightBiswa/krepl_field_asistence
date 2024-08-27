@@ -9,24 +9,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../../model/master/doctor_master_model.dart';
 import '../../../model/master/crop_model.dart';
 import '../../../model/master/crop_stage.dart';
 import '../../../model/master/pest_master.dart';
 import '../../../model/master/villages_model.dart';
+import '../../doctor/model/doctor_list.dart';
 import '../../farmer/model/farmer_list.dart';
 import '../../widgets/form_field.dart/form_field.dart';
 import '../../widgets/widgets.dart';
-import '../components/activity_master_dropdown.dart';
-import '../components/crop_selection_dropdown.dart';
-import '../components/doctor_selection_dropdown.dart';
-import '../components/farmer_selection_dropdown.dart';
+import '../components/single_select_dropdown/activity_master_dropdown.dart';
+import '../components/multi_select_dropdown/crop_selection_dropdown.dart';
+import '../components/multi_select_dropdown/doctor_selection_dropdown.dart';
+import '../components/multi_select_dropdown/farmer_selection_dropdown.dart';
 import '../components/geo_location_selection_page.dart';
-import '../components/pest_selection_dropdown.dart';
-import '../components/products_selection_drodown.dart';
-import '../components/seasion_selection_dropdown.dart';
-import '../components/stages_selection_dropdown.dart';
-import '../components/village_selecton_dropdown.dart';
+import '../components/multi_select_dropdown/pest_selection_dropdown.dart';
+import '../components/multi_select_dropdown/products_selection_drodown.dart';
+import '../components/multi_select_dropdown/seasion_selection_dropdown.dart';
+import '../components/multi_select_dropdown/stages_selection_dropdown.dart';
+import '../components/multi_select_dropdown/village_selecton_dropdown.dart';
 import '../model/activity_master_model.dart';
 
 class CreateFormCpage extends StatefulWidget {

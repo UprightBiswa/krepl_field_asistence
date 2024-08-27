@@ -101,6 +101,7 @@ class _GeoLocationInputFieldState extends State<GeoLocationInputField> {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!isLocationServiceEnabled) {
+      // _showPermissionDialog();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enable location services.'),

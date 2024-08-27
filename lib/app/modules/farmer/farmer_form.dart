@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/constrants/constants.dart';
-import '../widgets/appbars/appbars.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/texts/custom_header_text.dart';

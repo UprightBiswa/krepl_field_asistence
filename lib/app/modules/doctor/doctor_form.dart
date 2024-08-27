@@ -6,21 +6,20 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/constrants/constants.dart';
-import '../widgets/appbars/appbars.dart';
+import '../../data/helpers/data/image_doctor_url.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
-import 'components/image_picker_continer.dart';
 
-class FarmerForm extends StatefulWidget {
-  const FarmerForm({super.key});
+class DoctorForm extends StatefulWidget {
+  const DoctorForm({super.key});
 
   @override
-  State<FarmerForm> createState() => _FarmerFormState();
+  State<DoctorForm> createState() => _DoctorFormState();
 }
 
-class _FarmerFormState extends State<FarmerForm> {
+class _DoctorFormState extends State<DoctorForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
@@ -39,8 +38,6 @@ class _FarmerFormState extends State<FarmerForm> {
   final TextEditingController _workPlaceNameController =
       TextEditingController();
   final TextEditingController _selectedDateController = TextEditingController();
-  String? _selectedPromotionActivity;
-  String? _imagePath;
 
   @override
   void dispose() {
@@ -78,19 +75,13 @@ class _FarmerFormState extends State<FarmerForm> {
     }
   }
 
-  void _handleImagePicked(String imagePath) {
-    setState(() {
-      _imagePath = imagePath;
-      log("Image Path: $_imagePath");
-    });
-  }
-
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: CustomBackAppBar(
         leadingCallback: () {
           Get.back<void>();
@@ -99,7 +90,7 @@ class _FarmerFormState extends State<FarmerForm> {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Farmer Form',
+          'Doctor Form',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -107,273 +98,263 @@ class _FarmerFormState extends State<FarmerForm> {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              SizedBox(height: 20.h),
-              PicProfileImgWidget(
-                onImagePicked: _handleImagePicked,
-              ),
-              SizedBox(height: 20.h),
-              // Basic Details Section
-              PrimaryContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomHeaderText(
-                      text: 'Farmer\'s Basic Details',
-                      fontSize: 20.sp,
-                    ),
-                    SizedBox(height: 16.h),
-                    CustomTextField(
-                      labelText: "Name",
-                      hintText: "Enter the farmer's name",
-                      icon: Icons.person,
-                      controller: _nameController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the name';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Father's Name",
-                      hintText: "Enter the father's name",
-                      icon: Icons.person,
-                      controller: _fatherNameController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the father\'s name';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Mobile Number",
-                      hintText: "Enter the mobile number",
-                      icon: Icons.phone,
-                      controller: _mobileController,
-                      keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a mobile number';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomDropdownField(
-                      labelText: "Promotion Activity",
-                      icon: Icons.star,
-                      items: const ["Activity 1", "Activity 2", "Activity 3"],
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedPromotionActivity = value;
-                        });
-                      },
-                      value: _selectedPromotionActivity,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a promotion activity';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                  ],
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            const FormImageHeader(),
+            Positioned(
+              top: 228.h,
+              left: 2.w,
+              right: 2.w,
+              bottom: 0,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 18.w),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // Basic Details Section
+                      PrimaryContainer(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomHeaderText(
+                              text: 'Doctor\'s Basic Details',
+                              fontSize: 20.sp,
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomTextField(
+                              labelText: "Name",
+                              hintText: "Enter the doctor's name",
+                              icon: Icons.person,
+                              controller: _nameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Father's Name",
+                              hintText: "Enter the father's name",
+                              icon: Icons.person,
+                              controller: _fatherNameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the father\'s name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Mobile Number",
+                              hintText: "Enter the mobile number",
+                              icon: Icons.phone,
+                              controller: _mobileController,
+                              keyboardType: TextInputType.phone,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a mobile number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      // Address Details Section
+                      PrimaryContainer(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomHeaderText(
+                              text: 'Doctor\'s Address Details',
+                              fontSize: 20.sp,
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomTextField(
+                              labelText: "Village/Locality",
+                              hintText: "Enter village/locality",
+                              icon: Icons.location_city,
+                              controller: _villageController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the village/locality';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Post Office Name",
+                              hintText: "Enter post office name",
+                              icon: Icons.mail,
+                              controller: _postOfficeController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the post office name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Sub-District",
+                              hintText: "Enter sub-district",
+                              icon: Icons.map,
+                              controller: _subDistController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the sub-district';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "District",
+                              hintText: "Enter district",
+                              icon: Icons.location_on,
+                              controller: _districtController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the district';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "State",
+                              hintText: "Enter state",
+                              icon: Icons.public,
+                              controller: _stateController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the state';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      // Field Details Section
+                      PrimaryContainer(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomHeaderText(
+                              text: 'Field Details',
+                              fontSize: 20.sp,
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomTextField(
+                              labelText: "Acre",
+                              hintText: "Enter the total acres",
+                              icon: Icons.landscape,
+                              controller: _acreController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the number of acres';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "PIN Code",
+                              hintText: "Enter the PIN code",
+                              icon: Icons.pin_drop,
+                              controller: _pinController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the PIN code';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Cow Count",
+                              hintText: "Enter the number of cows",
+                              icon: Icons.pets,
+                              controller: _cowCountController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the number of cows';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Buffalo Count",
+                              hintText: "Enter the number of buffaloes",
+                              icon: Icons.pets,
+                              controller: _buffaloCountController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the number of buffaloes';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Work Place Code",
+                              hintText: "Enter the work place code",
+                              icon: Icons.work,
+                              controller: _workPlaceCodeController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the work place code';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Work Place Name",
+                              hintText: "Enter the work place name",
+                              icon: Icons.business,
+                              controller: _workPlaceNameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the work place name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomDatePicker(
+                              labelText: "Date of Registration",
+                              icon: Icons.calendar_today,
+                              textEditingController: _selectedDateController,
+                              onDateSelected: _selectDate,
+                            ),
+                            SizedBox(height: 20.h),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(height: 20.h),
-              // Address Details Section
-              PrimaryContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomHeaderText(
-                      text: 'Farmer\'s Address Details',
-                      fontSize: 20.sp,
-                    ),
-                    SizedBox(height: 16.h),
-                    CustomTextField(
-                      labelText: "Village/Locality",
-                      hintText: "Enter village/locality",
-                      icon: Icons.location_city,
-                      controller: _villageController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the village/locality';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Post Office Name",
-                      hintText: "Enter post office name",
-                      icon: Icons.mail,
-                      controller: _postOfficeController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the post office name';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Sub-District",
-                      hintText: "Enter sub-district",
-                      icon: Icons.map,
-                      controller: _subDistController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the sub-district';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "District",
-                      hintText: "Enter district",
-                      icon: Icons.location_on,
-                      controller: _districtController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the district';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "State",
-                      hintText: "Enter state",
-                      icon: Icons.public,
-                      controller: _stateController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the state';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20.h),
-              // Field Details Section
-              PrimaryContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomHeaderText(
-                      text: 'Field Details',
-                      fontSize: 20.sp,
-                    ),
-                    SizedBox(height: 16.h),
-                    CustomTextField(
-                      labelText: "Acre",
-                      hintText: "Enter the total acres",
-                      icon: Icons.landscape,
-                      controller: _acreController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the number of acres';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "PIN Code",
-                      hintText: "Enter the PIN code",
-                      icon: Icons.pin_drop,
-                      controller: _pinController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the PIN code';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Cow Count",
-                      hintText: "Enter the number of cows",
-                      icon: Icons.pets,
-                      controller: _cowCountController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the number of cows';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Buffalo Count",
-                      hintText: "Enter the number of buffaloes",
-                      icon: Icons.pets,
-                      controller: _buffaloCountController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the number of buffaloes';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Work Place Code",
-                      hintText: "Enter the work place code",
-                      icon: Icons.work,
-                      controller: _workPlaceCodeController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the work place code';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomTextField(
-                      labelText: "Work Place Name",
-                      hintText: "Enter the work place name",
-                      icon: Icons.business,
-                      controller: _workPlaceNameController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the work place name';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomDatePicker(
-                      labelText: "Date of Registration",
-                      icon: Icons.calendar_today,
-                      textEditingController: _selectedDateController,
-                      onDateSelected: _selectDate,
-                    ),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20.h),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: Container(
@@ -401,6 +382,63 @@ class _FarmerFormState extends State<FarmerForm> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class FormImageHeader extends StatelessWidget {
+  const FormImageHeader({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 270.h,
+      width: Get.width,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(ImageDoctorUrl.doctorImage),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Container(
+            height: 270.h,
+            width: Get.width,
+            padding: EdgeInsets.all(12.h),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Doctor Name',
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'Mobile Number',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.white.withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

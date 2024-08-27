@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/master_controller.dart/product_master_controller.dart';
-import '../../../model/master/product_master.dart';
-import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
-import 'activity_master_dropdown.dart';
+import '../../../../controllers/master_controller.dart/product_master_controller.dart';
+import '../../../../model/master/product_master.dart';
+import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class ProductMasterSelectionScreen extends StatefulWidget {
   final void Function(List<ProductMaster>)

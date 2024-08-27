@@ -1,11 +1,11 @@
-import 'package:field_asistence/app/model/master/doctor_master_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/master_controller.dart/Doctor_controller.dart';
+import '../../../../controllers/master_controller.dart/Doctor_controller.dart';
 
-import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
-import 'activity_master_dropdown.dart';
+import '../../../doctor/model/doctor_list.dart';
+import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class DoctorSelectionScreen extends StatefulWidget {
   final void Function(List<Doctor>)

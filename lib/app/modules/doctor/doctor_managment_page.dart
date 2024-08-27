@@ -1,4 +1,3 @@
-import 'package:field_asistence/app/modules/farmer/farmer_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,16 +5,16 @@ import 'package:get/get.dart';
 import '../../data/constrants/constants.dart';
 import '../home/components/search_field.dart';
 import '../widgets/appbars/appbars.dart';
-import '../widgets/buttons/buttons.dart';
 import '../widgets/buttons/custom_button.dart';
 import 'components/doctor_list_view.dart';
 import 'controller/doctor_controller.dart';
+import 'doctor_form.dart';
 
-class FarmerManagementPage extends StatelessWidget {
-  FarmerManagementPage({super.key});
+class DoctorManagementPage extends StatelessWidget {
+  DoctorManagementPage({super.key});
 
   final TextEditingController textController = TextEditingController();
-  final FarmerController farmerController = Get.put(FarmerController());
+  final DoctorController doctorController = Get.put(DoctorController());
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
@@ -31,7 +30,7 @@ class FarmerManagementPage extends StatelessWidget {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Farmer Management',
+          'Doctor Management',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -42,10 +41,10 @@ class FarmerManagementPage extends StatelessWidget {
         action: [
           CustomButton(
             icon: Icons.add,
-            text: 'Add Farmer',
+            text: 'Add Doctor',
             isBorder: true,
             onTap: () {
-              Get.to(() => const FarmerForm(),
+              Get.to(() => const DoctorForm(),
                   transition: Transition.rightToLeftWithFade);
             },
           ),
@@ -55,7 +54,7 @@ class FarmerManagementPage extends StatelessWidget {
         ],
       ),
       body: Obx(() {
-        if (farmerController.isLoading.value) {
+        if (doctorController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -71,10 +70,10 @@ class FarmerManagementPage extends StatelessWidget {
                       child: SearchField(
                         controller: textController,
                         onChanged: (query) {
-                          farmerController.filterFarmers(query);
+                          doctorController.filterDoctors(query);
                         },
                         isEnabled: true,
-                        hintText: 'Search farmers',
+                        hintText: 'Search Doctors',
                       ),
                     ),
                     SizedBox(width: 10.w),
@@ -93,23 +92,9 @@ class FarmerManagementPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Text('Farmers', style: AppTypography.kBold16),
-                    const Spacer(),
-                    CustomTextButton(
-                      onPressed: () {
-                        // Logic to see all farmers
-                      },
-                      text: 'See All',
-                      color: AppColors.kDarkContiner.withOpacity(0.3),
-                    ),
-                  ],
-                ),
                 SizedBox(height: 20.h),
-                FarmerListView(
-                  farmers: farmerController.filteredFarmers,
+                DoctorListView(
+                  doctors: doctorController.filteredDoctors,
                 ),
                 SizedBox(height: AppSpacing.twentyVertical),
               ],

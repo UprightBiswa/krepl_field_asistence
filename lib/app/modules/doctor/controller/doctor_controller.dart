@@ -1,33 +1,34 @@
 import 'package:get/get.dart';
 
+import '../../../controllers/master_controller.dart/doctor_controller.dart';
 import '../model/doctor_list.dart';
 
-class FarmerController extends GetxController {
+class DoctorController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
-  List<Farmer> allFarmers = farmersList;
+  List<Doctor> allDoctors = dummyDoctors;
 
-  var filteredFarmers = <Farmer>[].obs;
+  var filteredDoctors = <Doctor>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    filteredFarmers.addAll(allFarmers); // Initialize with all farmers
+    filteredDoctors.addAll(allDoctors); // Initialize with all Doctors
   }
 
-  void filterFarmers(String query) {
+  void filterDoctors(String query) {
     isLoading.value = true;
-    filteredFarmers.value = allFarmers.where((farmer) {
+    filteredDoctors.value = allDoctors.where((Doctor) {
       final nameMatch =
-          farmer.farmersName.toLowerCase().contains(query.toLowerCase());
+          Doctor.name.toLowerCase().contains(query.toLowerCase());
       final mobileNumber =
-          farmer.mobileNumber.toLowerCase().contains(query.toLowerCase());
+          Doctor.mobileNumber.toLowerCase().contains(query.toLowerCase());
       return nameMatch || mobileNumber;
     }).toList();
 
-    if (filteredFarmers.isEmpty) {
-      errorMessage.value = 'No farmers match your search.';
+    if (filteredDoctors.isEmpty) {
+      errorMessage.value = 'No Doctors match your search.';
     } else {
       errorMessage.value = '';
     }

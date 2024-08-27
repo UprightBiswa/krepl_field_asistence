@@ -1,7 +1,7 @@
 // controllers/doctor_controller.dart
 import 'package:get/get.dart';
 
-import '../../model/master/doctor_master_model.dart';
+import '../../modules/doctor/model/doctor_list.dart';
 
 List<Doctor> dummyDoctors = [
   Doctor(
@@ -9,25 +9,43 @@ List<Doctor> dummyDoctors = [
     fatherName: "Mr. Richard Doe",
     mobileNumber: "1234567890",
     acre: "5",
-    pin: "123456",
-    villageName: "Green Village",
-    postOfficeName: "Green PO",
-    subDistName: "Green Sub-Dist",
-    districtName: "Green District",
-    stateName: "Green State",
+    pinCode: "110001",
+    villageLocalityName: "Springfield",
+    postOfficeName: "BO",
+    subDistName: "Central",
+    districtName: "Springfield District",
+    stateName: "Springfield State",
+    workPlaceCode: "WP001",
+    workPlaceName: "Springfield Clinic",
   ),
   Doctor(
     name: "Dr. Jane Smith",
     fatherName: "Mr. William Smith",
     mobileNumber: "0987654321",
     acre: "10",
-    pin: "654321",
-    villageName: "Blue Village",
-    postOfficeName: "Blue PO",
-    subDistName: "Blue Sub-Dist",
-    districtName: "Blue District",
-    stateName: "Blue State",
+    pinCode: "220002",
+    villageLocalityName: "Lakeside",
+    postOfficeName: "SO",
+    subDistName: "East",
+    districtName: "Lakeside District",
+    stateName: "Lakeside State",
+    workPlaceCode: "WP002",
+    workPlaceName: "Lakeside Hospital",
   ),
+  Doctor(
+    name: "Dr. Emily Clark",
+    fatherName: "Mr. George Clark",
+    mobileNumber: "1122334455",
+    acre: "10",
+    pinCode: "330003",
+    villageLocalityName: "Greensville",
+    postOfficeName: "HO",
+    subDistName: "West",
+    districtName: "Greensville District",
+    stateName: "Greensville State",
+    workPlaceCode: "WP003",
+    workPlaceName: "Greensville Health Center",
+  )
 ];
 
 class DoctorController extends GetxController {

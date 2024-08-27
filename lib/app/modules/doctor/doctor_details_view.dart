@@ -3,20 +3,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
+import '../../data/helpers/data/image_doctor_url.dart';
+import '../widgets/components/Info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'model/doctor_list.dart';
 
-class FarmerDetailView extends StatefulWidget {
-  final Farmer farmer;
-  const FarmerDetailView({required this.farmer, super.key});
+class DoctorDetailView extends StatefulWidget {
+  final Doctor doctor;
+  const DoctorDetailView({required this.doctor, super.key});
 
   @override
-  State<FarmerDetailView> createState() => _FarmerDetailViewState();
+  State<DoctorDetailView> createState() => _DoctorDetailViewState();
 }
 
-class _FarmerDetailViewState extends State<FarmerDetailView> {
+class _DoctorDetailViewState extends State<DoctorDetailView> {
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
   @override
@@ -31,7 +33,7 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Farmer Details',
+          'doctor Details',
           style: AppTypography.kBold20.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -43,7 +45,7 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            DetailImageHeader(farmer: widget.farmer),
+            DetailImageHeader(doctor: widget.doctor),
             Positioned(
               top: 228.h,
               left: 20.w,
@@ -52,33 +54,29 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    // Segment 1: Farmer's Basic Details
+                    // Segment 1: doctor's Basic Details
                     PrimaryContainer(
                       child: Column(
                         children: [
                           CustomHeaderText(
-                            text: widget.farmer.farmersName,
+                            text: widget.doctor.name,
                             fontSize: 20.sp,
                           ),
                           SizedBox(height: 16.h),
                           InfoRow(
-                            label: "Promotion Activity",
-                            value: widget.farmer.promotionActivity,
-                          ),
-                          InfoRow(
                             label: "Father's Name",
-                            value: widget.farmer.fatherName,
+                            value: widget.doctor.fatherName,
                           ),
                           InfoRow(
                             label: "Mobile Number",
-                            value: widget.farmer.mobileNumber,
+                            value: widget.doctor.mobileNumber,
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20.h),
 
-                    // Segment 2: Farmer's Address Details
+                    // Segment 2: doctor's Address Details
                     PrimaryContainer(
                       child: Column(
                         children: [
@@ -89,27 +87,27 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                           SizedBox(height: 16.h),
                           InfoRow(
                             label: "Village",
-                            value: widget.farmer.villageLocalityName,
+                            value: widget.doctor.villageLocalityName,
                           ),
                           InfoRow(
                             label: "Post Office",
-                            value: widget.farmer.postOfficeName,
+                            value: widget.doctor.postOfficeName,
                           ),
                           InfoRow(
                             label: "Sub-District",
-                            value: widget.farmer.subDistName,
+                            value: widget.doctor.subDistName,
                           ),
                           InfoRow(
                             label: "District",
-                            value: widget.farmer.districtName,
+                            value: widget.doctor.districtName,
                           ),
                           InfoRow(
                             label: "State",
-                            value: widget.farmer.stateName,
+                            value: widget.doctor.stateName,
                           ),
                           InfoRow(
                             label: "PIN",
-                            value: widget.farmer.pin,
+                            value: widget.doctor.pinCode,
                           ),
                         ],
                       ),
@@ -127,23 +125,15 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                           SizedBox(height: 16.h),
                           InfoRow(
                             label: "Acre",
-                            value: widget.farmer.acre.toString(),
-                          ),
-                          InfoRow(
-                            label: "Cows Count",
-                            value: widget.farmer.cowCount.toString(),
-                          ),
-                          InfoRow(
-                            label: "Buffalos Count",
-                            value: widget.farmer.buffaloCount.toString(),
+                            value: widget.doctor.acre.toString(),
                           ),
                           InfoRow(
                             label: "Work Place Code",
-                            value: widget.farmer.workPlaceCode,
+                            value: widget.doctor.workPlaceCode,
                           ),
                           InfoRow(
                             label: "Work Place Name",
-                            value: widget.farmer.workPlaceName,
+                            value: widget.doctor.workPlaceName,
                           ),
                         ],
                       ),
@@ -156,9 +146,9 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
           ],
         ),
       ),
-      bottomNavigationBar: FarmerActionSheet(
+      bottomNavigationBar: DoctorActionSheet(
         editCallback: () {
-          // Logic for editing farmer details
+          // Logic for editing doctor details
         },
       ),
     );
@@ -166,17 +156,17 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
 }
 
 class DetailImageHeader extends StatelessWidget {
-  final Farmer farmer;
-  const DetailImageHeader({super.key, required this.farmer});
+  final Doctor doctor;
+  const DetailImageHeader({super.key, required this.doctor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 270.h,
       width: Get.width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(farmer.image),
+          image: NetworkImage(ImageDoctorUrl.doctorImage),
           fit: BoxFit.cover,
         ),
       ),
@@ -198,7 +188,7 @@ class DetailImageHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  farmer.farmersName,
+                  doctor.name,
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.bold,
@@ -206,7 +196,7 @@ class DetailImageHeader extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  farmer.promotionActivity,
+                  doctor.mobileNumber,
                   style: TextStyle(
                     fontSize: 18.sp,
                     color: Colors.white.withOpacity(0.7),
@@ -221,35 +211,18 @@ class DetailImageHeader extends StatelessWidget {
   }
 }
 
-class InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const InfoRow({super.key, required this.label, required this.value});
+class DoctorActionSheet extends StatefulWidget {
+  final VoidCallback editCallback;
+  const DoctorActionSheet({
+    super.key,
+    required this.editCallback,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 16.sp, color: Colors.grey),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
+  State<DoctorActionSheet> createState() => _DoctorActionSheetState();
 }
 
-class FarmerActionSheet extends StatelessWidget {
-  final VoidCallback editCallback;
-  const FarmerActionSheet({super.key, required this.editCallback});
+class _DoctorActionSheetState extends State<DoctorActionSheet> {
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
@@ -267,8 +240,8 @@ class FarmerActionSheet extends StatelessWidget {
         children: [
           Expanded(
             child: PrimaryButton(
-              onTap: editCallback,
-              text: "Edit Farmer Details",
+              onTap: widget.editCallback,
+              text: "Edit doctor Details",
             ),
           ),
         ],

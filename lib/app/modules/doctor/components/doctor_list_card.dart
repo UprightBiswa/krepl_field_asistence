@@ -10,11 +10,11 @@ import '../../widgets/containers/primary_container.dart';
 import '../doctor_details_view.dart';
 import '../model/doctor_list.dart';
 
-class FarmerListCard extends StatelessWidget {
-  final Farmer farmer;
+class DoctorListCard extends StatelessWidget {
+  final Doctor doctor;
   final int index;
 
-  const FarmerListCard({required this.farmer, required this.index, super.key});
+  const DoctorListCard({required this.doctor, required this.index, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,8 @@ class FarmerListCard extends StatelessWidget {
       child: AnimatedButton(
         onTap: () {
           Get.to<dynamic>(
-            FarmerDetailView(
-              farmer: farmer,
+            DoctorDetailView(
+              doctor: doctor,
             ),
             transition: Transition.rightToLeftWithFade,
           );
@@ -35,38 +35,49 @@ class FarmerListCard extends StatelessWidget {
           height: 150.h,
           child: Row(
             children: [
-              // Circular image of the farmer
-              ClipRRect(
-                borderRadius: BorderRadius.circular(50.r),
-                child: Image.network(
-                  farmer.image,
-                  width: 80.w,
-                  height: 80.w,
-                  fit: BoxFit.cover,
+              // Circular image of the doctor
+              // ClipRRect(
+              //   borderRadius: BorderRadius.circular(50.r),
+              //   child: Image.network(
+              //     doctor.image,
+              //     width: 80.w,
+              //     height: 80.w,
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
+              // make a cercle avotorre to show name 2 string in cernter
+              CircleAvatar(
+                radius: 40.r,
+                backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                child: Text(
+                  doctor.name.substring(0, 2).toUpperCase(),
+                  style: AppTypography.kBold20.copyWith(
+                    color: AppColors.kPrimary,
+                  ),
                 ),
               ),
               SizedBox(width: 16.w),
-              // Farmer details
+              // doctor details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      farmer.farmersName,
+                      doctor.name,
                       style: AppTypography.kBold20.copyWith(
                         color: AppColors.kDarkContiner,
                       ),
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      farmer.promotionActivity,
+                      doctor.fatherName,
                       style: AppTypography.kBold14.copyWith(
                         color: AppColors.kPrimary,
                       ),
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      'Contact: ${farmer.mobileNumber}',
+                      'Contact: ${doctor.mobileNumber}',
                       style: AppTypography.kLight16.copyWith(
                         color: AppColors.kNeutral04.withOpacity(0.75),
                       ),
@@ -77,10 +88,10 @@ class FarmerListCard extends StatelessWidget {
               // Action menu icon
               ActionMenuIcon(
                 onEdit: () {
-                  // Edit farmer logic
+                  // Edit doctor logic
                 },
                 onDelete: () {
-                  // Delete farmer logic
+                  // Delete doctor logic
                 },
               ),
             ],

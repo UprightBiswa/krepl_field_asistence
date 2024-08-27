@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 
 import '../../../data/constrants/constants.dart';
@@ -27,12 +26,9 @@ class CustomSwipeButton extends StatelessWidget {
           isDarkMode(context) ? AppColors.kSecondary : AppColors.kPrimary,
       activeTrackColor:
           isDarkMode(context) ? AppColors.kDarkHint : const Color(0xFFEAF6EF),
-      thumb: Padding(
-        padding: EdgeInsets.all(15.h),
-        child: Icon(
-          AppAssets.kArrowForwardRounded,
-          color: isDarkMode(context) ? AppColors.kBackground : AppColors.kWhite,
-        ),
+      thumb: Icon(
+        AppAssets.kArrowForwardRounded,
+        color: isDarkMode(context) ? AppColors.kBackground : AppColors.kWhite,
       ),
       onSwipe: onSwipe,
       child: Center(

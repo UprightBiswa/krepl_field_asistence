@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../farmer/controller/farmer_controller.dart';
-import '../../farmer/model/farmer_list.dart';
-import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
-import 'activity_master_dropdown.dart';
+import '../../../farmer/controller/farmer_controller.dart';
+import '../../../farmer/model/farmer_list.dart';
+import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class FarmerSelectionScreen extends StatefulWidget {
   final void Function(List<Farmer>)

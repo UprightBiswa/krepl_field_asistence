@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
+import '../widgets/components/Info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
@@ -221,31 +222,6 @@ class DetailImageHeader extends StatelessWidget {
   }
 }
 
-class InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const InfoRow({super.key, required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 16.sp, color: Colors.grey),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class FarmerActionSheet extends StatelessWidget {
   final VoidCallback editCallback;
