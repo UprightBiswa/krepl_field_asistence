@@ -76,9 +76,6 @@ class AppAssets {
   static const IconData kPersion = Icons.person;
   static const IconData kPersionOutliend = Icons.person_outline;
 
-
-
-
   static const IconData kSearch = Icons.search;
   static const IconData kPopular = Icons.trending_up;
   static const IconData kRecords = Icons.library_books;
@@ -125,8 +122,12 @@ class AppAssets {
   static const IconData kBusiness = Icons.business_center;
   static const IconData kLifeStyle = Icons.style;
   static const IconData kCoding = Icons.code;
-  static const IconData kCalendar = Icons.calendar_today;
+  static const IconData kCalendar = Icons.calendar_month;
   static const IconData kTriangleUp = Icons.arrow_drop_up;
+  static const IconData kTriangleDown = Icons.arrow_drop_down;
+  static const IconData kMap = Icons.map;
+  static const IconData kLocation = Icons.location_on;
+
 
   // Images.
   static String kTeacher1 = 'assets/images/teacher1.jpg';
@@ -152,5 +153,4 @@ class AppAssets {
   static String kStoreSet = 'assets/images/store_set.png';
   static String kProject = 'assets/images/project.png';
   static String kLogo = 'assets/images/app_icon.png';
-
 }

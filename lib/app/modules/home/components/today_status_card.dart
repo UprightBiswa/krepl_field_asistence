@@ -1,9 +1,11 @@
 import 'package:field_asistence/app/modules/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
 import '../../../model/login/user_details_reponse.dart';
+import '../../attendance/attendance_view_page.dart';
 import '../../widgets/containers/primary_container.dart';
 
 class TodayStatusCard extends StatelessWidget {
@@ -69,6 +71,12 @@ class TodayStatusCard extends StatelessWidget {
             title: 'Attendance',
             subtitle: 'Swipe to view Attendance',
             onSwipe: () {
+              // get.to
+              // AttendanceViewPage
+              Get.to(
+                () => AttendanceViewPage(userDetails: userDetails),
+                transition: Transition.rightToLeft,
+              );
               // showModalBottomSheet<void>(
               //   context: context,
               //   isScrollControlled: true,
