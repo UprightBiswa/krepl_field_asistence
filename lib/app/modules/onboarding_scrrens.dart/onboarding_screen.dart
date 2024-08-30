@@ -213,8 +213,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
 class GradientBackground extends StatelessWidget {
   final bool isDarkMode;
 
-  const GradientBackground({Key? key, required this.isDarkMode})
-      : super(key: key);
+  const GradientBackground({super.key, required this.isDarkMode});
 
   @override
   Widget build(BuildContext context) {

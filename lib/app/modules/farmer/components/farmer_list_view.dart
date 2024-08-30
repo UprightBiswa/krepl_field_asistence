@@ -10,22 +10,19 @@ class FarmerListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      
-      child: ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        clipBehavior: Clip.none,
-        itemBuilder: (context, index) {
-          return FarmerListCard(
-            farmer: farmers[index],
-            index: index,
-          );
-        },
-        separatorBuilder: (context, index) => SizedBox(height: 20.w),
-        itemCount: farmers.length,
-      ),
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      clipBehavior: Clip.none,
+      itemBuilder: (context, index) {
+        return FarmerListCard(
+          farmer: farmers[index],
+          index: index,
+        );
+      },
+      separatorBuilder: (context, index) => SizedBox(height: 10.h),
+      itemCount: farmers.length,
     );
   }
 }

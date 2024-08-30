@@ -11,7 +11,7 @@ class SettingTile extends StatefulWidget {
   final VoidCallback? onTap;
   final bool? switchValue;
   final void Function(bool)? onChanged;
-  final Widget? trailing;
+  final bool? trailing;
   const SettingTile({
     required this.title,
     required this.icon,
@@ -57,22 +57,8 @@ class _SettingTileState extends State<SettingTile> {
           : widget.subtitle != null
               ? Text(widget.subtitle!, style: AppTypography.kLight14)
               : null,
-      // trailing: widget.isSwitch
-      //     ? CustomSwitch(
-      //         value: widget.switchValue!,
-      //         activeColor: isDarkMode(context)
-      //             ? Colors.black
-      //             : AppColors.kPrimary,
-      //         onChanged: widget.onChanged!,
-      //       )
-      //     :Icon(
-      //         AppAssets.kArrowForward,
-      //         color: AppColors.kSecondary.withOpacity(0.4),
-      //       ),
-      // contentPadding: EdgeInsets.zero,
-      // minVerticalPadding: 0,
-      trailing: widget.trailing ??
-          (widget.isSwitch
+      trailing: widget.trailing != null
+          ? (widget.isSwitch
               ? CustomSwitch(
                   value: widget.switchValue!,
                   activeColor:
@@ -82,7 +68,8 @@ class _SettingTileState extends State<SettingTile> {
               : Icon(
                   AppAssets.kArrowForward,
                   color: AppColors.kDarkContiner.withOpacity(0.4),
-                )),
+                ))
+          : null,
       contentPadding: EdgeInsets.zero,
       minVerticalPadding: 0,
     );

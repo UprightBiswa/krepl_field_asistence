@@ -11,7 +11,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/constrants/constants.dart';
-import '../../data/helpers/utils/dioservice/dio_service.dart';
 import '../../model/login/user_details_reponse.dart';
 import '../../provider/connction_provider/connectivity_provider.dart';
 import '../../provider/login_provider/login_provider.dart';
@@ -306,12 +305,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final authState = Provider.of<AuthState>(context, listen: false);
-    final DioService dioService = DioService();
-    // Fetch the device token and set it in DioService
-    authState.getDeviceToken().then((_) {
-      authState.setDeviceTokenInDio(dioService);
-    });
     connectivityProvider = Provider.of<ConnectivityProvider>(context);
     bool isDarkMode(BuildContext context) =>
         Theme.of(context).brightness == Brightness.dark;

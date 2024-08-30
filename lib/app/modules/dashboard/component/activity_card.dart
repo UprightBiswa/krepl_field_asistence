@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,8 +7,9 @@ import '../model/data_model.dart';
 
 class ActivityCard extends StatelessWidget {
   final ActivityData activity;
+  final int index;
 
-  const ActivityCard({required this.activity, super.key});
+  const ActivityCard({required this.activity, super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -16,104 +18,107 @@ class ActivityCard extends StatelessWidget {
     double percentage =
         (activity.achievedActivityNumbers / activity.targetActivityNumbers) *
             100;
-    return PrimaryContainer(
-      padding: EdgeInsets.all(8.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10.h),
-                child: Container(
-                  color: activity.achievedActivityColor.withOpacity(0.1),
-                  height: 40.h,
-                  width: 40.h,
-                  child: Icon(
-                    activity.icon,
-                    size: 20.h,
-                    color: activity.achievedActivityColor,
-                  ),
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                  text: 'Today: ',
-                  style: AppTypography.kMedium12.copyWith(
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kGrey,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '\n${activity.todayActivity}',
-                      style: AppTypography.kMedium12.copyWith(
-                        color: activity.todayActivityColor,
-                      ),
+    return FadeIn(
+      delay: const Duration(milliseconds: 200) * index,
+      child: PrimaryContainer(
+        padding: EdgeInsets.all(8.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.h),
+                  child: Container(
+                    color: activity.achievedActivityColor.withOpacity(0.1),
+                    height: 40.h,
+                    width: 40.h,
+                    child: Icon(
+                      activity.icon,
+                      size: 20.h,
+                      color: activity.achievedActivityColor,
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Text(activity.activityName,
-              // maxLines: 1,
-              // overflow: TextOverflow.ellipsis,
-              style: AppTypography.kMedium14
-              // style: const TextStyle(
-              //   color: Colors.white,
-              //   fontSize: 16,
-              //   fontWeight: FontWeight.bold,
-              // ),
-              ),
-          ProgressLine(
-            color: activity.achievedActivityColor,
-            percentage: percentage.toInt(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RichText(
-                text: TextSpan(
-                  text: 'Achieved: ',
-                  style: AppTypography.kMedium12.copyWith(
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kGrey,
                   ),
-                  children: [
-                    TextSpan(
-                      text: '\n${activity.achievedActivityNumbers}',
-                      style: AppTypography.kMedium12.copyWith(
-                        color: activity.achievedActivityColor,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-              RichText(
-                text: TextSpan(
-                  text: 'Target: ',
-                  style: AppTypography.kMedium12.copyWith(
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kGrey,
+                RichText(
+                  text: TextSpan(
+                    text: 'Today: ',
+                    style: AppTypography.kMedium12.copyWith(
+                      color: isDarkMode(context)
+                          ? AppColors.kWhite
+                          : AppColors.kGrey,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '\n${activity.todayActivity}',
+                        style: AppTypography.kMedium12.copyWith(
+                          color: activity.todayActivityColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  children: [
-                    TextSpan(
-                      text: '\n${activity.targetActivityNumbers}',
-                      style: AppTypography.kMedium12.copyWith(
-                        color: activity.targetActivityColor,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            Text(activity.activityName,
+                // maxLines: 1,
+                // overflow: TextOverflow.ellipsis,
+                style: AppTypography.kMedium14
+                // style: const TextStyle(
+                //   color: Colors.white,
+                //   fontSize: 16,
+                //   fontWeight: FontWeight.bold,
+                // ),
+                ),
+            ProgressLine(
+              color: activity.achievedActivityColor,
+              percentage: percentage.toInt(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    text: 'Achieved: ',
+                    style: AppTypography.kMedium12.copyWith(
+                      color: isDarkMode(context)
+                          ? AppColors.kWhite
+                          : AppColors.kGrey,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '\n${activity.achievedActivityNumbers}',
+                        style: AppTypography.kMedium12.copyWith(
+                          color: activity.achievedActivityColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    text: 'Target: ',
+                    style: AppTypography.kMedium12.copyWith(
+                      color: isDarkMode(context)
+                          ? AppColors.kWhite
+                          : AppColors.kGrey,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '\n${activity.targetActivityNumbers}',
+                        style: AppTypography.kMedium12.copyWith(
+                          color: activity.targetActivityColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

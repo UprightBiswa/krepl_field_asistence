@@ -1,4 +1,6 @@
 import 'package:field_asistence/app/modules/farmer/farmer_form.dart';
+import 'package:field_asistence/app/modules/widgets/no_result/error_page.dart';
+import 'package:field_asistence/app/modules/widgets/texts/custom_header_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import '../home/components/search_field.dart';
 import '../widgets/appbars/appbars.dart';
 import '../widgets/buttons/buttons.dart';
 import '../widgets/buttons/custom_button.dart';
+import '../widgets/no_result/no_result.dart';
 import 'components/farmer_list_view.dart';
 import 'controller/farmer_controller.dart';
 
@@ -55,69 +58,89 @@ class FarmerManagementPage extends StatelessWidget {
           )
         ],
       ),
-      body: Obx(() {
-        if (farmerController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SearchField(
-                        controller: textController,
-                        onChanged: (query) {
-                          farmerController.filterFarmers(query);
-                        },
-                        isEnabled: true,
-                        hintText: 'Search farmers',
+      body: RefreshIndicator(
+        onRefresh: () async {
+          farmerController.filteredFarmers();
+        },
+        child: Column(
+          children: [
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0.h),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SearchField(
+                      controller: textController,
+                      onChanged: (query) {
+                        farmerController.filterFarmers(query);
+                      },
+                      isEnabled: true,
+                      hintText: 'Search farmers',
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () {
+                      // Logic for filter action
+                    },
+                    child: CircleAvatar(
+                      radius: 20.w,
+                      backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                      child: const Icon(
+                        Icons.filter_list,
+                        color: AppColors.kPrimary,
                       ),
                     ),
-                    SizedBox(width: 10.w),
-                    GestureDetector(
-                      onTap: () {
-                        // Logic for filter action
-                      },
-                      child: CircleAvatar(
-                        radius: 20.w,
-                        backgroundColor: AppColors.kPrimary.withOpacity(0.15),
-                        child: const Icon(
-                          Icons.filter_list,
-                          color: AppColors.kPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Text('Farmers', style: AppTypography.kBold16),
-                    const Spacer(),
-                    CustomTextButton(
-                      onPressed: () {
-                        // Logic to see all farmers
-                      },
-                      text: 'See All',
-                      color: AppColors.kDarkContiner.withOpacity(0.3),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                FarmerListView(
-                  farmers: farmerController.filteredFarmers,
-                ),
-                SizedBox(height: AppSpacing.twentyVertical),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0.h),
+              child: Row(
+                children: [
+                  CustomHeaderText(text: 'Farmers', fontSize: 16.sp),
+                  const Spacer(),
+                  CustomTextButton(
+                    onPressed: () {
+                      // Logic to see all farmers
+                    },
+                    text: 'See All',
+                    color: AppColors.kDarkContiner.withOpacity(0.3),
+                  ),
+                ],
+              ),
+            ),
+            Obx(() {
+              if (farmerController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (farmerController.filteredFarmers.isEmpty) {
+                return const Expanded(
+                  child: SingleChildScrollView(child: NoResultsScreen()),
+                );
+              } else if (farmerController.isError.value) {
+                return const Expanded(
+                  child: SingleChildScrollView(child: Error404Screen()),
+                );
+              }
+              return Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0.h),
+                  child: Column(
+                    children: [
+                      FarmerListView(
+                        farmers: farmerController.filteredFarmers,
+                      ),
+                      SizedBox(height: 10.h),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
     );
   }
 }

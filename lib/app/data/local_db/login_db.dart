@@ -1,4 +1,3 @@
-
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
@@ -37,6 +36,13 @@ class UserDatabase {
 
     print('User details retrieved: ${snapshot?.value}');
     return snapshot?.value;
+  }
+
+  Future<void> clearUserDetails(String username) async {
+    final Database db = await _openDatabase();
+    await _store.record(username).delete(db);
+    print('User details cleared for username: $username');
+    _printObjectCount();
   }
 
   void _printObjectCount() async {

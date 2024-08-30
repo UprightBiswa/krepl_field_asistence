@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../attendance/attendance_view_page.dart';
 import '../widgets.dart';
 
 class GradientUtil {

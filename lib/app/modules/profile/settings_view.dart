@@ -1,3 +1,4 @@
+import 'package:field_asistence/app/modules/widgets/appbars/appbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,6 @@ import '../../model/login/user_details_reponse.dart';
 import '../../repository/auth/auth_token.dart';
 import '../auth/sign_in_page.dart';
 import '../widgets/buttons/buttons.dart';
-import 'components/app_version.dart';
 import 'components/setting_tile.dart';
 
 class SettingsView extends StatefulWidget {
@@ -170,22 +170,19 @@ class _SettingsViewState extends State<SettingsView> {
         Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: EdgeInsets.all(10.h),
-          child: CustomIconButton(
-            color: isDarkMode(context)
-                ? Colors.black
-                : AppColors.kPrimary.withOpacity(0.14),
-            icon: AppAssets.kArrowBack,
-            iconColor: isDarkMode(context) ? Colors.white : AppColors.kPrimary,
-            onTap: () {
-              Get.back<void>();
-            },
+      appBar: CustomBackAppBar(
+        leadingCallback: () {
+          Get.back<void>();
+        },
+        iconColor: isDarkMode(context)
+            ? Colors.black
+            : AppColors.kPrimary.withOpacity(0.15),
+        title: Text(
+          'Settings',
+          style: AppTypography.kBold14.copyWith(
+            color: isDarkMode(context) ? Colors.white : AppColors.kDarkContiner,
           ),
         ),
-        centerTitle: true,
-        title: const Text('Settings'),
       ),
       body: Column(
         children: [
@@ -198,35 +195,20 @@ class _SettingsViewState extends State<SettingsView> {
                     icon: AppAssets.kProfile,
                     title: widget.userDetails.employeeName,
                     subtitle: widget.userDetails.hrEmployeeCode,
-                    onTap: () {},
+                    onTap: () {
+                      Get.back();
+                    },
                   ),
                   const Divider(height: 0.5),
                   SettingTile(
                     icon: AppAssets.kEmail,
                     title: 'Email',
                     subtitle: widget.userDetails.email,
-                    onTap: () {},
+                    onTap: () {
+                      Get.back();
+                    },
                   ),
                   const Divider(height: 0.5),
-                  // SettingTile(
-                  //   icon: AppAssets.kPassword,
-                  //   title: 'Password',
-                  //   subtitle: 'Last changed 3 months ago',
-                  //   onTap: () {},
-                  // ),
-                  // const Divider(),
-                  // SettingTile(
-                  //   icon: AppAssets.kNotifications,
-                  //   isSwitch: true,
-                  //   title: 'Notifications',
-                  //   switchValue: isNotification,
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       isNotification = value;
-                  //     });
-                  //   },
-                  // ),
-                  // const Divider(),
                   GetBuilder<ThemeController>(
                     init: ThemeController(),
                     initState: (_) {},
@@ -244,27 +226,10 @@ class _SettingsViewState extends State<SettingsView> {
                             _.setTheme('light');
                           }
                         },
+                        trailing: true,
                       );
                     },
                   ),
-                  // const Divider(),
-                  // SettingTile(
-                  //   icon: AppAssets.kDownload,
-                  //   isSwitch: true,
-                  //   title: 'Download courses',
-                  //   switchValue: isDownloadAll,
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       isDownloadAll = value;
-                  //     });
-                  //   },
-                  // ),
-                  // const Divider(),
-                  // SettingTile(
-                  //   icon: AppAssets.kHelp,
-                  //   title: 'Help & Feedback',
-                  //   onTap: () {},
-                  // ),
                   const Divider(),
                   SettingTile(
                     icon: AppAssets.kPrivacy,
@@ -278,9 +243,9 @@ class _SettingsViewState extends State<SettingsView> {
                   SettingTile(
                     icon: Icons.info,
                     title: "App Version",
-                    // subtitle: appVersion,
+                    subtitle: appVersion,
                     onTap: () {},
-                    trailing: const AppVersionWidget(),
+                    // trailing: const AppVersionWidget(),
                   ),
                   const Divider(),
                 ],

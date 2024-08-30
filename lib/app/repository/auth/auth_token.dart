@@ -165,8 +165,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/helpers/utils/dioservice/dio_service.dart';
-
 class AuthState with ChangeNotifier {
   String _workplaceCode = '';
   String _hrEmployeeCode = '';
@@ -318,15 +316,13 @@ class AuthState with ChangeNotifier {
   }
 
   Future<String?> getDeviceToken() async {
+    
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('deviceToken');
+    String? token = prefs.getString('deviceToken');
+    print('Retrieved device token: $token'); // Add this print statement
+    return token;
   }
 
-  void setDeviceTokenInDio(DioService dioService) {
-    if (_deviceToken.isNotEmpty) {
-      dioService.setDeviceToken(_deviceToken);
-    }
-  }
 
   Future<void> clearToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -5,23 +5,24 @@ import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import '../model/activity_master_model.dart';
 
 class ActivityMasterController extends GetxController {
-  // Observables
   var isLoading = true.obs;
   var isError = false.obs;
+  var errorMessage = ''.obs;
   var activityMasterList = <ActivityMaster>[].obs;
 
   // Services
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
-  // Method to fetch data dynamically
   void fetchActivityMasterData(String formNo) async {
     print('Fetching data for form: $formNo');
     try {
       isLoading(true); // Start loading
       isError(false); // Reset error state
+      errorMessage('');
       // Check connectivity
       if (!await _connectivityService.checkInternet()) {
+        // errorMessage('No internet connection');
         throw Exception('No internet connection');
       }
 
@@ -34,21 +35,36 @@ class ActivityMasterController extends GetxController {
       final response =
           await _dioService.post(endPoint, queryParams: parameters);
 
-      if (response.statusCode == 200 && response.data['success']) {
-        // Parse the response data
-        var data = response.data['data'] as List;
-        var fetchedData =
-            data.map((json) => ActivityMaster.fromJson(json)).toList();
-        print(response.data);
-        // Update the observable list with fetched data
-        activityMasterList.assignAll(fetchedData);
+      if (response.statusCode == 200) {
+        bool success =
+            response.data['success'] ?? false; // Default to false if null
+        if (success) {
+          // Parse the response data
+          var data = response.data['data'] as List;
+          var fetchedData =
+              data.map((json) => ActivityMaster.fromJson(json)).toList();
+          print('Data fetched successfully: $fetchedData');
+
+          activityMasterList.assignAll(fetchedData);
+        } else {
+          String message = response.data['message'] ?? 'Unknown error occurred';
+          print('Error fetching data: $message');
+          errorMessage(message);
+          throw Exception(message);
+        }
       } else {
-        throw Exception('Failed to load data');
+        print('Error fetching data: ${response.data['message']}');
+        String error = 'Failed to load data: HTTP ${response.statusCode}';
+        print(error);
+        errorMessage(error);
+        throw Exception(error);
       }
     } catch (e) {
-      isError(true); // If an error occurs, set isError to true
+      print('Error: $e');
+      errorMessage(e.toString());
+      isError(true);
     } finally {
-      isLoading(false); // End loading
+      isLoading(false);
     }
   }
 

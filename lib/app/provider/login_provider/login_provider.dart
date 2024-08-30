@@ -162,34 +162,45 @@ class LoginProvider extends ChangeNotifier {
         print('Successful Response');
         var responseData = response.data as Map<String, dynamic>;
         var userData = responseData['data'];
-        _userDetails = UserDetails.fromJson(userData);
-        print('Parsed user details: $_userDetails');
+        if (userData != null && userData.isNotEmpty) {
+          _userDetails = UserDetails.fromJson(userData);
+          print('Parsed user details: $_userDetails');
 
-        // Log each field of the UserDetails before saving
+          // Log each field of the UserDetails before saving
 
-        await _userDatabase.saveUserDetails(deviceToken, response.data!);
-        AuthState().setToken(
-          _userDetails!.workplaceCode,
-          _userDetails!.hrEmployeeCode,
-          _userDetails!.employeeName,
-          _userDetails!.fatherName,
-          _userDetails!.designation,
-          _userDetails!.dateOfJoining,
-          _userDetails!.headquarter,
-          _userDetails!.mobileNumber,
-          _userDetails!.email,
-          _userDetails!.company,
-          _userDetails!.dateOfLeaving,
-          _userDetails!.staffType,
-          _userDetails!.deviceToken,
-        );
+          await _userDatabase.saveUserDetails(deviceToken, response.data!);
+          AuthState().setToken(
+            _userDetails!.workplaceCode,
+            _userDetails!.hrEmployeeCode,
+            _userDetails!.employeeName,
+            _userDetails!.fatherName,
+            _userDetails!.designation,
+            _userDetails!.dateOfJoining,
+            _userDetails!.headquarter,
+            _userDetails!.mobileNumber,
+            _userDetails!.email,
+            _userDetails!.company,
+            _userDetails!.dateOfLeaving,
+            _userDetails!.staffType ?? 'staffType',
+            _userDetails!.deviceToken,
+          );
 
-        return UserDetailsResponse.fromJson(response.data);
+          return UserDetailsResponse.fromJson(response.data);
+        } else {
+          print('No data found in API response');
+          // Clear cached data if API returns null or empty
+          await _userDatabase.clearUserDetails(deviceToken);
+          return UserDetailsResponse(
+            success: false,
+            message: 'Data Not found',
+            data: null,
+          );
+        }
       } else {
         print('Background Error Response: ${response.data}');
         return UserDetailsResponse(
           success: false,
-          message: 'No internet connection',
+          message: 'Error fetching data',
           data: null,
         );
       }
@@ -225,24 +236,30 @@ class LoginProvider extends ChangeNotifier {
           print('Successful Background Response');
           var responseData = response.data as Map<String, dynamic>;
           var userData = responseData['data'];
-          _userDetails = UserDetails.fromJson(userData);
-          print('Parsed user details: $_userDetails');
-          await _userDatabase.saveUserDetails(deviceToken, response.data!);
-          AuthState().setToken(
-            _userDetails!.workplaceCode,
-            _userDetails!.hrEmployeeCode,
-            _userDetails!.employeeName,
-            _userDetails!.fatherName,
-            _userDetails!.designation,
-            _userDetails!.dateOfJoining,
-            _userDetails!.headquarter,
-            _userDetails!.mobileNumber,
-            _userDetails!.email,
-            _userDetails!.company,
-            _userDetails!.dateOfLeaving,
-            _userDetails!.staffType,
-            _userDetails!.deviceToken,
-          );
+          if (userData != null && userData.isNotEmpty) {
+            _userDetails = UserDetails.fromJson(userData);
+            print('Parsed user details: $_userDetails');
+            await _userDatabase.saveUserDetails(deviceToken, response.data!);
+            AuthState().setToken(
+              _userDetails!.workplaceCode,
+              _userDetails!.hrEmployeeCode,
+              _userDetails!.employeeName,
+              _userDetails!.fatherName,
+              _userDetails!.designation,
+              _userDetails!.dateOfJoining,
+              _userDetails!.headquarter,
+              _userDetails!.mobileNumber,
+              _userDetails!.email,
+              _userDetails!.company,
+              _userDetails!.dateOfLeaving,
+              _userDetails!.staffType ?? 'staffType',
+              _userDetails!.deviceToken,
+            );
+          } else {
+            print('No data found in background API response');
+            // Clear cached data if API returns null or empty
+            await _userDatabase.clearUserDetails(deviceToken);
+          }
         } else {
           print('Background Error Response: ${response.data}');
         }

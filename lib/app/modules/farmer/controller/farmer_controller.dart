@@ -4,6 +4,7 @@ import '../model/farmer_list.dart';
 
 class FarmerController extends GetxController {
   var isLoading = false.obs;
+  var isError = false.obs;
   var errorMessage = ''.obs;
 
   List<Farmer> allFarmers = farmersList;
@@ -18,21 +19,23 @@ class FarmerController extends GetxController {
 
   void filterFarmers(String query) {
     isLoading.value = true;
-    filteredFarmers.value = allFarmers.where((farmer) {
-      final nameMatch =
-          farmer.farmersName.toLowerCase().contains(query.toLowerCase());
-      final mobileNumber =
-          farmer.mobileNumber.toLowerCase().contains(query.toLowerCase());
-      return nameMatch || mobileNumber;
-    }).toList();
 
-    if (filteredFarmers.isEmpty) {
-      errorMessage.value = 'No farmers match your search.';
-    } else {
-      errorMessage.value = '';
-    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      filteredFarmers.value = allFarmers.where((farmer) {
+        final nameMatch =
+            farmer.farmersName.toLowerCase().contains(query.toLowerCase());
+        final mobileNumber =
+            farmer.mobileNumber.toLowerCase().contains(query.toLowerCase());
+        return nameMatch || mobileNumber;
+      }).toList();
 
-    isLoading.value = false;
+      if (filteredFarmers.isEmpty) {
+        errorMessage.value = 'No farmers match your search.';
+      } else {
+        errorMessage.value = '';
+      }
+
+      isLoading.value = false;
+    });
   }
-
 }

@@ -56,7 +56,6 @@ class LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     bool isDarkMode(BuildContext context) =>
         Theme.of(context).brightness == Brightness.dark;
-
     return WillPopScope(
       onWillPop: () async {
         if (_currentIndex == 0) {

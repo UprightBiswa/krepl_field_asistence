@@ -31,9 +31,10 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
       if (_activityMasterController.isLoading.value) {
         return const ShimmerLoading();
         // Show loading shimmer
-      } else if (_activityMasterController.isError.value) {
+      } else if (_activityMasterController.isError.value ||
+          _activityMasterController.errorMessage.isNotEmpty) {
         // Show error message
-        return const Center(child: Text('Error loading activities.'));
+        return Center(child: Text('${_activityMasterController.errorMessage}'));
       } else {
         // Show the dropdown
         return SingleSelectDropdown<ActivityMaster>(

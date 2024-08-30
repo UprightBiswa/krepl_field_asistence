@@ -8,6 +8,7 @@ import '../landing_screens/components/gradient_appbar.dart';
 import '../profile/settings_view.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/widgets.dart';
+import 'component/customer_sales_continer.dart';
 import 'component/mtb_tab_bar_data.dart';
 import 'component/ytd_tab_bar_data.dart';
 
@@ -114,13 +115,17 @@ class _DashboardPageState extends State<DashboardPage> {
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
                   TabBar(
-                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorSize: TabBarIndicatorSize.tab,
                     labelColor: isDarkMode(context)
-                        ? AppColors.kSecondary
-                        : AppColors.kPrimary,
-                    indicatorColor: isDarkMode(context)
-                        ? AppColors.kSecondary
-                        : AppColors.kPrimary,
+                        ? AppColors.kBackground
+                        : AppColors.kWhite,
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: isDarkMode(context)
+                          ? AppColors.kSecondary
+                          : AppColors.kPrimary,
+                    ),
+                    indicatorWeight: 2,
                     dividerColor: Colors.transparent,
                     tabs: [
                       Tab(
@@ -157,15 +162,37 @@ class _DashboardPageState extends State<DashboardPage> {
               SingleChildScrollView(
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSpacing.tenHorizontal),
-                child: YTDTabBarData(
-                  userDetails: widget.userDetails,
+                child: Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    YTDTabBarData(
+                      userDetails: widget.userDetails,
+                    ),
+                    SizedBox(height: 10.h),
+                    CustomerSalesContainer(
+                      userDetails: widget.userDetails,
+                      isYtd: true,
+                    ),
+                    SizedBox(height: 10.h),
+                  ],
                 ),
               ),
               SingleChildScrollView(
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSpacing.tenHorizontal),
-                child: MTDTabBarData(
-                  userDetails: widget.userDetails,
+                child: Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    MTDTabBarData(
+                      userDetails: widget.userDetails,
+                    ),
+                    SizedBox(height: 10.h),
+                    CustomerSalesContainer(
+                      userDetails: widget.userDetails,
+                      isYtd: false,
+                    ),
+                    SizedBox(height: 10.h),
+                  ],
                 ),
               ),
             ],

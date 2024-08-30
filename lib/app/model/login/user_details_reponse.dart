@@ -26,7 +26,6 @@ class UserDetailsResponse {
   }
 }
 
-
 class UserDetails {
   final String workplaceCode;
   final String hrEmployeeCode;
@@ -39,7 +38,15 @@ class UserDetails {
   final String email;
   final String company;
   final String dateOfLeaving;
-  final String staffType;
+  final String? staffType;
+  final String? workplaceStartDate;
+  final String? workplaceEndDate;
+  final String? grade;
+  final String? gradeStartDate;
+  final String? gradeEndDate;
+  final String? hqStartDate;
+  final String? hqEndDate;
+  final String? isActive;
   final String deviceToken;
 
   UserDetails({
@@ -54,7 +61,15 @@ class UserDetails {
     required this.email,
     required this.company,
     required this.dateOfLeaving,
-    required this.staffType,
+    this.staffType,
+    this.workplaceStartDate,
+    this.workplaceEndDate,
+    this.grade,
+    this.gradeStartDate,
+    this.gradeEndDate,
+    this.hqStartDate,
+    this.hqEndDate,
+    this.isActive,
     required this.deviceToken,
   });
 
@@ -71,7 +86,15 @@ class UserDetails {
       email: json['email'] ?? '',
       company: json['company'] ?? '',
       dateOfLeaving: json['date_of_leaving'] ?? '',
-      staffType: json['staff_type'] ?? '',
+      workplaceStartDate: json['workplace_start_date'],
+      workplaceEndDate: json['workplace_end_date'],
+      staffType: json['staff_type'],
+      grade: json['grade'],
+      gradeStartDate: json['grade_start_date'],
+      gradeEndDate: json['grade_end_date'],
+      hqStartDate: json['hq_start_date'],
+      hqEndDate: json['hq_end_date'],
+      isActive: json['is_active'],
       deviceToken: json['device_token'] ?? '',
     );
   }
@@ -89,7 +112,15 @@ class UserDetails {
       'email': email,
       'company': company,
       'date_of_leaving': dateOfLeaving,
+      'workplace_start_date': workplaceStartDate,
+      'workplace_end_date': workplaceEndDate,
+      'grade': grade,
       'staff_type': staffType,
+      'grade_start_date': gradeStartDate,
+      'grade_end_date': gradeEndDate,
+      'hq_start_date': hqStartDate,
+      'hq_end_date': hqEndDate,
+      'is_active': isActive,
       'device_token': deviceToken,
     };
   }
