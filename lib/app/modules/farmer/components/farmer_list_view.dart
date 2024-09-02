@@ -21,7 +21,7 @@ class FarmerListView extends StatelessWidget {
           index: index,
         );
       },
-      separatorBuilder: (context, index) => SizedBox(height: 10.h),
+      separatorBuilder: (context, index) => SizedBox(height: 20.h),
       itemCount: farmers.length,
     );
   }

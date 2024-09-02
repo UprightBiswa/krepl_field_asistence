@@ -1,12 +1,12 @@
 import 'package:field_asistence/app/data/constrants/app_typography.dart';
 import 'package:field_asistence/app/modules/widgets/buttons/custom_button.dart';
-import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:field_asistence/app/modules/widgets/texts/custom_header_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../model/login/user_details_reponse.dart';
+import '../../home/model/menu_group.dart';
 import '../../widgets/loading/shimmer_activity_card.dart';
 import '../controllers/activity_controller.dart';
 
@@ -30,30 +30,28 @@ class _CustomerSalesContainerState extends State<CustomerSalesContainer> {
       Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
-    return PrimaryContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CustomHeaderText(
-                text: 'Customer Sales',
-                fontSize: 18.sp,
-              ),
-              const Spacer(),
-              CustomButton(
-                text: 'View All',
-                onTap: () {},
-                icon: Icons.arrow_forward_ios,
-                iconSize: 16.h,
-                isBorder: true,
-              ),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          CustomerSalesListView(controller: controller, isYtd: widget.isYtd),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            CustomHeaderText(
+              text: 'Customer Sales',
+              fontSize: 18.sp,
+            ),
+            const Spacer(),
+            CustomButton(
+              text: 'See All',
+              onTap: () {},
+              icon: Icons.arrow_forward_ios,
+              iconSize: 16.h,
+              isBorder: true,
+            ),
+          ],
+        ),
+        SizedBox(height: 10.h),
+        CustomerSalesListView(controller: controller, isYtd: widget.isYtd),
+      ],
     );
   }
 }
@@ -67,7 +65,8 @@ class CustomerSalesListView extends StatelessWidget {
     required this.controller,
     required this.isYtd,
   });
-
+  bool isDarkMode(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -94,19 +93,38 @@ class CustomerSalesListView extends StatelessWidget {
           itemCount: isYtd
               ? controller.ytdSalesData.length
               : controller.mtdSalesData.length,
-          separatorBuilder: (context, index) => const Divider(),
+          separatorBuilder: (context, index) => SizedBox(
+            height: 10.h,
+          ),
           itemBuilder: (context, index) {
             final salesData = isYtd
                 ? controller.ytdSalesData[index]
                 : controller.mtdSalesData[index];
             return ListTile(
+              // tileColor:
+              //     isDarkMode(context) ? Colors.grey[800] : Colors.grey[200],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.r),
+                side: BorderSide(
+                  color: isDarkMode(context)
+                      ? Colors.grey[200]!
+                      : Colors.grey[400]!,
+                ),
+              ),
               minVerticalPadding: 0,
               minLeadingWidth: 0,
-              contentPadding: EdgeInsets.zero,
-              trailing: CircleAvatar(
-                backgroundColor: Colors.blue,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 10.w,
+              ),
+              leading: CircleAvatar(
+                radius: 30.r,
+                backgroundColor:
+                    colorGenerator.generateColor().withOpacity(0.5),
                 foregroundColor: Colors.white,
-                child: Text(salesData.customerName[0]),
+                child: Text(
+                  salesData.customerName[0],
+                  style: AppTypography.kBold20,
+                ),
               ),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +133,7 @@ class CustomerSalesListView extends StatelessWidget {
                     salesData.customerName,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: AppTypography.kMedium14,
+                    style: AppTypography.kMedium16,
                   ),
                   Text('Cus No: ${salesData.customerNo}',
                       style: AppTypography.kMedium10),
@@ -126,31 +144,38 @@ class CustomerSalesListView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Column(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Curt Year:', style: AppTypography.kLight12),
-                        Text('\u{20B9}${salesData.currentYearData},',
-                            style: AppTypography.kBold12),
+                        Text('Curt Year: ', style: AppTypography.kLight12),
+                        Text(
+                          '\u{20B9}${salesData.currentYearData}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: AppTypography.kBold12,
+                        ),
                       ],
                     ),
                   ),
                   // const Spacer(),
                   Expanded(
-                    child: Column(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Last Year:', style: AppTypography.kLight12),
-                        Text('\u{20B9}${salesData.previousYearData}',
-                            style: AppTypography.kBold12),
+                        Text('Last Year: ', style: AppTypography.kLight12),
+                        Text(
+                          '\u{20B9}${salesData.previousYearData}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: AppTypography.kBold12,
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
-
               onTap: () {
                 // Handle item tap, maybe navigate to a details page
               },

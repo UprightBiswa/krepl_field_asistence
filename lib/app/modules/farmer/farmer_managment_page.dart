@@ -62,12 +62,12 @@ class FarmerManagementPage extends StatelessWidget {
         onRefresh: () async {
           farmerController.filteredFarmers();
         },
-        child: Column(
-          children: [
-            SizedBox(height: 10.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0.h),
-              child: Row(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
+              Row(
                 children: [
                   Expanded(
                     child: SearchField(
@@ -95,10 +95,7 @@ class FarmerManagementPage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0.h),
-              child: Row(
+              Row(
                 children: [
                   CustomHeaderText(text: 'Farmers', fontSize: 16.sp),
                   const Spacer(),
@@ -111,34 +108,25 @@ class FarmerManagementPage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            Obx(() {
-              if (farmerController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (farmerController.filteredFarmers.isEmpty) {
-                return const Expanded(
-                  child: SingleChildScrollView(child: NoResultsScreen()),
+              Obx(() {
+                if (farmerController.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (farmerController.filteredFarmers.isEmpty) {
+                  return const NoResultsScreen();
+                } else if (farmerController.isError.value) {
+                  return const Error404Screen();
+                }
+                return Column(
+                  children: [
+                    FarmerListView(
+                      farmers: farmerController.filteredFarmers,
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
                 );
-              } else if (farmerController.isError.value) {
-                return const Expanded(
-                  child: SingleChildScrollView(child: Error404Screen()),
-                );
-              }
-              return Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0.h),
-                  child: Column(
-                    children: [
-                      FarmerListView(
-                        farmers: farmerController.filteredFarmers,
-                      ),
-                      SizedBox(height: 10.h),
-                    ],
-                  ),
-                ),
-              );
-            }),
-          ],
+              }),
+            ],
+          ),
         ),
       ),
     );
