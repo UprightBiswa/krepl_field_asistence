@@ -41,11 +41,13 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
     selectedItem = widget.selectedItem;
   }
 
+
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
+    print('${validationError}jdshf');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -220,12 +222,16 @@ class _SingleSelectModalState<T> extends State<SingleSelectModal<T>> {
         child: Row(
           children: [
             Expanded(
-              child: PrimaryButton(
-                onTap: () {
-                  widget.onChanged(selectedItem as T);
-                },
-                text: "Done",
-              ),
+              child: selectedItem != null
+                  ? PrimaryButton(
+                      onTap: () {
+                        if (selectedItem != null) {
+                          widget.onChanged(selectedItem as T);
+                        }
+                      },
+                      text: "Done",
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),

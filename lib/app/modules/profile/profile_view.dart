@@ -34,7 +34,7 @@ class _ProfileViewState extends State<ProfileView> {
         elevation: 0,
         title: Text(
           'Profile',
-          style: AppTypography.kBold20.copyWith(
+          style: AppTypography.kBold16.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
                 : AppColors.kDarkSurfaceColor,
@@ -231,11 +231,12 @@ class _ProfileViewState extends State<ProfileView> {
         buildAnimatedListTile(
           icon: Icons.work,
           title: 'Work Place',
-          subtitle: '${userDetails.workplaceCode}\n('
-              ' Start Date: '
-              '${userDetails.workplaceStartDate ?? 'dd-mm-yyyy'} - '
+          subtitle:
+              '${userDetails.workplaceCode} - ${userDetails.workplaceName}\n'
+              'Start Date: '
+              '${userDetails.workplaceStartDate ?? 'dd-mm-yyyy'} \n'
               'End Date: '
-              '${userDetails.workplaceEndDate ?? 'dd-mm-yyyy'} )',
+              '${userDetails.workplaceEndDate ?? 'dd-mm-yyyy'} ',
         ),
         const Divider(),
         buildAnimatedListTile(

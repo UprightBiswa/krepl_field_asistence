@@ -20,14 +20,28 @@ class _VillageSelectionScreenState extends State<VillageSelectionScreen> {
   List<Village> selectedVillages = [];
 
   @override
+  void initState() {
+    super.initState();
+    villageController.fetchVillageMasterData(); // Fetch village data on init
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (villageController.isLoading.value) {
         return const ShimmerLoading();
-      } else if (villageController.error.isNotEmpty) {
-        return const Center(
-          child: Text('Error loading Villages.'),
-        );
+        // } else if (villageController.isError.value) {
+        //   return const Center(
+        //     child: Text('Error loading Villages. Please try again later.'),
+        //   );
+        // }
+      } else if (villageController.isError.value) {
+        return Center(
+          child: Text(
+            villageController.errorMessage.value,
+            style: const TextStyle(color: Colors.red),
+          ),
+        ); // Show error message
       } else {
         return MultiSelectDropdown<Village>(
           labelText: 'Select Villages',
@@ -48,8 +62,7 @@ class _VillageSelectionScreenState extends State<VillageSelectionScreen> {
             setState(() {
               selectedVillages = items;
             });
-            widget.onSelectionChanged(
-                selectedVillages); // Notify parent of selection changes
+            widget.onSelectionChanged(selectedVillages);
           },
         );
       }

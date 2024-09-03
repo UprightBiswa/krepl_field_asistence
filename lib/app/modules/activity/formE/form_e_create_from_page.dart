@@ -26,7 +26,7 @@ import '../components/multi_select_dropdown/pest_selection_dropdown.dart';
 import '../components/multi_select_dropdown/products_selection_drodown.dart';
 import '../components/multi_select_dropdown/seasion_selection_dropdown.dart';
 import '../components/multi_select_dropdown/stages_selection_dropdown.dart';
-import '../components/multi_select_dropdown/village_selecton_dropdown.dart';
+import '../components/multi_select_dropdown/village_multi_selecton_dropdown.dart';
 import '../model/activity_master_model.dart';
 
 class CreateFormEpage extends StatefulWidget {
@@ -125,7 +125,7 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
               children: [
                 ActivitySelectionWidget(
                   formType: "E",
-                  onActivitySelected: (selectedActivity) {
+                  onSaved: (selectedActivity) {
                     setState(() {
                       _selectedActivity = selectedActivity;
 
@@ -133,6 +133,12 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                         selectedPartyType = _selectedActivity!.masterLink;
                       }
                     });
+                  },
+                  validator: (selectedActivity) {
+                    if (selectedActivity == null) {
+                      return 'Please select an activity';
+                    }
+                    return null;
                   },
                 ),
 
@@ -277,7 +283,6 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                     });
                   },
                 ),
-
               ],
             ),
           ),

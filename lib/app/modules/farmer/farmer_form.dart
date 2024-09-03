@@ -1,16 +1,24 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../data/constrants/constants.dart';
+import '../../model/master/villages_model.dart';
+import '../../repository/auth/auth_token.dart';
+import '../activity/components/single_select_dropdown/activity_master_dropdown.dart';
+import '../activity/components/single_select_dropdown/village_single_selection_dropdown.dart';
+import '../activity/model/activity_master_model.dart';
 import '../widgets/containers/primary_container.dart';
+import '../widgets/dialog/confirmation.dart';
+import '../widgets/dialog/error.dart';
+import '../widgets/dialog/loading.dart';
 import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
-import 'components/image_picker_continer.dart';
+import 'controller/farmer_controller.dart';
 
 class FarmerForm extends StatefulWidget {
   const FarmerForm({super.key});
@@ -20,7 +28,10 @@ class FarmerForm extends StatefulWidget {
 }
 
 class _FarmerFormState extends State<FarmerForm> {
+  final FarmerController farmerController = Get.put(FarmerController());
+  final AuthState authState = AuthState();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
@@ -38,8 +49,26 @@ class _FarmerFormState extends State<FarmerForm> {
   final TextEditingController _workPlaceNameController =
       TextEditingController();
   final TextEditingController _selectedDateController = TextEditingController();
-  String? _selectedPromotionActivity;
-  String? _imagePath;
+  ActivityMaster? _selectedActivity;
+  Village? _selectedVillage;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeControllers();
+  }
+
+  Future<void> _initializeControllers() async {
+    // Fetch workplace code and name from AuthState
+    final workplaceCode = await authState.getWorkplaceCode();
+    final workplaceName = await authState.getWorkplaceName();
+
+    // Update controllers with the fetched values
+    setState(() {
+      _workPlaceCodeController.text = workplaceCode ?? '';
+      _workPlaceNameController.text = workplaceName ?? '';
+    });
+  }
 
   @override
   void dispose() {
@@ -61,27 +90,29 @@ class _FarmerFormState extends State<FarmerForm> {
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    if (pickedDate != null) {
+  void _onVillageSelected(Village? selectedVillage) {
+    if (selectedVillage != null) {
       setState(() {
-        _selectedDateController.text =
-            DateFormat('dd/MM/yyyy').format(pickedDate);
-        log('Selected Date: ${_selectedDateController.text}');
+        _selectedVillage = selectedVillage;
+        _villageController.text = selectedVillage.villageName;
+        // Auto-fill the address fields
+        _pinController.text = selectedVillage.pin;
+        _postOfficeController.text = selectedVillage.officeName;
+        _subDistController.text = selectedVillage.tehsil;
+        _districtController.text = selectedVillage.district;
+        _stateController.text = selectedVillage.state;
+      });
+    } else {
+      setState(() {
+        _selectedVillage = null;
+        _villageController.clear();
+        _pinController.clear();
+        _postOfficeController.clear();
+        _subDistController.clear();
+        _districtController.clear();
+        _stateController.clear();
       });
     }
-  }
-
-  void _handleImagePicked(String imagePath) {
-    setState(() {
-      _imagePath = imagePath;
-      log("Image Path: $_imagePath");
-    });
   }
 
   bool isDarkMode(BuildContext context) =>
@@ -89,43 +120,39 @@ class _FarmerFormState extends State<FarmerForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomBackAppBar(
-        leadingCallback: () {
-          Get.back<void>();
-        },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
-        title: Text(
-          'Farmer Form',
-          style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage(
+              AppAssets.kFarmer,
+            ),
+            fit: BoxFit.cover),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomBackAppBar(
+          leadingCallback: () {
+            Get.back<void>();
+          },
+          iconColor: isDarkMode(context)
+              ? Colors.black
+              : AppColors.kPrimary.withOpacity(0.15),
+          title: Text(
+            'Farmer Form',
+            style: AppTypography.kBold14.copyWith(
+              color: isDarkMode(context)
+                  ? AppColors.kWhite
+                  : AppColors.kDarkContiner,
+            ),
           ),
         ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(
-                AppAssets.kOnboardingFirst,
-              ),
-              fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(
+        body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
                 SizedBox(height: 20.h),
-                PicProfileImgWidget(
-                  onImagePicked: _handleImagePicked,
-                ),
-                SizedBox(height: 20.h),
-                // Basic Details Section
                 PrimaryContainer(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,6 +166,10 @@ class _FarmerFormState extends State<FarmerForm> {
                         labelText: "Name",
                         hintText: "Enter the farmer's name",
                         icon: Icons.person,
+                        inputFormatter: [
+                          FilteringTextInputFormatter.singleLineFormatter,
+                          LengthLimitingTextInputFormatter(30),
+                        ],
                         controller: _nameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -152,6 +183,10 @@ class _FarmerFormState extends State<FarmerForm> {
                         labelText: "Father's Name",
                         hintText: "Enter the father's name",
                         icon: Icons.person,
+                        inputFormatter: [
+                          FilteringTextInputFormatter.singleLineFormatter,
+                          LengthLimitingTextInputFormatter(30),
+                        ],
                         controller: _fatherNameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -165,6 +200,10 @@ class _FarmerFormState extends State<FarmerForm> {
                         labelText: "Mobile Number",
                         hintText: "Enter the mobile number",
                         icon: Icons.phone,
+                        inputFormatter: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
                         controller: _mobileController,
                         keyboardType: TextInputType.phone,
                         validator: (value) {
@@ -175,23 +214,32 @@ class _FarmerFormState extends State<FarmerForm> {
                         },
                       ),
                       SizedBox(height: 20.h),
-                      CustomDropdownField(
-                        labelText: "Promotion Activity",
-                        icon: Icons.star,
-                        items: const ["Activity 1", "Activity 2", "Activity 3"],
-                        onChanged: (value) {
+                      ActivitySelectionWidget(
+                        formType: "A",
+                        onSaved: (selectedActivity) {
                           setState(() {
-                            _selectedPromotionActivity = value;
+                            _selectedActivity = selectedActivity;
                           });
                         },
-                        value: _selectedPromotionActivity,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a promotion activity';
+                        validator: (selectedActivity) {
+                          if (selectedActivity == null) {
+                            return 'Please select an activity';
                           }
                           return null;
                         },
                       ),
+                      if (_selectedActivity == null) ...[
+                        //show text veldaition
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                          child: Text(
+                            'Please select a promotional activity',
+                            style: AppTypography.kLight12.copyWith(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ],
                       SizedBox(height: 20.h),
                     ],
                   ),
@@ -207,20 +255,50 @@ class _FarmerFormState extends State<FarmerForm> {
                         fontSize: 20.sp,
                       ),
                       SizedBox(height: 16.h),
+                      VillageSingleSelectionWidget(
+                        onVillageSelected: _onVillageSelected,
+                        validator: (selected) {
+                          if (selected == null) {
+                            return "Please select a village";
+                          }
+                          return null;
+                        },
+                      ),
+                      if (_selectedVillage == null) ...[
+                        //show text veldaition
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                          child: Text(
+                            'Please select a village to auto-fill the address fields',
+                            style: AppTypography.kLight12.copyWith(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ],
+                      SizedBox(height: 20.h),
+
                       CustomTextField(
-                        labelText: "Village/Locality",
-                        hintText: "Enter village/locality",
-                        icon: Icons.location_city,
-                        controller: _villageController,
+                        readonly: true,
+                        labelText: "PIN Code",
+                        hintText: "Enter the PIN code",
+                        icon: Icons.pin_drop,
+                        controller: _pinController,
+                        inputFormatter: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(6),
+                        ],
+                        keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter the village/locality';
+                            return 'Please enter the PIN code';
                           }
                           return null;
                         },
                       ),
                       SizedBox(height: 20.h),
                       CustomTextField(
+                        readonly: true,
                         labelText: "Post Office Name",
                         hintText: "Enter post office name",
                         icon: Icons.mail,
@@ -234,6 +312,7 @@ class _FarmerFormState extends State<FarmerForm> {
                       ),
                       SizedBox(height: 20.h),
                       CustomTextField(
+                        readonly: true,
                         labelText: "Sub-District",
                         hintText: "Enter sub-district",
                         icon: Icons.map,
@@ -247,6 +326,7 @@ class _FarmerFormState extends State<FarmerForm> {
                       ),
                       SizedBox(height: 20.h),
                       CustomTextField(
+                        readonly: true,
                         labelText: "District",
                         hintText: "Enter district",
                         icon: Icons.location_on,
@@ -260,6 +340,7 @@ class _FarmerFormState extends State<FarmerForm> {
                       ),
                       SizedBox(height: 20.h),
                       CustomTextField(
+                        readonly: true,
                         labelText: "State",
                         hintText: "Enter state",
                         icon: Icons.public,
@@ -272,6 +353,7 @@ class _FarmerFormState extends State<FarmerForm> {
                         },
                       ),
                       SizedBox(height: 20.h),
+                      // ],
                     ],
                   ),
                 ),
@@ -295,20 +377,6 @@ class _FarmerFormState extends State<FarmerForm> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter the number of acres';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 20.h),
-                      CustomTextField(
-                        labelText: "PIN Code",
-                        hintText: "Enter the PIN code",
-                        icon: Icons.pin_drop,
-                        controller: _pinController,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the PIN code';
                           }
                           return null;
                         },
@@ -343,6 +411,7 @@ class _FarmerFormState extends State<FarmerForm> {
                       ),
                       SizedBox(height: 20.h),
                       CustomTextField(
+                        readonly: true,
                         labelText: "Work Place Code",
                         hintText: "Enter the work place code",
                         icon: Icons.work,
@@ -356,6 +425,7 @@ class _FarmerFormState extends State<FarmerForm> {
                       ),
                       SizedBox(height: 20.h),
                       CustomTextField(
+                        readonly: true,
                         labelText: "Work Place Name",
                         hintText: "Enter the work place name",
                         icon: Icons.business,
@@ -368,13 +438,6 @@ class _FarmerFormState extends State<FarmerForm> {
                         },
                       ),
                       SizedBox(height: 20.h),
-                      CustomDatePicker(
-                        labelText: "Date of Registration",
-                        icon: Icons.calendar_today,
-                        textEditingController: _selectedDateController,
-                        onDateSelected: _selectDate,
-                      ),
-                      SizedBox(height: 20.h),
                     ],
                   ),
                 ),
@@ -383,33 +446,99 @@ class _FarmerFormState extends State<FarmerForm> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(16.h),
-        decoration: BoxDecoration(
-          color: isDarkMode(context)
-              ? AppColors.kDarkSurfaceColor
-              : AppColors.kInput,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: PrimaryButton(
-                onTap: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    // Handle form submission
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
-                    );
-                  }
-                },
-                text: "Submit",
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.all(16.h),
+          decoration: BoxDecoration(
+            color: isDarkMode(context)
+                ? AppColors.kDarkContiner
+                : AppColors.kWhite,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: PrimaryButton(
+                  onTap: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      _formKey.currentState?.save();
+                      _showConfirmationDialog(context);
+                    } else {
+                      Get.snackbar(
+                        'Error',
+                        'Please fill all the fields',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      log('Form is invalid');
+                    }
+                  },
+                  text: "Submit",
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Confirm Action',
+          content: 'Are you sure you want to proceed?',
+          onConfirm: () {
+            Navigator.of(context).pop(); // Close the dialog
+
+            _submitForm();
+          },
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
+  void _submitForm() async {
+    Get.dialog(const LoadingDialog(), barrierDismissible: false);
+    final parameters = {
+      'promotion_activity': _selectedActivity?.promotionalActivity,
+      'farmer_name': _nameController.text,
+      'father_name': _fatherNameController.text,
+      'mobile_no': _mobileController.text,
+      'acre': _acreController.text,
+      'pin': _pinController.text,
+      'village_name': _villageController.text,
+      'officename': _postOfficeController.text,
+      'tehshil': _subDistController.text,
+      'district': _districtController.text,
+      'state': _stateController.text,
+      'cow': _cowCountController.text,
+      'buffalo': _buffaloCountController.text,
+      'workplace_code': _workPlaceCodeController.text,
+      'workplace_name': _workPlaceNameController.text,
+    };
+    try {
+      await farmerController.submitFarmerData(parameters);
+    } catch (e) {
+      // In case of error, hide the loading dialog and show the error dialog
+      Get.back(); // Close loading dialog
+      Get.dialog(
+          ErrorDialog(
+            errorMessage: e.toString(),
+            onClose: () {
+              Get.back(); // Close error dialog
+            },
+          ),
+          barrierDismissible: false);
+    } finally {
+      // Ensure loading dialog is closed
+      Get.back(); // Close loading dialog if not already closed
+
+      print(_selectedActivity?.promotionalActivity ?? 'Not selected');
+      log('Form is valid');
+    }
   }
 }

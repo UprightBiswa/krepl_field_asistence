@@ -7,9 +7,14 @@ import '../../model/activity_master_model.dart';
 
 class ActivitySelectionWidget extends StatefulWidget {
   final String formType;
-  final ValueChanged<ActivityMaster?> onActivitySelected;
-  const ActivitySelectionWidget(
-      {super.key, required this.formType, required this.onActivitySelected});
+  final FormFieldSetter<ActivityMaster?> onSaved;
+  final FormFieldValidator<ActivityMaster?> validator;
+  const ActivitySelectionWidget({
+    super.key,
+    required this.formType,
+    required this.onSaved,
+    required this.validator,
+  });
 
   @override
   State<ActivitySelectionWidget> createState() =>
@@ -37,23 +42,27 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
         return Center(child: Text('${_activityMasterController.errorMessage}'));
       } else {
         // Show the dropdown
-        return SingleSelectDropdown<ActivityMaster>(
-          labelText: "Select Activity",
-          items: _activityMasterController.activityMasterList,
-          selectedItem: null,
-          itemAsString: (activity) => activity.promotionalActivity,
-          onChanged: (selected) {
-            widget.onActivitySelected(selected);
-          },
-          searchableFields: {
-            "promotional_activity": (activity) => activity.promotionalActivity,
-            "Form": (activity) => activity.form,
-          },
-          validator: (selected) {
-            if (selected == null) {
-              return "Please select an activity";
-            }
-            return null;
+        return FormField<ActivityMaster?>(
+          validator: widget.validator,
+          onSaved: widget.onSaved,
+          builder: (FormFieldState<ActivityMaster?> field) {
+            return SingleSelectDropdown<ActivityMaster>(
+              labelText: "Select Activity",
+              items: _activityMasterController.activityMasterList,
+              selectedItem: field.value,
+              itemAsString: (activity) => activity.promotionalActivity,
+              onChanged: (selected) {
+                field.didChange(selected);
+                widget.onSaved(selected);
+                field.validate();
+              },
+              validator: widget.validator,
+              searchableFields: {
+                "promotional_activity": (activity) =>
+                    activity.promotionalActivity,
+                "Form": (activity) => activity.form,
+              },
+            );
           },
         );
       }

@@ -147,6 +147,8 @@ class AppAssets {
   static String kOnboardingFirst = 'assets/images/onboarding_second.png';
   static String kOnboardingSecond = 'assets/images/onboarding_first.png';
   static String kOnboardingThird = 'assets/images/onboarding_third.png';
+  //farmer.jpg
+  static String kFarmer = 'assets/images/farmer.jpg';
   static String kStudent = 'assets/images/student.png';
   static String kTeacher = 'assets/images/teacher.png';
   static String kStoreSetup = 'assets/images/store_setup.png';

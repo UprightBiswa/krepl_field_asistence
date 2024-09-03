@@ -171,6 +171,7 @@ class LoginProvider extends ChangeNotifier {
           await _userDatabase.saveUserDetails(deviceToken, response.data!);
           AuthState().setToken(
             _userDetails!.workplaceCode,
+            _userDetails!.workplaceName,
             _userDetails!.hrEmployeeCode,
             _userDetails!.employeeName,
             _userDetails!.fatherName,
@@ -181,7 +182,7 @@ class LoginProvider extends ChangeNotifier {
             _userDetails!.email,
             _userDetails!.company,
             _userDetails!.dateOfLeaving,
-            _userDetails!.staffType ?? 'staffType',
+            _userDetails!.staffType ?? '',
             _userDetails!.deviceToken,
           );
 
@@ -242,6 +243,7 @@ class LoginProvider extends ChangeNotifier {
             await _userDatabase.saveUserDetails(deviceToken, response.data!);
             AuthState().setToken(
               _userDetails!.workplaceCode,
+              _userDetails!.workplaceName,
               _userDetails!.hrEmployeeCode,
               _userDetails!.employeeName,
               _userDetails!.fatherName,
@@ -252,7 +254,7 @@ class LoginProvider extends ChangeNotifier {
               _userDetails!.email,
               _userDetails!.company,
               _userDetails!.dateOfLeaving,
-              _userDetails!.staffType ?? 'staffType',
+              _userDetails!.staffType ?? '',
               _userDetails!.deviceToken,
             );
           } else {

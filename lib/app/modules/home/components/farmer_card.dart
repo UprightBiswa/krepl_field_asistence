@@ -32,7 +32,7 @@ class FarmerCard extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Hero(
-                tag: farmer.farmersName,
+                tag: farmer.farmerName?? '',
                 child: Container(
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.all(10.h),
@@ -41,7 +41,7 @@ class FarmerCard extends StatelessWidget {
                       top: Radius.circular(AppSpacing.radiusFifteen),
                     ),
                     image: DecorationImage(
-                      image: NetworkImage(farmer.image),
+                      image: AssetImage(AppAssets.kFarmer),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -64,13 +64,13 @@ class FarmerCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      farmer.promotionActivity,
+                      farmer.promotionActivity?? '',
                       style: AppTypography.kBold14
                           .copyWith(color: AppColors.kPrimary),
                     ),
                     SizedBox(height: AppSpacing.tenVertical),
                     Text(
-                      farmer.farmersName,
+                      farmer.farmerName?? '',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.kBold20,
@@ -84,7 +84,7 @@ class FarmerCard extends StatelessWidget {
                         ),
                         const Spacer(),
                         Text(
-                          'Contact: ${farmer.mobileNumber}',
+                          'Contact: ${farmer.mobileNo}',
                           style: AppTypography.kLight16,
                         ),
                       ],

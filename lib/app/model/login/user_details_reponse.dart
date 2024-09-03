@@ -28,6 +28,7 @@ class UserDetailsResponse {
 
 class UserDetails {
   final String workplaceCode;
+  final String workplaceName;
   final String hrEmployeeCode;
   final String employeeName;
   final String fatherName;
@@ -51,6 +52,7 @@ class UserDetails {
 
   UserDetails({
     required this.workplaceCode,
+    required this.workplaceName,
     required this.hrEmployeeCode,
     required this.employeeName,
     required this.fatherName,
@@ -76,6 +78,7 @@ class UserDetails {
   factory UserDetails.fromJson(Map<String, dynamic> json) {
     return UserDetails(
       workplaceCode: json['workplace_code'] ?? '',
+      workplaceName: json['workplace_name'] ?? '',
       hrEmployeeCode: json['hr_employee_code'] ?? '',
       employeeName: json['employee_name'] ?? '',
       fatherName: json['father_name'] ?? '',

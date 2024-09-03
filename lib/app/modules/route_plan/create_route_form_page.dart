@@ -6,6 +6,7 @@ import '../../data/constrants/constants.dart';
 import '../../model/employee/employee_model.dart';
 import '../../model/master/villages_model.dart';
 import '../../model/workplace/workplace_model.dart';
+import '../activity/components/multi_select_dropdown/village_multi_selecton_dropdown.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/widgets.dart';
@@ -170,26 +171,33 @@ class _RouteFormPageState extends State<RouteFormPage> {
                   },
                 ),
                 SizedBox(height: 16.h),
-                MultiSelectDropdown<Village>(
-                  labelText: 'Villages',
-                  // icon: Icons.location_city,
-                  selectedItems: selectedVillages,
-                  items:
-                      villagesList, // Assuming villagesList is your data source
-                  itemAsString: (Village village) => village.villageName,
-                  searchableFields: {
-                    'villageName': (Village village) => village.villageName,
-                    'villageCode': (Village village) => village.villageCode,
-                  },
-                  validator: (selectedVillages) {
-                    if (selectedVillages.isEmpty) {
-                      return 'Please select at least one village.';
-                    }
-                    return null;
-                  },
-                  // isRequired: true, // Make it required
-                  // validationMessage: 'Please select at least one village.',
-                  onChanged: (List<Village> items) {
+                // MultiSelectDropdown<Village>(
+                //   labelText: 'Villages',
+                //   // icon: Icons.location_city,
+                //   selectedItems: selectedVillages,
+                //   items:
+                //       villagesList, // Assuming villagesList is your data source
+                //   itemAsString: (Village village) => village.villageName,
+                //   searchableFields: {
+                //     'villageName': (Village village) => village.villageName,
+                //     'villageCode': (Village village) => village.villageCode,
+                //   },
+                //   validator: (selectedVillages) {
+                //     if (selectedVillages.isEmpty) {
+                //       return 'Please select at least one village.';
+                //     }
+                //     return null;
+                //   },
+                //   // isRequired: true, // Make it required
+                //   // validationMessage: 'Please select at least one village.',
+                //   onChanged: (List<Village> items) {
+                //     setState(() {
+                //       selectedVillages = items;
+                //     });
+                //   },
+                // ),
+                VillageSelectionScreen(
+                  onSelectionChanged: (List<Village> items) {
                     setState(() {
                       selectedVillages = items;
                     });
@@ -218,13 +226,15 @@ class _RouteFormPageState extends State<RouteFormPage> {
                 ),
                 SizedBox(height: 16.h),
                 CustomTextField(
-                  labelText: 'Pincode',
-                  hintText: 'Enter pincode',
-                  icon: Icons.pin_drop,
-                  controller: pincodeController,
-                  keyboardType: TextInputType.number,
-                  inputFormatter: FilteringTextInputFormatter.digitsOnly,
-                ),
+                    labelText: 'Pincode',
+                    hintText: 'Enter pincode',
+                    icon: Icons.pin_drop,
+                    controller: pincodeController,
+                    keyboardType: TextInputType.number,
+                    inputFormatter: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(6),
+                    ]),
                 SizedBox(height: 16.h),
                 CustomTextField(
                   labelText: 'Office Name',

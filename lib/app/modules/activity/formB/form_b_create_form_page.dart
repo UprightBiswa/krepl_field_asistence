@@ -79,7 +79,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                   children: [
                     ActivitySelectionWidget(
                       formType: "B",
-                      onActivitySelected: (selectedActivity) {
+                       onSaved: (selectedActivity) {
                         setState(() {
                           _selectedActivity = selectedActivity;
 
@@ -87,6 +87,12 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                             selectedPartyType = _selectedActivity!.masterLink;
                           }
                         });
+                      },
+                      validator: (selectedActivity) {
+                        if (selectedActivity == null) {
+                          return 'Please select an activity';
+                        }
+                        return null;
                       },
                     ),
                     if (_selectedActivity != null) ...[

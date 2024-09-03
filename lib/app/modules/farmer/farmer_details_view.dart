@@ -58,21 +58,21 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                       child: Column(
                         children: [
                           CustomHeaderText(
-                            text: widget.farmer.farmersName,
+                            text: widget.farmer.farmerName?? '',
                             fontSize: 20.sp,
                           ),
                           SizedBox(height: 16.h),
                           InfoRow(
                             label: "Promotion Activity",
-                            value: widget.farmer.promotionActivity,
+                            value: widget.farmer.promotionActivity ?? '',
                           ),
                           InfoRow(
                             label: "Father's Name",
-                            value: widget.farmer.fatherName,
+                            value: widget.farmer.fatherName ?? '',
                           ),
                           InfoRow(
                             label: "Mobile Number",
-                            value: widget.farmer.mobileNumber,
+                            value: widget.farmer.mobileNo ?? '',
                           ),
                         ],
                       ),
@@ -90,27 +90,27 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                           SizedBox(height: 16.h),
                           InfoRow(
                             label: "Village",
-                            value: widget.farmer.villageLocalityName,
+                            value: widget.farmer.villageName?? '',
                           ),
                           InfoRow(
                             label: "Post Office",
-                            value: widget.farmer.postOfficeName,
+                            value: widget.farmer.officeName?? '',
                           ),
                           InfoRow(
                             label: "Sub-District",
-                            value: widget.farmer.subDistName,
+                            value: widget.farmer.tehshil?? '',
                           ),
                           InfoRow(
                             label: "District",
-                            value: widget.farmer.districtName,
+                            value: widget.farmer.district?? '',
                           ),
                           InfoRow(
                             label: "State",
-                            value: widget.farmer.stateName,
+                            value: widget.farmer.state?? '',
                           ),
                           InfoRow(
                             label: "PIN",
-                            value: widget.farmer.pin,
+                            value: widget.farmer.pin?? '',
                           ),
                         ],
                       ),
@@ -132,19 +132,19 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                           ),
                           InfoRow(
                             label: "Cows Count",
-                            value: widget.farmer.cowCount.toString(),
+                            value: widget.farmer.cow.toString(),
                           ),
                           InfoRow(
                             label: "Buffalos Count",
-                            value: widget.farmer.buffaloCount.toString(),
+                            value: widget.farmer.buffalo.toString(),
                           ),
                           InfoRow(
                             label: "Work Place Code",
-                            value: widget.farmer.workPlaceCode,
+                            value: widget.farmer.workplaceCode?? '',
                           ),
                           InfoRow(
                             label: "Work Place Name",
-                            value: widget.farmer.workPlaceName,
+                            value: widget.farmer.workplaceName?? '',
                           ),
                         ],
                       ),
@@ -177,7 +177,7 @@ class DetailImageHeader extends StatelessWidget {
       width: Get.width,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(farmer.image),
+          image: AssetImage(AppAssets.kFarmer),
           fit: BoxFit.cover,
         ),
       ),
@@ -199,7 +199,7 @@ class DetailImageHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  farmer.farmersName,
+                  farmer.farmerName ?? '',
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.bold,
@@ -207,7 +207,7 @@ class DetailImageHeader extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  farmer.promotionActivity,
+                  farmer.promotionActivity ?? '',
                   style: TextStyle(
                     fontSize: 18.sp,
                     color: Colors.white.withOpacity(0.7),

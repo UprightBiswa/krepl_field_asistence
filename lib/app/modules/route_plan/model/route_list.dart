@@ -1,4 +1,3 @@
-
 // ignore: constant_identifier_names
 import '../../../model/employee/employee_model.dart';
 import '../../../model/master/villages_model.dart';
@@ -9,7 +8,7 @@ enum RouteStatus { Active, Deactive, Delete }
 class RouteMap {
   final String routeNo;
   final String routeName;
-   final List<Employee> employees; // Multiple employees
+  final List<Employee> employees; // Multiple employees
   final List<WorkPlace> workPlaces; // Multiple workplaces
   final List<Village> villages;
   final String stateName;
@@ -38,7 +37,6 @@ class RouteMap {
   });
 }
 
-
 // Dummy RouteMaps
 final List<RouteMap> dummyRouteData = [
   RouteMap(
@@ -46,7 +44,7 @@ final List<RouteMap> dummyRouteData = [
     routeName: "North Zone",
     employees: [employeesList[0], employeesList[1]],
     workPlaces: [workPlacesList[0], workPlacesList[1]],
-    villages: [villagesList[0]],
+    villages: [],
     stateName: "State A",
     districtName: "District 1",
     subDistName: "Sub-district 1",
@@ -61,7 +59,7 @@ final List<RouteMap> dummyRouteData = [
     routeName: "South Zone",
     employees: [employeesList[1]],
     workPlaces: [workPlacesList[1], workPlacesList[2]],
-    villages: [villagesList[1], villagesList[2]],
+    villages: [],
     stateName: "State B",
     districtName: "District 2",
     subDistName: "Sub-district 2",
@@ -76,7 +74,7 @@ final List<RouteMap> dummyRouteData = [
     routeName: "East Zone",
     employees: [employeesList[2], employeesList[0]],
     workPlaces: [workPlacesList[2], workPlacesList[0]],
-    villages: [villagesList[2],villagesList[1]],
+    villages: [],
     stateName: "State C",
     districtName: "District 3",
     subDistName: "Sub-district 3",

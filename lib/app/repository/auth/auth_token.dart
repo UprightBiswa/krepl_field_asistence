@@ -167,6 +167,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthState with ChangeNotifier {
   String _workplaceCode = '';
+  //add workplaceName
+  String _workplaceName = '';
   String _hrEmployeeCode = '';
   String _employeeName = '';
   String _fatherName = '';
@@ -181,6 +183,7 @@ class AuthState with ChangeNotifier {
   String _deviceToken = '';
 
   String get workplaceCode => _workplaceCode;
+  String get workplaceName => _workplaceName;
   String get hrEmployeeCode => _hrEmployeeCode;
   String get employeeName => _employeeName;
   String get fatherName => _fatherName;
@@ -196,6 +199,7 @@ class AuthState with ChangeNotifier {
 
   Future<void> setToken(
     String newWorkplaceCode,
+    String newWorkplaceName,
     String newHrEmployeeCode,
     String newEmployeeName,
     String newFatherName,
@@ -210,6 +214,7 @@ class AuthState with ChangeNotifier {
     String newDeviceToken,
   ) async {
     _workplaceCode = newWorkplaceCode;
+    _workplaceName = newWorkplaceName;
     _hrEmployeeCode = newHrEmployeeCode;
     _employeeName = newEmployeeName;
     _fatherName = newFatherName;
@@ -225,6 +230,7 @@ class AuthState with ChangeNotifier {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('workplaceCode', _workplaceCode);
+    await prefs.setString('workplaceName', _workplaceName);
     await prefs.setString('hrEmployeeCode', _hrEmployeeCode);
     await prefs.setString('employeeName', _employeeName);
     await prefs.setString('fatherName', _fatherName);
@@ -258,6 +264,11 @@ class AuthState with ChangeNotifier {
   Future<String?> getWorkplaceCode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('workplaceCode');
+  }
+
+  Future<String?> getWorkplaceName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('workplaceName');
   }
 
   Future<String?> getHrEmployeeCode() async {
@@ -327,6 +338,7 @@ class AuthState with ChangeNotifier {
   Future<void> clearToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('workplaceCode');
+    await prefs.remove('workplaceName');
     await prefs.remove('hrEmployeeCode');
     await prefs.remove('employeeName');
     await prefs.remove('fatherName');

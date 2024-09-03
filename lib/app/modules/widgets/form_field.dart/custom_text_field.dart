@@ -5,16 +5,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../data/constrants/constants.dart';
 
 class CustomTextField extends StatelessWidget {
+  final bool readonly;
   final String labelText;
   final String hintText;
   final IconData icon;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
-  final TextInputFormatter? inputFormatter;
+  final List<TextInputFormatter>? inputFormatter;
   final int maxLines;
 
   const CustomTextField({
+    this.readonly = false,
     required this.labelText,
     required this.hintText,
     required this.icon,
@@ -30,10 +32,11 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+       readOnly: readonly,
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      inputFormatters: inputFormatter != null ? [inputFormatter!] : null,
+      inputFormatters: inputFormatter,
       maxLines: maxLines,
       decoration: InputDecoration(
         labelText: labelText,

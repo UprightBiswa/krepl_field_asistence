@@ -12,6 +12,7 @@ import '../widgets/buttons/buttons.dart';
 import '../widgets/buttons/custom_button.dart';
 import '../widgets/no_result/no_result.dart';
 import 'components/farmer_list_view.dart';
+import 'components/filter_bottom_sheet.dart';
 import 'controller/farmer_controller.dart';
 
 class FarmerManagementPage extends StatelessWidget {
@@ -60,7 +61,7 @@ class FarmerManagementPage extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          farmerController.filteredFarmers();
+          farmerController.refreshItems();
         },
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.0.w),
@@ -73,7 +74,7 @@ class FarmerManagementPage extends StatelessWidget {
                     child: SearchField(
                       controller: textController,
                       onChanged: (query) {
-                        farmerController.filterFarmers(query);
+                        farmerController.setSearchQuery(query);
                       },
                       isEnabled: true,
                       hintText: 'Search farmers',
@@ -82,7 +83,13 @@ class FarmerManagementPage extends StatelessWidget {
                   SizedBox(width: 10.w),
                   GestureDetector(
                     onTap: () {
-                      // Logic for filter action
+                      Get.bottomSheet(
+                        FilterBottomSheet(
+                          controller: farmerController.filterController,
+                          onApply: farmerController.refreshItems,
+                        ),
+                        isScrollControlled: true,
+                      );
                     },
                     child: CircleAvatar(
                       radius: 20.w,
@@ -109,17 +116,18 @@ class FarmerManagementPage extends StatelessWidget {
                 ],
               ),
               Obx(() {
-                if (farmerController.isLoading.value) {
+                if (farmerController.isListLoading.value) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (farmerController.filteredFarmers.isEmpty) {
+                } else if (farmerController.pagingController.itemList == null ||
+                    farmerController.pagingController.itemList!.isEmpty) {
                   return const NoResultsScreen();
-                } else if (farmerController.isError.value) {
+                } else if (farmerController.isListError.value) {
                   return const Error404Screen();
                 }
                 return Column(
                   children: [
                     FarmerListView(
-                      farmers: farmerController.filteredFarmers,
+                      pagingController: farmerController.pagingController,
                     ),
                     SizedBox(height: 20.h),
                   ],

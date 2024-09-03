@@ -33,11 +33,11 @@ class _FarmerSelectionScreenState extends State<FarmerSelectionScreen> {
         return MultiSelectDropdown<Farmer>(
           labelText: 'Select farmer',
           selectedItems: selectedFarmers,
-          items: farmerController.filteredFarmers,
-          itemAsString: (farmers) => farmers.farmersName,
+          items: farmerController.allFarmers,
+          itemAsString: (farmers) => farmers.farmerName??'',
           searchableFields: {
-            'farmersName': (farmers) => farmers.farmersName,
-            'mobileNumber': (farmers) => farmers.mobileNumber,
+            'farmersName': (farmers) => farmers.farmerName?? '',
+            'mobileNumber': (farmers) => farmers.mobileNo?? '',
           },
           validator: (selectedFarmers) {
             if (selectedFarmers.isEmpty) {

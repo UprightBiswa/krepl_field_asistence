@@ -41,7 +41,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         ),
         fillColor:
             isDarkMode(context) ? AppColors.kContentColor : AppColors.kInput,
-        prefixIcon: Icon(widget.icon),
+        prefixIcon: Icon(
+          widget.icon,
+          color: AppColors.kPrimary,
+        ),
         border: OutlineInputBorder(
           borderSide: BorderSide(
             color: isDarkMode(context)
