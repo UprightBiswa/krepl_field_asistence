@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
+import '../../farmer/controller/farmer_controller.dart';
 import '../../farmer/farmer_details_view.dart';
 import '../../farmer/model/farmer_list.dart';
 import '../../widgets/containers/primary_container.dart';
@@ -14,6 +15,8 @@ class FarmerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FarmerController farmerController = Get.put(FarmerController());
+
     return GestureDetector(
       onTap: () {
         Get.to<dynamic>(
@@ -21,7 +24,10 @@ class FarmerCard extends StatelessWidget {
             farmer: farmer,
           ),
           transition: Transition.rightToLeftWithFade,
-        );
+        )!
+            .then((value) {
+          farmerController.fetchRecentFarmers();
+        });
       },
       child: PrimaryContainer(
         padding: const EdgeInsets.all(0.0),
@@ -32,7 +38,7 @@ class FarmerCard extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Hero(
-                tag: farmer.farmerName?? '',
+                tag: farmer.farmerName ?? '',
                 child: Container(
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.all(10.h),
@@ -64,13 +70,13 @@ class FarmerCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      farmer.promotionActivity?? '',
+                      farmer.promotionActivity ?? '',
                       style: AppTypography.kBold14
                           .copyWith(color: AppColors.kPrimary),
                     ),
                     SizedBox(height: AppSpacing.tenVertical),
                     Text(
-                      farmer.farmerName?? '',
+                      farmer.farmerName ?? '',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.kBold20,

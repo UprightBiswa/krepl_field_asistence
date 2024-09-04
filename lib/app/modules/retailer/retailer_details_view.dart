@@ -8,17 +8,17 @@ import '../widgets/components/Info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
-import 'model/doctor_list.dart';
+import 'model/retailer_model_list.dart';
 
-class DoctorDetailView extends StatefulWidget {
-  final Doctor doctor;
-  const DoctorDetailView({required this.doctor, super.key});
+class RetailerDetailView extends StatefulWidget {
+  final Retailer retailer;
+  const RetailerDetailView({required this.retailer, super.key});
 
   @override
-  State<DoctorDetailView> createState() => _DoctorDetailViewState();
+  State<RetailerDetailView> createState() => _RetailerDetailViewState();
 }
 
-class _DoctorDetailViewState extends State<DoctorDetailView> {
+class _RetailerDetailViewState extends State<RetailerDetailView> {
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
   @override
@@ -33,7 +33,7 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'doctor Details',
+          'Retailer Details',
           style: AppTypography.kBold20.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -45,7 +45,7 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            DetailImageHeader(doctor: widget.doctor),
+            DetailImageHeader(retailer: widget.retailer),
             Positioned(
               top: 228.h,
               left: 20.w,
@@ -59,17 +59,17 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
                       child: Column(
                         children: [
                           CustomHeaderText(
-                            text: widget.doctor.name,
+                            text: widget.retailer.retailerName,
                             fontSize: 20.sp,
                           ),
                           SizedBox(height: 16.h),
                           InfoRow(
-                            label: "Father's Name",
-                            value: widget.doctor.fatherName,
+                            label: "Email Address",
+                            value: widget.retailer.email,
                           ),
                           InfoRow(
                             label: "Mobile Number",
-                            value: widget.doctor.mobileNumber,
+                            value: widget.retailer.mobileNumber,
                           ),
                         ],
                       ),
@@ -87,34 +87,62 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
                           SizedBox(height: 16.h),
                           InfoRow(
                             label: "Village",
-                            value: widget.doctor.villageName?? '',
+                            value: widget.retailer.villageName,
                           ),
                           InfoRow(
                             label: "Post Office",
-                            value: widget.doctor.postOfficeName,
+                            value: widget.retailer.postOfficeName,
                           ),
                           InfoRow(
                             label: "Sub-District",
-                            value: widget.doctor.subDistName,
+                            value: widget.retailer.subDistName,
                           ),
                           InfoRow(
                             label: "District",
-                            value: widget.doctor.districtName,
+                            value: widget.retailer.districtName,
                           ),
                           InfoRow(
                             label: "State",
-                            value: widget.doctor.stateName,
+                            value: widget.retailer.stateName,
                           ),
                           InfoRow(
                             label: "PIN",
-                            value: widget.doctor.pinCode,
+                            value: widget.retailer.pinCode,
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20.h),
-
-                    // Segment 3: Field Details
+                    // Segment 3: Customer Details
+                    if (widget.retailer.customerDetails.isNotEmpty)
+                      PrimaryContainer(
+                        child: Column(
+                          children: [
+                            CustomHeaderText(
+                              text: 'Customer Details',
+                              fontSize: 18.sp,
+                            ),
+                            SizedBox(height: 16.h),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: widget.retailer.customerDetails.length,
+                              itemBuilder: (context, index) {
+                                final customer =
+                                    widget.retailer.customerDetails[index];
+                                return InfoRow(
+                                  label: customer.customerName != ''
+                                      ? customer.customerName
+                                      : "Customer Name",
+                                  value: customer.customerCode,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    SizedBox(height: 20.h),
+                    // Segment 4: Field Details
                     PrimaryContainer(
                       child: Column(
                         children: [
@@ -124,16 +152,12 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
                           ),
                           SizedBox(height: 16.h),
                           InfoRow(
-                            label: "Acre",
-                            value: widget.doctor.acre.toString(),
-                          ),
-                          InfoRow(
                             label: "Work Place Code",
-                            value: widget.doctor.workPlaceCode,
+                            value: widget.retailer.workplaceCode,
                           ),
                           InfoRow(
                             label: "Work Place Name",
-                            value: widget.doctor.workPlaceName,
+                            value: widget.retailer.workplaceName,
                           ),
                         ],
                       ),
@@ -156,8 +180,8 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
 }
 
 class DetailImageHeader extends StatelessWidget {
-  final Doctor doctor;
-  const DetailImageHeader({super.key, required this.doctor});
+  final Retailer retailer;
+  const DetailImageHeader({super.key, required this.retailer});
 
   @override
   Widget build(BuildContext context) {
@@ -183,23 +207,56 @@ class DetailImageHeader extends StatelessWidget {
                 end: Alignment.bottomCenter,
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  doctor.name,
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      retailer.retailerName,
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      retailer.mobileNumber,
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        color: Colors.white.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  doctor.mobileNumber,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: Colors.white.withOpacity(0.7),
+                Container(
+                  padding: EdgeInsets.all(8.h),
+                  decoration: BoxDecoration(
+                    color: retailer.isActive
+                        ? Colors.green.withOpacity(0.1)
+                        : Colors.red.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        retailer.isActive ? Icons.check_circle : Icons.cancel,
+                        color: retailer.isActive ? Colors.green : Colors.red,
+                        size: 20.sp,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        retailer.isActive ? 'Active' : 'Inactive',
+                        style: TextStyle(
+                          color: retailer.isActive ? Colors.green : Colors.red,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -241,7 +298,7 @@ class _DoctorActionSheetState extends State<DoctorActionSheet> {
           Expanded(
             child: PrimaryButton(
               onTap: widget.editCallback,
-              text: "Edit doctor Details",
+              text: "Edit Retailer Details",
             ),
           ),
         ],

@@ -17,39 +17,11 @@ class FarmerList extends StatefulWidget {
 }
 
 class _FarmerListState extends State<FarmerList> {
-  Widget buildShimmer() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (_, __) => Padding(
-          padding: EdgeInsets.only(right: 20.w),
-          child: Container(
-            width: 264.w,
-            height: 280.h,
-            color: Colors.white,
-          ),
-        ),
-        itemCount: 5,
-      ),
-    );
-  }
-
   final FarmerController _farmerController = Get.put(FarmerController());
-
   @override
   void initState() {
+    _farmerController.fetchRecentFarmers();
     super.initState();
-    _fetchRecentFarmers();
-  }
-
- Future<void> _fetchRecentFarmers() async {
-    try {
-      await _farmerController.fetchRecentFarmers();
-    } catch (e) {
-      print('Error in _fetchRecentFarmers: $e'); // Debug log
-    }
   }
 
   @override
@@ -64,9 +36,12 @@ class _FarmerListState extends State<FarmerList> {
             CustomTextButton(
               onPressed: () {
                 Get.to<void>(
-                  () => FarmerManagementPage(),
+                  () => const FarmerManagementPage(),
                   transition: Transition.rightToLeftWithFade,
-                );
+                )!
+                    .then((value) {
+                  _farmerController.fetchRecentFarmers();
+                });
               },
               text: 'See All',
             ),
@@ -75,12 +50,12 @@ class _FarmerListState extends State<FarmerList> {
         SizedBox(
           height: 260.h,
           child: Obx(() {
-            if (_farmerController.isLoading.value) {
+            if (_farmerController.isLoadingrecent.value) {
               return buildShimmer();
-            } else if (_farmerController.isError.value) {
+            } else if (_farmerController.isErrorrecent.value) {
               return Center(
                 child: Text(
-                  'Error: ${_farmerController.errorMessage.value}',
+                  'Error: ${_farmerController.errorMessageRecent.value}',
                   style: const TextStyle(color: Colors.red),
                 ),
               );
@@ -102,6 +77,25 @@ class _FarmerListState extends State<FarmerList> {
           }),
         ),
       ],
+    );
+  }
+
+  Widget buildShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (_, __) => Padding(
+          padding: EdgeInsets.only(right: 20.w),
+          child: Container(
+            width: 264.w,
+            height: 280.h,
+            color: Colors.white,
+          ),
+        ),
+        itemCount: 5,
+      ),
     );
   }
 }

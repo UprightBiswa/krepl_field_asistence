@@ -2,44 +2,20 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
-import '../../../controllers/master_controller.dart/doctor_controller.dart';
 import '../../../data/helpers/internet/connectivity_services.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import '../../farmer/components/filter_bottom_sheet.dart';
 import '../../widgets/dialog/error.dart';
 import '../../widgets/dialog/success.dart';
-import '../model/doctor_list.dart';
+import '../model/retailer_model_list.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class DoctorController extends GetxController {
+class RetailerController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+  var filteredRetailers = <Retailer>[].obs;
 
-  List<Doctor> allDoctors = dummyDoctors;
-
-  var filteredDoctors = <Doctor>[].obs;
-
-  void filterDoctors(String query) {
-    isLoading.value = true;
-    filteredDoctors.value = allDoctors.where((Doctor) {
-      final nameMatch = Doctor.name.toLowerCase().contains(query.toLowerCase());
-      final mobileNumber =
-          Doctor.mobileNumber.toLowerCase().contains(query.toLowerCase());
-      return nameMatch || mobileNumber;
-    }).toList();
-
-    if (filteredDoctors.isEmpty) {
-      errorMessage.value = 'No Doctors match your search.';
-    } else {
-      errorMessage.value = '';
-    }
-
-    isLoading.value = false;
-  }
-
-  // doctor list with pegination
-
-  final PagingController<int, Doctor> pagingController =
+  final PagingController<int, Retailer> pagingController =
       PagingController(firstPageKey: 1);
 
   static const int pageSize = 10;
@@ -60,16 +36,15 @@ class DoctorController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    filteredDoctors.addAll(allDoctors);
-    print("FarmerListController initialized");
+    print("Retailer ListController initialized");
 
     filterController = FilterController<String>(
       filterOptions: [
-        FilterOption(label: 'Doctor Name', value: 'doctor_name'),
+        FilterOption(label: 'Doctor Name', value: 'retailer_name'),
         FilterOption(label: 'Mobile NO', value: 'mobile_no'),
         FilterOption(label: 'Village Name', value: 'village_name'),
       ],
-      initialOrderBy: 'doctor_name',
+      initialOrderBy: 'retailer_name',
     );
 
     pagingController.addPageRequestListener((pageKey) {
@@ -91,8 +66,8 @@ class DoctorController extends GetxController {
   }
 
   void fetchFarmers(
-      int pageKey, PagingController<int, Doctor> pagingController) async {
-    print("Fetching Doctors for page: $pageKey");
+      int pageKey, PagingController<int, Retailer> pagingController) async {
+    print("Fetching retailers for page: $pageKey");
     try {
       if (pageKey == 1) {
         isListLoading(true);
@@ -103,7 +78,7 @@ class DoctorController extends GetxController {
       if (!await _connectivityService.checkInternet()) {
         throw Exception('No internet connection');
       }
-      String endPoint = 'viewDoctor';
+      String endPoint = 'viewRetailer';
       Map<String, dynamic> parameters = {
         'page': pageKey,
         'limit': pageSize,
@@ -119,9 +94,9 @@ class DoctorController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
-        final doctors = data.map((item) => Doctor.fromJson(item)).toList();
+        final retailers = data.map((item) => Retailer.fromJson(item)).toList();
         // Filter out duplicates
-        final List<Doctor> uniqueDoctors = doctors.where((farmer) {
+        final List<Retailer> uniqueRetailers = retailers.where((farmer) {
           final isDuplicate = _existingItemIds.contains(farmer.id.toString());
           if (!isDuplicate) {
             _existingItemIds.add(farmer.id.toString());
@@ -131,19 +106,19 @@ class DoctorController extends GetxController {
 
         final isLastPage = pageKey >= response.data['total_pages'];
         if (isLastPage) {
-          pagingController.appendLastPage(uniqueDoctors);
+          pagingController.appendLastPage(uniqueRetailers);
         } else {
           final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueDoctors, nextPageKey);
+          pagingController.appendPage(uniqueRetailers, nextPageKey);
         }
       } else {
-        throw Exception('Failed to load doctors');
+        throw Exception('Failed to load retailers');
       }
     } catch (e) {
       isListError(true);
       listErrorMessage.value = e.toString();
       pagingController.error = e;
-      print('Error fetching doctors: $e');
+      print('Error fetching retailers: $e');
     } finally {
       isListLoading(false);
     }
@@ -166,7 +141,7 @@ class DoctorController extends GetxController {
 
   void clearFilters() {
     searchQuery.value = '';
-    filterController!.selectedOrderBy.value = 'doctor_name';
+    filterController!.selectedOrderBy.value = 'retailer_name';
     filterController!.order.value = 1;
     refreshItems();
   }
@@ -178,23 +153,22 @@ class DoctorController extends GetxController {
     super.onClose();
   }
 
-  // doctor create
+  // retailer create
   var isLoadingCreate = false.obs;
   var isErrorCreate = false.obs;
   var errorMessageCreate = ''.obs;
 
-  Future<void> createDoctor(Map<String, dynamic> parameters) async {
+  Future<void> submitRetailerData(Map<String, dynamic> parameters) async {
     isLoadingCreate(true);
     isErrorCreate(false);
-    errorMessageCreate.value = '';
-
+    errorMessageCreate('');
     try {
       if (!await _connectivityService.checkInternet()) {
         throw Exception('No internet connection');
       }
 
       final response =
-          await _dioService.post('createDoctor', queryParams: parameters);
+          await _dioService.post('createRetailer', queryParams: parameters);
 
       if (response.statusCode == 200 && response.data['success'] == true) {
         Get.snackbar('Success', response.data['message'],
@@ -223,7 +197,7 @@ class DoctorController extends GetxController {
                 Get.back();
               }),
           barrierDismissible: false);
-      print('Error creating Doctor: $e');
+      print('Error creating retailer: $e');
     } finally {
       isLoadingCreate(false);
     }

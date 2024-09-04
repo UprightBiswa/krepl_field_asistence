@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import '../model/doctor_list.dart';
-import 'doctor_list_card.dart';
+import '../model/retailer_model_list.dart';
+import 'retailer_list_card.dart';
 
-class DoctorListView extends StatefulWidget {
-  final PagingController<int, Doctor> pagingController;
+class RetailerListView extends StatefulWidget {
+  final PagingController<int, Retailer> pagingController;
 
-  const DoctorListView({
+  const RetailerListView({
     super.key,
     required this.pagingController,
   });
 
   @override
-  State<DoctorListView> createState() => _DoctorListViewState();
+  State<RetailerListView> createState() => _RetailerListViewState();
 }
 
-class _DoctorListViewState extends State<DoctorListView> {
+class _RetailerListViewState extends State<RetailerListView> {
   @override
   Widget build(BuildContext context) {
     return PagedListView.separated(
@@ -26,10 +26,10 @@ class _DoctorListViewState extends State<DoctorListView> {
       physics: const NeverScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
       clipBehavior: Clip.none,
-      builderDelegate: PagedChildBuilderDelegate<Doctor>(
+      builderDelegate: PagedChildBuilderDelegate<Retailer>(
         itemBuilder: (context, doctor, index) {
-          return DoctorListCard(
-            doctor: doctor,
+          return RetailerListCard(
+            retailer: doctor,
             index: index,
           );
         },

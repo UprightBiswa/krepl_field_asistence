@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../model/farmer_list.dart';
 import 'farmer_list_card.dart';
 
@@ -17,10 +18,12 @@ class FarmerListView extends StatefulWidget {
 }
 
 class _FarmerListViewState extends State<FarmerListView> {
+
+
   @override
   Widget build(BuildContext context) {
-    // return PagedListView.separated(
-    return PagedListView<int, Farmer>(
+    return PagedListView.separated(
+      // return PagedListView<int, Farmer>(
       pagingController: widget.pagingController,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -43,7 +46,7 @@ class _FarmerListViewState extends State<FarmerListView> {
           child: Text('No more items to load'),
         ),
       ),
-      // separatorBuilder: (context, index) => SizedBox(height: 20.h),
+      separatorBuilder: (context, index) => SizedBox(height: 20.h),
     );
   }
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/master_controller.dart/customer_controller.dart';
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
 import '../../model/master/villages_model.dart';
 import '../../repository/auth/auth_token.dart';
+import '../activity/components/multi_select_dropdown/customer_multi_select_dropdown.dart';
 import '../activity/components/single_select_dropdown/village_single_selection_dropdown.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
@@ -14,24 +17,22 @@ import '../widgets/dialog/loading.dart';
 import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
-import 'controller/doctor_controller.dart';
+import 'controller/retailer_controller.dart';
 
-class DoctorForm extends StatefulWidget {
-  const DoctorForm({super.key});
+class RetailerForm extends StatefulWidget {
+  const RetailerForm({super.key});
 
   @override
-  State<DoctorForm> createState() => _DoctorFormState();
+  State<RetailerForm> createState() => _RetailerFormState();
 }
 
-class _DoctorFormState extends State<DoctorForm> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _RetailerFormState extends State<RetailerForm> {
+  final RetailerController retailerController = Get.put(RetailerController());
   final AuthState authState = AuthState();
-  final DoctorController doctorController = Get.find<DoctorController>();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _fatherNameController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
-  final TextEditingController _acreController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
   final TextEditingController _villageController = TextEditingController();
   final TextEditingController _postOfficeController = TextEditingController();
@@ -42,6 +43,10 @@ class _DoctorFormState extends State<DoctorForm> {
       TextEditingController();
   final TextEditingController _workPlaceNameController =
       TextEditingController();
+
+  //veriable to store list of customer
+  List<Customer> selectedCustomers = [];
+  
   Village? _selectedVillage;
 
   @override
@@ -90,9 +95,8 @@ class _DoctorFormState extends State<DoctorForm> {
   @override
   void dispose() {
     _nameController.dispose();
-    _fatherNameController.dispose();
     _mobileController.dispose();
-    _acreController.dispose();
+    _emailController.dispose();
     _pinController.dispose();
     _villageController.dispose();
     _postOfficeController.dispose();
@@ -119,7 +123,7 @@ class _DoctorFormState extends State<DoctorForm> {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Doctor Form',
+          'Retailer Form',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -149,31 +153,18 @@ class _DoctorFormState extends State<DoctorForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Doctor\'s Basic Details',
+                              text: 'Retailer\'s Basic Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
                             CustomTextField(
                               labelText: "Name",
-                              hintText: "Enter the doctor's name",
+                              hintText: "Enter the retaile's name",
                               icon: Icons.person,
                               controller: _nameController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the name';
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 20.h),
-                            CustomTextField(
-                              labelText: "Father's Name",
-                              hintText: "Enter the father's name",
-                              icon: Icons.person,
-                              controller: _fatherNameController,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the father\'s name';
                                 }
                                 return null;
                               },
@@ -192,6 +183,20 @@ class _DoctorFormState extends State<DoctorForm> {
                                 return null;
                               },
                             ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Email Address",
+                              hintText: "Enter the email address",
+                              icon: Icons.email,
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the email address';
+                                }
+                                return null;
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -202,7 +207,7 @@ class _DoctorFormState extends State<DoctorForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Doctor\'s Address Details',
+                              text: 'Retailer\'s Address Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
@@ -230,7 +235,6 @@ class _DoctorFormState extends State<DoctorForm> {
                             ],
                             SizedBox(height: 20.h),
                             CustomTextField(
-                              readonly: true,
                               labelText: "PIN Code",
                               hintText: "Enter the PIN code",
                               icon: Icons.pin_drop,
@@ -245,7 +249,6 @@ class _DoctorFormState extends State<DoctorForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
-                              readonly: true,
                               labelText: "Post Office Name",
                               hintText: "Enter post office name",
                               icon: Icons.mail,
@@ -259,7 +262,6 @@ class _DoctorFormState extends State<DoctorForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
-                              readonly: true,
                               labelText: "Sub-District",
                               hintText: "Enter sub-district",
                               icon: Icons.map,
@@ -273,7 +275,6 @@ class _DoctorFormState extends State<DoctorForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
-                              readonly: true,
                               labelText: "District",
                               hintText: "Enter district",
                               icon: Icons.location_on,
@@ -287,7 +288,6 @@ class _DoctorFormState extends State<DoctorForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
-                              readonly: true,
                               labelText: "State",
                               hintText: "Enter state",
                               icon: Icons.public,
@@ -303,7 +303,6 @@ class _DoctorFormState extends State<DoctorForm> {
                           ],
                         ),
                       ),
-
                       SizedBox(height: 20.h),
                       // Field Details Section
                       PrimaryContainer(
@@ -315,22 +314,13 @@ class _DoctorFormState extends State<DoctorForm> {
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
-                            CustomTextField(
-                              labelText: "Acre",
-                              hintText: "Enter the total acres",
-                              icon: Icons.landscape,
-                              controller: _acreController,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the number of acres';
-                                }
-                                return null;
+                            CustomerMultiPleSelectionScreen(
+                              onSelectionChanged: (customers) {
+                                selectedCustomers = customers;
                               },
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
-                              readonly: true,
                               labelText: "Work Place Code",
                               hintText: "Enter the work place code",
                               icon: Icons.work,
@@ -344,7 +334,6 @@ class _DoctorFormState extends State<DoctorForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
-                              readonly: true,
                               labelText: "Work Place Name",
                               hintText: "Enter the work place name",
                               icon: Icons.business,
@@ -425,20 +414,20 @@ class _DoctorFormState extends State<DoctorForm> {
   void _submitForm() async {
     Get.dialog(const LoadingDialog(), barrierDismissible: false);
     final parameters = {
-      'doctor_name': _nameController.text,
-      'doctor_father_name': _fatherNameController.text,
+      'retailer_name': _nameController.text,
+      'email': _emailController.text,
       'mobile_no': _mobileController.text,
-      'acre': _acreController.text,
       'pin': _pinController.text,
-      'village': _villageController.text,
+      'village_name': _villageController.text,
       'officename': _postOfficeController.text,
       'tehshil': _subDistController.text,
       'district': _districtController.text,
       'state': _stateController.text,
       'workplace_code': _workPlaceCodeController.text,
+      'customer_code[]': selectedCustomers.map((e) => e.code).toList(),
     };
     try {
-      await doctorController.createDoctor(parameters);
+      await retailerController.submitRetailerData(parameters);
     } catch (e) {
       // In case of error, hide the loading dialog and show the error dialog
       Get.back(); // Close loading dialog
@@ -491,7 +480,8 @@ class FormImageHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Doctor Name',
+                  //add controllerto show the name text controller
+                  'Retain name',
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.bold,
@@ -499,7 +489,7 @@ class FormImageHeader extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Mobile Number',
+                  'enter the retailer details',
                   style: TextStyle(
                     fontSize: 18.sp,
                     color: Colors.white.withOpacity(0.7),

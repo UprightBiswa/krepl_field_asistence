@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../farmer/controller/farmer_controller.dart';
+import '../../../farmer/controller/farmer_list_view_controller.dart';
 import '../../../farmer/model/farmer_list.dart';
 import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
@@ -17,15 +17,15 @@ class FarmerSelectionScreen extends StatefulWidget {
 }
 
 class _FarmerSelectionScreenState extends State<FarmerSelectionScreen> {
-  final FarmerController farmerController = Get.put(FarmerController());
+  final FarmerListController farmerController = Get.put(FarmerListController());
   List<Farmer> selectedFarmers = [];
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (farmerController.isLoading.value) {
+      if (farmerController.isListLoading.value) {
         return const ShimmerLoading();
-      } else if (farmerController.errorMessage.isNotEmpty) {
+      } else if (farmerController.listErrorMessage.isNotEmpty) {
         return const Center(
           child: Text('Error loading farmer.'),
         );

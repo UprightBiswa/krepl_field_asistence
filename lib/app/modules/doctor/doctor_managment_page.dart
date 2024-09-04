@@ -3,21 +3,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
+import '../farmer/components/filter_bottom_sheet.dart';
 import '../home/components/search_field.dart';
 import '../widgets/appbars/appbars.dart';
 import '../widgets/buttons/custom_button.dart';
+import '../widgets/no_result/error_page.dart';
+import '../widgets/no_result/no_result.dart';
 import 'components/doctor_list_view.dart';
 import 'controller/doctor_controller.dart';
 import 'doctor_form.dart';
 
-class DoctorManagementPage extends StatelessWidget {
-  DoctorManagementPage({super.key});
+class DoctorManagementPage extends StatefulWidget {
+  const DoctorManagementPage({super.key});
 
+  @override
+  State<DoctorManagementPage> createState() => _DoctorManagementPageState();
+}
+
+class _DoctorManagementPageState extends State<DoctorManagementPage> {
   final TextEditingController textController = TextEditingController();
+
   final DoctorController doctorController = Get.put(DoctorController());
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
+
+  @override
+  void initState() {
+    super.initState();
+    doctorController.fetchFarmers(1, doctorController.pagingController);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +60,10 @@ class DoctorManagementPage extends StatelessWidget {
             isBorder: true,
             onTap: () {
               Get.to(() => const DoctorForm(),
-                  transition: Transition.rightToLeftWithFade);
+                      transition: Transition.rightToLeftWithFade)!
+                  .then((value) {
+                doctorController.refreshItems();
+              });
             },
           ),
           SizedBox(
@@ -53,55 +71,73 @@ class DoctorManagementPage extends StatelessWidget {
           )
         ],
       ),
-      body: Obx(() {
-        if (doctorController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        return SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          doctorController.refreshItems();
+        },
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SearchField(
-                        controller: textController,
-                        onChanged: (query) {
-                          doctorController.filterDoctors(query);
-                        },
-                        isEnabled: true,
-                        hintText: 'Search Doctors',
-                      ),
-                    ),
-                    SizedBox(width: 10.w),
-                    GestureDetector(
-                      onTap: () {
-                        // Logic for filter action
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: SearchField(
+                      controller: textController,
+                      onChanged: (query) {
+                        doctorController.setSearchQuery(query);
                       },
-                      child: CircleAvatar(
-                        radius: 20.w,
-                        backgroundColor: AppColors.kPrimary.withOpacity(0.15),
-                        child: const Icon(
-                          Icons.filter_list,
-                          color: AppColors.kPrimary,
+                      isEnabled: true,
+                      hintText: 'Search Doctors',
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () {
+                      Get.bottomSheet(
+                        FilterBottomSheet(
+                          controller: doctorController.filterController!,
+                          onApply: doctorController.refreshItems,
+                          onClear: doctorController.clearFilters,
                         ),
+                        isScrollControlled: true,
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 20.w,
+                      backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                      child: const Icon(
+                        Icons.filter_list,
+                        color: AppColors.kPrimary,
                       ),
                     ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20.h),
+              Obx(() {
+                if (doctorController.isListLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (doctorController.pagingController.itemList == null ||
+                    doctorController.pagingController.itemList!.isEmpty) {
+                  return const NoResultsScreen();
+                } else if (doctorController.isListError.value) {
+                  return const Error404Screen();
+                }
+                return Column(
+                  children: [
+                    DoctorListView(
+                      pagingController: doctorController.pagingController,
+                    ),
+                    SizedBox(height: 20.h),
                   ],
-                ),
-                SizedBox(height: 20.h),
-                DoctorListView(
-                  doctors: doctorController.filteredDoctors,
-                ),
-                SizedBox(height: AppSpacing.twentyVertical),
-              ],
-            ),
+                );
+              }),
+            ],
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }

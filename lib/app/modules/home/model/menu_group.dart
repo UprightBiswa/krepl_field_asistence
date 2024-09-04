@@ -9,7 +9,9 @@ import '../../activity/formC/form_c_manage_page.dart';
 import '../../activity/formD/form_d_manage_page.dart';
 import '../../activity/formE/form_e_manage_page.dart';
 import '../../doctor/doctor_managment_page.dart';
+import '../../farmer/controller/farmer_controller.dart';
 import '../../farmer/farmer_managment_page.dart';
+import '../../retailer/retailer_managment_page.dart';
 import '../../route_plan/route_managment_page.dart';
 
 class RandomColorGenerator {
@@ -58,15 +60,20 @@ class MenuItem {
   });
 }
 
+final FarmerController _farmerController = Get.put(FarmerController());
+
 List<MenuItem> reportMenuItems = [
   MenuItem(
     title: 'Farmer Registration',
     icon: Icons.agriculture, // Example icon
     onTap: () {
       Get.to<void>(
-        () => FarmerManagementPage(),
+        () => const FarmerManagementPage(),
         transition: Transition.rightToLeftWithFade,
-      );
+      )!
+          .then((value) {
+        _farmerController.fetchRecentFarmers();
+      });
     },
   ),
   MenuItem(
@@ -74,7 +81,7 @@ List<MenuItem> reportMenuItems = [
     icon: Icons.local_hospital, // Example icon
     onTap: () {
       Get.to<void>(
-        () => DoctorManagementPage(),
+        () => const DoctorManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -114,7 +121,11 @@ List<MenuItem> reportMenuItems = [
     title: 'Retailer',
     icon: Icons.store, // Example icon
     onTap: () {
-      // Handle navigation to Retailer page
+      Get.to(() => const RetailerManagementPage(),
+              transition: Transition.rightToLeftWithFade)!
+          .then((value) {
+        _farmerController.fetchRecentFarmers();
+      });
     },
   ),
   MenuItem(
@@ -192,8 +203,11 @@ List<MenuItem> formMenuItems = [
     title: 'Farmer Management',
     icon: Icons.document_scanner, // Example icon
     onTap: () {
-      Get.to(() => FarmerManagementPage(),
-          transition: Transition.rightToLeftWithFade);
+      Get.to(() => const FarmerManagementPage(),
+              transition: Transition.rightToLeftWithFade)!
+          .then((value) {
+        _farmerController.fetchRecentFarmers();
+      });
     },
   ),
 ];
@@ -205,9 +219,13 @@ List<MenuItem> shortcutMenuItems = [
     icon: Icons.person_add,
     onTap: () {
       Get.to<void>(
-        () => FarmerManagementPage(),
+        () => const FarmerManagementPage(),
         transition: Transition.rightToLeftWithFade,
-      );
+      )!
+          .then((value) {
+        _farmerController.fetchRecentFarmers();
+      });
+      ;
     },
   ),
   MenuItem(

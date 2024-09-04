@@ -9,6 +9,7 @@ import '../../../provider/connction_provider/connectivity_provider.dart';
 import '../../home/components/action_menue.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../controller/farmer_list_view_controller.dart';
 import '../farmer_details_view.dart';
 import '../model/farmer_list.dart';
 
@@ -23,6 +24,8 @@ class FarmerListCard extends StatefulWidget {
 }
 
 class _FarmerListCardState extends State<FarmerListCard> {
+  final FarmerListController farmerController = Get.put(FarmerListController());
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ConnectivityProvider>(
@@ -32,9 +35,13 @@ class _FarmerListCardState extends State<FarmerListCard> {
           child: AnimatedButton(
             onTap: () {
               Get.to<dynamic>(
-                FarmerDetailView(farmer: widget.farmer),
+                () => FarmerDetailView(farmer: widget.farmer),
                 transition: Transition.rightToLeftWithFade,
-              );
+              )!
+                  .then((value) {
+                farmerController.fetchFarmers(
+                    1, farmerController.pagingController);
+              });
             },
             child: PrimaryContainer(
               child: Column(

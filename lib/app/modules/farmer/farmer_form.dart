@@ -94,7 +94,7 @@ class _FarmerFormState extends State<FarmerForm> {
     if (selectedVillage != null) {
       setState(() {
         _selectedVillage = selectedVillage;
-        _villageController.text = selectedVillage.villageName;
+        _villageController.text = selectedVillage.id.toString();
         // Auto-fill the address fields
         _pinController.text = selectedVillage.pin;
         _postOfficeController.text = selectedVillage.officeName;
@@ -504,7 +504,7 @@ class _FarmerFormState extends State<FarmerForm> {
   void _submitForm() async {
     Get.dialog(const LoadingDialog(), barrierDismissible: false);
     final parameters = {
-      'promotion_activity': _selectedActivity?.promotionalActivity,
+      'promotion_activity': _selectedActivity?.id,
       'farmer_name': _nameController.text,
       'father_name': _fatherNameController.text,
       'mobile_no': _mobileController.text,

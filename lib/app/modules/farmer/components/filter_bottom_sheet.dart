@@ -36,11 +36,13 @@ class FilterController<T> extends GetxController {
 class FilterBottomSheet<T> extends StatefulWidget {
   final FilterController<T> controller;
   final Function onApply;
+  final Function onClear;
 
   const FilterBottomSheet({
     super.key,
     required this.controller,
     required this.onApply,
+    required this.onClear,
   });
 
   @override
@@ -87,10 +89,10 @@ class _FilterBottomSheetState<T> extends State<FilterBottomSheet<T>> {
             ),
             Slider(
               value: order.toDouble(),
-              min: 0,
+              min: -1,
               max: 1,
               divisions: 1,
-              label: order == 0 ? 'Ascending' : 'Descending',
+              label: order == -1 ? 'Descending' : 'Ascending',
               onChanged: (double value) {
                 setState(() {
                   order = value.toInt();
@@ -99,12 +101,24 @@ class _FilterBottomSheetState<T> extends State<FilterBottomSheet<T>> {
               },
             ),
             SizedBox(height: 20.h),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                widget.controller.applyFilters(widget.onApply);
-              },
-              child: const Text('Apply Filters'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    widget.onClear();
+                  },
+                  child: const Text('Clear'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    widget.controller.applyFilters(widget.onApply);
+                  },
+                  child: const Text('Apply Filters'),
+                ),
+              ],
             ),
           ],
         ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NoResultsScreen extends StatelessWidget {
+  //add call back function buttion press add constrctor
+
   const NoResultsScreen({super.key});
 
   @override
@@ -29,7 +31,11 @@ class NoResultsScreen extends StatelessWidget {
                 "We couldn't find any matches for your search. Try using different terms or browse our categories.",
             // button: you can pass your custom button,
             btnText: "Search again",
-            press: () {},
+            press: () {
+              // add your CallBackfunction here
+              
+
+            },
           ),
         ],
       ),
