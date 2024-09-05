@@ -31,7 +31,7 @@ class _DoctorManagementPageState extends State<DoctorManagementPage> {
   @override
   void initState() {
     super.initState();
-    doctorController.fetchFarmers(1, doctorController.pagingController);
+    doctorController.fetchDoctors(1, doctorController.pagingController);
   }
 
   @override

@@ -17,6 +17,8 @@ class DoctorListView extends StatefulWidget {
 }
 
 class _DoctorListViewState extends State<DoctorListView> {
+  
+
   @override
   Widget build(BuildContext context) {
     return PagedListView.separated(

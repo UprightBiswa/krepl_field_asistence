@@ -37,9 +37,17 @@ class _VillageSingleSelectionWidgetState
         return const ShimmerLoading(); // Show shimmer loading effect while data is being fetched
       } else if (_villageController.isError.value ||
           _villageController.errorMessage.isNotEmpty) {
-        return Center(
-            child: Text(
-                'Error: ${_villageController.errorMessage}')); // Display error message if there's an issue
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.red[100],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Error loading villages'),
+          ),
+        );
       } else {
         return SingleSelectDropdown<Village>(
           labelText: "Select Village",

@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:field_asistence/app/modules/farmer/farmer_edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,10 @@ class _FarmerListCardState extends State<FarmerListCard> {
           child: AnimatedButton(
             onTap: () {
               Get.to<dynamic>(
-                () => FarmerDetailView(farmer: widget.farmer),
+                () => FarmerDetailView(
+                  farmer: widget.farmer,
+                  tag: widget.farmer.mobileNo ?? '',
+                ),
                 transition: Transition.rightToLeftWithFade,
               )!
                   .then((value) {
@@ -52,26 +56,17 @@ class _FarmerListCardState extends State<FarmerListCard> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(50.r),
-                        child: connectivityProvider.isConnected
-                            ? // show 1st latter cercle text
-                            CircleAvatar(
-                                radius: 40.r,
-                                backgroundColor: AppColors.kPrimary,
-                                child: Text(
-                                  widget.farmer.farmerName![0].toUpperCase(),
-                                  style: AppTypography.kBold20.copyWith(
-                                    color: AppColors.kWhite,
-                                  ),
-                                ),
-                              )
-                            : Image.asset(
-                                AppAssets.kLogo,
-                                width: 80.w,
-                                height: 80.w,
-                                fit: BoxFit.cover,
+                          borderRadius: BorderRadius.circular(50.r),
+                          child: CircleAvatar(
+                            radius: 40.r,
+                            backgroundColor: AppColors.kPrimary,
+                            child: Text(
+                              widget.farmer.farmerName![0].toUpperCase(),
+                              style: AppTypography.kBold20.copyWith(
+                                color: AppColors.kWhite,
                               ),
-                      ),
+                            ),
+                          )),
                       SizedBox(width: 16.w),
                       // Farmer details
                       Expanded(
@@ -103,10 +98,17 @@ class _FarmerListCardState extends State<FarmerListCard> {
                       ActionMenuIcon(
                         onEdit: () {
                           // Edit farmer logic
+                          Get.to(() => FarmerEditForm(
+                                    farmer: widget.farmer,
+                                    tag: widget.farmer.mobileNo ?? '',
+                                  ))!
+                              .then((value) {
+                            farmerController.fetchFarmers(
+                                1, farmerController.pagingController);
+                            Get.back();
+                          });
                         },
-                        onDelete: () {
-                          // Delete farmer logic
-                        },
+                        onDelete: () {},
                       ),
                     ],
                   ),

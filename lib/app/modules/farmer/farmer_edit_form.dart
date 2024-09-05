@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -6,7 +9,9 @@ import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
 import '../../model/master/villages_model.dart';
 import '../../repository/auth/auth_token.dart';
+import '../activity/components/single_select_dropdown/activity_master_dropdown.dart';
 import '../activity/components/single_select_dropdown/village_single_selection_dropdown.dart';
+import '../activity/model/activity_master_model.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
@@ -15,19 +20,23 @@ import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/form_field.dart/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
-import 'controller/doctor_controller.dart';
+import 'controller/farmer_controller.dart';
+import 'model/farmer_list.dart';
 
-class DoctorForm extends StatefulWidget {
-  const DoctorForm({super.key});
+class FarmerEditForm extends StatefulWidget {
+  final Farmer farmer;
+  final String tag;
+
+  const FarmerEditForm({super.key, required this.farmer, required this.tag});
 
   @override
-  State<DoctorForm> createState() => _DoctorFormState();
+  State<FarmerEditForm> createState() => _FarmerEditFormState();
 }
 
-class _DoctorFormState extends State<DoctorForm> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _FarmerEditFormState extends State<FarmerEditForm> {
+  final FarmerController farmerController = Get.put(FarmerController());
   final AuthState authState = AuthState();
-  final DoctorController doctorController = Get.find<DoctorController>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
@@ -39,10 +48,14 @@ class _DoctorFormState extends State<DoctorForm> {
   final TextEditingController _subDistController = TextEditingController();
   final TextEditingController _districtController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _cowCountController = TextEditingController();
+  final TextEditingController _buffaloCountController = TextEditingController();
   final TextEditingController _workPlaceCodeController =
       TextEditingController();
   final TextEditingController _workPlaceNameController =
       TextEditingController();
+  final TextEditingController _selectedDateController = TextEditingController();
+  ActivityMaster? _selectedActivity;
   Village? _selectedVillage;
 
   @override
@@ -61,6 +74,26 @@ class _DoctorFormState extends State<DoctorForm> {
       _workPlaceCodeController.text = workplaceCode ?? '';
       _workPlaceNameController.text = workplaceName ?? '';
     });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _fatherNameController.dispose();
+    _mobileController.dispose();
+    _acreController.dispose();
+    _pinController.dispose();
+    _villageController.dispose();
+    _postOfficeController.dispose();
+    _subDistController.dispose();
+    _districtController.dispose();
+    _stateController.dispose();
+    _cowCountController.dispose();
+    _buffaloCountController.dispose();
+    _workPlaceCodeController.dispose();
+    _workPlaceNameController.dispose();
+    _selectedDateController.dispose();
+    super.dispose();
   }
 
   void _onVillageSelected(Village? selectedVillage) {
@@ -88,23 +121,6 @@ class _DoctorFormState extends State<DoctorForm> {
     }
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _fatherNameController.dispose();
-    _mobileController.dispose();
-    _acreController.dispose();
-    _pinController.dispose();
-    _villageController.dispose();
-    _postOfficeController.dispose();
-    _subDistController.dispose();
-    _districtController.dispose();
-    _stateController.dispose();
-    _workPlaceCodeController.dispose();
-    _workPlaceNameController.dispose();
-    super.dispose();
-  }
-
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
@@ -120,7 +136,7 @@ class _DoctorFormState extends State<DoctorForm> {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Doctor Form',
+          'Farmer Edit Form',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -132,11 +148,11 @@ class _DoctorFormState extends State<DoctorForm> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            const FormImageHeader(
+            FormImageHeader(
               tag: 'form',
-              image: ImageDoctorUrl.doctorImage,
-              header: 'Doctor Form',
-              subtitle: 'Fill in the details to add a new doctor',
+              image: ImageDoctorUrl.farmerImage,
+              header: widget.farmer.farmerName ?? '',
+              subtitle: widget.farmer.promotionActivity ?? '',
             ),
             Positioned(
               top: 228.h,
@@ -149,20 +165,23 @@ class _DoctorFormState extends State<DoctorForm> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      // Basic Details Section
                       PrimaryContainer(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Doctor\'s Basic Details',
+                              text: 'Farmer\'s Basic Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
                             CustomTextField(
                               labelText: "Name",
-                              hintText: "Enter the doctor's name",
+                              hintText: "Enter the farmer's name",
                               icon: Icons.person,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.singleLineFormatter,
+                                LengthLimitingTextInputFormatter(30),
+                              ],
                               controller: _nameController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -176,6 +195,10 @@ class _DoctorFormState extends State<DoctorForm> {
                               labelText: "Father's Name",
                               hintText: "Enter the father's name",
                               icon: Icons.person,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.singleLineFormatter,
+                                LengthLimitingTextInputFormatter(30),
+                              ],
                               controller: _fatherNameController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -189,6 +212,10 @@ class _DoctorFormState extends State<DoctorForm> {
                               labelText: "Mobile Number",
                               hintText: "Enter the mobile number",
                               icon: Icons.phone,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               controller: _mobileController,
                               keyboardType: TextInputType.phone,
                               validator: (value) {
@@ -198,6 +225,33 @@ class _DoctorFormState extends State<DoctorForm> {
                                 return null;
                               },
                             ),
+                            SizedBox(height: 20.h),
+                            ActivitySelectionWidget(
+                              formType: "A",
+                              onSaved: (selectedActivity) {
+                                setState(() {
+                                  _selectedActivity = selectedActivity;
+                                });
+                              },
+                              validator: (selectedActivity) {
+                                if (selectedActivity == null) {
+                                  return 'Please select an activity';
+                                }
+                                return null;
+                              },
+                            ),
+                            if (_selectedActivity == null) ...[
+                              //show text veldaition
+                              const Padding(
+                                padding: EdgeInsets.only(top: 8.0, left: 8.0),
+                                child: Text(
+                                  'Please select a promotional activity',
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 12),
+                                ),
+                              ),
+                            ],
+                            SizedBox(height: 20.h),
                           ],
                         ),
                       ),
@@ -208,7 +262,7 @@ class _DoctorFormState extends State<DoctorForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Doctor\'s Address Details',
+                              text: 'Farmer\'s Address Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
@@ -233,12 +287,17 @@ class _DoctorFormState extends State<DoctorForm> {
                               ),
                             ],
                             SizedBox(height: 20.h),
+
                             CustomTextField(
                               readonly: true,
                               labelText: "PIN Code",
                               hintText: "Enter the PIN code",
                               icon: Icons.pin_drop,
                               controller: _pinController,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(6),
+                              ],
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -304,10 +363,10 @@ class _DoctorFormState extends State<DoctorForm> {
                               },
                             ),
                             SizedBox(height: 20.h),
+                            // ],
                           ],
                         ),
                       ),
-
                       SizedBox(height: 20.h),
                       // Field Details Section
                       PrimaryContainer(
@@ -328,6 +387,34 @@ class _DoctorFormState extends State<DoctorForm> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the number of acres';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Cow Count",
+                              hintText: "Enter the number of cows",
+                              icon: Icons.pets,
+                              controller: _cowCountController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the number of cows';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomTextField(
+                              labelText: "Buffalo Count",
+                              hintText: "Enter the number of buffaloes",
+                              icon: Icons.pets,
+                              controller: _buffaloCountController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the number of buffaloes';
                                 }
                                 return null;
                               },
@@ -376,9 +463,8 @@ class _DoctorFormState extends State<DoctorForm> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
-          color: isDarkMode(context)
-              ? AppColors.kDarkSurfaceColor
-              : AppColors.kInput,
+          color:
+              isDarkMode(context) ? AppColors.kDarkContiner : AppColors.kWhite,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Row(
@@ -395,9 +481,10 @@ class _DoctorFormState extends State<DoctorForm> {
                       'Please fill all the fields',
                       snackPosition: SnackPosition.BOTTOM,
                     );
+                    log('Form is invalid');
                   }
                 },
-                text: "Submit",
+                text: "Update",
               ),
             ),
           ],
@@ -429,20 +516,24 @@ class _DoctorFormState extends State<DoctorForm> {
   void _submitForm() async {
     Get.dialog(const LoadingDialog(), barrierDismissible: false);
     final parameters = {
-      'doctor_name': _nameController.text,
-      'doctor_father_name': _fatherNameController.text,
+      'promotion_activity': _selectedActivity?.id,
+      'farmer_name': _nameController.text,
+      'father_name': _fatherNameController.text,
       'mobile_no': _mobileController.text,
       'acre': _acreController.text,
       'pin': _pinController.text,
-      'village': _villageController.text,
+      'village_name': _villageController.text,
       'officename': _postOfficeController.text,
       'tehshil': _subDistController.text,
       'district': _districtController.text,
       'state': _stateController.text,
+      'cow': _cowCountController.text,
+      'buffalo': _buffaloCountController.text,
       'workplace_code': _workPlaceCodeController.text,
+      'workplace_name': _workPlaceNameController.text,
     };
     try {
-      await doctorController.createDoctor(parameters);
+      await farmerController.editFarmer(parameters);
     } catch (e) {
       // In case of error, hide the loading dialog and show the error dialog
       Get.back(); // Close loading dialog
@@ -457,6 +548,9 @@ class _DoctorFormState extends State<DoctorForm> {
     } finally {
       // Ensure loading dialog is closed
       Get.back(); // Close loading dialog if not already closed
+
+      print(_selectedActivity?.promotionalActivity ?? 'Not selected');
+      log('Form is valid');
     }
   }
 }

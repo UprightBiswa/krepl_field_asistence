@@ -25,7 +25,7 @@ class _SeasionSelectionScreenState extends State<SeasionSelectionScreen> {
     return Obx(() {
       if (seasonController.isLoading.value) {
         return const ShimmerLoading();
-      } else if (seasonController.error.isNotEmpty) {
+      } else if (seasonController.errorMessage.isNotEmpty) {
         return const Center(
           child: Text('Error loading Season.'),
         );
@@ -34,10 +34,10 @@ class _SeasionSelectionScreenState extends State<SeasionSelectionScreen> {
           labelText: 'Select Season',
           selectedItems: selectedSeason,
           items: seasonController.seasons,
-          itemAsString: (crop) => crop.name,
+          itemAsString: (season) => '${season.season}\n${season.code}',
           searchableFields: {
-            'Name': (crop) => crop.name,
-            'code': (crop) => crop.code.toString(),
+            'Name': (season) => season.season,
+            'code': (season) => season.code.toString(),
           },
           validator: (selectedSeason) {
             if (selectedSeason.isEmpty) {

@@ -75,7 +75,7 @@ class DoctorController extends GetxController {
     pagingController.addPageRequestListener((pageKey) {
       print(
           "Page Request Listener Triggered: ${filterController!.selectedOrderBy.value}");
-      fetchFarmers(pageKey, pagingController);
+      fetchDoctors(pageKey, pagingController);
     });
 
     // Log and refresh items when filter changes
@@ -90,7 +90,7 @@ class DoctorController extends GetxController {
     });
   }
 
-  void fetchFarmers(
+  void fetchDoctors(
       int pageKey, PagingController<int, Doctor> pagingController) async {
     print("Fetching Doctors for page: $pageKey");
     try {
@@ -226,6 +226,113 @@ class DoctorController extends GetxController {
       print('Error creating Doctor: $e');
     } finally {
       isLoadingCreate(false);
+    }
+  }
+
+  //delete doctor
+  var isLoadingDelete = false.obs;
+  var isErrorDelete = false.obs;
+  var errorMessageDelete = ''.obs;
+
+  //end point deleteDoctor and pass doctor id
+  Future<void> deleteDoctor(int doctorId) async {
+    isLoadingDelete(true);
+    isErrorDelete(false);
+    errorMessageDelete.value = '';
+
+    try {
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Example endpoint
+      String endPoint = 'deleteDoctor';
+
+      final response = await _dioService.post(endPoint, queryParams: {
+        'doctor_id': doctorId,
+      });
+
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.snackbar('Success', response.data['message'],
+            snackPosition: SnackPosition.BOTTOM);
+        Get.dialog(
+            SuccessDialog(
+                message: response.data['message'],
+                onClose: () {
+                  Get.back();
+                  Get.back();
+                }),
+            barrierDismissible: false);
+      } else {
+        throw Exception(response.data['message']);
+      }
+    } catch (e) {
+      isErrorDelete(true);
+      errorMessageDelete.value = e.toString();
+      Get.snackbar('Error', errorMessageDelete.value);
+      Get.dialog(
+          ErrorDialog(
+              errorMessage: errorMessageDelete.value,
+              onClose: () {
+                Get.back();
+              }),
+          barrierDismissible: false);
+      print('Error deleting Doctor: $e');
+    } finally {
+      isLoadingDelete(false);
+    }
+  }
+
+  //edit doctor
+  var isLoadingEdit = false.obs;
+  var isErrorEdit = false.obs;
+  var errorMessageEdit = ''.obs;
+
+  //end point editDoctor and Map<String, dynamic> parameters
+  Future<void> editDoctor(Map<String, dynamic> parameters) async {
+    isLoadingEdit(true);
+    isErrorEdit(false);
+    errorMessageEdit.value = '';
+
+    try {
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Example endpoint
+      String endPoint = 'editDoctor';
+
+      final response =
+          await _dioService.post(endPoint, queryParams: parameters);
+
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.snackbar('Success', response.data['message'],
+            snackPosition: SnackPosition.BOTTOM);
+        Get.dialog(
+            SuccessDialog(
+                message: response.data['message'],
+                onClose: () {
+                  Get.back();
+                  Get.back();
+                }),
+            barrierDismissible: false);
+      } else {
+        throw Exception(response.data['message']);
+      }
+    } catch (e) {
+      isErrorEdit(true);
+      errorMessageEdit.value = e.toString();
+      Get.snackbar('Error', errorMessageEdit.value);
+      Get.dialog(
+          ErrorDialog(
+              errorMessage: errorMessageEdit.value,
+              onClose: () {
+                Get.back();
+              }),
+          barrierDismissible: false);
+      print('Error editing Doctor: $e');
+    } finally {
+      isLoadingEdit(false);
     }
   }
 }

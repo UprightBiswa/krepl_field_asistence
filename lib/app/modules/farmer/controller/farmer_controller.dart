@@ -116,4 +116,119 @@ class FarmerController extends GetxController {
       isLoading(false);
     }
   }
+
+  //delete the farmer
+  var isLoadingDelete = false.obs;
+  var isErrorDelete = false.obs;
+  var errorMessageDelete = ''.obs;
+
+  Future<void> deleteFarmer(int farmerId) async {
+    isLoadingDelete(true);
+    isErrorDelete(false);
+    errorMessageDelete('');
+
+    try {
+      // Check connectivity
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Example endpoint
+      String endPoint = 'deleteFarmer';
+
+      // API call
+      final response = await _dioService.post(endPoint, queryParams: {
+        'farmer_id': farmerId,
+      });
+
+      // Handle response
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.snackbar('Success', response.data['message'],
+            snackPosition: SnackPosition.BOTTOM);
+        Get.dialog(
+            SuccessDialog(
+                message: response.data['message'],
+                onClose: () {
+                  Get.back();
+                  Get.back();
+                }),
+            barrierDismissible: false);
+      } else {
+        // Handle error in response
+        throw Exception(response.data['message']);
+      }
+    } catch (e) {
+      // Handle exception
+      isErrorDelete(true);
+      errorMessageDelete(e.toString());
+      Get.snackbar('Error', errorMessageDelete.value);
+      Get.dialog(
+          ErrorDialog(
+              errorMessage: errorMessageDelete.value,
+              onClose: () {
+                Get.back();
+              }),
+          barrierDismissible: false);
+    } finally {
+      isLoadingDelete(false);
+    }
+  }
+
+  //EDIT FARMER
+  var isLoadingEdit = false.obs;
+  var isErrorEdit = false.obs;
+  var errorMessageEdit = ''.obs;
+  // editFarmer END PONT
+  // Map<String, dynamic> parameters
+
+  Future<void> editFarmer(Map<String, dynamic> parameters) async {
+    isLoadingEdit(true);
+    isErrorEdit(false);
+    errorMessageEdit('');
+
+    try {
+      // Check connectivity
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Example endpoint
+      String endPoint = 'editFarmer';
+
+      // API call
+      final response =
+          await _dioService.post(endPoint, queryParams: parameters);
+
+      // Handle response
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.snackbar('Success', response.data['message'],
+            snackPosition: SnackPosition.BOTTOM);
+        Get.dialog(
+            SuccessDialog(
+                message: response.data['message'],
+                onClose: () {
+                  Get.back();
+                  Get.back();
+                }),
+            barrierDismissible: false);
+      } else {
+        // Handle error in response
+        throw Exception(response.data['message']);
+      }
+    } catch (e) {
+      // Handle exception
+      isErrorEdit(true);
+      errorMessageEdit(e.toString());
+      Get.snackbar('Error', errorMessageEdit.value);
+      Get.dialog(
+          ErrorDialog(
+              errorMessage: errorMessageEdit.value,
+              onClose: () {
+                Get.back();
+              }),
+          barrierDismissible: false);
+    } finally {
+      isLoadingEdit(false);
+    }
+  }
 }

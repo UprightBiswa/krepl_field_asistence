@@ -6,6 +6,7 @@ import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
 import '../widgets/components/Info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
+import '../widgets/form_field.dart/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'model/retailer_model_list.dart';
@@ -45,7 +46,12 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            DetailImageHeader(retailer: widget.retailer),
+            FormImageHeader(
+              tag: widget.retailer.mobileNumber,
+              image: ImageDoctorUrl.retailerImage,
+              header: widget.retailer.retailerName,
+              subtitle: widget.retailer.email,
+            ),
             Positioned(
               top: 228.h,
               left: 20.w,
@@ -64,19 +70,77 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                           ),
                           SizedBox(height: 16.h),
                           InfoRow(
-                            label: "Email Address",
+                            label: "Code",
+                            value: widget.retailer.code,
+                          ),
+                          InfoRow(
+                            label: "Email",
                             value: widget.retailer.email,
                           ),
                           InfoRow(
-                            label: "Mobile Number",
+                            label: "Mobile No",
                             value: widget.retailer.mobileNumber,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8.h),
+                            decoration: BoxDecoration(
+                              color: widget.retailer.isActive
+                                  ? Colors.green.withOpacity(0.1)
+                                  : Colors.red.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  widget.retailer.isActive
+                                      ? Icons.check_circle
+                                      : Icons.cancel,
+                                  color: widget.retailer.isActive
+                                      ? Colors.green
+                                      : Colors.red,
+                                  size: 20.sp,
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  widget.retailer.isActive
+                                      ? 'Active'
+                                      : 'Inactive',
+                                  style: TextStyle(
+                                    color: widget.retailer.isActive
+                                        ? Colors.green
+                                        : Colors.red,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 20.h),
-
-                    // Segment 2: doctor's Address Details
+                    // Segment 2: Customer Details
+                    if (widget.retailer.customerDetails.isNotEmpty)
+                      PrimaryContainer(
+                        child: Column(children: [
+                          CustomHeaderText(
+                            text: 'Customer Details',
+                            fontSize: 18.sp,
+                          ),
+                          SizedBox(height: 16.h),
+                          for (var customer in widget.retailer.customerDetails)
+                            InfoRow(
+                              label: customer.customerName != ''
+                                  ? customer.customerName
+                                  : "Customer Name",
+                              value: customer.customerCode,
+                            )
+                        ]),
+                      ),
+                    SizedBox(height: 20.h),
+                    // Segment 3: doctor's Address Details
                     PrimaryContainer(
                       child: Column(
                         children: [
@@ -113,35 +177,7 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                       ),
                     ),
                     SizedBox(height: 20.h),
-                    // Segment 3: Customer Details
-                    if (widget.retailer.customerDetails.isNotEmpty)
-                      PrimaryContainer(
-                        child: Column(
-                          children: [
-                            CustomHeaderText(
-                              text: 'Customer Details',
-                              fontSize: 18.sp,
-                            ),
-                            SizedBox(height: 16.h),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: widget.retailer.customerDetails.length,
-                              itemBuilder: (context, index) {
-                                final customer =
-                                    widget.retailer.customerDetails[index];
-                                return InfoRow(
-                                  label: customer.customerName != ''
-                                      ? customer.customerName
-                                      : "Customer Name",
-                                  value: customer.customerCode,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    SizedBox(height: 20.h),
+
                     // Segment 4: Field Details
                     PrimaryContainer(
                       child: Column(
@@ -174,95 +210,6 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
         editCallback: () {
           // Logic for editing doctor details
         },
-      ),
-    );
-  }
-}
-
-class DetailImageHeader extends StatelessWidget {
-  final Retailer retailer;
-  const DetailImageHeader({super.key, required this.retailer});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 270.h,
-      width: Get.width,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(ImageDoctorUrl.doctorImage),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            height: 270.h,
-            width: Get.width,
-            padding: EdgeInsets.all(12.h),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      retailer.retailerName,
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      retailer.mobileNumber,
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        color: Colors.white.withOpacity(0.7),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.all(8.h),
-                  decoration: BoxDecoration(
-                    color: retailer.isActive
-                        ? Colors.green.withOpacity(0.1)
-                        : Colors.red.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        retailer.isActive ? Icons.check_circle : Icons.cancel,
-                        color: retailer.isActive ? Colors.green : Colors.red,
-                        size: 20.sp,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        retailer.isActive ? 'Active' : 'Inactive',
-                        style: TextStyle(
-                          color: retailer.isActive ? Colors.green : Colors.red,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

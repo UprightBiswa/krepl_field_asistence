@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
+import '../../../data/helpers/data/image_doctor_url.dart';
 import '../../farmer/controller/farmer_controller.dart';
 import '../../farmer/farmer_details_view.dart';
+import '../../farmer/farmer_edit_form.dart';
 import '../../farmer/model/farmer_list.dart';
 import '../../widgets/containers/primary_container.dart';
 import 'action_menue.dart';
@@ -22,6 +24,7 @@ class FarmerCard extends StatelessWidget {
         Get.to<dynamic>(
           FarmerDetailView(
             farmer: farmer,
+            tag: farmer.mobileNo ?? '',
           ),
           transition: Transition.rightToLeftWithFade,
         )!
@@ -32,13 +35,13 @@ class FarmerCard extends StatelessWidget {
       child: PrimaryContainer(
         padding: const EdgeInsets.all(0.0),
         width: 264.w,
-        height: 280.h,
+        height: 260.h,
         child: Column(
           children: [
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Hero(
-                tag: farmer.farmerName ?? '',
+                tag: farmer.mobileNo ?? '',
                 child: Container(
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.all(10.h),
@@ -46,14 +49,22 @@ class FarmerCard extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(AppSpacing.radiusFifteen),
                     ),
-                    image: DecorationImage(
-                      image: AssetImage(AppAssets.kFarmer),
+                    image: const DecorationImage(
+                      image: NetworkImage(ImageDoctorUrl.farmerImage),
                       fit: BoxFit.cover,
                     ),
                   ),
                   child: ActionMenuIcon(
                     onEdit: () {
-                      // Add logic to edit the farmer details or icon
+                      // Edit farmer logic
+                      Get.to(() => FarmerEditForm(
+                                farmer: farmer,
+                                tag: farmer.mobileNo ?? '',
+                              ))!
+                          .then((value) {
+                        farmerController.fetchRecentFarmers();
+                        Get.back();
+                      });
                     },
                     onDelete: () {
                       // Add logic to delete the farmer
@@ -63,35 +74,45 @@ class FarmerCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 6,
+              flex: 4,
               child: Container(
                 padding: EdgeInsets.all(AppSpacing.tenVertical),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      farmer.promotionActivity ?? '',
+                      farmer.farmerName ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTypography.kBold14
                           .copyWith(color: AppColors.kPrimary),
                     ),
-                    SizedBox(height: AppSpacing.tenVertical),
+                    SizedBox(height: 5.h),
                     Text(
-                      farmer.farmerName ?? '',
-                      maxLines: 2,
+                      farmer.promotionActivity ?? '',
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTypography.kBold20,
+                      style: AppTypography.kBold14,
                     ),
                     const Spacer(),
                     Row(
                       children: [
-                        Text(
-                          '🏠${farmer.acre}',
-                          style: AppTypography.kBold14,
+                        Expanded(
+                          child: Text(
+                            '${farmer.villageName}, ${farmer.tehshil}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.kBold12,
+                          ),
                         ),
                         const Spacer(),
-                        Text(
-                          'Contact: ${farmer.mobileNo}',
-                          style: AppTypography.kLight16,
+                        Expanded(
+                          child: Text(
+                            'No: ${farmer.mobileNo}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.kBold12,
+                          ),
                         ),
                       ],
                     ),

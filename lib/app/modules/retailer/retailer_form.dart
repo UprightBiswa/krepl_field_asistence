@@ -15,6 +15,7 @@ import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
 import '../widgets/form_field.dart/form_field.dart';
+import '../widgets/form_field.dart/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/retailer_controller.dart';
@@ -46,7 +47,7 @@ class _RetailerFormState extends State<RetailerForm> {
 
   //veriable to store list of customer
   List<Customer> selectedCustomers = [];
-  
+
   Village? _selectedVillage;
 
   @override
@@ -135,7 +136,12 @@ class _RetailerFormState extends State<RetailerForm> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            const FormImageHeader(),
+            const FormImageHeader(
+              tag: 'form',
+              image: ImageDoctorUrl.retailerImage,
+              header: 'Retailer Form',
+              subtitle: 'Fill in the details to add a new retailer',
+            ),
             Positioned(
               top: 228.h,
               left: 2.w,
@@ -176,6 +182,10 @@ class _RetailerFormState extends State<RetailerForm> {
                               icon: Icons.phone,
                               controller: _mobileController,
                               keyboardType: TextInputType.phone,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter a mobile number';
@@ -190,11 +200,24 @@ class _RetailerFormState extends State<RetailerForm> {
                               icon: Icons.email,
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
+                              //input eamil
+                              inputFormatter: [
+                                FilteringTextInputFormatter.singleLineFormatter,
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the email address';
+                                } else if (!GetUtils.isEmail(value)) {
+                                  return 'Please enter a valid email address';
                                 }
+
                                 return null;
+                              },
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomerMultiPleSelectionScreen(
+                              onSelectionChanged: (customers) {
+                                selectedCustomers = customers;
                               },
                             ),
                           ],
@@ -222,19 +245,18 @@ class _RetailerFormState extends State<RetailerForm> {
                             ),
                             if (_selectedVillage == null) ...[
                               //show text veldaition
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 8.0, left: 8.0),
+                              const Padding(
+                                padding: EdgeInsets.only(top: 8.0, left: 8.0),
                                 child: Text(
                                   'Please select a village to auto-fill the address fields',
-                                  style: AppTypography.kLight12.copyWith(
-                                    color: Colors.red,
-                                  ),
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ],
                             SizedBox(height: 20.h),
                             CustomTextField(
+                              readonly: true,
                               labelText: "PIN Code",
                               hintText: "Enter the PIN code",
                               icon: Icons.pin_drop,
@@ -249,6 +271,7 @@ class _RetailerFormState extends State<RetailerForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
+                              readonly: true,
                               labelText: "Post Office Name",
                               hintText: "Enter post office name",
                               icon: Icons.mail,
@@ -262,6 +285,7 @@ class _RetailerFormState extends State<RetailerForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
+                              readonly: true,
                               labelText: "Sub-District",
                               hintText: "Enter sub-district",
                               icon: Icons.map,
@@ -275,6 +299,7 @@ class _RetailerFormState extends State<RetailerForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
+                              readonly: true,
                               labelText: "District",
                               hintText: "Enter district",
                               icon: Icons.location_on,
@@ -288,6 +313,7 @@ class _RetailerFormState extends State<RetailerForm> {
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
+                              readonly: true,
                               labelText: "State",
                               hintText: "Enter state",
                               icon: Icons.public,
@@ -314,12 +340,6 @@ class _RetailerFormState extends State<RetailerForm> {
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
-                            CustomerMultiPleSelectionScreen(
-                              onSelectionChanged: (customers) {
-                                selectedCustomers = customers;
-                              },
-                            ),
-                            SizedBox(height: 20.h),
                             CustomTextField(
                               labelText: "Work Place Code",
                               hintText: "Enter the work place code",
@@ -371,7 +391,8 @@ class _RetailerFormState extends State<RetailerForm> {
             Expanded(
               child: PrimaryButton(
                 onTap: () {
-                  if (_formKey.currentState?.validate() ?? false) {
+                  if ((_formKey.currentState?.validate() ?? false) &&
+                      selectedCustomers.isNotEmpty) {
                     _formKey.currentState?.save();
                     _showConfirmationDialog(context);
                   } else {
@@ -443,63 +464,5 @@ class _RetailerFormState extends State<RetailerForm> {
       // Ensure loading dialog is closed
       Get.back(); // Close loading dialog if not already closed
     }
-  }
-}
-
-class FormImageHeader extends StatelessWidget {
-  const FormImageHeader({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 270.h,
-      width: Get.width,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(ImageDoctorUrl.doctorImage),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            height: 270.h,
-            width: Get.width,
-            padding: EdgeInsets.all(12.h),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  //add controllerto show the name text controller
-                  'Retain name',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'enter the retailer details',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: Colors.white.withOpacity(0.7),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,22 +34,21 @@ class ActionMenuIcon extends StatelessWidget {
             title: const Text('Edit'),
             onTap: () {
               onEdit();
-              Navigator.pop(context);
             },
           ),
         ),
-        const PopupMenuDivider(),
-        PopupMenuItem(
-          value: 'delete',
-          child: ListTile(
-            leading: const Icon(Icons.delete),
-            title: const Text('Delete'),
-            onTap: () {
-              onDelete();
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        // const PopupMenuDivider(),
+        // PopupMenuItem(
+        //   value: 'delete',
+        //   child: ListTile(
+        //     leading: const Icon(Icons.delete),
+        //     title: const Text('Delete'),
+        //     onTap: () {
+        //       onDelete();
+        //       Navigator.pop(context);
+        //     },
+        //   ),
+        // ),
       ],
     );
   }

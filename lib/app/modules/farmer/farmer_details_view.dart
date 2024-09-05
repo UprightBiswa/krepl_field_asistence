@@ -3,21 +3,30 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
+import '../../data/helpers/data/image_doctor_url.dart';
 import '../widgets/components/Info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
+import '../widgets/dialog/confirmation.dart';
+import '../widgets/dialog/error.dart';
+import '../widgets/dialog/loading.dart';
+import '../widgets/form_field.dart/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
+import 'controller/farmer_controller.dart';
+import 'farmer_edit_form.dart';
 import 'model/farmer_list.dart';
 
 class FarmerDetailView extends StatefulWidget {
   final Farmer farmer;
-  const FarmerDetailView({required this.farmer, super.key});
+  final String? tag;
+  const FarmerDetailView({required this.farmer, this.tag, super.key});
 
   @override
   State<FarmerDetailView> createState() => _FarmerDetailViewState();
 }
 
 class _FarmerDetailViewState extends State<FarmerDetailView> {
+  final FarmerController _farmerController = Get.put(FarmerController());
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
   @override
@@ -44,7 +53,12 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            DetailImageHeader(farmer: widget.farmer),
+            FormImageHeader(
+              tag: widget.tag ?? '',
+              image: ImageDoctorUrl.farmerImage,
+              header: widget.farmer.farmerName ?? '',
+              subtitle: widget.farmer.promotionActivity ?? '',
+            ),
             Positioned(
               top: 228.h,
               left: 20.w,
@@ -58,7 +72,7 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                       child: Column(
                         children: [
                           CustomHeaderText(
-                            text: widget.farmer.farmerName?? '',
+                            text: widget.farmer.farmerName ?? '',
                             fontSize: 20.sp,
                           ),
                           SizedBox(height: 16.h),
@@ -90,27 +104,27 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                           SizedBox(height: 16.h),
                           InfoRow(
                             label: "Village",
-                            value: widget.farmer.villageName?? '',
+                            value: widget.farmer.villageName ?? '',
                           ),
                           InfoRow(
                             label: "Post Office",
-                            value: widget.farmer.officeName?? '',
+                            value: widget.farmer.officeName ?? '',
                           ),
                           InfoRow(
                             label: "Sub-District",
-                            value: widget.farmer.tehshil?? '',
+                            value: widget.farmer.tehshil ?? '',
                           ),
                           InfoRow(
                             label: "District",
-                            value: widget.farmer.district?? '',
+                            value: widget.farmer.district ?? '',
                           ),
                           InfoRow(
                             label: "State",
-                            value: widget.farmer.state?? '',
+                            value: widget.farmer.state ?? '',
                           ),
                           InfoRow(
                             label: "PIN",
-                            value: widget.farmer.pin?? '',
+                            value: widget.farmer.pin ?? '',
                           ),
                         ],
                       ),
@@ -140,11 +154,11 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                           ),
                           InfoRow(
                             label: "Work Place Code",
-                            value: widget.farmer.workplaceCode?? '',
+                            value: widget.farmer.workplaceCode ?? '',
                           ),
                           InfoRow(
                             label: "Work Place Name",
-                            value: widget.farmer.workplaceName?? '',
+                            value: widget.farmer.workplaceName ?? '',
                           ),
                         ],
                       ),
@@ -159,73 +173,71 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
       ),
       bottomNavigationBar: FarmerActionSheet(
         editCallback: () {
-          // Logic for editing farmer details
+          Get.to(() => FarmerEditForm(
+                    farmer: widget.farmer,
+                    tag: widget.farmer.mobileNo ?? '',
+                  ))!
+              .then((value) {
+            Get.back();
+          });
+        },
+        deleteCallback: () {
+          _showConfirmationDialog(context);
         },
       ),
     );
   }
-}
 
-class DetailImageHeader extends StatelessWidget {
-  final Farmer farmer;
-  const DetailImageHeader({super.key, required this.farmer});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 270.h,
-      width: Get.width,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(AppAssets.kFarmer),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            height: 270.h,
-            width: Get.width,
-            padding: EdgeInsets.all(12.h),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  farmer.farmerName ?? '',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  farmer.promotionActivity ?? '',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: Colors.white.withOpacity(0.7),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Confirm Action',
+          content: 'Are you sure you want to proceed?',
+          onConfirm: () {
+            Navigator.of(context).pop(); // Close the dialog
+            _submitForm();
+          },
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+        );
+      },
     );
+  }
+
+  //logic call function to delte and show api call loading, error dailog showw succcess dilog and refesh the list
+  void _submitForm() {
+    Get.dialog(const LoadingDialog(), barrierDismissible: false);
+    try {
+      _farmerController.deleteFarmer(widget.farmer.id);
+    } catch (e) {
+      Get.back();
+      Get.dialog(
+        ErrorDialog(
+          errorMessage: e.toString(),
+          onClose: () {
+            Get.back();
+          },
+        ),
+        barrierDismissible: false,
+      );
+    } finally {
+      // Ensure loading dialog is closed
+      Get.back(); // Close loading dialog if not already closed
+    }
   }
 }
 
-
 class FarmerActionSheet extends StatelessWidget {
   final VoidCallback editCallback;
-  const FarmerActionSheet({super.key, required this.editCallback});
+  final VoidCallback deleteCallback;
+  const FarmerActionSheet({
+    super.key,
+    required this.editCallback,
+    required this.deleteCallback,
+  });
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
@@ -243,8 +255,17 @@ class FarmerActionSheet extends StatelessWidget {
         children: [
           Expanded(
             child: PrimaryButton(
+              color: AppColors.kAccent1,
+              onTap: deleteCallback,
+              text: "Delete Farmer",
+            ),
+          ),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: PrimaryButton(
+              color: AppColors.kPrimary,
               onTap: editCallback,
-              text: "Edit Farmer Details",
+              text: "Edit Farmer",
             ),
           ),
         ],

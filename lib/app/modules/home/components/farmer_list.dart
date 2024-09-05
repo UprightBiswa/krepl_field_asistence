@@ -1,4 +1,5 @@
 import 'package:field_asistence/app/modules/home/components/farmer_card.dart';
+import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -47,22 +48,31 @@ class _FarmerListState extends State<FarmerList> {
             ),
           ],
         ),
-        SizedBox(
-          height: 260.h,
-          child: Obx(() {
-            if (_farmerController.isLoadingrecent.value) {
-              return buildShimmer();
-            } else if (_farmerController.isErrorrecent.value) {
-              return Center(
-                child: Text(
-                  'Error: ${_farmerController.errorMessageRecent.value}',
-                  style: const TextStyle(color: Colors.red),
-                ),
-              );
-            } else if (_farmerController.recentFarmers.isEmpty) {
-              return const Center(child: Text('No recent farmers found'));
-            } else {
-              return ListView.separated(
+        Obx(() {
+          if (_farmerController.isLoadingrecent.value) {
+            return buildShimmer();
+          } else if (_farmerController.isErrorrecent.value) {
+            return PrimaryContainer(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Error loading farmers'),
+                  CustomTextButton(
+                    onPressed: () {
+                      _farmerController.fetchRecentFarmers();
+                    },
+                    text: 'Retry',
+                  ),
+                ],
+              ),
+            );
+          } else if (_farmerController.recentFarmers.isEmpty) {
+            return const Center(child: Text('No recent farmers found'));
+          } else {
+            return SizedBox(
+              height: 260.h,
+              child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
                 itemBuilder: (context, index) {
@@ -72,10 +82,10 @@ class _FarmerListState extends State<FarmerList> {
                 },
                 separatorBuilder: (context, index) => SizedBox(width: 20.w),
                 itemCount: _farmerController.recentFarmers.length,
-              );
-            }
-          }),
-        ),
+              ),
+            );
+          }
+        }),
       ],
     );
   }
@@ -84,17 +94,23 @@ class _FarmerListState extends State<FarmerList> {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (_, __) => Padding(
-          padding: EdgeInsets.only(right: 20.w),
-          child: Container(
-            width: 264.w,
-            height: 280.h,
-            color: Colors.white,
+      child: SizedBox(
+        height: 260.h,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (_, __) => Padding(
+            padding: EdgeInsets.only(right: 20.w),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.r),
+                color: Colors.white,
+              ),
+              width: 264.w,
+              height: 260.h,
+            ),
           ),
+          itemCount: 5,
         ),
-        itemCount: 5,
       ),
     );
   }

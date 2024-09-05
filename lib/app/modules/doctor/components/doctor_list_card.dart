@@ -9,6 +9,7 @@ import '../../widgets/buttons/buttons.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../doctor_details_view.dart';
 import '../model/doctor_list.dart';
+import '../controller/doctor_controller.dart';
 
 class DoctorListCard extends StatelessWidget {
   final Doctor doctor;
@@ -18,6 +19,7 @@ class DoctorListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DoctorController doctorController = Get.put(DoctorController());
     return FadeIn(
       delay: const Duration(milliseconds: 500) * index,
       child: AnimatedButton(
@@ -27,7 +29,11 @@ class DoctorListCard extends StatelessWidget {
               doctor: doctor,
             ),
             transition: Transition.rightToLeftWithFade,
-          );
+          )!
+                  .then((value) {
+                doctorController.fetchDoctors(
+                    1, doctorController.pagingController);
+              });
         },
         child: PrimaryContainer(
           padding: EdgeInsets.all(10.h),

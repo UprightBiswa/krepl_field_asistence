@@ -101,7 +101,7 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
 
     if (chips.isEmpty) {
       chips.add(Text(
-        "Select ${widget.labelText}",
+        widget.labelText,
         style: TextStyle(color: Colors.grey[600]),
       ));
     }
@@ -231,13 +231,17 @@ class _MultiSelectModalState<T> extends State<MultiSelectModal<T>> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: filteredItems.length,
+              separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
                 final item = filteredItems[index];
                 final isSelected = selectedItems.contains(item);
 
                 return ListTile(
+                  tileColor: isSelected
+                      ? AppColors.kPrimary.withOpacity(0.2)
+                      : Colors.transparent,
                   title: Text(widget.itemAsString(item)),
                   trailing: isSelected
                       ? const Icon(Icons.check_box)

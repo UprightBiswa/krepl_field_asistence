@@ -1,38 +1,60 @@
-// controllers/product_master_controller.dart
 import 'package:get/get.dart';
-
+import '../../data/helpers/internet/connectivity_services.dart';
+import '../../data/helpers/utils/dioservice/dio_service.dart';
 import '../../model/master/product_master.dart';
-
-List<ProductMaster> dummyProductMasters = [
-  ProductMaster(brandCode: "Paushak", brandName: "Paushak", meterialName: 'Paushak', meterialCode: '000111'),
-  ProductMaster(brandCode: "K Max", brandName: "K Max", meterialName: 'K Max', meterialCode: '000222'),
-];
 
 class ProductMasterController extends GetxController {
   var productMasters = <ProductMaster>[].obs;
   var isLoading = false.obs;
   var error = ''.obs;
 
+  // Inject services (replace with your actual services)
+  final DioService _dioService = DioService(); // Assuming you have a DioService for API calls
+   final ConnectivityService _connectivityService = ConnectivityService(); // Connectivity check
+
   @override
   void onInit() {
-    loadProductMasters();
     super.onInit();
+    loadProductMasters('000');
   }
 
-  Future<void> loadProductMasters() async {
+  // Function to load product masters based on search query
+  Future<void> loadProductMasters(String search) async {
     isLoading.value = true;
     error.value = '';
 
     try {
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
+      // Check internet connection
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
 
-      // Load data (replace with actual data loading logic)
-      productMasters.assignAll(dummyProductMasters);
+      // API endpoint and query parameters
+      String endPoint = 'viewFaProducts';
+      Map<String, dynamic> queryParams = {
+        'search': search, // Pass search term
+      };
+
+      // Make API call
+      final response = await _dioService.post(endPoint, queryParams: queryParams);
+
+      // Check if response is successful
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        var data = response.data['data'] as List;
+
+        // Convert the response data into ProductMaster models
+        productMasters.assignAll(
+          data.map((json) => ProductMaster.fromJson(json)).toList(),
+        );
+      } else {
+        // If API returns an error, show the message from the response
+        throw Exception(response.data['message'] ?? 'Failed to load products');
+      }
     } catch (e) {
-      error.value = 'Failed to load data';
+      // Handle exceptions and set error message
+      error.value = e.toString();
     } finally {
-      isLoading.value = false;
+      isLoading.value = false; // Always stop loading after try-catch
     }
   }
 }

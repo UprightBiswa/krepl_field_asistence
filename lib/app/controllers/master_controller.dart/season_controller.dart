@@ -1,39 +1,54 @@
-// controllers/season_controller.dart
 import 'package:get/get.dart';
 
+import '../../data/helpers/internet/connectivity_services.dart';
+import '../../data/helpers/utils/dioservice/dio_service.dart';
 import '../../model/master/season_model.dart';
-
-
-List<Season> dummySeasons = [
-  Season(code: 1, name: "Ravi"),
-  Season(code: 2, name: "Kharif"),
-];
 
 class SeasonController extends GetxController {
   var seasons = <Season>[].obs;
   var isLoading = false.obs;
-  var error = ''.obs;
+  var isError = false.obs;
+  var errorMessage = ''.obs;
 
   @override
   void onInit() {
-    loadSeasons();
+    loadSeasons(); // Load seasons when the controller is initialized
     super.onInit();
   }
 
-  Future<void> loadSeasons() async {
-    isLoading.value = true;
-    error.value = '';
+  // Services
+  final DioService _dioService = DioService();
+  final ConnectivityService _connectivityService = ConnectivityService();
 
+  void loadSeasons() async {
     try {
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
+      isLoading(true);
+      isError(false);
+      errorMessage('');
 
-      // Load data (replace with actual data loading logic)
-      seasons.assignAll(dummySeasons);
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      String endPoint = 'getSeason';
+      final response = await _dioService.post(endPoint);
+
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        var data = response.data['data'] as List;
+
+        var fetchedSeasons = data.map((json) => Season.fromJson(json)).toList();
+        seasons.assignAll(fetchedSeasons);
+      } else {
+        String message = response.data['message'] ?? 'Failed to load data';
+        print('Error fetching data: $message');
+        errorMessage(message);
+        throw Exception(message);
+      }
     } catch (e) {
-      error.value = 'Failed to load data';
+      errorMessage(e.toString());
+      isError(true);
     } finally {
-      isLoading.value = false;
+      isLoading(false);
     }
   }
 }

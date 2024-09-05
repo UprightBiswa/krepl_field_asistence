@@ -38,10 +38,10 @@ class _ProductMasterSelectionScreenState
           labelText: 'Select ProductMasters',
           selectedItems: selectedProductMasters,
           items: productMasterController.productMasters,
-          itemAsString: (productMaster) => productMaster.meterialName,
+          itemAsString: (productMaster) => productMaster.materialDescription,
           searchableFields: {
-            'meterialName': (productMaster) => productMaster.meterialName,
-            'meterialCode': (productMaster) => productMaster.meterialCode,
+            'materialDescription': (productMaster) => productMaster.materialDescription,
+            'materialNumber': (productMaster) => productMaster.materialNumber,
           },
           validator: (selectedProductMasters) {
             if (selectedProductMasters.isEmpty) {
