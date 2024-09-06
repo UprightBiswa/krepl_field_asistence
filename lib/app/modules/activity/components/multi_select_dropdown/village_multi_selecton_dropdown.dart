@@ -8,8 +8,13 @@ import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class VillageSelectionScreen extends StatefulWidget {
   final void Function(List<Village>) onSelectionChanged;
+  final List<Village> selectedItems;
 
-  const VillageSelectionScreen({super.key, required this.onSelectionChanged});
+  const VillageSelectionScreen({
+    super.key,
+    required this.onSelectionChanged,
+    required this.selectedItems,
+  });
 
   @override
   State<VillageSelectionScreen> createState() => _VillageSelectionScreenState();
@@ -17,11 +22,12 @@ class VillageSelectionScreen extends StatefulWidget {
 
 class _VillageSelectionScreenState extends State<VillageSelectionScreen> {
   final VillageController villageController = Get.put(VillageController());
-  List<Village> selectedVillages = [];
+  late List<Village> selectedVillages;
 
   @override
   void initState() {
     super.initState();
+    selectedVillages = widget.selectedItems;
     villageController.fetchVillageMasterData(); // Fetch village data on init
   }
 

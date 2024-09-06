@@ -1,38 +1,52 @@
 // controllers/crop_controller.dart
 import 'package:get/get.dart';
 
+import '../../data/helpers/internet/connectivity_services.dart';
+import '../../data/helpers/utils/dioservice/dio_service.dart';
 import '../../model/master/crop_model.dart';
-
-List<Crop> dummyCrops = [
-  Crop(code: 1, name: "Wheat"),
-  Crop(code: 2, name: "Paddy"),
-];
 
 class CropController extends GetxController {
   var crops = <Crop>[].obs;
   var isLoading = false.obs;
-  var error = ''.obs;
+  var isError = false.obs;
+  var errorMessage = ''.obs;
 
-  @override
-  void onInit() {
-    loadCrops();
-    super.onInit();
-  }
+  final DioService _dioService = DioService();
+  final ConnectivityService _connectivityService = ConnectivityService();
 
-  Future<void> loadCrops() async {
-    isLoading.value = true;
-    error.value = '';
+  void loadCrops(List<int> seasonIds) async {
+    print(seasonIds.length);
+    isLoading(true);
+    isError(false);
+    errorMessage('');
+
+    if (!await _connectivityService.checkInternet()) {
+      isError(true);
+      errorMessage('No internet connection');
+      isLoading(false);
+      return;
+    }
 
     try {
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
+      //preint each session id
+      print(seasonIds);
+      final response = await _dioService.post('getCrop', queryParams: {
+        'season_id[]': seasonIds.map((id) => id.toString()).toList(),
+      });
 
-      // Load data (replace with actual data loading logic)
-      crops.assignAll(dummyCrops);
+      if (response.data['success'] == true) {
+        var cropData = response.data['data'] as List;
+        var cropList = cropData.map((json) => Crop.fromJson(json)).toList();
+        crops.assignAll(cropList);
+      } else {
+        isError(true);
+        errorMessage('Failed to load crops');
+      }
     } catch (e) {
-      error.value = 'Failed to load data';
+      isError(true);
+      errorMessage('Failed to load data');
     } finally {
-      isLoading.value = false;
+      isLoading(false);
     }
   }
 }

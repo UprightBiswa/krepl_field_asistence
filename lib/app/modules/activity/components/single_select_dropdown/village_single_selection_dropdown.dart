@@ -5,12 +5,14 @@ import '../../../../model/master/villages_model.dart';
 import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
 import 'activity_master_dropdown.dart';
 
-class VillageSingleSelectionWidget extends StatefulWidget {
+class VillageSingleSelectionWidget<T> extends StatefulWidget {
+   final T? selectedItem;
   final ValueChanged<Village?> onVillageSelected;
   final String? Function(Village?)? validator;
 
   const VillageSingleSelectionWidget({
     super.key,
+    required this.selectedItem,
     required this.onVillageSelected,
     this.validator,
   });
@@ -52,7 +54,7 @@ class _VillageSingleSelectionWidgetState
         return SingleSelectDropdown<Village>(
           labelText: "Select Village",
           items: _villageController.villages,
-          selectedItem: _selectedVillage,
+          selectedItem: _selectedVillage ?? widget.selectedItem,
           itemAsString: (village) => village.villageName,
           onChanged: (selected) {
             setState(() {

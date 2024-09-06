@@ -41,7 +41,6 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
     selectedItem = widget.selectedItem;
   }
 
-
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
@@ -51,8 +50,8 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.labelText),
-        const SizedBox(height: 8),
+        // Text(widget.labelText),
+        // const SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showModalBottomSheet(context),
           child: Container(
@@ -75,7 +74,6 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
                         )
                       : Text(
                           "Select ${widget.labelText}",
-                          style: TextStyle(color: Colors.grey[600]),
                         ),
                 ),
                 Icon(widget.icon),

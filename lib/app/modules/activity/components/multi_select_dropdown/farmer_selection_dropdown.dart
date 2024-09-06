@@ -7,10 +7,14 @@ import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class FarmerSelectionScreen extends StatefulWidget {
-  final void Function(List<Farmer>)
-      onSelectionChanged; // Callback for selected items
+  final void Function(List<Farmer>) onSelectionChanged;
+  final List<Farmer> selectedItems;
 
-  const FarmerSelectionScreen({super.key, required this.onSelectionChanged});
+  const FarmerSelectionScreen({
+    super.key,
+    required this.onSelectionChanged,
+    required this.selectedItems,
+  });
 
   @override
   State<FarmerSelectionScreen> createState() => _FarmerSelectionScreenState();
@@ -18,7 +22,13 @@ class FarmerSelectionScreen extends StatefulWidget {
 
 class _FarmerSelectionScreenState extends State<FarmerSelectionScreen> {
   final FarmerListController farmerController = Get.put(FarmerListController());
-  List<Farmer> selectedFarmers = [];
+  late List<Farmer> selectedFarmers;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedFarmers = widget.selectedItems;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +44,10 @@ class _FarmerSelectionScreenState extends State<FarmerSelectionScreen> {
           labelText: 'Select farmer',
           selectedItems: selectedFarmers,
           items: farmerController.allFarmers,
-          itemAsString: (farmers) => farmers.farmerName??'',
+          itemAsString: (farmers) => farmers.farmerName ?? '',
           searchableFields: {
-            'farmersName': (farmers) => farmers.farmerName?? '',
-            'mobileNumber': (farmers) => farmers.mobileNo?? '',
+            'farmersName': (farmers) => farmers.farmerName ?? '',
+            'mobileNumber': (farmers) => farmers.mobileNo ?? '',
           },
           validator: (selectedFarmers) {
             if (selectedFarmers.isEmpty) {

@@ -125,6 +125,7 @@ class _CreateFormApageState extends State<CreateFormDpage> {
               children: [
                 ActivitySelectionWidget(
                   formType: "D",
+                  selectedItem: _selectedActivity,
                    onSaved: (selectedActivity) {
                         setState(() {
                           _selectedActivity = selectedActivity;
@@ -157,6 +158,7 @@ class _CreateFormApageState extends State<CreateFormDpage> {
                         selectedFarmers = selectedFarmersitems;
                       });
                     },
+                    selectedItems: selectedFarmers,
                   ),
                 ] else if (selectedPartyType == "Village") ...[
                   VillageSelectionScreen(
@@ -165,6 +167,7 @@ class _CreateFormApageState extends State<CreateFormDpage> {
                         selectedVillages = selectedVillagesitems;
                       });
                     },
+                    selectedItems: selectedVillages,
                   ),
                 ] else if (selectedPartyType == "Doctor") ...[
                   DoctorSelectionScreen(
@@ -173,6 +176,7 @@ class _CreateFormApageState extends State<CreateFormDpage> {
                         selectedDoctors = selectedDoctorsitems;
                       });
                     },
+                    selectedItems: selectedDoctors,
                   ),
                 ],
                 const SizedBox(height: 16),

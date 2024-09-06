@@ -1,43 +1,48 @@
+import 'package:field_asistence/app/model/master/crop_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
+import '../../../../controllers/master_controller.dart/crop_controller.dart';
 import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
-import '../../controller/activity_master_controller.dart';
-import '../../model/activity_master_model.dart';
+import 'activity_master_dropdown.dart';
 
-class ActivitySelectionWidget extends StatefulWidget {
-  final String formType;
-  final FormFieldSetter<ActivityMaster?> onSaved;
-  final FormFieldValidator<ActivityMaster?> validator;
-  const ActivitySelectionWidget({
+class CropSingleSelectionWidget<T> extends StatefulWidget {
+  final List<int> seasonId;
+  final T? selectedItem;
+  final FormFieldSetter<Crop?> onSaved;
+  final FormFieldValidator<Crop?> validator;
+  const CropSingleSelectionWidget({
     super.key,
-    required this.formType,
+    required this.seasonId,
+    required this.selectedItem,
     required this.onSaved,
     required this.validator,
   });
 
   @override
-  State<ActivitySelectionWidget> createState() =>
-      _ActivitySelectionWidgetState();
+  State<CropSingleSelectionWidget> createState() =>
+      _CropSingleSelectionWidgetState();
 }
 
-class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
-  final ActivityMasterController _activityMasterController =
-      Get.put(ActivityMasterController());
+class _CropSingleSelectionWidgetState extends State<CropSingleSelectionWidget> {
+  final CropController _cropController = Get.put(CropController());
   @override
   void initState() {
     super.initState();
-    _activityMasterController.fetchActivityMasterData(widget.formType);
+    if (widget.seasonId.isNotEmpty) {
+      _cropController.loadCrops(widget.seasonId);
+    }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (_activityMasterController.isLoading.value) {
+      if (_cropController.isLoading.value) {
         return const ShimmerLoading();
         // Show loading shimmer
-      } else if (_activityMasterController.isError.value ||
-          _activityMasterController.errorMessage.isNotEmpty) {
+      } else if (_cropController.isError.value ||
+          _cropController.errorMessage.isNotEmpty) {
         // Show error message
         return Container(
           width: double.infinity,
@@ -52,15 +57,15 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
         );
       } else {
         // Show the dropdown
-        return FormField<ActivityMaster?>(
+        return FormField<Crop?>(
           validator: widget.validator,
           onSaved: widget.onSaved,
-          builder: (FormFieldState<ActivityMaster?> field) {
-            return SingleSelectDropdown<ActivityMaster>(
-              labelText: "Select Activity",
-              items: _activityMasterController.activityMasterList,
-              selectedItem: field.value,
-              itemAsString: (activity) => activity.promotionalActivity,
+          builder: (FormFieldState<Crop?> field) {
+            return SingleSelectDropdown<Crop>(
+              labelText: "Select Crop",
+              items: _cropController.crops,
+              selectedItem: field.value ?? widget.selectedItem,
+              itemAsString: (crop) => crop.name ?? '',
               onChanged: (selected) {
                 field.didChange(selected);
                 widget.onSaved(selected);
@@ -68,48 +73,13 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
               },
               validator: widget.validator,
               searchableFields: {
-                "promotional_activity": (activity) =>
-                    activity.promotionalActivity,
-                "Form": (activity) => activity.form,
+                "code": (crop) => crop.code ?? '',
+                "name": (crop) => crop.name ?? '',
               },
             );
           },
         );
       }
     });
-  }
-}
-
-class ShimmerLoading extends StatelessWidget {
-  const ShimmerLoading({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: Colors.grey),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Row(
-            children: [
-              const Icon(Icons.search, color: Colors.grey),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: Container(
-                  height: 48.0,
-                  color: Colors.transparent,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -1,4 +1,11 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
+import '../../../data/helpers/internet/connectivity_services.dart';
+import '../../../data/helpers/utils/dioservice/dio_service.dart';
+import '../../widgets/dialog/error.dart';
+import '../../widgets/dialog/success.dart';
 import '../model/form_a_model.dart';
 
 class FormAController extends GetxController {
@@ -82,9 +89,91 @@ class FormAController extends GetxController {
     } else {
       filteredFormAList.assignAll(
         formAList.where(
-          (form) => form.farmerVillageDoctorName.toLowerCase().contains(query.toLowerCase()),
+          (form) => form.farmerVillageDoctorName
+              .toLowerCase()
+              .contains(query.toLowerCase()),
         ),
       );
+    }
+  }
+
+  //submitactivityA form data recive end pont // reciev peramnetrs, // recive dio media file as peremter photo
+  var isloading = false.obs;
+  var isError = false.obs;
+  var errorMessage = ''.obs;
+
+  // Services
+  final DioService _dioService = DioService();
+  final ConnectivityService _connectivityService = ConnectivityService();
+
+  Future<void> submitActivityAFormData(
+    String endPoint,
+    Map<String, dynamic> parameters,
+    File? imageFile,
+  ) async {
+    isloading(true);
+    isError(false);
+    errorMessage('');
+    try {
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Prepare the multipart form data
+      dio.FormData formData = dio.FormData();
+      formData.fields.addAll(
+        parameters.entries.map(
+          (e) => MapEntry(e.key, e.value.toString()),
+        ),
+      );
+      if (imageFile != null && imageFile.existsSync()) {
+        formData.files.add(
+          MapEntry(
+            'image',
+            dio.MultipartFile.fromFileSync(
+              imageFile.path,
+              filename: imageFile.path.split('/').last,
+            ),
+          ),
+        );
+      }
+
+      final response = await _dioService.postFormData(endPoint, formData);
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.snackbar('Success', response.data['message'],
+            snackPosition: SnackPosition.BOTTOM);
+        Get.dialog(
+            SuccessDialog(
+                message: response.data['message'],
+                onClose: () {
+                  Get.back();
+                  Get.back();
+                  Get.back();
+                }),
+            barrierDismissible: false);
+      } else {
+        print('Error submitting form A data: ${response.data['message']}');
+        String error =
+            'Failed to submit form A data: HTTP ${response.statusCode}';
+        print(error);
+        errorMessage(error);
+        throw Exception(error);
+      }
+    } catch (e) {
+      print('Error: $e');
+      errorMessage(e.toString());
+      isError(true);
+      Get.snackbar('Error', errorMessage.value);
+      Get.dialog(
+          ErrorDialog(
+              errorMessage: errorMessage.value,
+              onClose: () {
+                Get.back();
+                Get.back();
+              }),
+          barrierDismissible: false);
+    } finally {
+      isloading(false);
     }
   }
 }

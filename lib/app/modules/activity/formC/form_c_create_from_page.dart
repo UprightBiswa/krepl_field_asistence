@@ -134,6 +134,7 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                       }
                     });
                   },
+                  selectedItem: _selectedActivity,
                   validator: (selectedActivity) {
                     if (selectedActivity == null) {
                       return 'Please select an activity';
@@ -157,6 +158,7 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                         selectedFarmers = selectedFarmersitems;
                       });
                     },
+                    selectedItems: selectedFarmers,
                   ),
                 ] else if (selectedPartyType == "Village") ...[
                   VillageSelectionScreen(
@@ -165,6 +167,7 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                         selectedVillages = selectedVillagesitems;
                       });
                     },
+                    selectedItems: selectedVillages,
                   ),
                 ] else if (selectedPartyType == "Doctor") ...[
                   DoctorSelectionScreen(
@@ -173,6 +176,7 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                         selectedDoctors = selectedDoctorsitems;
                       });
                     },
+                    selectedItems: selectedDoctors,
                   ),
                 ],
                 const SizedBox(height: 16),

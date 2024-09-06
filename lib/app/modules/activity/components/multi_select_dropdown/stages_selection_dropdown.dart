@@ -22,11 +22,17 @@ class _CropStageSelectionScreenState extends State<CropStageSelectionScreen> {
   List<CropStage> selectedCropStages = [];
 
   @override
+  void initState() {
+    cropController.loadCropStages();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (cropController.isLoading.value) {
         return const ShimmerLoading();
-      } else if (cropController.error.isNotEmpty) {
+      } else if (cropController.errorMessage.isNotEmpty) {
         return const Center(
           child: Text('Error loading CropStage.'),
         );

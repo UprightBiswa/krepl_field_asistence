@@ -25,7 +25,7 @@ class _PestSelectionScreenState extends State<PestSelectionScreen> {
     return Obx(() {
       if (pestController.isLoading.value) {
         return const ShimmerLoading();
-      } else if (pestController.error.isNotEmpty) {
+      } else if (pestController.errorMessage.isNotEmpty) {
         return const Center(
           child: Text('Error loading Pests.'),
         );
@@ -37,7 +37,7 @@ class _PestSelectionScreenState extends State<PestSelectionScreen> {
           itemAsString: (pest) => pest.pest,
           searchableFields: {
             'Name': (pest) => pest.pest,
-            'code': (pest) => pest.code.toString(),
+            'code': (pest) => pest.code,
           },
           validator: (selectedPests) {
             if (selectedPests.isEmpty) {

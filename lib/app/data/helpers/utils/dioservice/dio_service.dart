@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:field_asistence/app/modules/auth/sign_in_page.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +49,26 @@ class DioService {
     }
   }
 
+  Future<Response> postFormData(String endPoint, FormData formData) async {
+    try {
+      if (_deviceToken == null) {
+        return _handleNullDeviceToken();
+      } else {
+        formData.fields.add(MapEntry('device_token', _deviceToken!));
+      }
+
+      final response = await _dio.post(endPoint, data: formData);
+      return response;
+    } catch (e) {
+      if (e is DioException) {
+        print('DioError: ${e.message}');
+        throw Exception('DioError: ${e.message}');
+      }
+      print('Exception: $e');
+      throw Exception('Failed to make POST request: $e');
+    }
+  }
+
   Response _handleNullDeviceToken() {
     getx.Get.defaultDialog(
       barrierDismissible: false,
@@ -68,4 +87,3 @@ class DioService {
     throw Exception('Device Token is null');
   }
 }
-

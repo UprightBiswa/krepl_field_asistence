@@ -88,6 +88,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                           }
                         });
                       },
+                      selectedItem: _selectedActivity,
                       validator: (selectedActivity) {
                         if (selectedActivity == null) {
                           return 'Please select an activity';

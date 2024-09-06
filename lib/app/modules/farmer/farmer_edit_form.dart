@@ -233,6 +233,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                                   _selectedActivity = selectedActivity;
                                 });
                               },
+                              selectedItem: _selectedActivity,
                               validator: (selectedActivity) {
                                 if (selectedActivity == null) {
                                   return 'Please select an activity';
@@ -268,6 +269,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                             SizedBox(height: 16.h),
                             VillageSingleSelectionWidget(
                               onVillageSelected: _onVillageSelected,
+                              selectedItem: _selectedVillage,
                               validator: (selected) {
                                 if (selected == null) {
                                   return "Please select a village";

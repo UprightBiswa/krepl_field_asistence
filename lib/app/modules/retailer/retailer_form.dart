@@ -235,6 +235,7 @@ class _RetailerFormState extends State<RetailerForm> {
                             ),
                             SizedBox(height: 16.h),
                             VillageSingleSelectionWidget(
+                              selectedItem: _selectedVillage,
                               onVillageSelected: _onVillageSelected,
                               validator: (selected) {
                                 if (selected == null) {

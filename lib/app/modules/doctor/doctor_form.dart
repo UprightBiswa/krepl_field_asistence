@@ -214,6 +214,7 @@ class _DoctorFormState extends State<DoctorForm> {
                             SizedBox(height: 16.h),
                             VillageSingleSelectionWidget(
                               onVillageSelected: _onVillageSelected,
+                              selectedItem: _selectedVillage,
                               validator: (selected) {
                                 if (selected == null) {
                                   return "Please select a village";

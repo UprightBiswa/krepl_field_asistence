@@ -8,10 +8,14 @@ import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class DoctorSelectionScreen extends StatefulWidget {
-  final void Function(List<Doctor>)
-      onSelectionChanged; // Callback for selected items
+  final void Function(List<Doctor>) onSelectionChanged;
+  final List<Doctor> selectedItems;
 
-  const DoctorSelectionScreen({super.key, required this.onSelectionChanged});
+  const DoctorSelectionScreen({
+    super.key,
+    required this.onSelectionChanged,
+    required this.selectedItems,
+  });
 
   @override
   State<DoctorSelectionScreen> createState() => _DoctorSelectionScreenState();
@@ -19,7 +23,13 @@ class DoctorSelectionScreen extends StatefulWidget {
 
 class _DoctorSelectionScreenState extends State<DoctorSelectionScreen> {
   final DoctorController doctorController = Get.put(DoctorController());
-  List<Doctor> selectedDoctors = [];
+  late List<Doctor> selectedDoctors;
+
+  @override
+  void initState() {
+    selectedDoctors = widget.selectedItems;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

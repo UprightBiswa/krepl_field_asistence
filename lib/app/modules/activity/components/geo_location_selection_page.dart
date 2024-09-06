@@ -54,7 +54,6 @@ class _GeoLocationInputFieldState extends State<GeoLocationInputField> {
           controller: _controller,
           style: const TextStyle(
             fontSize: 16,
-            color: Colors.black87,
           ),
           decoration: InputDecoration(
             labelText: 'Location',

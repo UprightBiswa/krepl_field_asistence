@@ -5,13 +5,15 @@ import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
 import '../../controller/activity_master_controller.dart';
 import '../../model/activity_master_model.dart';
 
-class ActivitySelectionWidget extends StatefulWidget {
+class ActivitySelectionWidget<T> extends StatefulWidget {
   final String formType;
+  final T? selectedItem;
   final FormFieldSetter<ActivityMaster?> onSaved;
   final FormFieldValidator<ActivityMaster?> validator;
   const ActivitySelectionWidget({
     super.key,
     required this.formType,
+    required this.selectedItem,
     required this.onSaved,
     required this.validator,
   });
@@ -59,7 +61,7 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
             return SingleSelectDropdown<ActivityMaster>(
               labelText: "Select Activity",
               items: _activityMasterController.activityMasterList,
-              selectedItem: field.value,
+              selectedItem: field.value ?? widget.selectedItem,
               itemAsString: (activity) => activity.promotionalActivity,
               onChanged: (selected) {
                 field.didChange(selected);

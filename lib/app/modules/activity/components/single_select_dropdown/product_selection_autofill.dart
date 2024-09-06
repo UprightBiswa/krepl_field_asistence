@@ -7,9 +7,10 @@ import '../../../../data/constrants/constants.dart';
 import '../../../home/components/search_field.dart';
 import '../../../widgets/widgets.dart';
 
-class ProductMasterSelector extends StatefulWidget {
+class ProductMasterSelector<T> extends StatefulWidget {
   final String labelText;
   final IconData icon;
+  final T? selectedItem;
   final Function(dynamic) onChanged; // callback for selected item
   final String Function(dynamic) itemAsString; // function to display item text
 
@@ -17,6 +18,7 @@ class ProductMasterSelector extends StatefulWidget {
     super.key,
     required this.labelText,
     required this.icon,
+    required this.selectedItem,
     required this.onChanged,
     required this.itemAsString,
   });
@@ -29,9 +31,15 @@ class _ProductMasterSelectorState extends State<ProductMasterSelector> {
   dynamic selectedItem; // Changed from List to a single item
   String? validationError;
 
+  @override
+  void initState() {
+    super.initState();
+    selectedItem = widget.selectedItem; // Set initial selected item
+  }
+
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
-// Method to validate if an item is selected
+
   bool isValid() {
     if (selectedItem == null) {
       setState(() {
@@ -54,14 +62,13 @@ class _ProductMasterSelectorState extends State<ProductMasterSelector> {
       builder: (context) {
         return ProductMasterSelectionBottomSheet(
           title: widget.labelText,
-          initialSelectedItem: selectedItem, // Pass the current selected item
+          initialSelectedItem: selectedItem ?? widget.selectedItem,
           onChanged: (item) {
             setState(() {
-              selectedItem = item; // Update selected item in parent
+              selectedItem = item;
             });
-            widget.onChanged(item); // Trigger the callback
-            Navigator.of(context)
-                .pop(); // Close the bottom sheet after selection
+            widget.onChanged(item);
+            Navigator.of(context).pop();
           },
           itemAsString: widget.itemAsString,
         );
@@ -74,15 +81,13 @@ class _ProductMasterSelectorState extends State<ProductMasterSelector> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.labelText),
-        const SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showModalBottomSheet(context),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               border: Border.all(
-                color: validationError != null ? Colors.red : AppColors.kGrey,
+                color: validationError != null ? Colors.red : Colors.grey,
               ),
               color: isDarkMode(context)
                   ? AppColors.kContentColor
@@ -167,8 +172,9 @@ class _ProductMasterSelectionBottomSheetState
       ),
       body: Column(
         children: [
+          const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: SearchField(
               controller: searchController,
               onChanged: _filterItems,
@@ -176,6 +182,7 @@ class _ProductMasterSelectionBottomSheetState
               hintText: 'Search',
             ),
           ),
+          const SizedBox(height: 8),
           Expanded(
             child: Obx(() {
               if (productMasterController.isLoading.value) {
@@ -186,8 +193,11 @@ class _ProductMasterSelectionBottomSheetState
                 return const Center(child: Text('No data found.'));
               } else {
                 return ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   itemCount: productMasterController.productMasters.length,
-                  separatorBuilder: (context, index) => const Divider(),
+                  separatorBuilder: (context, index) => const Divider(
+                    height: 0,
+                  ),
                   itemBuilder: (context, index) {
                     final item = productMasterController.productMasters[index];
                     final isSelected = selectedItem == item;
@@ -238,13 +248,13 @@ class _ProductMasterSelectionBottomSheetState
                   });
                 },
                 text: "Clear",
-                color: AppColors.kAccent7.withOpacity(0.4),
-                isBorder: true,
+                color: AppColors.kAccent1,
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: PrimaryButton(
+                color: AppColors.kPrimary,
                 onTap: () {
                   widget.onChanged(selectedItem); // Callback to parent
                 },

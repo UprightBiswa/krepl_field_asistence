@@ -223,12 +223,14 @@ class _FarmerFormState extends State<FarmerForm> {
                             ),
                             SizedBox(height: 20.h),
                             ActivitySelectionWidget(
+
                               formType: "A",
                               onSaved: (selectedActivity) {
                                 setState(() {
                                   _selectedActivity = selectedActivity;
                                 });
                               },
+                              selectedItem: _selectedActivity,
                               validator: (selectedActivity) {
                                 if (selectedActivity == null) {
                                   return 'Please select an activity';
@@ -264,6 +266,7 @@ class _FarmerFormState extends State<FarmerForm> {
                             SizedBox(height: 16.h),
                             VillageSingleSelectionWidget(
                               onVillageSelected: _onVillageSelected,
+                              selectedItem: _selectedVillage,
                               validator: (selected) {
                                 if (selected == null) {
                                   return "Please select a village";

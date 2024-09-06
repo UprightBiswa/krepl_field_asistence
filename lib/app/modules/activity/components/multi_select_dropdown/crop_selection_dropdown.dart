@@ -25,7 +25,7 @@ class _CropSelectionScreenState extends State<CropSelectionScreen> {
     return Obx(() {
       if (cropController.isLoading.value) {
         return const ShimmerLoading();
-      } else if (cropController.error.isNotEmpty) {
+      } else if (cropController.errorMessage.isNotEmpty) {
         return const Center(
           child: Text('Error loading crops.'),
         );
@@ -34,10 +34,10 @@ class _CropSelectionScreenState extends State<CropSelectionScreen> {
           labelText: 'Select Crops',
           selectedItems: selectedCrops,
           items: cropController.crops,
-          itemAsString: (crop) => crop.name,
+          itemAsString: (crop) => crop.name ?? '',
           searchableFields: {
-            'Name': (crop) => crop.name,
-            'code': (crop) => crop.code.toString(),
+            'Name': (crop) => crop.name ?? '',
+            'code': (crop) => crop.code ?? '',
           },
           validator: (selectedCrops) {
             if (selectedCrops.isEmpty) {

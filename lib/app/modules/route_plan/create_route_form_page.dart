@@ -171,37 +171,13 @@ class _RouteFormPageState extends State<RouteFormPage> {
                   },
                 ),
                 SizedBox(height: 16.h),
-                // MultiSelectDropdown<Village>(
-                //   labelText: 'Villages',
-                //   // icon: Icons.location_city,
-                //   selectedItems: selectedVillages,
-                //   items:
-                //       villagesList, // Assuming villagesList is your data source
-                //   itemAsString: (Village village) => village.villageName,
-                //   searchableFields: {
-                //     'villageName': (Village village) => village.villageName,
-                //     'villageCode': (Village village) => village.villageCode,
-                //   },
-                //   validator: (selectedVillages) {
-                //     if (selectedVillages.isEmpty) {
-                //       return 'Please select at least one village.';
-                //     }
-                //     return null;
-                //   },
-                //   // isRequired: true, // Make it required
-                //   // validationMessage: 'Please select at least one village.',
-                //   onChanged: (List<Village> items) {
-                //     setState(() {
-                //       selectedVillages = items;
-                //     });
-                //   },
-                // ),
                 VillageSelectionScreen(
                   onSelectionChanged: (List<Village> items) {
                     setState(() {
                       selectedVillages = items;
                     });
                   },
+                  selectedItems: selectedVillages,
                 ),
                 SizedBox(height: 16.h),
                 CustomTextField(

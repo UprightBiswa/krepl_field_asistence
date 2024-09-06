@@ -48,15 +48,15 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.labelText),
-        const SizedBox(height: 8),
+        // Text(widget.labelText),
+        // const SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showModalBottomSheet(context),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               border: Border.all(
-                color: validationError != null ? Colors.red : AppColors.kGrey,
+                color: validationError != null ? Colors.red : Colors.grey,
               ),
               color: isDarkMode(context)
                   ? AppColors.kContentColor
@@ -102,7 +102,7 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
     if (chips.isEmpty) {
       chips.add(Text(
         widget.labelText,
-        style: TextStyle(color: Colors.grey[600]),
+        // style: TextStyle(color: Colors.grey[600]),
       ));
     }
 
@@ -221,8 +221,11 @@ class _MultiSelectModalState<T> extends State<MultiSelectModal<T>> {
       ),
       body: Column(
         children: [
+          const SizedBox(
+            height: 8,
+          ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: SearchField(
               controller: searchController,
               onChanged: _filterItems,
@@ -230,10 +233,16 @@ class _MultiSelectModalState<T> extends State<MultiSelectModal<T>> {
               hintText: 'Search',
             ),
           ),
+          const SizedBox(
+            height: 8,
+          ),
           Expanded(
             child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               itemCount: filteredItems.length,
-              separatorBuilder: (context, index) => const Divider(),
+              separatorBuilder: (context, index) => const Divider(
+                height: 0,
+              ),
               itemBuilder: (context, index) {
                 final item = filteredItems[index];
                 final isSelected = selectedItems.contains(item);
@@ -273,13 +282,13 @@ class _MultiSelectModalState<T> extends State<MultiSelectModal<T>> {
                   });
                 },
                 text: "Clear",
-                color: AppColors.kAccent7.withOpacity(0.4),
-                isBorder: true,
+                color: AppColors.kAccent1,
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: PrimaryButton(
+                color: AppColors.kPrimary,
                 onTap: () {
                   widget.onChanged(selectedItems);
                 },

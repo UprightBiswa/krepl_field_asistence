@@ -34,14 +34,14 @@ class _SeasionSelectionScreenState extends State<SeasionSelectionScreen> {
           labelText: 'Select Season',
           selectedItems: selectedSeason,
           items: seasonController.seasons,
-          itemAsString: (season) => '${season.season}\n${season.code}',
+          itemAsString: (season) => '${season.season} - ${season.code}',
           searchableFields: {
-            'Name': (season) => season.season,
-            'code': (season) => season.code.toString(),
+            'season': (season) => season.season,
+            'code': (season) => season.code,
           },
           validator: (selectedSeason) {
             if (selectedSeason.isEmpty) {
-              return 'Please select at least one crop.';
+              return 'Please select at least one season.';
             }
             return null;
           },
@@ -49,8 +49,7 @@ class _SeasionSelectionScreenState extends State<SeasionSelectionScreen> {
             setState(() {
               selectedSeason = items;
             });
-            widget.onSelectionChanged(
-                selectedSeason); // Notify parent of selection changes
+            widget.onSelectionChanged(selectedSeason);
           },
         );
       }
