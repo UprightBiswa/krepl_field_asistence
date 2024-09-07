@@ -22,7 +22,6 @@ import '../../farmer/model/farmer_list.dart';
 import '../../widgets/dialog/confirmation.dart';
 import '../../widgets/dialog/error.dart';
 import '../../widgets/dialog/loading.dart';
-import '../../widgets/dialog/success.dart';
 import '../../widgets/form_field.dart/form_field.dart';
 import '../../widgets/form_field.dart/form_hader.dart';
 import '../../widgets/texts/custom_header_text.dart';
@@ -49,62 +48,28 @@ class CreateFormApage extends StatefulWidget {
 }
 
 class _CreateFormApageState extends State<CreateFormApage> {
-  List<ActivityObject> activityObjects = [];
   final FormAController _formAController = Get.put(FormAController());
   final CropController _cropController = Get.put(CropController());
 
   final _formKey = GlobalKey<FormState>();
+  List<ActivityObject> activityObjects = [];
   final TextEditingController _remarksController = TextEditingController();
   final TextEditingController _selectionCountController =
       TextEditingController();
 
   ActivityMaster? _selectedActivity;
-
   String? selectedPartyType;
-
+  String? totalSelectedPertyType;
+  String? _selectedImagePath;
+  File? attachment;
+  LocationData? gioLocation;
   List<String>? selectedPartyNameListId;
 
   List<Village> selectedVillages = [];
   List<Farmer> selectedFarmers = [];
   List<Doctor> selectedDoctors = [];
 
-  //check if the selected items are valid set a sting that store selected items id,
-  //switch case functio to check  if (selectedPartyType == "Farmer")
-  //then set the selectedFarmers id to the string
-  //else if (selectedPartyType == "Village")
-  //then set the selectedVillages id to the string
-  //else if (selectedPartyType == "Doctor")
-  //then set the selectedDoctors id to the string
-  //then pass the string to the parameters
-  // give me function switch case to check the selectedPartyType and set the selected items id to the string
-  void checkSelectedPartyType() {
-    switch (selectedPartyType) {
-      case "Farmer":
-        selectedPartyNameListId =
-            selectedFarmers.map((e) => e.id.toString()).toList();
-        break;
-      case "Village":
-        selectedPartyNameListId =
-            selectedVillages.map((e) => e.id.toString()).toList();
-        break;
-      case "Doctor":
-        selectedPartyNameListId =
-            selectedDoctors.map((e) => e.id.toString()).toList();
-        break;
-    }
-  }
-
   List<Season> selectedSeasons = [];
-
-  // Crop? selectedCrop;
-  // CropStage? selectedCropStage;
-  // ProductMaster? selectedProductmaster;
-  // Pest? selectedPest;
-
-  String? totalSelectedPertyType;
-  String? _selectedImagePath;
-  File? attachment;
-  LocationData? gioLocation;
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -115,9 +80,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
         _selectedImagePath = pickedFile.path;
         attachment = File(pickedFile.path);
       });
-
-      // Pass the image path to the callback
-      // You can store this path to send it in an API later.
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -157,6 +119,43 @@ class _CreateFormApageState extends State<CreateFormApage> {
     );
   }
 
+  void onActivitySelected(ActivityMaster? selectedActivity) {
+    setState(() {
+      _selectedActivity = selectedActivity;
+      selectedPartyType = _selectedActivity?.masterLink;
+
+      // Clear previous selections
+      selectedFarmers.clear();
+      selectedVillages.clear();
+      selectedDoctors.clear();
+      selectedPartyNameListId = null;
+
+      // Clear the selection count
+      _updateSelectionCount();
+      checkSelectedPartyType();
+    });
+  }
+
+  void checkSelectedPartyType() {
+    switch (selectedPartyType) {
+      case "Farmer":
+        selectedPartyNameListId =
+            selectedFarmers.map((e) => e.id.toString()).toList();
+        break;
+      case "Village":
+        selectedPartyNameListId =
+            selectedVillages.map((e) => e.id.toString()).toList();
+        break;
+      case "Doctor":
+        selectedPartyNameListId =
+            selectedDoctors.map((e) => e.id.toString()).toList();
+        break;
+      default:
+        selectedPartyNameListId = [];
+        break;
+    }
+  }
+
   void _updateSelectionCount() {
     int count = 0;
     if (selectedPartyType == "Farmer") {
@@ -177,6 +176,16 @@ class _CreateFormApageState extends State<CreateFormApage> {
   void initState() {
     super.initState();
     addNewObject();
+  }
+
+  @override
+  void dispose() {
+    _remarksController.dispose();
+    _selectionCountController.dispose();
+    for (var object in activityObjects) {
+      object.expenseController.dispose();
+    }
+    super.dispose();
   }
 
   void addNewObject() {
@@ -258,6 +267,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                   if (_selectedActivity != null) {
                                     selectedPartyType =
                                         _selectedActivity!.masterLink;
+                                    onActivitySelected(selectedActivity);
                                   }
                                 });
                               },
@@ -297,6 +307,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                   setState(() {
                                     selectedFarmers = selectedFarmersitems;
                                     _updateSelectionCount();
+                                    checkSelectedPartyType();
                                   });
                                 },
                                 selectedItems: selectedFarmers,
@@ -307,6 +318,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                   setState(() {
                                     selectedVillages = selectedVillagesitems;
                                     _updateSelectionCount();
+                                    checkSelectedPartyType();
                                   });
                                 },
                                 selectedItems: selectedVillages,
@@ -317,6 +329,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                   setState(() {
                                     selectedDoctors = selectedDoctorsitems;
                                     _updateSelectionCount();
+                                    checkSelectedPartyType();
                                   });
                                 },
                                 selectedItems: selectedDoctors,
@@ -339,6 +352,25 @@ class _CreateFormApageState extends State<CreateFormApage> {
                               maxLines: 1,
                             ),
                             const SizedBox(height: 16),
+                            //print text in list of selected items in id selectedPartyNameListId
+                            if (selectedPartyNameListId != null) ...[
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.green[100],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  //in ui show like [2,1] but i want to show like 2,1
+                                  'Selected Party Name Ids: ${selectedPartyNameListId!.join(', ')}',
+                                  // 'Selected Party Name Ids: $selectedPartyNameListId',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+
                             SeasionSelectionScreen(
                               onSelectionChanged: (selectedSeasonsitems) {
                                 setState(() {
@@ -375,7 +407,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                     icon: Icons.arrow_drop_down,
                                     onChanged: (selectedProduct) {
                                       setState(() {
-                                        // selectedProductmaster = selectedProduct;
                                         activityObject.product =
                                             selectedProduct;
                                       });
@@ -391,9 +422,11 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                           .map((season) => season.id)
                                           .toList(),
                                       onSaved: (selectedCrop) {
-                                        setState(() {
-                                          // this.selectedCrop = selectedCrop;
-                                          activityObject.crop = selectedCrop;
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                          setState(() {
+                                            activityObject.crop = selectedCrop;
+                                          });
                                         });
                                       },
                                       // selectedItem: selectedCrop,
@@ -423,9 +456,12 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                     selectedItem: activityObject.cropStage,
                                     onCropStageSelected:
                                         (selectedCropStagesitem) {
-                                      setState(() {
-                                        activityObject.cropStage =
-                                            selectedCropStagesitem;
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        setState(() {
+                                          activityObject.cropStage =
+                                              selectedCropStagesitem;
+                                        });
                                       });
                                     },
                                   ),
@@ -471,7 +507,30 @@ class _CreateFormApageState extends State<CreateFormApage> {
                         isBorder: true,
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            addNewObject();
+                            if (_formKey.currentState?.validate() ?? false) {
+                              bool allValid = true;
+
+                              // Validate all current activityObjects
+                              for (var activityObject in activityObjects) {
+                                if (!activityObject.validate()) {
+                                  allValid = false;
+                                  Get.snackbar('Error',
+                                      'Please complete all fields before adding more.');
+                                  break;
+                                }
+                              }
+
+                              // If all are valid, add a new object
+                              if (allValid) {
+                                // setState(() {
+                                //   activityObjects.add(ActivityObject());
+                                // });
+                                addNewObject();
+                              }
+                            } else {
+                              Get.snackbar(
+                                  'Error', 'Please fill the form correctly.');
+                            }
                           }
                         },
                         text: 'Add More Products',
@@ -536,12 +595,12 @@ class _CreateFormApageState extends State<CreateFormApage> {
                               icon: Icons.comment,
                               controller: _remarksController,
                               keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter remarks';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please enter remarks';
+                              //   }
+                              //   return null;
+                              // },
                               maxLines: 3,
                             ),
                           ],
@@ -570,6 +629,21 @@ class _CreateFormApageState extends State<CreateFormApage> {
               child: PrimaryButton(
                 onTap: () {
                   if (_formKey.currentState?.validate() ?? false) {
+                    for (var activityObject in activityObjects) {
+                      if (!activityObject.validate()) {
+                        Get.snackbar('Error',
+                            'Please fill all fields before submitting.');
+                        Get.dialog(
+                          ErrorDialog(
+                            errorMessage:
+                                "Please fill all fields before submitting.",
+                            onClose: () => Get.back(),
+                          ),
+                          barrierDismissible: false,
+                        );
+                        return;
+                      }
+                    }
                     _showConfirmationDialog(context);
                   }
                 },
@@ -605,42 +679,60 @@ class _CreateFormApageState extends State<CreateFormApage> {
     Get.dialog(const LoadingDialog(), barrierDismissible: false);
 
     try {
-      // Prepare parameters
       final parameters = {
-        'promotional_activity_type': _selectedActivity?.id,
-        'party_type': selectedPartyType,
+        'promotional_activity_type': _selectedActivity?.id.toString() ?? '',
+        'party_type': selectedPartyType ?? '',
         'remarks': _remarksController.text,
-        'latitude': gioLocation?.latitude ?? '',
-        'longitude': gioLocation?.longitude ?? '',
-        'party_name[]': selectedPartyNameListId,
-        'season[]': selectedSeasons.map((e) => e.id.toString()).toList(),
-        'crop[]': activityObjects.map((e) => e.crop!.id.toString()).toList(),
-        'crop_stage[]':
-            activityObjects.map((e) => e.cropStage!.id.toString()).toList(),
-        'product[]': activityObjects
-            .map((e) => e.product!.materialNumber.toString())
-            .toList(),
-        'pest[]': activityObjects.map((e) => e.pest!.id.toString()).toList(),
-        'expense[]':
-            activityObjects.map((e) => e.expenseController.text).toList(),
+        'latitude': gioLocation?.latitude.toString() ?? '',
+        'longitude': gioLocation?.longitude.toString() ?? '',
       };
+      List<MapEntry<String, String>> fields = [];
+
+      for (var id in selectedPartyNameListId!) {
+        fields.add(MapEntry('party_name[]', id));
+      }
+
+      for (var season in selectedSeasons) {
+        fields.add(MapEntry('season[]', season.id.toString()));
+      }
+
+      // for (var activity in activityObjects) {
+      //   fields.add(MapEntry('crop[]', activity.crop!.id.toString()));
+      // }
+
+      // for (var activity in activityObjects) {
+      //   fields.add(MapEntry('crop_stage[]', activity.cropStage!.id.toString()));
+      // }
+
+      // for (var activity in activityObjects) {
+      //   fields.add(
+      //       MapEntry('product[]', activity.product!.materialNumber.toString()));
+      // }
+
+      // // Loop over pests
+      // for (var activity in activityObjects) {
+      //   fields.add(MapEntry('pest[]', activity.pest!.id.toString()));
+      // }
+
+      // // Loop over expenses
+      // for (var activity in activityObjects) {
+      //   fields.add(MapEntry('expense[]', activity.expenseController.text));
+      // }
+      for (var activity in activityObjects) {
+        fields.add(MapEntry('crop[]', activity.crop!.id.toString()));
+        fields.add(MapEntry('crop_stage[]', activity.cropStage!.id.toString()));
+        fields.add(
+            MapEntry('product[]', activity.product!.materialNumber.toString()));
+        fields.add(MapEntry('pest[]', activity.pest!.id.toString()));
+        fields.add(MapEntry('expense[]', activity.expenseController.text));
+      }
 
       await _formAController.submitActivityAFormData(
         'createFormA',
         parameters,
+        fields,
         _selectedImagePath != null ? File(_selectedImagePath!) : null,
       );
-
-      // On success
-      Get.dialog(
-          SuccessDialog(
-            message: 'Form submitted successfully',
-            onClose: () {
-              Get.back(); // Close success dialog
-              Get.back(); // Close form page
-            },
-          ),
-          barrierDismissible: false);
     } catch (e) {
       // On error
       Get.back(); // Close loading dialog
@@ -674,7 +766,14 @@ class ActivityObject {
     TextEditingController? expenseController,
   }) : expenseController = expenseController ?? TextEditingController();
 
-  // bool validate() {
-  //   return product.isNotEmpty && crop.isNotEmpty && cropStage.isNotEmpty && pest.isNotEmpty && expenseController.text.isNotEmpty;
-  // }
+  bool validate() {
+    if (product == null ||
+        crop == null ||
+        cropStage == null ||
+        pest == null ||
+        expenseController.text.isEmpty) {
+      return false;
+    }
+    return true;
+  }
 }

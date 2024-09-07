@@ -28,6 +28,7 @@ class _FarmerSelectionScreenState extends State<FarmerSelectionScreen> {
   void initState() {
     super.initState();
     selectedFarmers = widget.selectedItems;
+    farmerController.fetchAllFarmers(); // Fetch farmer data on init
   }
 
   @override

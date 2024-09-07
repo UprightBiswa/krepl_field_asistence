@@ -109,6 +109,7 @@ class FormAController extends GetxController {
   Future<void> submitActivityAFormData(
     String endPoint,
     Map<String, dynamic> parameters,
+    List<MapEntry<String, String>> fields,
     File? imageFile,
   ) async {
     isloading(true);
@@ -121,15 +122,20 @@ class FormAController extends GetxController {
 
       // Prepare the multipart form data
       dio.FormData formData = dio.FormData();
+
       formData.fields.addAll(
         parameters.entries.map(
           (e) => MapEntry(e.key, e.value.toString()),
         ),
       );
+
+      // Add array/list fields using the MapEntry list `fields`
+      formData.fields.addAll(fields);
+      
       if (imageFile != null && imageFile.existsSync()) {
         formData.files.add(
           MapEntry(
-            'image',
+            'photo',
             dio.MultipartFile.fromFileSync(
               imageFile.path,
               filename: imageFile.path.split('/').last,
@@ -146,7 +152,6 @@ class FormAController extends GetxController {
             SuccessDialog(
                 message: response.data['message'],
                 onClose: () {
-                  Get.back();
                   Get.back();
                   Get.back();
                 }),

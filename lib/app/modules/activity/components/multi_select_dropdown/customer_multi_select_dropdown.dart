@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../controllers/master_controller.dart/customer_controller.dart';
+import '../../../../model/master/customer_model.dart';
 import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class CustomerMultiPleSelectionScreen extends StatefulWidget {
-  final void Function(List<Customer>)
-      onSelectionChanged; // Callback for selected items
-
-  const CustomerMultiPleSelectionScreen(
-      {super.key, required this.onSelectionChanged});
+  final void Function(List<Customer>) onSelectionChanged;
+  final List<Customer> selectedItems;
+  const CustomerMultiPleSelectionScreen({
+    super.key,
+    required this.onSelectionChanged,
+    required this.selectedItems,
+  });
 
   @override
   State<CustomerMultiPleSelectionScreen> createState() =>
@@ -20,6 +23,13 @@ class _CustomerMultiPleSelectionScreenState
     extends State<CustomerMultiPleSelectionScreen> {
   final CustomerController customerController = Get.put(CustomerController());
   List<Customer> selectedCustomers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedCustomers = widget.selectedItems;
+    customerController.loadcustomer(); // Fetch customer data on init
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +45,10 @@ class _CustomerMultiPleSelectionScreenState
           labelText: 'Select Customers',
           selectedItems: selectedCustomers,
           items: customerController.customer,
-          itemAsString: (customers) => customers.name,
+          itemAsString: (customers) => customers.customerName,
           searchableFields: {
-            'name': (customers) => customers.name,
-            'code': (customers) => customers.code,
+            'name': (customers) => customers.customerName,
+            'code': (customers) => customers.customerNumber,
           },
           validator: (selectedDoctors) {
             if (selectedDoctors.isEmpty) {

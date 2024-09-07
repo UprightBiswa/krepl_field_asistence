@@ -87,4 +87,7 @@ class FormCController extends GetxController {
       );
     }
   }
+
+
+  //submit Activity form data C peremter recive from 
 }

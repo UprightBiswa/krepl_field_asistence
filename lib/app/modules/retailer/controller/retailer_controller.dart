@@ -202,4 +202,43 @@ class RetailerController extends GetxController {
       isLoadingCreate(false);
     }
   }
+
+  //fetch all retailer endpoint viewRetailer permeter form_value = all
+  var isLoadingAllRetailer = false.obs;
+  var isErrorAllRetailer = false.obs;
+  var errorMessageAllRetailer = ''.obs;
+  var allRetailer = <Retailer>[].obs;
+
+  void fetchAllRetailers() async {
+    try {
+      isLoadingAllRetailer(true);
+      isErrorAllRetailer(false);
+      errorMessageAllRetailer.value = '';
+
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      String endPoint = 'viewRetailer';
+      Map<String, dynamic> parameters = {
+        'form_value': 'all',
+      };
+
+      final response = await _dioService.post(endPoint, queryParams: parameters);
+
+      if (response.statusCode == 200) {
+        final data = response.data['data'] as List;
+        final retailers = data.map((item) => Retailer.fromJson(item)).toList();
+        allRetailer.assignAll(retailers);
+      } else {
+        throw Exception('Failed to load retailers');
+      }
+    } catch (e) {
+      isErrorAllRetailer(true);
+      errorMessageAllRetailer.value = e.toString();
+      print('Error fetching retailers: $e');
+    } finally {
+      isLoadingAllRetailer(false);
+    }
+  }
 }

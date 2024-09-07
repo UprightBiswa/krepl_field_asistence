@@ -1,32 +1,20 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:field_asistence/app/model/master/product_master.dart';
-import 'package:field_asistence/app/model/master/season_model.dart';
+import 'package:field_asistence/app/modules/retailer/model/retailer_model_list.dart';
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../../model/master/crop_model.dart';
-import '../../../model/master/crop_stage.dart';
-import '../../../model/master/pest_master.dart';
-import '../../../model/master/villages_model.dart';
-import '../../doctor/model/doctor_list.dart';
-import '../../farmer/model/farmer_list.dart';
+import '../../../model/master/customer_model.dart';
 import '../../widgets/form_field.dart/form_field.dart';
+import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
+import '../components/multi_select_dropdown/customer_multi_select_dropdown.dart';
+import '../components/multi_select_dropdown/retailer_multiselection_dropdown.dart';
 import '../components/single_select_dropdown/activity_master_dropdown.dart';
-import '../components/multi_select_dropdown/crop_selection_dropdown.dart';
-import '../components/multi_select_dropdown/doctor_selection_dropdown.dart';
-import '../components/multi_select_dropdown/farmer_selection_dropdown.dart';
-import '../components/geo_location_selection_page.dart';
-import '../components/multi_select_dropdown/pest_selection_dropdown.dart';
-import '../components/multi_select_dropdown/products_selection_drodown.dart';
-import '../components/multi_select_dropdown/seasion_selection_dropdown.dart';
-import '../components/multi_select_dropdown/stages_selection_dropdown.dart';
-import '../components/multi_select_dropdown/village_multi_selecton_dropdown.dart';
+import '../components/single_select_dropdown/product_selection_autofill.dart';
 import '../model/activity_master_model.dart';
 
 class CreateFormCpage extends StatefulWidget {
@@ -38,257 +26,223 @@ class CreateFormCpage extends StatefulWidget {
 
 class _CreateFormCpageState extends State<CreateFormCpage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _expenseController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
 
   ActivityMaster? _selectedActivity;
   String? selectedPartyType;
 
-  List<Village> selectedVillages = [];
-  List<Farmer> selectedFarmers = [];
-  List<Doctor> selectedDoctors = [];
-  List<Season> selectedSeasions = [];
-  List<Crop> selectedCrops = [];
-  List<CropStage> selectedCropStages = [];
-  List<ProductMaster> selectedProducts = [];
-  List<Pest> selectedPests = [];
-
-  String? totalSelectedPertyType;
-  String? _selectedImagePath;
-  LocationData? gioLocation;
-
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-    if (pickedFile != null) {
-      log('Picked file path: ${pickedFile.path}');
-
-      setState(() {
-        _selectedImagePath = pickedFile.path;
-      });
-
-      // Pass the image path to the callback
-      // You can store this path to send it in an API later.
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No image selected'),
-        ),
-      );
-    }
-  }
-
-  void _showImagePickerOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Pick from gallery'),
-                onTap: () {
-                  _pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Take a photo'),
-                onTap: () {
-                  _pickImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  List<Retailer> selectedRetailers = [];
+  List<Customer> selectedCustomers = [];
+  List<String>? selectedPartyNameListId;
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Create Form C"),
+      extendBodyBehindAppBar: true,
+      appBar: CustomBackAppBar(
+        leadingCallback: () {
+          Get.back<void>();
+        },
+        iconColor: isDarkMode(context)
+            ? Colors.black
+            : AppColors.kPrimary.withOpacity(0.15),
+        title: Text(
+          'Create Dealer Stock',
+          style: AppTypography.kBold14.copyWith(
+            color: isDarkMode(context)
+                ? AppColors.kWhite
+                : AppColors.kDarkContiner,
+          ),
+        ),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: PrimaryContainer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ActivitySelectionWidget(
-                  formType: "C",
-                  onSaved: (selectedActivity) {
-                    setState(() {
-                      _selectedActivity = selectedActivity;
-
-                      if (_selectedActivity != null) {
-                        selectedPartyType = _selectedActivity!.masterLink;
-                      }
-                    });
-                  },
-                  selectedItem: _selectedActivity,
-                  validator: (selectedActivity) {
-                    if (selectedActivity == null) {
-                      return 'Please select an activity';
-                    }
-                    return null;
-                  },
-                ),
-
-                if (_selectedActivity != null) ...[
-                  SizedBox(height: 16.h),
-                  Text(
-                    'Selected Partytype: ${_selectedActivity!.masterLink}',
-                  ),
-                  SizedBox(height: 16.h),
-                ],
-                // Conditional Fields based on the selected party type
-                if (selectedPartyType == "Farmer") ...[
-                  FarmerSelectionScreen(
-                    onSelectionChanged: (selectedFarmersitems) {
-                      setState(() {
-                        selectedFarmers = selectedFarmersitems;
-                      });
-                    },
-                    selectedItems: selectedFarmers,
-                  ),
-                ] else if (selectedPartyType == "Village") ...[
-                  VillageSelectionScreen(
-                    onSelectionChanged: (selectedVillagesitems) {
-                      setState(() {
-                        selectedVillages = selectedVillagesitems;
-                      });
-                    },
-                    selectedItems: selectedVillages,
-                  ),
-                ] else if (selectedPartyType == "Doctor") ...[
-                  DoctorSelectionScreen(
-                    onSelectionChanged: (selectedDoctorsitems) {
-                      setState(() {
-                        selectedDoctors = selectedDoctorsitems;
-                      });
-                    },
-                    selectedItems: selectedDoctors,
-                  ),
-                ],
-                const SizedBox(height: 16),
-
-                SeasionSelectionScreen(
-                  onSelectionChanged: (selectedSeasionsitems) {
-                    setState(() {
-                      selectedSeasions = selectedSeasionsitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                CropSelectionScreen(
-                  onSelectionChanged: (selectedCropsitems) {
-                    setState(() {
-                      selectedCrops = selectedCropsitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                CropStageSelectionScreen(
-                  onSelectionChanged: (selectedCropStagesitems) {
-                    setState(() {
-                      selectedCropStages = selectedCropStagesitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                ProductMasterSelectionScreen(
-                  onSelectionChanged: (selectedProductsitems) {
-                    setState(() {
-                      selectedProducts = selectedProductsitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                PestSelectionScreen(
-                  onSelectionChanged: (selectedPestsitems) {
-                    setState(() {
-                      selectedPests = selectedPestsitems;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  labelText: 'Expense',
-                  hintText: 'Enter the expense',
-                  icon: Icons.attach_money,
-                  controller: _expenseController,
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the expense';
-                    }
-                    return null;
-                  },
-                  maxLines: 1,
-                ),
-                const SizedBox(height: 16),
-
-                CustomTextField(
-                  labelText: 'Remarks',
-                  hintText: 'Enter remarks',
-                  icon: Icons.comment,
-                  controller: _remarksController,
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter remarks';
-                    }
-                    return null;
-                  },
-                  maxLines: 3,
-                ),
-                const SizedBox(height: 16),
-
-                GestureDetector(
-                  onTap: () => _showImagePickerOptions(context),
-                  child: Container(
-                    height: 150.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: isDarkMode(context)
-                          ? Colors.grey[800]
-                          : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10.r),
+          child: Column(
+            children: [
+              PrimaryContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomHeaderText(
+                      text: 'Activity\'s Basic Details',
+                      fontSize: 20.sp,
                     ),
-                    child: _selectedImagePath == null
-                        ? Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 50.sp,
-                              color: Colors.grey,
-                            ),
-                          )
-                        : Image.file(
-                            File(_selectedImagePath!),
-                            fit: BoxFit.cover,
-                          ),
-                  ),
+                    SizedBox(height: 16.h),
+                    ActivitySelectionWidget(
+                      formType: "C",
+                      onSaved: (selectedActivity) {
+                        setState(() {
+                          _selectedActivity = selectedActivity;
+
+                          if (_selectedActivity != null) {
+                            selectedPartyType = _selectedActivity!.masterLink;
+                          }
+                          //clear privions selected items from
+                          // List<Retailer> selectedRetailers = [];
+                          // List<Customer> selectedCustomers = [];
+                          selectedCustomers.clear();
+                          selectedRetailers.clear();
+                        });
+                      },
+                      selectedItem: _selectedActivity,
+                      validator: (selectedActivity) {
+                        if (selectedActivity == null) {
+                          return 'Please select an activity';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    if (_selectedActivity != null) ...[
+                      SizedBox(height: 16.h),
+                      Text(
+                        'Selected Partytype: ${_selectedActivity!.masterLink}',
+                      ),
+                      SizedBox(height: 16.h),
+                    ],
+                    // Conditional Fields based on the selected party type
+                    if (selectedPartyType == "Customer") ...[
+                      CustomerMultiPleSelectionScreen(
+                        onSelectionChanged: (selectedCustomersitems) {
+                          setState(() {
+                            selectedCustomers = selectedCustomersitems;
+                            selectedPartyNameListId = selectedCustomers
+                                .map((e) => e.id.toString())
+                                .toList();
+                          });
+                        },
+                        selectedItems: selectedCustomers,
+                      ),
+                    ] else if (selectedPartyType == "Retailer") ...[
+                      RetailerSelectionScreen(
+                        onSelectionChanged: (selectedRetailersitems) {
+                          setState(() {
+                            selectedRetailers = selectedRetailersitems;
+                            selectedPartyNameListId = selectedRetailers
+                                .map((e) => e.id.toString())
+                                .toList();
+                          });
+                        },
+                        selectedItems: selectedRetailers,
+                      ),
+                    ],
+                    const SizedBox(height: 16),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                GeoLocationInputField(
-                  // initialAddress: gioLocation,
-                  onLocationSelected: (selectedAddress) {
-                    setState(() {
-                      gioLocation = selectedAddress;
-                    });
-                  },
+              ),
+              const SizedBox(height: 16),
+              PrimaryContainer(
+                child: Column(
+                  children: [
+                    ProductMasterSelector(
+                                    labelText: 'Select Products',
+                                    icon: Icons.arrow_drop_down,
+                                    onChanged: (selectedProduct) {
+                                      setState(() {
+                                        activityObject.product =
+                                            selectedProduct;
+                                      });
+                                    },
+                                    selectedItem: activityObject.product,
+                                    itemAsString: (product) =>
+                                        product.materialDescription,
+                                  ),
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      labelText: 'Quantity',
+                      hintText: 'Enter the product quantity',
+                      icon: Icons.attach_money,
+                      controller: ,
+                      keyboardType: TextInputType.number,
+                      inputFormatter: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        LengthLimitingTextInputFormatter(10),
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the quantity';
+                        }
+                        return null;
+                      },
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      labelText: 'Expense',
+                      hintText: 'Enter the expense',
+                      icon: Icons.attach_money,
+                      controller: ,
+                      keyboardType: TextInputType.number,
+                      inputFormatter: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}'),
+                        ),
+                        LengthLimitingTextInputFormatter(10),
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the expense';
+                        }
+                        return null;
+                      },
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              PrimaryButton(
+                color: AppColors.kSecondary,
+                isBorder: true,
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      bool allValid = true;
+
+                      // Validate all current activityObjects
+                      for (var activityObject in activityObjects) {
+                        if (!activityObject.validate()) {
+                          allValid = false;
+                          Get.snackbar('Error',
+                              'Please complete all fields before adding more.');
+                          break;
+                        }
+                      }
+
+                      // If all are valid, add a new object
+                      if (allValid) {
+                        // setState(() {
+                        //   activityObjects.add(ActivityObject());
+                        // });
+                        addNewObject();
+                      }
+                    } else {
+                      Get.snackbar('Error', 'Please fill the form correctly.');
+                    }
+                  }
+                },
+                text: 'Add More Products',
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                labelText: 'Remarks',
+                hintText: 'Enter remarks',
+                icon: Icons.comment,
+                controller: _remarksController,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter remarks';
+                  }
+                  return null;
+                },
+                maxLines: 3,
+              ),
+            ],
           ),
         ),
       ),

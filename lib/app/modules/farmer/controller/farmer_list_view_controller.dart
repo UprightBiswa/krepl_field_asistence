@@ -151,4 +151,46 @@ class FarmerListController extends GetxController {
     _debounce?.cancel();
     super.onClose();
   }
+
+
+  //fetch all farmer //end point viewFarmer// peremter form_value =all
+  var isLoading = false.obs;
+  var isError = false.obs;
+  var errorMessage = ''.obs;
+
+  var allFarmer = <Farmer>[].obs;
+
+  void fetchAllFarmers() async {
+    try {
+      isLoading(true);
+      isError(false);
+      errorMessage.value = '';
+
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Example endpoint and parameters
+      String endPoint = 'viewFarmer';
+      Map<String, dynamic> parameters = {
+        'form_value': 'all',
+      };
+
+      final response = await _dioService.post(endPoint, queryParams: parameters);
+
+      if (response.statusCode == 200) {
+        final data = response.data['data'] as List;
+        final farmers = data.map((item) => Farmer.fromJson(item)).toList();
+        allFarmer.assignAll(farmers);
+      } else {
+        throw Exception('Failed to load farmers');
+      }
+    } catch (e) {
+      isError(true);
+      errorMessage.value = e.toString();
+      print('Error fetching farmers: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
 }

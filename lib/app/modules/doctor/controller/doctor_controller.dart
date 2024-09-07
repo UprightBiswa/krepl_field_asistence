@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
-import '../../../controllers/master_controller.dart/doctor_controller.dart';
 import '../../../data/helpers/internet/connectivity_services.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import '../../farmer/components/filter_bottom_sheet.dart';
@@ -15,30 +14,7 @@ class DoctorController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
-  List<Doctor> allDoctors = dummyDoctors;
-
-  var filteredDoctors = <Doctor>[].obs;
-
-  void filterDoctors(String query) {
-    isLoading.value = true;
-    filteredDoctors.value = allDoctors.where((Doctor) {
-      final nameMatch = Doctor.name.toLowerCase().contains(query.toLowerCase());
-      final mobileNumber =
-          Doctor.mobileNumber.toLowerCase().contains(query.toLowerCase());
-      return nameMatch || mobileNumber;
-    }).toList();
-
-    if (filteredDoctors.isEmpty) {
-      errorMessage.value = 'No Doctors match your search.';
-    } else {
-      errorMessage.value = '';
-    }
-
-    isLoading.value = false;
-  }
-
-  // doctor list with pegination
-
+ 
   final PagingController<int, Doctor> pagingController =
       PagingController(firstPageKey: 1);
 
@@ -60,7 +36,6 @@ class DoctorController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    filteredDoctors.addAll(allDoctors);
     print("FarmerListController initialized");
 
     filterController = FilterController<String>(
@@ -335,4 +310,46 @@ class DoctorController extends GetxController {
       isLoadingEdit(false);
     }
   }
+
+
+  //fetchall doctor end point  viewDoctor and permeter form_value = all
+  var isLoadingAll = false.obs;
+  var isErrorAll = false.obs;
+  var errorMessageAll = ''.obs;
+  var allDoctor = <Doctor>[].obs;
+
+  void fetchAllDoctors() async {
+    try {
+      isLoadingAll(true);
+      isErrorAll(false);
+      errorMessageAll.value = '';
+
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Example endpoint and parameters
+      String endPoint = 'viewDoctor';
+      Map<String, dynamic> parameters = {
+        'form_value': 'all',
+      };
+
+      final response = await _dioService.post(endPoint, queryParams: parameters);
+
+      if (response.statusCode == 200) {
+        final data = response.data['data'] as List;
+        final doctors = data.map((item) => Doctor.fromJson(item)).toList();
+        allDoctor.assignAll(doctors);
+      } else {
+        throw Exception('Failed to load doctors');
+      }
+    } catch (e) {
+      isErrorAll(true);
+      errorMessageAll.value = e.toString();
+      print('Error fetching doctors: $e');
+    } finally {
+      isLoadingAll(false);
+    }
+  }
+  
 }

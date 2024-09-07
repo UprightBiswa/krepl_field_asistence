@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../controllers/master_controller.dart/Doctor_controller.dart';
-
+import '../../../doctor/controller/doctor_controller.dart';
 import '../../../doctor/model/doctor_list.dart';
 import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
@@ -28,6 +27,7 @@ class _DoctorSelectionScreenState extends State<DoctorSelectionScreen> {
   @override
   void initState() {
     selectedDoctors = widget.selectedItems;
+    doctorController.fetchAllDoctors(); // Fetch doctor data on init
     super.initState();
   }
 
@@ -36,7 +36,7 @@ class _DoctorSelectionScreenState extends State<DoctorSelectionScreen> {
     return Obx(() {
       if (doctorController.isLoading.value) {
         return const ShimmerLoading();
-      } else if (doctorController.error.isNotEmpty) {
+      } else if (doctorController.isErrorAll.value) {
         return const Center(
           child: Text('Error loading Doctors.'),
         );
@@ -44,7 +44,7 @@ class _DoctorSelectionScreenState extends State<DoctorSelectionScreen> {
         return MultiSelectDropdown<Doctor>(
           labelText: 'Select Doctors',
           selectedItems: selectedDoctors,
-          items: doctorController.doctors,
+          items: doctorController.allDoctor,
           itemAsString: (doctors) => doctors.name,
           searchableFields: {
             'name': (doctors) => doctors.name,

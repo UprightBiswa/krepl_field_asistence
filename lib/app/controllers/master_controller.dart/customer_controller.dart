@@ -1,22 +1,11 @@
 // controllers/doctor_controller.dart
 import 'package:get/get.dart';
 
-class Customer {
-  final int id;
-  final String name;
-  final String code;
-  Customer({
-    required this.id,
-    required this.name,
-    required this.code,
-  });
-}
+import '../../data/helpers/internet/connectivity_services.dart';
+import '../../data/helpers/utils/dioservice/dio_service.dart';
+import '../../model/master/customer_model.dart';
 
-List<Customer> dummyCustomers = [
-  Customer(id: 1, name: "John Doe", code: '123'),
-  Customer(id: 2, name: "Jane Smith", code: '456'),
-  Customer(id: 3, name: "Emily Clark", code: '789')
-];
+
 
 class CustomerController extends GetxController {
   var customer = <Customer>[].obs;
@@ -29,20 +18,44 @@ class CustomerController extends GetxController {
     super.onInit();
   }
 
+  // Services
+  final DioService _dioService = DioService();
+  final ConnectivityService _connectivityService = ConnectivityService();
+
   Future<void> loadcustomer() async {
-    isLoading.value = true;
-    error.value = '';
-
     try {
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
+      isLoading(true);
+      error('');
 
-      // Load data (replace with actual data loading logic)
-      customer.assignAll(dummyCustomers);
+      // Check connectivity
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // API call
+      final response = await _dioService.post('viewFaCustomers');
+
+      if (response.statusCode == 200) {
+        bool success = response.data['success'] ?? false;
+        if (success) {
+          var data = response.data['data'] as List;
+          var fetchedData =
+              data.map((json) => Customer.fromJson(json)).toList();
+
+          customer.assignAll(fetchedData);
+        } else {
+          String message = response.data['message'] ?? 'Unknown error occurred';
+          error(message);
+          throw Exception(message);
+        }
+      } else {
+        String error = 'Failed to load data: HTTP ${response.statusCode}';
+        throw Exception(error);
+      }
     } catch (e) {
-      error.value = 'Failed to load data';
+      error(e.toString());
     } finally {
-      isLoading.value = false;
+      isLoading(false);
     }
   }
 }
