@@ -1,5 +1,4 @@
 import 'package:field_asistence/app/modules/home/components/search_field.dart';
-import 'package:field_asistence/app/modules/widgets/buttons/buttons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/constrants/constants.dart';
@@ -32,14 +31,7 @@ class SingleSelectDropdown<T> extends StatefulWidget {
 }
 
 class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
-  T? selectedItem;
   String? validationError;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedItem = widget.selectedItem;
-  }
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
@@ -50,8 +42,8 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(widget.labelText),
-        // const SizedBox(height: 8),
+        Text(widget.labelText),
+        const SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showModalBottomSheet(context),
           child: Container(
@@ -68,12 +60,12 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
             child: Row(
               children: [
                 Expanded(
-                  child: selectedItem != null
+                  child: widget.selectedItem != null
                       ? Text(
-                          widget.itemAsString(selectedItem as T),
+                          widget.itemAsString(widget.selectedItem!),
                         )
                       : Text(
-                          "Select ${widget.labelText}",
+                          widget.labelText,
                         ),
                 ),
                 Icon(widget.icon),
@@ -102,13 +94,12 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
         return SingleSelectModal<T>(
           title: widget.labelText,
           items: widget.items,
-          selectedItem: selectedItem,
+          selectedItem: widget.selectedItem,
           itemAsString: widget.itemAsString,
           onChanged: (T selected) {
             setState(() {
-              selectedItem = selected;
-              widget.onChanged(selectedItem as T);
-              _validateSelection();
+              widget.onChanged(selected);
+              _validateSelection(selected);
             });
             Navigator.pop(context);
           },
@@ -118,7 +109,7 @@ class _SingleSelectDropdownState<T> extends State<SingleSelectDropdown<T>> {
     );
   }
 
-  void _validateSelection() {
+  void _validateSelection(T? selectedItem) {
     if (widget.validator != null) {
       setState(() {
         validationError = widget.validator!(selectedItem);
@@ -150,14 +141,12 @@ class SingleSelectModal<T> extends StatefulWidget {
 }
 
 class _SingleSelectModalState<T> extends State<SingleSelectModal<T>> {
-  T? selectedItem;
   late List<T> filteredItems;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    selectedItem = widget.selectedItem;
     filteredItems = widget.items;
   }
 
@@ -177,6 +166,7 @@ class _SingleSelectModalState<T> extends State<SingleSelectModal<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedItem = widget.selectedItem;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: AppTypography.kBold14),
@@ -205,34 +195,13 @@ class _SingleSelectModalState<T> extends State<SingleSelectModal<T>> {
                       ? const Icon(Icons.check_circle, color: Colors.green)
                       : const Icon(Icons.radio_button_unchecked),
                   onTap: () {
-                    setState(() {
-                      selectedItem = item;
-                    });
+                    widget.onChanged(item);
                   },
                 );
               },
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Expanded(
-              child: selectedItem != null
-                  ? PrimaryButton(
-                      onTap: () {
-                        if (selectedItem != null) {
-                          widget.onChanged(selectedItem as T);
-                        }
-                      },
-                      text: "Done",
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          ],
-        ),
       ),
     );
   }

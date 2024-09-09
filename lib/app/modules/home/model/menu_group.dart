@@ -150,7 +150,7 @@ List<MenuItem> reportMenuItems = [
 List<MenuItem> formMenuItems = [
   MenuItem(
     title: 'Activity Management',
-    icon: Icons.document_scanner, // Example icon
+    icon: Icons.local_activity_outlined, // Example icon
     onTap: () {
       Get.to<void>(
         () => FormAManagementPage(),
@@ -160,7 +160,7 @@ List<MenuItem> formMenuItems = [
   ),
   MenuItem(
     title: 'Jeep Campaign',
-    icon: Icons.document_scanner, // Example icon
+    icon: Icons.campaign_outlined, // Example icon
     onTap: () {
       //
       Get.to<void>(
@@ -171,7 +171,7 @@ List<MenuItem> formMenuItems = [
   ),
   MenuItem(
     title: 'Dealer Stock',
-    icon: Icons.document_scanner, // Example icon
+    icon: Icons.inventory_rounded, // Example icon
     onTap: () {
       Get.to<void>(
         () => FormCManagementPage(),
@@ -181,7 +181,7 @@ List<MenuItem> formMenuItems = [
   ),
   MenuItem(
     title: 'Demonstration Management',
-    icon: Icons.document_scanner, // Example icon
+    icon: Icons.preview_outlined, // Example icon
     onTap: () {
       Get.to<void>(
         () => FormDManagementPage(),
@@ -191,7 +191,7 @@ List<MenuItem> formMenuItems = [
   ),
   MenuItem(
     title: 'POP Management',
-    icon: Icons.document_scanner, // Example icon
+    icon: Icons.pages, // Example icon
     onTap: () {
       Get.to<void>(
         () => FormEManagementPage(),
@@ -201,7 +201,7 @@ List<MenuItem> formMenuItems = [
   ),
   MenuItem(
     title: 'Farmer Management',
-    icon: Icons.document_scanner, // Example icon
+    icon: Icons.agriculture_rounded, // Example icon
     onTap: () {
       Get.to(() => const FarmerManagementPage(),
               transition: Transition.rightToLeftWithFade)!

@@ -7,10 +7,14 @@ import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class RouteSelectionScreen extends StatefulWidget {
-  final void Function(List<RouteMap>)
-      onSelectionChanged; // Callback for selected items
+  final void Function(List<RouteMap>) onSelectionChanged;
+  final List<RouteMap> selectedItems;
 
-  const RouteSelectionScreen({super.key, required this.onSelectionChanged});
+  const RouteSelectionScreen({
+    super.key,
+    required this.onSelectionChanged,
+    required this.selectedItems,
+  });
 
   @override
   State<RouteSelectionScreen> createState() => _RouteSelectionScreenState();
@@ -18,7 +22,13 @@ class RouteSelectionScreen extends StatefulWidget {
 
 class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
   final RouteController routeController = Get.put(RouteController());
-  List<RouteMap> selectedRoutes = [];
+  late List<RouteMap> selectedRoutes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedRoutes = widget.selectedItems;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +47,11 @@ class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
           itemAsString: (route) => route.routeName,
           searchableFields: {
             'routeName': (route) => route.routeName,
-            'routeNo': (route) =>route.routeNo.toString(),
+            'routeNo': (route) => route.routeNo.toString(),
           },
           validator: (selectedRoutes) {
             if (selectedRoutes.isEmpty) {
-              return 'Please select at least one crop.';
+              return 'Please select at least one routes.';
             }
             return null;
           },
@@ -49,8 +59,7 @@ class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
             setState(() {
               selectedRoutes = items;
             });
-            widget.onSelectionChanged(
-                selectedRoutes); // Notify parent of selection changes
+            widget.onSelectionChanged(selectedRoutes);
           },
         );
       }

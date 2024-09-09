@@ -152,7 +152,6 @@ class FarmerListController extends GetxController {
     super.onClose();
   }
 
-
   //fetch all farmer //end point viewFarmer// peremter form_value =all
   var isLoading = false.obs;
   var isError = false.obs;
@@ -176,12 +175,14 @@ class FarmerListController extends GetxController {
         'form_value': 'all',
       };
 
-      final response = await _dioService.post(endPoint, queryParams: parameters);
+      final response =
+          await _dioService.post(endPoint, queryParams: parameters);
 
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
         final farmers = data.map((item) => Farmer.fromJson(item)).toList();
         allFarmer.assignAll(farmers);
+        print('Farmer List: ${allFarmer.length}');
       } else {
         throw Exception('Failed to load farmers');
       }

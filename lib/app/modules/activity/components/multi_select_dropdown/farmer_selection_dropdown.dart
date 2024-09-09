@@ -34,9 +34,9 @@ class _FarmerSelectionScreenState extends State<FarmerSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (farmerController.isListLoading.value) {
+      if (farmerController.isLoading.value) {
         return const ShimmerLoading();
-      } else if (farmerController.listErrorMessage.isNotEmpty) {
+      } else if (farmerController.errorMessage.isNotEmpty) {
         return const Center(
           child: Text('Error loading farmer.'),
         );
@@ -44,7 +44,7 @@ class _FarmerSelectionScreenState extends State<FarmerSelectionScreen> {
         return MultiSelectDropdown<Farmer>(
           labelText: 'Select farmer',
           selectedItems: selectedFarmers,
-          items: farmerController.allFarmers,
+          items: farmerController.allFarmer,
           itemAsString: (farmers) => farmers.farmerName ?? '',
           searchableFields: {
             'farmersName': (farmers) => farmers.farmerName ?? '',

@@ -48,8 +48,8 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(widget.labelText),
-        // const SizedBox(height: 8),
+        Text(widget.labelText),
+        const SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showModalBottomSheet(context),
           child: Container(

@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../controllers/master_controller.dart/crop_controller.dart';
+import '../../../controllers/master_controller.dart/crop_stage_controller.dart';
+import '../../../controllers/master_controller.dart/pest_controller.dart';
 import '../../../data/constrants/constants.dart';
 import '../../../data/helpers/data/image_doctor_url.dart';
 import '../../../model/master/crop_model.dart';
@@ -24,6 +26,7 @@ import '../../widgets/dialog/error.dart';
 import '../../widgets/dialog/loading.dart';
 import '../../widgets/form_field.dart/form_field.dart';
 import '../../widgets/form_field.dart/form_hader.dart';
+import '../../widgets/form_field.dart/single_selected_dropdown.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../components/expanded_object.dart';
@@ -33,9 +36,6 @@ import '../components/multi_select_dropdown/farmer_selection_dropdown.dart';
 import '../components/geo_location_selection_page.dart';
 import '../components/multi_select_dropdown/seasion_selection_dropdown.dart';
 import '../components/multi_select_dropdown/village_multi_selecton_dropdown.dart';
-import '../components/single_select_dropdown/crop_selection_single.dart';
-import '../components/single_select_dropdown/cropstage_single_dropdown.dart';
-import '../components/single_select_dropdown/pests_single-dropdown.dart';
 import '../components/single_select_dropdown/product_selection_autofill.dart';
 import '../controller/form_a_controller.dart';
 import '../model/activity_master_model.dart';
@@ -50,9 +50,12 @@ class CreateFormApage extends StatefulWidget {
 class _CreateFormApageState extends State<CreateFormApage> {
   final FormAController _formAController = Get.put(FormAController());
   final CropController _cropController = Get.put(CropController());
+  final PestController _pestController = Get.put(PestController());
+  final CropStageController _cropStageController =
+      Get.put(CropStageController());
 
   final _formKey = GlobalKey<FormState>();
-  List<ActivityObject> activityObjects = [];
+  List<ActivityObject> activityObjects = [ActivityObject()];
   final TextEditingController _remarksController = TextEditingController();
   final TextEditingController _selectionCountController =
       TextEditingController();
@@ -175,7 +178,8 @@ class _CreateFormApageState extends State<CreateFormApage> {
   @override
   void initState() {
     super.initState();
-    addNewObject();
+    _pestController.loadPests();
+    _cropStageController.loadCropStages();
   }
 
   @override
@@ -365,7 +369,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                   //in ui show like [2,1] but i want to show like 2,1
                                   'Selected Party Name Ids: ${selectedPartyNameListId!.join(', ')}',
                                   // 'Selected Party Name Ids: $selectedPartyNameListId',
-                                  style: TextStyle(color: Colors.green),
+                                  style: const TextStyle(color: Colors.green),
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -417,63 +421,181 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                   ),
                                   const SizedBox(height: 16),
                                   if (selectedSeasons.isNotEmpty)
-                                    CropSingleSelectionWidget(
-                                      seasonId: selectedSeasons
-                                          .map((season) => season.id)
-                                          .toList(),
-                                      onSaved: (selectedCrop) {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          setState(() {
-                                            activityObject.crop = selectedCrop;
-                                          });
-                                        });
-                                      },
-                                      // selectedItem: selectedCrop,
-                                      selectedItem: activityObject.crop,
-                                      validator: (selectedCrop) {
-                                        if (selectedCrop == null) {
-                                          return 'Please select a crop';
-                                        }
-                                        return null;
-                                      },
-                                    )
+                                    Obx(() {
+                                      if (_cropController.isLoading.value) {
+                                        return const ShimmerLoading();
+                                      } else if (_cropController
+                                              .isError.value ||
+                                          _cropController
+                                              .errorMessage.isNotEmpty) {
+                                        return Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Colors.red[100],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border:
+                                                Border.all(color: Colors.red),
+                                          ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text('Error loading crop'),
+                                          ),
+                                        );
+                                      } else {
+                                        return SingleSelectDropdown<Crop>(
+                                          labelText: "Select Crop",
+                                          items: _cropController.crops,
+                                          selectedItem: activityObject.crop,
+                                          itemAsString: (crop) =>
+                                              crop.name ?? '',
+                                          onChanged: (selected) {
+                                            WidgetsBinding.instance
+                                                .addPostFrameCallback((_) {
+                                              setState(() {
+                                                activityObject.crop = selected;
+                                              });
+                                            });
+                                          },
+                                          searchableFields: {
+                                            "name": (crop) => crop.name ?? '',
+                                            "code": (crop) => crop.code ?? '',
+                                          },
+                                          validator: (selectedPopMaterial) {
+                                            if (selectedPopMaterial == null) {
+                                              return 'Please select a crop';
+                                            }
+                                            return null;
+                                          },
+                                        );
+                                      }
+                                    })
                                   else
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red[100],
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const Text(
-                                        'Please select a season first',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Select Crop',
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red[100],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border:
+                                                Border.all(color: Colors.red),
+                                          ),
+                                          child: const Text(
+                                            'Please select a season first',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   const SizedBox(height: 16),
-                                  CropStageSingleSelectionWidget(
-                                    selectedItem: activityObject.cropStage,
-                                    onCropStageSelected:
-                                        (selectedCropStagesitem) {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        setState(() {
-                                          activityObject.cropStage =
-                                              selectedCropStagesitem;
-                                        });
-                                      });
-                                    },
-                                  ),
+                                  Obx(() {
+                                    if (_cropStageController.isLoading.value) {
+                                      return const ShimmerLoading();
+                                    } else if (_cropStageController
+                                            .isError.value ||
+                                        _cropStageController
+                                            .errorMessage.isNotEmpty) {
+                                      return Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.red[100],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(color: Colors.red),
+                                        ),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child:
+                                              Text('Error loading crop stages'),
+                                        ),
+                                      );
+                                    } else {
+                                      return SingleSelectDropdown<CropStage>(
+                                        labelText: "Select Crop Stage",
+                                        items: _cropStageController.cropStages,
+                                        selectedItem: activityObject.cropStage,
+                                        itemAsString: (cropStages) =>
+                                            cropStages.name,
+                                        onChanged: (selected) {
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            setState(() {
+                                              activityObject.cropStage =
+                                                  selected;
+                                            });
+                                          });
+                                        },
+                                        searchableFields: {
+                                          "name": (cropStages) =>
+                                              cropStages.name,
+                                          "code": (cropStages) =>
+                                              cropStages.code,
+                                        },
+                                        validator: (selectedPopMaterial) {
+                                          if (selectedPopMaterial == null) {
+                                            return 'Please select a crop Stages';
+                                          }
+                                          return null;
+                                        },
+                                      );
+                                    }
+                                  }),
                                   const SizedBox(height: 16),
-                                  PestSingleSelectionWidget(
-                                    selectedItem: activityObject.pest,
-                                    onPestSelected: (selectedPestsitem) {
-                                      setState(() {
-                                        activityObject.pest = selectedPestsitem;
-                                      });
-                                    },
-                                  ),
+                                  Obx(() {
+                                    if (_pestController.isLoading.value) {
+                                      return const ShimmerLoading();
+                                    } else if (_pestController.isError.value ||
+                                        _pestController
+                                            .errorMessage.isNotEmpty) {
+                                      return Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.red[100],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(color: Colors.red),
+                                        ),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Error loading pests'),
+                                        ),
+                                      );
+                                    } else {
+                                      return SingleSelectDropdown<Pest>(
+                                        labelText: "Select Pest",
+                                        items: _pestController.pests,
+                                        selectedItem: activityObject.pest,
+                                        itemAsString: (pest) => pest.pest,
+                                        onChanged: (selected) {
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            setState(() {
+                                              activityObject.pest = selected;
+                                            });
+                                          });
+                                        },
+                                        searchableFields: {
+                                          "pest": (pest) => pest.pest,
+                                          "code": (pest) => pest.code,
+                                        },
+                                        validator: (selectedPopMaterial) {
+                                          if (selectedPopMaterial == null) {
+                                            return 'Please select a pest';
+                                          }
+                                          return null;
+                                        },
+                                      );
+                                    }
+                                  }),
                                   const SizedBox(height: 16),
                                   CustomTextField(
                                     labelText: 'Expense',
@@ -506,30 +628,20 @@ class _CreateFormApageState extends State<CreateFormApage> {
                         color: AppColors.kSecondary,
                         isBorder: true,
                         onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              bool allValid = true;
+                          if (_formKey.currentState?.validate() ?? false) {
+                            bool allValid = true;
 
-                              // Validate all current activityObjects
-                              for (var activityObject in activityObjects) {
-                                if (!activityObject.validate()) {
-                                  allValid = false;
-                                  Get.snackbar('Error',
-                                      'Please complete all fields before adding more.');
-                                  break;
-                                }
+                            for (var activityObject in activityObjects) {
+                              if (!activityObject.validate()) {
+                                allValid = false;
+                                Get.snackbar('Error',
+                                    'Please complete all fields before adding more.');
+                                break;
                               }
+                            }
 
-                              // If all are valid, add a new object
-                              if (allValid) {
-                                // setState(() {
-                                //   activityObjects.add(ActivityObject());
-                                // });
-                                addNewObject();
-                              }
-                            } else {
-                              Get.snackbar(
-                                  'Error', 'Please fill the form correctly.');
+                            if (allValid) {
+                              addNewObject();
                             }
                           }
                         },
@@ -595,12 +707,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
                               icon: Icons.comment,
                               controller: _remarksController,
                               keyboardType: TextInputType.text,
-                              // validator: (value) {
-                              //   if (value == null || value.isEmpty) {
-                              //     return 'Please enter remarks';
-                              //   }
-                              //   return null;
-                              // },
                               maxLines: 3,
                             ),
                           ],
@@ -633,14 +739,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
                       if (!activityObject.validate()) {
                         Get.snackbar('Error',
                             'Please fill all fields before submitting.');
-                        Get.dialog(
-                          ErrorDialog(
-                            errorMessage:
-                                "Please fill all fields before submitting.",
-                            onClose: () => Get.back(),
-                          ),
-                          barrierDismissible: false,
-                        );
                         return;
                       }
                     }
@@ -696,28 +794,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
         fields.add(MapEntry('season[]', season.id.toString()));
       }
 
-      // for (var activity in activityObjects) {
-      //   fields.add(MapEntry('crop[]', activity.crop!.id.toString()));
-      // }
-
-      // for (var activity in activityObjects) {
-      //   fields.add(MapEntry('crop_stage[]', activity.cropStage!.id.toString()));
-      // }
-
-      // for (var activity in activityObjects) {
-      //   fields.add(
-      //       MapEntry('product[]', activity.product!.materialNumber.toString()));
-      // }
-
-      // // Loop over pests
-      // for (var activity in activityObjects) {
-      //   fields.add(MapEntry('pest[]', activity.pest!.id.toString()));
-      // }
-
-      // // Loop over expenses
-      // for (var activity in activityObjects) {
-      //   fields.add(MapEntry('expense[]', activity.expenseController.text));
-      // }
       for (var activity in activityObjects) {
         fields.add(MapEntry('crop[]', activity.crop!.id.toString()));
         fields.add(MapEntry('crop_stage[]', activity.cropStage!.id.toString()));
@@ -731,7 +807,8 @@ class _CreateFormApageState extends State<CreateFormApage> {
         'createFormA',
         parameters,
         fields,
-        _selectedImagePath != null ? File(_selectedImagePath!) : null,
+        imageFile:
+            _selectedImagePath != null ? File(_selectedImagePath!) : null,
       );
     } catch (e) {
       // On error
@@ -745,6 +822,21 @@ class _CreateFormApageState extends State<CreateFormApage> {
           ),
           barrierDismissible: false);
     } finally {
+      // clear all data
+      _selectedActivity = null;
+      selectedPartyType = null;
+      selectedPartyNameListId = null;
+      selectedFarmers.clear();
+      selectedVillages.clear();
+      selectedDoctors.clear();
+      selectedSeasons.clear();
+      activityObjects.clear();
+      activityObjects.add(ActivityObject());
+      _remarksController.clear();
+      _selectionCountController.clear();
+      _selectedImagePath = null;
+      attachment = null;
+      gioLocation = null;
       // Ensure loading dialog is closed
       Get.back(); // Close loading dialog if not already closed
     }
@@ -756,15 +848,7 @@ class ActivityObject {
   Crop? crop;
   CropStage? cropStage;
   Pest? pest;
-  TextEditingController expenseController;
-
-  ActivityObject({
-    this.product,
-    this.crop,
-    this.cropStage,
-    this.pest,
-    TextEditingController? expenseController,
-  }) : expenseController = expenseController ?? TextEditingController();
+  TextEditingController expenseController = TextEditingController();
 
   bool validate() {
     if (product == null ||

@@ -7,7 +7,7 @@ import '../../model/activity_master_model.dart';
 
 class ActivitySelectionWidget<T> extends StatefulWidget {
   final String formType;
-  final T? selectedItem;
+  final ActivityMaster? selectedItem;
   final FormFieldSetter<ActivityMaster?> onSaved;
   final FormFieldValidator<ActivityMaster?> validator;
   const ActivitySelectionWidget({

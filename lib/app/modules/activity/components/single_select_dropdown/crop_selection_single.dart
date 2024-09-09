@@ -7,7 +7,7 @@ import 'activity_master_dropdown.dart';
 
 class CropSingleSelectionWidget<T> extends StatefulWidget {
   final List<int> seasonId;
-  final T? selectedItem;
+  final Crop? selectedItem;
   final FormFieldSetter<Crop?> onSaved;
   final FormFieldValidator<Crop?> validator;
   const CropSingleSelectionWidget({
@@ -25,15 +25,15 @@ class CropSingleSelectionWidget<T> extends StatefulWidget {
 
 class _CropSingleSelectionWidgetState extends State<CropSingleSelectionWidget> {
   final CropController _cropController = Get.put(CropController());
+  Crop? selectedItem;
   @override
   void initState() {
     super.initState();
+    selectedItem = widget.selectedItem;
     if (widget.seasonId.isNotEmpty) {
       _cropController.loadCrops(widget.seasonId);
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +64,19 @@ class _CropSingleSelectionWidgetState extends State<CropSingleSelectionWidget> {
             return SingleSelectDropdown<Crop>(
               labelText: "Select Crop",
               items: _cropController.crops,
-              selectedItem: field.value ?? widget.selectedItem,
+              selectedItem: field.value ?? selectedItem,
               itemAsString: (crop) => crop.name ?? '',
               onChanged: (selected) {
-                field.didChange(selected);
-                widget.onSaved(selected);
-                field.validate();
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) {
+                    setState(() {
+                      selectedItem = selected;
+                    });
+                    field.didChange(selected);
+                    widget.onSaved(selected);
+                    field.validate();
+                  },
+                );
               },
               validator: widget.validator,
               searchableFields: {

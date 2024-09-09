@@ -106,12 +106,9 @@ class FormAController extends GetxController {
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
-  Future<void> submitActivityAFormData(
-    String endPoint,
-    Map<String, dynamic> parameters,
-    List<MapEntry<String, String>> fields,
-    File? imageFile,
-  ) async {
+  Future<void> submitActivityAFormData(String endPoint,
+      Map<String, dynamic> parameters, List<MapEntry<String, String>> fields,
+      {File? imageFile}) async {
     isloading(true);
     isError(false);
     errorMessage('');
@@ -131,7 +128,7 @@ class FormAController extends GetxController {
 
       // Add array/list fields using the MapEntry list `fields`
       formData.fields.addAll(fields);
-      
+
       if (imageFile != null && imageFile.existsSync()) {
         formData.files.add(
           MapEntry(
@@ -154,8 +151,10 @@ class FormAController extends GetxController {
                 onClose: () {
                   Get.back();
                   Get.back();
+                  Get.back();
                 }),
             barrierDismissible: false);
+        print(response.data);
       } else {
         print('Error submitting form A data: ${response.data['message']}');
         String error =

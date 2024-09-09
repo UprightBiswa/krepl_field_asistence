@@ -9,8 +9,10 @@ class ProductMasterController extends GetxController {
   var error = ''.obs;
 
   // Inject services (replace with your actual services)
-  final DioService _dioService = DioService(); // Assuming you have a DioService for API calls
-   final ConnectivityService _connectivityService = ConnectivityService(); // Connectivity check
+  final DioService _dioService =
+      DioService(); // Assuming you have a DioService for API calls
+  final ConnectivityService _connectivityService =
+      ConnectivityService(); // Connectivity check
 
   @override
   void onInit() {
@@ -26,7 +28,9 @@ class ProductMasterController extends GetxController {
     try {
       // Check internet connection
       if (!await _connectivityService.checkInternet()) {
-        throw Exception('No internet connection');
+        error('No internet connection');
+        isLoading(false);
+        return;
       }
 
       // API endpoint and query parameters
@@ -36,7 +40,8 @@ class ProductMasterController extends GetxController {
       };
 
       // Make API call
-      final response = await _dioService.post(endPoint, queryParams: queryParams);
+      final response =
+          await _dioService.post(endPoint, queryParams: queryParams);
 
       // Check if response is successful
       if (response.statusCode == 200 && response.data['success'] == true) {
@@ -47,7 +52,6 @@ class ProductMasterController extends GetxController {
           data.map((json) => ProductMaster.fromJson(json)).toList(),
         );
       } else {
-        // If API returns an error, show the message from the response
         throw Exception(response.data['message'] ?? 'Failed to load products');
       }
     } catch (e) {

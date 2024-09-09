@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/master_controller.dart/customer_controller.dart';
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
+import '../../model/master/customer_model.dart';
 import '../../model/master/villages_model.dart';
 import '../../repository/auth/auth_token.dart';
 import '../activity/components/multi_select_dropdown/customer_multi_select_dropdown.dart';
@@ -219,6 +219,7 @@ class _RetailerFormState extends State<RetailerForm> {
                               onSelectionChanged: (customers) {
                                 selectedCustomers = customers;
                               },
+                              selectedItems: selectedCustomers,
                             ),
                           ],
                         ),
@@ -446,7 +447,7 @@ class _RetailerFormState extends State<RetailerForm> {
       'district': _districtController.text,
       'state': _stateController.text,
       'workplace_code': _workPlaceCodeController.text,
-      'customer_code[]': selectedCustomers.map((e) => e.code).toList(),
+      'customer_code[]': selectedCustomers.map((e) => e.customerNumber).toList(),
     };
     try {
       await retailerController.submitRetailerData(parameters);

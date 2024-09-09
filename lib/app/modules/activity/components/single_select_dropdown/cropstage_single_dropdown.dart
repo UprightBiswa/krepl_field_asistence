@@ -6,7 +6,7 @@ import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
 import 'activity_master_dropdown.dart';
 
 class CropStageSingleSelectionWidget<T> extends StatefulWidget {
-  final T? selectedItem;
+  final CropStage? selectedItem;
   final ValueChanged<CropStage?> onCropStageSelected;
   final String? Function(CropStage?)? validator;
 
@@ -26,7 +26,6 @@ class _CropStageSingleSelectionWidgetState
     extends State<CropStageSingleSelectionWidget> {
   final CropStageController _cropStageController =
       Get.put(CropStageController());
-  CropStage? _selectedCropStage;
   @override
   void initState() {
     _cropStageController.loadCropStages();
@@ -55,23 +54,18 @@ class _CropStageSingleSelectionWidgetState
         return SingleSelectDropdown<CropStage>(
           labelText: "Select Crop Stage",
           items: _cropStageController.cropStages,
-          selectedItem: _selectedCropStage ?? widget.selectedItem,
+          selectedItem: widget.selectedItem,
           itemAsString: (cropStage) => cropStage.name,
           onChanged: (selected) {
-            setState(() {
-              _selectedCropStage = selected;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              widget.onCropStageSelected(selected);
             });
-            widget.onCropStageSelected(selected);
           },
           searchableFields: {
             "name": (cropStage) => cropStage.name,
             "code": (cropStage) => cropStage.code,
           },
-          validator: (selected) {
-            final error = widget.validator?.call(selected);
-            return error ??
-                (selected == null ? "Please select a cropStage" : null);
-          },
+          validator: widget.validator,
         );
       }
     });

@@ -81,6 +81,8 @@ class _ProductMasterSelectorState extends State<ProductMasterSelector> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(widget.labelText),
+        const SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showModalBottomSheet(context),
           child: Container(
@@ -188,7 +190,7 @@ class _ProductMasterSelectionBottomSheetState
               if (productMasterController.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               } else if (productMasterController.error.isNotEmpty) {
-                return Center(child: Text(productMasterController.error.value));
+                return const Center(child: Text('Error loading data.'));
               } else if (productMasterController.productMasters.isEmpty) {
                 return const Center(child: Text('No data found.'));
               } else {

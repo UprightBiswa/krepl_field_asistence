@@ -7,7 +7,7 @@ import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
 import 'activity_master_dropdown.dart';
 
 class PestSingleSelectionWidget<T> extends StatefulWidget {
-   final T? selectedItem;
+  final Pest? selectedItem;
   final ValueChanged<Pest?> onPestSelected;
   final String? Function(Pest?)? validator;
 
@@ -26,7 +26,6 @@ class PestSingleSelectionWidget<T> extends StatefulWidget {
 class _PestSingleSelectionWidgetState extends State<PestSingleSelectionWidget> {
   final PestController pestController = Get.put(PestController());
 
-  Pest? _selectedPest;
   @override
   void initState() {
     super.initState();
@@ -55,22 +54,18 @@ class _PestSingleSelectionWidgetState extends State<PestSingleSelectionWidget> {
         return SingleSelectDropdown<Pest>(
           labelText: "Select Pest",
           items: pestController.pests,
-          selectedItem: _selectedPest ?? widget.selectedItem,
+          selectedItem: widget.selectedItem,
           itemAsString: (pest) => pest.pest,
           onChanged: (selected) {
-            setState(() {
-              _selectedPest = selected;
-            });
+             WidgetsBinding.instance.addPostFrameCallback((_) {
             widget.onPestSelected(selected);
+             });
           },
           searchableFields: {
             "pest_name": (pest) => pest.pest,
             "pest_code": (pest) => pest.code,
           },
-          validator: (selected) {
-            final error = widget.validator?.call(selected);
-            return error ?? (selected == null ? "Please select a pest" : null);
-          },
+          validator: widget.validator,
         );
       }
     });
