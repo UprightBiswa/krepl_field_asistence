@@ -47,9 +47,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
         icon: const Icon(Icons.support),
       ),
       DrawerList(
-        index: DrawerIndex.FeedBack,
-        labelName: 'FeedBack',
-        icon: const Icon(Icons.help),
+        index: DrawerIndex.Notification,
+        labelName: 'Notification',
+        icon: const Icon(Icons.notifications_active),
       ),
       DrawerList(
         index: DrawerIndex.Invite,
@@ -309,7 +309,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
 enum DrawerIndex {
   HOME,
-  FeedBack,
+  Notification,
   Help,
   Share,
   About,

@@ -5,6 +5,25 @@ import '../../../model/workplace/workplace_model.dart';
 
 enum RouteStatus { Active, Deactive, Delete }
 
+class RouteMaster {
+  final int id;
+  final String routeCode;
+  final String routeName;
+
+  RouteMaster({
+    required this.id,
+    required this.routeCode,
+    required this.routeName,
+  });
+  factory RouteMaster.fromJson(Map<String, dynamic> json) {
+    return RouteMaster(
+      id: json['id'],
+      routeCode: json['route_code'] ?? '',
+      routeName: json['route_name'] ?? '',
+    );
+  }
+}
+
 class RouteMap {
   final String routeNo;
   final String routeName;

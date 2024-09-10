@@ -570,15 +570,6 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                       );
                                     }
                                   }),
-                                  //add buttion to relodae status and result contrler
-                                  PrimaryButton(
-                                      onTap: () {
-                                        _getDomoStausController
-                                            .loadDemoStatusData();
-                                        _getDomoResultController
-                                            .loaddemoResultData();
-                                      },
-                                      text: 'reload'),
                                   const SizedBox(height: 16),
                                   Obx(() {
                                     if (_getDomoResultController
@@ -875,19 +866,33 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
         'remarks': _remarksController.text,
         'latitude': gioLocation?.latitude.toString() ?? '',
         'longitude': gioLocation?.longitude.toString() ?? '',
-        'next_demo_date': DateFormat('yyyyMMdd').format(selectedDate),
+        'next_demo_date': DateFormat('yyyy-MM-dd').format(selectedDate),
       };
+      print('Parameters: $parameters');
       List<MapEntry<String, String>> fields = [];
 
       for (var id in selectedFarmers) {
+        print('Field: $id');
         fields.add(MapEntry('party_name[]', id.id.toString()));
       }
 
       for (var season in selectedSeasons) {
+        print('Season: $season');
         fields.add(MapEntry('season[]', season.id.toString()));
       }
 
       for (var activity in activityObjects) {
+        print('Activity Object: $activity');
+        print('Crop: ${activity.crop}');
+        print('Crop Stage: ${activity.cropStage}');
+        print('Product: ${activity.product}');
+        print('Pest: ${activity.pest}');
+        print('Demo Status: ${activity.demoStatus}');
+        print('Demo Result: ${activity.demoResult}');
+        print('Dosage: ${activity.dosageController.text}');
+        print('Area of Demo: ${activity.areaController.text}');
+        print('Total Area Cover: ${activity.totalAreaController.text}');
+        print('Expense: ${activity.expenseController.text}');
         fields.add(MapEntry('crop[]', activity.crop!.id.toString()));
         fields.add(MapEntry('crop_stage[]', activity.cropStage!.id.toString()));
         fields.add(
@@ -903,6 +908,10 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
         fields.add(MapEntry('expense[]', activity.expenseController.text));
       }
 
+      print('Fields: $fields');
+      print('image: $_selectedImagePath');
+
+
       await _formAController.submitActivityAFormData(
         'createFormD',
         parameters,
@@ -911,19 +920,20 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
             _selectedImagePath != null ? File(_selectedImagePath!) : null,
       );
 
-      // clear all data
-      _selectedActivity = null;
-      selectedPartyType = null;
-      selectedFarmers.clear();
-      selectedSeasons.clear();
-      activityObjects.clear();
-      activityObjects.add(ActivityObject());
-      _remarksController.clear();
-      _selectedImagePath = null;
-      attachment = null;
-      gioLocation = null;
+      // // // clear all data
+      // // _selectedActivity = null;
+      // // selectedPartyType = null;
+      // // selectedFarmers.clear();
+      // // selectedSeasons.clear();
+      // // activityObjects.clear();
+      // // activityObjects.add(ActivityObject());
+      // // _remarksController.clear();
+      // // _selectedImagePath = null;
+      // // attachment = null;
+      // gioLocation = null;
     } catch (e) {
       // On error
+      print('Error: $e');
       Get.back(); // Close loading dialog
       Get.dialog(
           ErrorDialog(

@@ -1,17 +1,35 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/constrants/api_base_url.dart';
 import '../../../data/helpers/internet/connectivity_services.dart';
-
+import '../../auth/sign_in_page.dart';
 
 class AppInfoController extends GetxController {
   final Dio _dio = Dio();
+  String? _deviceToken;
+
+  @override
+  onInit() {
+    super.onInit();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await setDeviceToken();
+  }
 
   var isLoading = false.obs;
   var appInfoResponse = Rxn<AppInfo>();
   final ConnectivityService _connectivityService = ConnectivityService();
+
+  Future<void> setDeviceToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _deviceToken = prefs.getString('deviceToken');
+    print('Device Token set in DioService: $_deviceToken');
+  }
 
   Future<void> getAppInfo({
     required BuildContext context,
@@ -23,22 +41,48 @@ class AppInfoController extends GetxController {
         throw Exception('No internet connection');
       }
 
-      final response = await _dio.post(
-        '${BaseURL.baseUrl}emp_app_info', 
-      );
-
-      if (response.statusCode == 200) {
-        print('Successful Response: ${response.data}');
-        final responseData = response.data['data'];
-        appInfoResponse.value = AppInfo.fromJson(responseData);
+      if (_deviceToken == null) {
+        // Handle null device token
+        return _handleNullDeviceToken();
       } else {
-        print('Error Response: ${response.data}');
+        final response = await _dio.post(
+          '${BaseURL.baseUrl}fa_app_info',
+          queryParameters: {
+            'device_token': _deviceToken,
+          },
+        );
+
+        if (response.statusCode == 200) {
+          print('Successful Response: ${response.data}');
+          final responseData = response.data['data'];
+          appInfoResponse.value = AppInfo.fromJson(responseData);
+        } else {
+          print('Error Response: ${response.data}');
+        }
       }
     } catch (e) {
       print('Exception: $e');
     } finally {
       isLoading(false);
     }
+  }
+
+  _handleNullDeviceToken() {
+    Get.defaultDialog(
+      barrierDismissible: false,
+      title: 'Device Token is null',
+      content: const Text('Please login again'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.offAll(() => const SignIn(),
+                transition: Transition.rightToLeftWithFade);
+          },
+          child: const Text('Login'),
+        ),
+      ],
+    );
+    throw Exception('Device Token is null');
   }
 }
 

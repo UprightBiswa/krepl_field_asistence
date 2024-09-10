@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../route_plan/controller/route_controller.dart';
 import '../../../route_plan/model/route_list.dart';
 import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
-import '../single_select_dropdown/activity_master_dropdown.dart';
+import '../single_select_dropdown/activity_master_dropdown.dart'; // Import ShimmerLoading for a loading effect
 
 class RouteSelectionScreen extends StatefulWidget {
-  final void Function(List<RouteMap>) onSelectionChanged;
-  final List<RouteMap> selectedItems;
+  final void Function(List<RouteMaster>) onSelectionChanged;
+  final List<RouteMaster> selectedItems;
 
   const RouteSelectionScreen({
     super.key,
@@ -22,36 +21,40 @@ class RouteSelectionScreen extends StatefulWidget {
 
 class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
   final RouteController routeController = Get.put(RouteController());
-  late List<RouteMap> selectedRoutes = [];
+  late List<RouteMaster> selectedRoutes = [];
 
   @override
   void initState() {
     super.initState();
     selectedRoutes = widget.selectedItems;
+    routeController.fetchRouteMasterData(); // Fetch data from API on init
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (routeController.isLoading.value) {
+      if (routeController.isLoadingList.value) {
+        // Show a loading effect while fetching data
         return const ShimmerLoading();
-      } else if (routeController.errorMessage.isNotEmpty) {
-        return const Center(
-          child: Text('Error loading Routes.'),
+      } else if (routeController.isErrorList.value) {
+        // Show an error message if fetching fails
+        return Center(
+          child: Text(routeController.errorMessageList.value),
         );
-      } else {
-        return MultiSelectDropdown<RouteMap>(
+      } else if (routeController.routelist.isNotEmpty) {
+        // Show the dropdown with fetched route data
+        return MultiSelectDropdown<RouteMaster>(
           labelText: 'Select Routes',
           selectedItems: selectedRoutes,
-          items: routeController.allRouteMaps,
-          itemAsString: (route) => route.routeName,
+          items: routeController.routelist,
+          itemAsString: (route) => route.routeName, // Show route names in dropdown
           searchableFields: {
-            'routeName': (route) => route.routeName,
-            'routeNo': (route) => route.routeNo.toString(),
+            'route_name': (route) => route.routeName,
+            'route_code': (route) => route.routeCode,
           },
           validator: (selectedRoutes) {
             if (selectedRoutes.isEmpty) {
-              return 'Please select at least one routes.';
+              return 'Please select at least one route.';
             }
             return null;
           },
@@ -61,6 +64,11 @@ class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
             });
             widget.onSelectionChanged(selectedRoutes);
           },
+        );
+      } else {
+        // No data found
+        return const Center(
+          child: Text('No Routes found.'),
         );
       }
     });

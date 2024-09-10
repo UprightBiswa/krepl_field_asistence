@@ -44,7 +44,6 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _logoAnimation;
-  // final AppInfoProvider _newAppinfoProvider = AppInfoProvider();
   String appVersion = "";
   late LoginProvider loginProvider;
   UserDetails? userDetails;
@@ -82,12 +81,12 @@ class _SplashScreenState extends State<SplashScreen>
           );
         } else {
           //navigateBasedOnLoginStatus();
-          // if (!connectivityProvider.isConnected) {
-          navigateBasedOnLoginStatus();
-          //   return;
-          // } else {
-          //   fetchAppInfo();
-          // }
+          if (!connectivityProvider.isConnected) {
+            navigateBasedOnLoginStatus();
+            return;
+          } else {
+            fetchAppInfo();
+          }
         }
       },
     ).catchError((error) {
@@ -193,7 +192,6 @@ class _SplashScreenState extends State<SplashScreen>
         return PlaceholderDialog(
           image: Image.asset(
             AppAssets.kLogo,
-            // 'assets/images/logo.png',
             width: 80,
             height: 80,
           ),

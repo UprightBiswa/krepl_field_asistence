@@ -9,8 +9,10 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'app/data/constrants/constants.dart';
+import 'app/modules/attendance/controller/loaction_service.dart';
 import 'app/modules/splash_screens/splash_screens.dart';
 import 'app/provider/common_provider.dart';
+import 'app/repository/firebase/firebase_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotifications();
+  await BackgroundService.initialize();
   runApp(const MyApp());
 }
 
@@ -30,7 +34,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-  
     final themeController = Get.put(ThemeController());
     debugPrint(themeController.theme);
     return MultiProvider(

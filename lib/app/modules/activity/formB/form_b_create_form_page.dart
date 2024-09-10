@@ -57,7 +57,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
 
   List<Village> selectedVillages = [];
 
-  List<RouteMap> selectedRoutes = [];
+  List<RouteMaster> selectedRoutes = [];
 
   List<Season> selectedSeasons = [];
 
@@ -584,7 +584,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
       // route_code[]
 
       for (var route in selectedRoutes) {
-        fields.add(MapEntry('route_code[]', route.routeNo.toString()));
+        fields.add(MapEntry('route_code[]', route.id.toString()));
       }
 
       for (var season in selectedSeasons) {

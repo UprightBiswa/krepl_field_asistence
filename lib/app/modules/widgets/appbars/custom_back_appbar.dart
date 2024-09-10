@@ -22,14 +22,14 @@ class GradientUtil {
 }
 
 class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback leadingCallback;
+  final VoidCallback? leadingCallback;
   final Color? iconColor;
   final Widget? title;
   final List<Widget>? action;
   final bool centerTitle;
   final bool? spaceBar;
   const CustomBackAppBar({
-    required this.leadingCallback,
+    this.leadingCallback,
     this.iconColor,
     this.title,
     this.action,
@@ -58,7 +58,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Padding(
         padding: EdgeInsets.all(7.h),
         child: CustomIconButton(
-          onTap: leadingCallback,
+          onTap: leadingCallback ?? () {},
           icon: AppAssets.kArrowBack,
           color: iconColor,
         ),
@@ -66,6 +66,8 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       title: title,
       actions: action,
+      //hide back buttion
+      automaticallyImplyLeading: leadingCallback != null,
     );
   }
 

@@ -156,9 +156,9 @@ class FormAController extends GetxController {
             barrierDismissible: false);
         print(response.data);
       } else {
-        print('Error submitting form A data: ${response.data['message']}');
+        print('Error submitting form  data: ${response.data['message']}');
         String error =
-            'Failed to submit form A data: HTTP ${response.statusCode}';
+            'Failed to submit form  data: HTTP ${response.statusCode}';
         print(error);
         errorMessage(error);
         throw Exception(error);

@@ -14,6 +14,7 @@ import 'components/month_year_picker.dart';
 import 'components/today_status_card.dart';
 import 'controller/attendance_controller.dart';
 import 'controller/location_service.dart';
+import 'location_view_list.dart';
 
 class AttendanceViewPage extends StatefulWidget {
   final UserDetails userDetails;
@@ -72,6 +73,17 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
           ),
         ),
         centerTitle: true,
+        action: [
+          // LocationPage
+          IconButton(
+              icon: Icon(
+                Icons.location_on,
+                color: isDarkMode(context)
+                    ? AppColors.kWhite
+                    : AppColors.kDarkContiner,
+              ),
+              onPressed: () => Get.to(() => LocationPage())),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),

@@ -5,7 +5,7 @@ import '../../model/login/user_details_reponse.dart';
 import '../custom_drawer/drawer_user_controller.dart';
 import '../custom_drawer/home_drawer.dart';
 import '../landing_screens/landing_page.dart';
-import 'feedback_screen.dart';
+import '../notification/notification_view.dart';
 import 'help_screen.dart';
 import 'invite_friend_screen.dart';
 
@@ -33,24 +33,42 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Container(
-      color: AppColors.kWhite,
-      child: SafeArea(
-        top: false,
-        bottom: false,
-        child: Scaffold(
-          backgroundColor: AppColors.kInput,
-          body: DrawerUserController(
-            userDetails: widget.userDetails,
-            screenIndex: drawerIndex,
-            drawerWidth: MediaQuery.of(context).size.width * 0.75,
-            onDrawerCall: (DrawerIndex drawerIndexdata) {
-              changeIndex(drawerIndexdata);
-              //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
-            },
-            screenView: screenView,
-            //we replace screen view as we need on navigate starting screens like MyHomePage, HelpScreen, FeedbackScreen, etc...
+    return PopScope(
+      canPop: drawerIndex == DrawerIndex.HOME,
+      onPopInvoked: (bool didPop) {
+        print("$didPop");
+        // Check if the current screen is not LandingPage
+        if (drawerIndex != DrawerIndex.HOME) {
+          // Navigate back to the LandingPage
+          setState(() {
+            drawerIndex = DrawerIndex.HOME;
+            screenView = LandingPage(userDetails: widget.userDetails);
+          });
+        } else {
+          if (didPop) {
+            // Optionally log or handle didPop event here
+            print("App is closing from home page");
+          }
+        }
+      },
+      child: Container(
+        color: AppColors.kWhite,
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: Scaffold(
+            backgroundColor: AppColors.kInput,
+            body: DrawerUserController(
+              userDetails: widget.userDetails,
+              screenIndex: drawerIndex,
+              drawerWidth: MediaQuery.of(context).size.width * 0.75,
+              onDrawerCall: (DrawerIndex drawerIndexdata) {
+                changeIndex(drawerIndexdata);
+                //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
+              },
+              screenView: screenView,
+              //we replace screen view as we need on navigate starting screens like MyHomePage, HelpScreen, FeedbackScreen, etc...
+            ),
           ),
         ),
       ),
@@ -71,9 +89,11 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             screenView = HelpScreen();
           });
           break;
-        case DrawerIndex.FeedBack:
+        case DrawerIndex.Notification:
           setState(() {
-            screenView = FeedbackScreen();
+            screenView = const NotificationView(
+              showappbar: false,
+            );
           });
           break;
         case DrawerIndex.Invite:
