@@ -1,8 +1,5 @@
-// ignore_for_file: constant_identifier_names
-
 import 'package:field_asistence/app/data/constrants/app_assets.dart';
 import 'package:field_asistence/app/data/constrants/app_colors.dart';
-import 'package:field_asistence/app/data/constrants/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,8 +39,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
         icon: const Icon(Icons.home),
       ),
       DrawerList(
-        index: DrawerIndex.Help,
-        labelName: 'Help',
+        index: DrawerIndex.Support,
+        labelName: 'Support',
         icon: const Icon(Icons.support),
       ),
       DrawerList(
@@ -52,19 +49,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
         icon: const Icon(Icons.notifications_active),
       ),
       DrawerList(
-        index: DrawerIndex.Invite,
-        labelName: 'Invite Friend',
-        icon: const Icon(Icons.group),
-      ),
-      DrawerList(
-        index: DrawerIndex.Share,
+        index: DrawerIndex.Rateing,
         labelName: 'Rate the app',
         icon: const Icon(Icons.share),
-      ),
-      DrawerList(
-        index: DrawerIndex.About,
-        labelName: 'About Us',
-        icon: const Icon(Icons.info),
       ),
     ];
   }
@@ -124,17 +111,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       );
                     },
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 8, left: 4),
-                  //   child: Text(
-                  //     'Field Asistence',
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.w600,
-                  //       color: isLightMode ?  AppColors.kHint :  AppColors.kWhite,
-                  //       fontSize: 18,
-                  //     ),
-                  //   ),
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, left: 4),
+                    child: Text(
+                      'Field Asistence',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: isDarkMode(context)
+                            ? AppColors.kHint
+                            : AppColors.kWhite,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -163,23 +152,16 @@ class _HomeDrawerState extends State<HomeDrawer> {
           Column(
             children: <Widget>[
               ListTile(
-                title: Text(
-                  'Settings',
-                  style: AppTypography.kBold12.copyWith(
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kGrey,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                trailing: Icon(
-                  AppAssets.kSetting,
-                  color:
-                      isDarkMode(context) ? AppColors.kWhite : AppColors.kGrey,
-                ),
                 onTap: () {
                   onTapped();
                 },
+                leading: const Icon(
+                  AppAssets.kSetting,
+                ),
+                title: const Text(
+                  'Settings',
+                  textAlign: TextAlign.left,
+                ),
               ),
               SizedBox(
                 height: MediaQuery.of(context).padding.bottom,
@@ -310,11 +292,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
 enum DrawerIndex {
   HOME,
   Notification,
-  Help,
-  Share,
-  About,
-  Invite,
-  Testing,
+  Support,
+  Rateing,
 }
 
 class DrawerList {

@@ -75,27 +75,25 @@ class _NotificationViewState extends State<NotificationView> {
                     padding:
                         EdgeInsets.only(top: 200.h, left: 10.w, right: 10.w),
                     child: PrimaryContainer(
+                      width: double.infinity,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: 10.h),
                           Icon(
                             AppAssets.kNotifications,
                             size: 100.w,
-                            color: AppColors.kAccent2,
+                            color: AppColors.kPrimary,
                           ),
                           SizedBox(height: 10.h),
                           Text(
                             'No Notifications!',
-                            style: AppTypography.kMedium16.copyWith(
-                              color: AppColors.kAccent2,
-                            ),
+                            style: AppTypography.kMedium16.copyWith(),
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'You dont have any notification yet. Stay tuned for updates.',
-                            style: AppTypography.kBold12.copyWith(
-                              color: AppColors.kAccent2,
-                            ),
+                            'You dont have any notification yet.',
+                            style: AppTypography.kBold12.copyWith(),
                           ),
                         ],
                       ),

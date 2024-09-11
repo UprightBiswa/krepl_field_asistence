@@ -13,6 +13,7 @@ import '../widgets/form_field.dart/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/doctor_controller.dart';
+import 'doctor_edit_page.dart';
 import 'model/doctor_list.dart';
 
 class DoctorDetailView extends StatefulWidget {
@@ -159,7 +160,15 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
       ),
       bottomNavigationBar: DoctorActionSheet(
         editCallback: () {
-          // Logic for editing doctor details
+          Get.to<dynamic>(
+            EditDoctorForm(
+              doctor: widget.doctor,
+            ),
+            transition: Transition.rightToLeftWithFade,
+          )!
+              .then((value) {
+            Get.back();
+          });
         },
         deleteCallback: () {
           _showConfirmationDialog(context);

@@ -1,5 +1,4 @@
 import 'package:field_asistence/app/controllers/theme_controller.dart';
-import 'package:field_asistence/app/data/helpers/theme_helper.dart';
 import 'package:field_asistence/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +59,11 @@ class MyApp extends StatelessWidget {
                   .copyWith(physics: const BouncingScrollPhysics()),
               defaultTransition: Transition.fadeIn,
               theme: AppTheme.lightTheme,
+
               darkTheme: AppTheme.darkTheme,
-              themeMode: getThemeMode(themeController.theme),
+
+              // themeMode: getThemeMode(themeController.theme),
+              themeMode: ThemeMode.system,
               home: const SplashScreen(),
             ),
           );

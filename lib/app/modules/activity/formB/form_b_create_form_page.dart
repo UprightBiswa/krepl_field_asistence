@@ -532,11 +532,11 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                     }
                     _showConfirmationDialog(context);
                   }
-                  Get.snackbar(
-                    'Error',
-                    'Please fill all fields before submitting.',
-                    snackPosition: SnackPosition.BOTTOM,
-                  );
+                  // Get.snackbar(
+                  //   'Error',
+                  //   'Please fill all fields before submitting.',
+                  //   snackPosition: SnackPosition.BOTTOM,
+                  // );
                 },
                 text: "Submit",
               ),

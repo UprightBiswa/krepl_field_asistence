@@ -8,6 +8,7 @@ import '../../home/components/action_menue.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../doctor_details_view.dart';
+import '../doctor_edit_page.dart';
 import '../model/doctor_list.dart';
 import '../controller/doctor_controller.dart';
 
@@ -30,10 +31,9 @@ class DoctorListCard extends StatelessWidget {
             ),
             transition: Transition.rightToLeftWithFade,
           )!
-                  .then((value) {
-                doctorController.fetchDoctors(
-                    1, doctorController.pagingController);
-              });
+              .then((value) {
+            doctorController.fetchDoctors(1, doctorController.pagingController);
+          });
         },
         child: PrimaryContainer(
           padding: EdgeInsets.all(10.h),
@@ -94,7 +94,17 @@ class DoctorListCard extends StatelessWidget {
               // Action menu icon
               ActionMenuIcon(
                 onEdit: () {
-                  // Edit doctor logic
+                  Get.to<dynamic>(
+                    EditDoctorForm(
+                      doctor: doctor,
+                    ),
+                    transition: Transition.rightToLeftWithFade,
+                  )!
+                      .then((value) {
+                    Get.back();
+                    doctorController.fetchDoctors(
+                        1, doctorController.pagingController);
+                  });
                 },
                 onDelete: () {
                   // Delete doctor logic

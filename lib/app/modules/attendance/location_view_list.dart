@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart'; // Add this import
 import 'controller/location_controller.dart';
+import 'model/location_data_model.dart';
 
 class LocationPage extends StatefulWidget {
   const LocationPage({super.key});
@@ -25,7 +28,6 @@ class _LocationPageState extends State<LocationPage> {
                 return const Center(child: Text('No locations found.'));
               }
               return ListView.builder(
-                //show like reverse data
                 reverse: true,
                 itemCount: _controller.locations.length,
                 itemBuilder: (context, index) {
@@ -59,8 +61,9 @@ class _LocationPageState extends State<LocationPage> {
         ),
         padding: const EdgeInsets.all(8.0),
         child: Wrap(
+          spacing: 8,
+          alignment: WrapAlignment.spaceBetween,
           children: [
-            //add more 2 buttion
             Obx(() {
               return ElevatedButton(
                 onPressed: () {
@@ -87,9 +90,60 @@ class _LocationPageState extends State<LocationPage> {
               },
               child: const Text('Refresh'),
             ),
+            //
+            ElevatedButton(
+              onPressed: () {
+                _openRouteMap();
+              },
+              child: const Text('Map open'),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _openRouteMap() async {
+    // check  minimum number of routes to open 3
+    if (_controller.locations.isEmpty || _controller.locations.length < 3) {
+      Get.snackbar('Error', 'No locations to show on the map',
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+
+    // Get the list of locations
+    final List<LocationDataModel> locations = _controller.locations;
+
+    // Construct the Google Maps URL
+    final String origin =
+        '${locations.first.latitude},${locations.first.longitude}';
+    final String destination =
+        '${locations.last.latitude},${locations.last.longitude}';
+    final String waypoints = locations
+        .skip(1) // Skip the first point (origin)
+        .take(locations.length -
+            2) // Take all points except the last (destination)
+        .map((loc) => '${loc.latitude},${loc.longitude}')
+        .join('|');
+
+    // Construct the final URL
+    final String googleMapsUrl = 'https://www.google.com/maps/dir/?api=1'
+        '&origin=$origin'
+        '&destination=$destination'
+        '&waypoints=$waypoints';
+    // for ios, we need to
+
+    final Uri googleMapsUri = Uri.parse(googleMapsUrl);
+
+    try {
+      if (await canLaunchUrl(googleMapsUri)) {
+        await launchUrl(googleMapsUri);
+      } else {
+        throw 'Could not launch Google Maps';
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to open map: $e',
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
 }

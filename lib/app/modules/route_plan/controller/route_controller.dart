@@ -51,7 +51,7 @@ class RouteController extends GetxController {
 
   void fetchRouteMasterData() async {
     try {
-      isLoading(true);
+      isLoadingList(true);
       isErrorList(false);
       errorMessageList('');
 
@@ -85,7 +85,7 @@ class RouteController extends GetxController {
       errorMessageList(e.toString());
       isErrorList(true);
     } finally {
-      isLoading(false);
+      isLoadingList(false);
     }
   }
 }

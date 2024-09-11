@@ -407,7 +407,6 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                           ),
                                           child: const Text(
                                             'Please select a season first',
-                                            style: TextStyle(color: Colors.red),
                                           ),
                                         ),
                                       ],
@@ -426,6 +425,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                           color: Colors.red[100],
                                           borderRadius:
                                               BorderRadius.circular(10),
+                                          border: Border.all(color: Colors.red),
                                         ),
                                         child: const Padding(
                                           padding: EdgeInsets.all(8.0),
@@ -477,6 +477,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                           color: Colors.red[100],
                                           borderRadius:
                                               BorderRadius.circular(10),
+                                          border: Border.all(color: Colors.red),
                                         ),
                                         child: const Padding(
                                           padding: EdgeInsets.all(8.0),
@@ -627,7 +628,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                   CustomTextField(
                                     labelText: 'Dosage',
                                     hintText: 'Enter the dosage',
-                                    icon: Icons.format_list_numbered,
+                                    icon: Icons.medication_liquid_outlined,
                                     controller: activityObject.dosageController,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
@@ -642,7 +643,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                   CustomTextField(
                                     labelText: 'Area of Demonstration',
                                     hintText: 'Enter the area of demonstration',
-                                    icon: Icons.format_list_numbered,
+                                    icon: Icons.area_chart_outlined,
                                     controller: activityObject.areaController,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
@@ -657,7 +658,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                   CustomTextField(
                                     labelText: 'Total Area Covered',
                                     hintText: 'Enter the total area covered',
-                                    icon: Icons.format_list_numbered,
+                                    icon: Icons.area_chart,
                                     controller:
                                         activityObject.totalAreaController,
                                     keyboardType: TextInputType.number,
@@ -825,8 +826,8 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                     }
                     _showConfirmationDialog(context);
                   }
-                  Get.snackbar('Error',
-                      'Please complete all fields before adding more.');
+                  // Get.snackbar('Error',
+                  //     'Please complete all fields before adding more.');
                 },
                 text: "Submit",
               ),
@@ -901,7 +902,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
         fields
             .add(MapEntry('demo_status[]', activity.demoStatus!.id.toString()));
         fields.add(MapEntry('result[]', activity.demoResult!.id.toString()));
-        fields.add(MapEntry('dosage[]', activity.dosageController.text));
+        fields.add(MapEntry('dosages[]', activity.dosageController.text));
         fields.add(MapEntry('area_of_demo[]', activity.areaController.text));
         fields.add(
             MapEntry('total_area_cover[]', activity.totalAreaController.text));
@@ -910,7 +911,6 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
 
       print('Fields: $fields');
       print('image: $_selectedImagePath');
-
 
       await _formAController.submitActivityAFormData(
         'createFormD',

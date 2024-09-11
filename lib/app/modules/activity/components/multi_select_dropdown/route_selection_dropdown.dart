@@ -41,7 +41,7 @@ class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
         return Center(
           child: Text(routeController.errorMessageList.value),
         );
-      } else if (routeController.routelist.isNotEmpty) {
+      } else {
         // Show the dropdown with fetched route data
         return MultiSelectDropdown<RouteMaster>(
           labelText: 'Select Routes',
@@ -64,11 +64,6 @@ class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
             });
             widget.onSelectionChanged(selectedRoutes);
           },
-        );
-      } else {
-        // No data found
-        return const Center(
-          child: Text('No Routes found.'),
         );
       }
     });

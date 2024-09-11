@@ -46,6 +46,7 @@ class _ActivitySelectionWidgetState extends State<ActivitySelectionWidget> {
           decoration: BoxDecoration(
             color: Colors.red[100],
             borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.red),
           ),
           child: const Padding(
             padding: EdgeInsets.all(8.0),

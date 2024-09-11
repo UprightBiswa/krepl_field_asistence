@@ -26,8 +26,17 @@ class _SeasionSelectionScreenState extends State<SeasionSelectionScreen> {
       if (seasonController.isLoading.value) {
         return const ShimmerLoading();
       } else if (seasonController.errorMessage.isNotEmpty) {
-        return const Center(
-          child: Text('Error loading Season.'),
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.red[100],
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.red),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Error loading Season.'),
+          ),
         );
       } else {
         return MultiSelectDropdown<Season>(

@@ -14,7 +14,6 @@ class DoctorController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
- 
   final PagingController<int, Doctor> pagingController =
       PagingController(firstPageKey: 1);
 
@@ -281,12 +280,13 @@ class DoctorController extends GetxController {
           await _dioService.post(endPoint, queryParams: parameters);
 
       if (response.statusCode == 200 && response.data['success'] == true) {
-        Get.snackbar('Success', response.data['message'],
-            snackPosition: SnackPosition.BOTTOM);
+        // Get.snackbar('Success', response.data['message'],
+        //     snackPosition: SnackPosition.BOTTOM);
         Get.dialog(
             SuccessDialog(
                 message: response.data['message'],
                 onClose: () {
+                  Get.back();
                   Get.back();
                   Get.back();
                 }),
@@ -297,11 +297,12 @@ class DoctorController extends GetxController {
     } catch (e) {
       isErrorEdit(true);
       errorMessageEdit.value = e.toString();
-      Get.snackbar('Error', errorMessageEdit.value);
+      // Get.snackbar('Error', errorMessageEdit.value);
       Get.dialog(
           ErrorDialog(
               errorMessage: errorMessageEdit.value,
               onClose: () {
+                Get.back();
                 Get.back();
               }),
           barrierDismissible: false);
@@ -310,7 +311,6 @@ class DoctorController extends GetxController {
       isLoadingEdit(false);
     }
   }
-
 
   //fetchall doctor end point  viewDoctor and permeter form_value = all
   var isLoadingAll = false.obs;
@@ -334,7 +334,8 @@ class DoctorController extends GetxController {
         'form_value': 'all',
       };
 
-      final response = await _dioService.post(endPoint, queryParams: parameters);
+      final response =
+          await _dioService.post(endPoint, queryParams: parameters);
 
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
@@ -351,5 +352,4 @@ class DoctorController extends GetxController {
       isLoadingAll(false);
     }
   }
-  
 }

@@ -13,7 +13,7 @@ class VillageController extends GetxController {
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
-  void fetchVillageMasterData() async {
+  Future<void> fetchVillageMasterData() async {
     try {
       isLoading(true);
       isError(false);
@@ -32,7 +32,7 @@ class VillageController extends GetxController {
         if (success) {
           var data = response.data['data'] as List;
           var fetchedData = data.map((json) => Village.fromJson(json)).toList();
-
+          print(response.data);
           villages.assignAll(fetchedData);
         } else {
           String message = response.data['message'] ?? 'Unknown error occurred';

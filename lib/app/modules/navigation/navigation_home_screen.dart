@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
@@ -7,7 +11,6 @@ import '../custom_drawer/home_drawer.dart';
 import '../landing_screens/landing_page.dart';
 import '../notification/notification_view.dart';
 import 'help_screen.dart';
-import 'invite_friend_screen.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   final UserDetails userDetails;
@@ -84,9 +87,9 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             screenView = LandingPage(userDetails: widget.userDetails);
           });
           break;
-        case DrawerIndex.Help:
+        case DrawerIndex.Support:
           setState(() {
-            screenView = HelpScreen();
+            screenView = const HelpScreen();
           });
           break;
         case DrawerIndex.Notification:
@@ -96,14 +99,39 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             );
           });
           break;
-        case DrawerIndex.Invite:
-          setState(() {
-            screenView = InviteFriend();
-          });
-          break;
+        case DrawerIndex.Rateing:
+          //give me functionality to
+          _openStore();
+
         default:
           break;
       }
+    }
+  }
+
+  Future<void> _openStore() async {
+    Uri appStoreUrl =
+        Uri.parse('https://apps.apple.com/in/app/krishaj-sarthi/id6504442750');
+    Uri playStoreUrl = Uri.parse(
+        'https://play.google.com/store/apps/details?id=com.krepl.kreplemployee');
+
+    try {
+      if (Platform.isIOS) {
+        if (await canLaunchUrl((appStoreUrl))) {
+          await launchUrl(appStoreUrl);
+        } else {
+          throw 'Could not launch App Store';
+        }
+      } else if (Platform.isAndroid) {
+        if (await canLaunchUrl(playStoreUrl)) {
+          await launchUrl(playStoreUrl);
+        } else {
+          throw 'Could not launch Play Store';
+        }
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to open store: $e',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }
