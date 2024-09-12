@@ -39,16 +39,15 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
     _monthName = DateFormat('MMMM').format(DateTime.now());
     _year = DateFormat('yyyy').format(DateTime.now());
     locationController.startLocationUpdates();
+    attendanceController.fetchTodayStatus();
     _fetchAttendanceData();
   }
 
   Future<void> _fetchAttendanceData() async {
     await attendanceController.fetchAttendance(
-      employeeCode: 'EMP001',
       month: _month,
       year: _year,
     );
-    await attendanceController.fetchTodayStatus(employeeCode: 'EMP001');
   }
 
   bool isDarkMode(BuildContext context) =>
@@ -128,9 +127,9 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
 
             Expanded(
               child: Obx(() {
-                if (attendanceController.isLoading.value) {
+                if (attendanceController.isLodaingList.value) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (attendanceController.isError.value) {
+                } else if (attendanceController.isErrorList.value) {
                   return const Center(child: Text('Error loading data'));
                 } else if (attendanceController.attendanceList.isEmpty) {
                   return const Center(child: Text('No data found'));

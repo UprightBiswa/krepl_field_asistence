@@ -40,7 +40,7 @@ class AttendanceListItem extends StatelessWidget {
                   children: [
                     Text(
                       DateFormat('E')
-                          .format(DateTime.parse(data.dateOfAttendance!)),
+                          .format(DateTime.parse(data.checkinDate!)),
                       style: const TextStyle(
                         fontSize: 10,
                         color: Colors.white,
@@ -48,7 +48,7 @@ class AttendanceListItem extends StatelessWidget {
                     ),
                     Text(
                       DateFormat('dd')
-                          .format(DateTime.parse(data.dateOfAttendance!)),
+                          .format(DateTime.parse(data.checkinDate!)),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white,
@@ -98,30 +98,6 @@ class AttendanceListItem extends StatelessWidget {
                 ),
                 Text(
                   data.checkoutTime ?? '',
-                  style: AppTypography.kBold12.copyWith(
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kDarkHint,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Work Hours",
-                  style: AppTypography.kMedium10.copyWith(
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kDarkHint,
-                  ),
-                ),
-                Text(
-                  '${data.totalWorkingHours}',
                   style: AppTypography.kBold12.copyWith(
                     color: isDarkMode(context)
                         ? AppColors.kWhite
