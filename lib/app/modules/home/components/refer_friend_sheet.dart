@@ -17,23 +17,23 @@ class OnlinePeople {
 
 List<OnlinePeople> onlinePeople = [
   OnlinePeople(
-    image: AppAssets.kUser1,
+    image: AppAssets.kFarmer,
     name: 'Alex',
   ),
   OnlinePeople(
-    image: AppAssets.kUser2,
+    image: AppAssets.kFarmer,
     name: 'Qin',
   ),
   OnlinePeople(
-    image: AppAssets.kUser3,
+    image: AppAssets.kFarmer,
     name: 'Harinder',
   ),
   OnlinePeople(
-    image: AppAssets.kUser5,
+    image: AppAssets.kFarmer,
     name: 'Lilah',
   ),
   OnlinePeople(
-    image: AppAssets.kUser6,
+    image: AppAssets.kFarmer,
     name: 'Martin',
   ),
 ];

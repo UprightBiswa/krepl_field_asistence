@@ -1,3 +1,4 @@
+import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,20 +20,22 @@ class MonthYearPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        CustomHeaderText(
-          text: '$monthName - $year',
-          fontSize: 18.sp,
-        ),
-        const Spacer(),
-        CustomButton(
-          text: 'Pick a Month',
-          icon: AppAssets.kCalendar,
-          isBorder: true,
-          onTap: onPickMonth,
-        ),
-      ],
+    return PrimaryContainer(
+      child: Row(
+        children: [
+          CustomHeaderText(
+            text: '$monthName - $year',
+            fontSize: 16.sp,
+          ),
+          const Spacer(),
+          CustomButton(
+            text: 'Pick a Month',
+            icon: AppAssets.kCalendar,
+            isBorder: true,
+            onTap: onPickMonth,
+          ),
+        ],
+      ),
     );
   }
 }

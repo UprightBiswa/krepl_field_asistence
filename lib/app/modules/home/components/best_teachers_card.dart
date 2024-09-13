@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../../model/home/best_dealers_model.dart';
+import '../../dashboard/model/cutomer _sales_data.dart';
 import '../../profile/components/profile_image_card.dart';
 import '../../widgets/containers/primary_container.dart';
 
 class BestTeachersCard extends StatelessWidget {
   final PageController pageController;
   final int index;
-  final BestTeachersModel teacher;
+  final SalesData dummySalesYTDData;
   const BestTeachersCard({
     required this.index,
     required this.pageController,
-    required this.teacher,
+    required this.dummySalesYTDData,
     super.key,
   });
 
@@ -43,8 +43,10 @@ class BestTeachersCard extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(teacher.name, style: AppTypography.kBold16),
-                    Text(teacher.bio, style: AppTypography.kLight14),
+                    Text(dummySalesYTDData.customerName,
+                        style: AppTypography.kBold16),
+                    Text(dummySalesYTDData.customerNo,
+                        style: AppTypography.kLight14),
                     const Spacer(),
                     const Icon(AppAssets.kCrown),
                     SizedBox(height: 5.h),
@@ -54,14 +56,14 @@ class BestTeachersCard extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: teacher.position == 1
+                        color: dummySalesYTDData.position == 1
                             ? AppColors.kAccent1
-                            : teacher.position == 2
+                            : dummySalesYTDData.position == 2
                                 ? AppColors.kAccent2
                                 : AppColors.kPrimary,
                       ),
                       child: Text(
-                        '${teacher.position}',
+                        '${dummySalesYTDData.position}',
                         style: AppTypography.kBold14
                             .copyWith(color: AppColors.kWhite),
                       ),
@@ -71,7 +73,7 @@ class BestTeachersCard extends StatelessWidget {
               ),
               ProfileImageCard(
                 size: 60.h,
-                image: teacher.image,
+                image: AppAssets.kFarmer,
               ),
             ],
           ),

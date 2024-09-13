@@ -99,4 +99,123 @@ class AttendanceController extends GetxController {
       isLoading(false);
     }
   }
+
+  //update attendance
+  var isLoadingUpdate = false.obs;
+  var isErrorUpdate = false.obs;
+  var errorMessageUpdate = ''.obs;
+  var isSuccessUpdate = false.obs;
+
+  Future<void> updateCheckInAttendance({
+    required String checkinDate,
+    required String checkinTime,
+    required String checkinLat,
+    required String checkinLong,
+  }) async {
+    print(checkinDate);
+    print(checkinTime);
+    print(checkinLat);
+    print(checkinLong);
+    try {
+      isLoadingUpdate(true);
+      isErrorUpdate(false);
+      errorMessageUpdate('');
+      isSuccessUpdate(false);
+
+      // Check for internet connectivity
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Define endpoint and send request
+      String endPoint = 'fa_attandence';
+      Map<String, dynamic> parameters = {
+        'checkin_date': checkinDate,
+        'checkin_time': checkinTime,
+        'checkin_lat': checkinLat,
+        'checkin_long': checkinLong,
+        'status': '0',
+      };
+
+
+      final response =
+          await _dioService.post(endPoint, queryParams: parameters);
+      if (response.data['success'] == true) {
+        print(response.data);
+        isSuccessUpdate(true);
+      } else {
+        print(response.data);
+        String errorMsg =
+            response.data['message'] ?? 'You have already checked in.';
+        errorMessageUpdate(errorMsg);
+        throw Exception(errorMsg);
+      }
+    } catch (e) {
+      isErrorUpdate(true);
+      errorMessageUpdate(e.toString());
+      print("Error updating attendance: $e");
+    } finally {
+      isLoadingUpdate(false);
+    }
+  }
+
+  //checkOut of attendance
+  var isLoadingCheckOut = false.obs;
+  var isErrorCheckOut = false.obs;
+  var errorMessageCheckOut = ''.obs;
+  var isSuccessCheckOut = false.obs;
+
+  Future<void> updateCheckOutAttendance({
+    required String checkoutDate,
+    required String checkoutTime,
+    required String checkoutLat,
+    required String checkoutLong,
+    required List<Map<String, dynamic>> coordinates,
+  }) async {
+    print(checkoutDate);
+    print(checkoutTime);
+    print(checkoutLat);
+    print(checkoutLong);
+    print(coordinates);
+    try {
+      isLoadingCheckOut(true);
+      isErrorCheckOut(false);
+      errorMessageCheckOut('');
+      isSuccessCheckOut(false);
+
+      // Check for internet connectivity
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      // Define endpoint and send request
+      String endPoint = 'fa_attandence';
+      Map<String, dynamic> parameters = {
+        'checkout_date': checkoutDate,
+        'checkout_time': checkoutTime,
+        'checkout_lat': checkoutLat,
+        'checkout_long': checkoutLong,
+        'status': 1,
+        'coordicates': coordinates,
+      };
+      final response =
+          await _dioService.post(endPoint, queryParams: parameters);
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        print(response.data);
+        isSuccessCheckOut(true);
+      } else {
+        print(response.data);
+        String errorMsg =
+            response.data['message'] ?? 'Error updating attendance';
+        errorMessageCheckOut(errorMsg);
+        throw Exception(errorMsg);
+      }
+    } catch (e) {
+      isErrorCheckOut(true);
+      errorMessageCheckOut(e.toString());
+      print("Error updating attendance: $e");
+    } finally {
+      isLoadingCheckOut(false);
+    }
+  }
 }

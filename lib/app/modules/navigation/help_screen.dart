@@ -29,7 +29,7 @@ class _HelpScreenState extends State<HelpScreen> {
       backgroundColor:
           isLightMode ? AppColors.kWhite : AppColors.kDarkBackground,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.0.h),
         child: Column(
           children: <Widget>[
             const CustomHeaderText(text: 'Support'),

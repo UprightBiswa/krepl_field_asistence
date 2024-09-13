@@ -50,7 +50,8 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
               decoration: BoxDecoration(
                 gradient: GradientUtil.appBarGradient(
                   startColor: AppColors.kPrimary,
-                  endColor: AppColors.kPrimary.withOpacity(0.2),
+                  //use shedder with out opacity
+                  endColor: AppColors.kPrimary2,
                 ),
               ),
             )

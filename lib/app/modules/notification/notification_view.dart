@@ -73,7 +73,7 @@ class _NotificationViewState extends State<NotificationView> {
               } else if (snapshot.data == null || snapshot.data!.isEmpty) {
                 return Padding(
                     padding:
-                        EdgeInsets.only(top: 200.h, left: 10.w, right: 10.w),
+                        EdgeInsets.only(top: 200.h, left: 20.w, right: 20.w),
                     child: PrimaryContainer(
                       width: double.infinity,
                       child: Column(
@@ -102,10 +102,10 @@ class _NotificationViewState extends State<NotificationView> {
                 final notificationsList = snapshot.data!;
                 return SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.tenHorizontal),
+                      horizontal: AppSpacing.twentyHorizontal),
                   child: Column(
                     children: [
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 20.h),
                       Row(
                         children: [
                           const CustomHeaderText(text: 'Notifications'),
@@ -123,7 +123,7 @@ class _NotificationViewState extends State<NotificationView> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 20.h),
                       PrimaryContainer(
                         child: ListView.separated(
                           shrinkWrap: true,
@@ -155,7 +155,7 @@ class _NotificationViewState extends State<NotificationView> {
                           itemCount: notificationsList.length,
                         ),
                       ),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 20.h),
                     ],
                   ),
                 );

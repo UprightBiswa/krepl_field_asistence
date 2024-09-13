@@ -58,91 +58,91 @@ class _HomeViewState extends State<HomeView> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                color: AppColors.kPrimary,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.kPrimary.withOpacity(0.5),
-                    blurRadius: 0,
-                    spreadRadius: 5,
-                  )
-                ],
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.twentyHorizontal,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10.h),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 24.r,
-                          backgroundColor: AppColors.kWhite.withOpacity(0.8),
-                          child: Text(
-                            widget.userDetails.employeeName[0].toUpperCase(),
-                            style: AppTypography.kBold20.copyWith(
-                              color: AppColors.kPrimary,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Welcome back,',
-                              style: AppTypography.kLight14
-                                  .copyWith(color: AppColors.kWhite),
-                            ),
-                            Text(
-                              '${widget.userDetails.employeeName} 👋',
-                              style: AppTypography.kBold16
-                                  .copyWith(color: AppColors.kWhite),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 10.w),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to<void>(
-                          () => const SearchView(),
-                          transition: Transition.rightToLeftWithFade,
-                        );
-                      },
-                      child: SearchField(
-                        controller: TextEditingController(),
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: AppColors.kPrimary,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.kPrimary.withOpacity(0.5),
+                      blurRadius: 0,
+                      spreadRadius: 5,
+                    )
                   ],
                 ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.twentyHorizontal,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10.h),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 24.r,
+                            backgroundColor: AppColors.kWhite.withOpacity(0.8),
+                            child: Text(
+                              widget.userDetails.employeeName[0].toUpperCase(),
+                              style: AppTypography.kBold20.copyWith(
+                                color: AppColors.kPrimary,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Welcome back,',
+                                style: AppTypography.kLight14
+                                    .copyWith(color: AppColors.kWhite),
+                              ),
+                              Text(
+                                '${widget.userDetails.employeeName} 👋',
+                                style: AppTypography.kBold16
+                                    .copyWith(color: AppColors.kWhite),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10.w),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to<void>(
+                            () => const SearchView(),
+                            transition: Transition.rightToLeftWithFade,
+                          );
+                        },
+                        child: SearchField(
+                          controller: TextEditingController(),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            SizedBox(height: 10.h),
-            Expanded(
-              child: SingleChildScrollView(
+              Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: AppSpacing.twentyHorizontal,
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 20.h),
                     const ShortcutMenus(),
                     SizedBox(height: 20.h),
                     TodayStatusCard(
@@ -151,14 +151,15 @@ class _HomeViewState extends State<HomeView> {
                     const FarmerList(),
                     SizedBox(height: 20.h),
                     const ReportView(),
-                    SizedBox(height: AppSpacing.twentyVertical),
+                    SizedBox(height: 20.h),
                     const BestTeachers(),
+                    SizedBox(height: 20.h),
                     SizedBox(height: 20.h),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

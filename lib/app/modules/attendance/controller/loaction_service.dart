@@ -1,5 +1,6 @@
 import 'package:flutter_background/flutter_background.dart' as fg;
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:async';
 
@@ -63,7 +64,7 @@ class BackgroundService {
       throw Exception('Location permissions are permanently denied.');
     }
 
-    const locationUpdateInterval = Duration(minutes: 1);
+    const locationUpdateInterval = Duration(seconds: 10);
     Timer.periodic(locationUpdateInterval, (timer) async {
       if (!_isTracking) {
         timer.cancel(); // Stop the timer if tracking is disabled
@@ -77,11 +78,15 @@ class BackgroundService {
         print(
           DateTime.now(),
         );
+        final now = DateTime.now();
+        String date = DateFormat('yyyy-MM-dd').format(now);
+        String time = DateFormat('hh:mm:ss a').format(now);
         final locationData = LocationDataModel(
           id: DateTime.now().millisecondsSinceEpoch,
           latitude: position.latitude,
           longitude: position.longitude,
-          timestamp: DateTime.now(),
+          date: date,
+          time: time,
         );
 
         // Save location data to the database

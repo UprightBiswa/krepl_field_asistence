@@ -32,7 +32,7 @@ class _FarmerListState extends State<FarmerList> {
       children: [
         Row(
           children: [
-            Text('New Farmers', style: AppTypography.kBold14),
+            Text('New Farmers', style: AppTypography.kBold16),
             const Spacer(),
             CustomTextButton(
               onPressed: () {

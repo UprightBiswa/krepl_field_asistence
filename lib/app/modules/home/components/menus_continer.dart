@@ -17,6 +17,11 @@ class ShortcutMenus extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          shortcutMenuGroup.heading.title,
+          style: AppTypography.kBold16,
+        ),
+        SizedBox(height: 10.h),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -103,44 +108,49 @@ class ReportViewgroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelectedvalue = isSelected();
-    return PrimaryContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            menuGroup.heading.title,
-            style: AppTypography.kBold16,
-          ),
-          SizedBox(height: AppSpacing.twentyVertical),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-            ),
-            itemCount: menuGroup.menuItems.length,
-            itemBuilder: (context, index) {
-              final menuItem = menuGroup.menuItems[index];
-
-              return GestureDetector(
-                onTap: () => menuItem.onTap(),
-                child: FadeIn(
-                  delay: const Duration(milliseconds: 200) * index,
-                  child: CustomMenuCard(
-                    isSelected: isSelectedvalue,
-                    onTap: () => menuItem.onTap(),
-                    icon: menuItem.icon,
-                    title: menuItem.title,
-                  ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          menuGroup.heading.title,
+          style: AppTypography.kBold16,
+        ),
+        SizedBox(height: 10.h),
+        PrimaryContainer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 1,
+                  mainAxisSpacing: 1,
                 ),
-              );
-            },
+                itemCount: menuGroup.menuItems.length,
+                itemBuilder: (context, index) {
+                  final menuItem = menuGroup.menuItems[index];
+
+                  return GestureDetector(
+                    onTap: () => menuItem.onTap(),
+                    child: FadeIn(
+                      delay: const Duration(milliseconds: 200) * index,
+                      child: CustomMenuCard(
+                        isSelected: isSelectedvalue,
+                        onTap: () => menuItem.onTap(),
+                        icon: menuItem.icon,
+                        title: menuItem.title,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

@@ -60,7 +60,6 @@ class AppAssets {
   // Icons
   static const IconData kArrowBackIos = Icons.arrow_back_ios;
   static const IconData kArrowBack = Icons.arrow_back;
-
   static const IconData kArrowForward = Icons.arrow_forward_ios;
   //double_arrow_rounded
   static const IconData kArrowForwardRounded = Icons.double_arrow_rounded;
@@ -130,29 +129,12 @@ class AppAssets {
 
 
   // Images.
-  static String kTeacher1 = 'assets/images/teacher1.jpg';
-  static String kFlutterCourse1 = 'assets/images/flutter-course-1.png';
-  static String kWebsiteCourse1 = 'assets/images/website-course-1.jpg';
-  static String kContrast = 'assets/images/contrast.png';
-  static String kRepetition = 'assets/images/repetition.png';
-  static String kSymmetry = 'assets/images/symmetry.png';
-  static String kUser1 = 'assets/images/user1.jpg';
-  static String kUser2 = 'assets/images/user2.jpg';
-  static String kUser3 = 'assets/images/user3.jpg';
-  static String kUser4 = 'assets/images/user4.jpg';
-  static String kUser5 = 'assets/images/user5.jpg';
-  static String kUser6 = 'assets/images/user6.jpg';
-  static String kUser7 = 'assets/images/user7.jpg';
   static String kNoData = 'assets/images/no_data.png';
   static String kOnboardingFirst = 'assets/images/onboarding_second.png';
   static String kOnboardingSecond = 'assets/images/onboarding_first.png';
   static String kOnboardingThird = 'assets/images/onboarding_third.png';
   //farmer.jpg
   static String kFarmer = 'assets/images/farmer.jpg';
-  static String kStudent = 'assets/images/student.png';
-  static String kTeacher = 'assets/images/teacher.png';
-  static String kStoreSetup = 'assets/images/store_setup.png';
-  static String kStoreSet = 'assets/images/store_set.png';
-  static String kProject = 'assets/images/project.png';
+
   static String kLogo = 'assets/images/app_icon.png';
 }

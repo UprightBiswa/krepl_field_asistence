@@ -1,5 +1,6 @@
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,34 +29,31 @@ class AttendanceListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.kPrimary,
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('E')
-                          .format(DateTime.parse(data.checkinDate!)),
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Colors.white,
-                      ),
+          Container(
+            width: 50,
+            decoration: const BoxDecoration(
+              color: AppColors.kPrimary,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    DateFormat('E').format(DateTime.parse(data.checkinDate!)),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.white,
                     ),
-                    Text(
-                      DateFormat('dd')
-                          .format(DateTime.parse(data.checkinDate!)),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                      ),
+                  ),
+                  Text(
+                    DateFormat('dd').format(DateTime.parse(data.checkinDate!)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -107,19 +105,11 @@ class AttendanceListItem extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            child: IconButton(
+          if (data.attendanceSummaries.length > 2)
+            IconButton(
               onPressed: () {
-                if (data.checkinLat != 'null' &&
-                    data.checkinLong != 'null' &&
-                    data.checkoutLat != 'null' &&
-                    data.checkoutLong != 'null') {
-                  _launchMap(
-                    double.parse(data.checkinLat.toString()),
-                    double.parse(data.checkinLong.toString()),
-                    double.parse(data.checkoutLat.toString()),
-                    double.parse(data.checkoutLong.toString()),
-                  );
+                if (data.attendanceSummaries.length > 2) {
+                  _openRouteMap(data.attendanceSummaries);
                 }
               },
               icon: const Icon(
@@ -128,28 +118,49 @@ class AttendanceListItem extends StatelessWidget {
               iconSize: 24,
               splashRadius: 8,
             ),
-          ),
         ],
       ),
     );
   }
 
-  Future<void> _launchMap(double checkinLat, double checkinLong,
-      double checkoutLat, double checkoutLong) async {
-    String googleMapsUrl =
-        'https://www.google.com/maps/dir/?api=1&origin=$checkinLat,$checkinLong&destination=$checkoutLat,$checkoutLong';
-    String appleMapsUrl =
-        'https://maps.apple.com/?saddr=$checkinLat,$checkinLong&daddr=$checkoutLat,$checkoutLong';
+  Future<void> _openRouteMap(List<AttendanceSummary> locations) async {
+    // check  minimum number of routes to open 3
+    if (locations.isEmpty || locations.length < 3) {
+      Get.snackbar('Error', 'No locations to show on the map',
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
 
-    Uri googleMapsUri = Uri.parse(googleMapsUrl);
-    Uri appleMapsUri = Uri.parse(appleMapsUrl);
+    // Construct the Google Maps URL
+    final String origin =
+        '${locations.first.latitude},${locations.first.longitude}';
+    final String destination =
+        '${locations.last.latitude},${locations.last.longitude}';
+    final String waypoints = locations
+        .skip(1) // Skip the first point (origin)
+        .take(locations.length -
+            2) // Take all points except the last (destination)
+        .map((loc) => '${loc.latitude},${loc.longitude}')
+        .join('|');
 
-    if (await canLaunchUrl(googleMapsUri)) {
-      await launchUrl(googleMapsUri);
-    } else if (await canLaunchUrl(appleMapsUri)) {
-      await launchUrl(appleMapsUri);
-    } else {
-      throw 'Could not launch map';
+    // Construct the final URL
+    final String googleMapsUrl = 'https://www.google.com/maps/dir/?api=1'
+        '&origin=$origin'
+        '&destination=$destination'
+        '&waypoints=$waypoints';
+    // for ios, we need to
+
+    final Uri googleMapsUri = Uri.parse(googleMapsUrl);
+
+    try {
+      if (await canLaunchUrl(googleMapsUri)) {
+        await launchUrl(googleMapsUri);
+      } else {
+        throw 'Could not launch Google Maps';
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to open map: $e',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

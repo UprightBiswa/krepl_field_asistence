@@ -246,7 +246,7 @@ List<MenuItem> shortcutMenuItems = [
 
 // Creating menu groups with headings
 MenuGroup reportMenuGroup = MenuGroup(
-  heading: Heading(title: 'Reports'),
+  heading: Heading(title: 'Reports Management'),
   menuItems: reportMenuItems,
 );
 
@@ -256,6 +256,6 @@ MenuGroup activityFormGroup = MenuGroup(
 );
 
 MenuGroup shortcutMenuGroup = MenuGroup(
-  heading: Heading(title: 'Shortcuts'),
+  heading: Heading(title: 'Quick Actions'),
   menuItems: shortcutMenuItems,
 );

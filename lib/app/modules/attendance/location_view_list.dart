@@ -39,7 +39,7 @@ class _LocationPageState extends State<LocationPage> {
                     leading: CircleAvatar(child: Text('${index + 1}')),
                     title: Text(
                         'Lat: ${location.latitude}, Lon: ${location.longitude}'),
-                    subtitle: Text('Time: ${location.timestamp}'),
+                    subtitle: Text('Time: ${location.time} - ${location.date}'),
                   );
                 },
               );

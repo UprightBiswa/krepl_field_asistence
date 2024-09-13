@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../../model/home/best_dealers_model.dart';
+import '../../dashboard/model/cutomer _sales_data.dart';
 import '../../onboarding_scrrens.dart/components/custom_indicator.dart';
 import 'best_teachers_card.dart';
 
@@ -15,7 +15,7 @@ class BestTeachers extends StatefulWidget {
 
 class _BestTeachersState extends State<BestTeachers> {
   late PageController _pageController;
-  int _currentPage = 1;
+  final int _currentPage = 1;
 
   @override
   void initState() {
@@ -35,16 +35,15 @@ class _BestTeachersState extends State<BestTeachers> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(height: AppSpacing.thirtyVertical),
         Text(
-          'Dealer of the Week',
-          style: AppTypography.kBold14,
+          'Customer Sales',
+          style: AppTypography.kBold16,
         ),
-        SizedBox(height: AppSpacing.twentyVertical),
+        SizedBox(height: AppSpacing.tenHorizontal),
         SizedBox(
           height: 260.h,
           child: PageView.builder(
-            itemCount: bestTeachers.length,
+            itemCount: dummySalesYTDData.length,
             clipBehavior: Clip.none,
             physics: const BouncingScrollPhysics(),
             controller: _pageController,
@@ -52,17 +51,16 @@ class _BestTeachersState extends State<BestTeachers> {
               return BestTeachersCard(
                 index: index,
                 pageController: _pageController,
-                teacher: bestTeachers[index],
+                dummySalesYTDData: dummySalesYTDData[index],
               );
             },
           ),
         ),
-        SizedBox(height: 30.h),
+        SizedBox(height: 20.h),
         CustomIndicator(
           controller: _pageController,
           dotsLength: 3,
         ),
-        SizedBox(height: 40.h),
       ],
     );
   }

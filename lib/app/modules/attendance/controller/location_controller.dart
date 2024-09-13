@@ -43,6 +43,11 @@ class LocationServiceController extends GetxController {
     locations.assignAll(fetchedLocations);
   }
 
+  Future<List<Map<String, dynamic>>> getFormattedLocationData() async {
+    await _loadLocations();
+    return locations.map((location) => location.toMap()).toList();
+  }
+
   Future<void> clearLocationData() async {
     await _dbHelper.clearLocations();
     locations.clear(); // Clear the observable list
