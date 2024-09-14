@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/constrants/constants.dart';
 import '../model/attendance_data_model.dart';
+import 'dart:math' as math;
 
 class AttendanceListItem extends StatelessWidget {
   final AttendanceData data;
@@ -32,6 +33,18 @@ class AttendanceListItem extends StatelessWidget {
           Container(
             width: 50,
             decoration: const BoxDecoration(
+              gradient: SweepGradient(
+                center: FractionalOffset.center,
+                colors: <Color>[
+                  AppColors.kPrimary,
+                  AppColors.kPrimary2,
+                  AppColors.kAccent1,
+                  AppColors.kAccent2,
+                  AppColors.kPrimary,
+                ],
+                stops: <double>[0.0, 0.25, 0.5, 0.75, 1.0],
+                transform: GradientRotation(math.pi / 4),
+              ),
               color: AppColors.kPrimary,
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
@@ -105,19 +118,19 @@ class AttendanceListItem extends StatelessWidget {
               ],
             ),
           ),
-          if (data.attendanceSummaries.length > 2)
-            IconButton(
-              onPressed: () {
-                if (data.attendanceSummaries.length > 2) {
-                  _openRouteMap(data.attendanceSummaries);
-                }
-              },
-              icon: const Icon(
-                AppAssets.kLocation,
-              ),
-              iconSize: 24,
-              splashRadius: 8,
+          // if (data.attendanceSummaries.length > 2)
+          IconButton(
+            onPressed: () {
+              if (data.attendanceSummaries.length > 2) {
+                _openRouteMap(data.attendanceSummaries);
+              }
+            },
+            icon: const Icon(
+              AppAssets.kLocation,
             ),
+            iconSize: 24,
+            splashRadius: 8,
+          ),
         ],
       ),
     );

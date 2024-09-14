@@ -104,7 +104,8 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
                   : AppColors.kBackground,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(16), topRight: Radius.circular(16))),
-          child: Padding(
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             padding: EdgeInsets.symmetric(horizontal: 20.h),
             child: Column(
               children: [
@@ -298,6 +299,8 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
                             if (_locationServiceController.isTracking.value) {
                               _locationServiceController.stopService();
                             }
+                            _locationServiceController.clearLocationData();
+
                             Get.dialog(SuccessDialog(
                               message: "Check-Out Successful!",
                               onClose: () {

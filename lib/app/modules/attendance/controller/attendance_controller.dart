@@ -75,6 +75,9 @@ class AttendanceController extends GetxController {
         throw Exception('No internet connection');
       }
 
+      // Clear the current status to indicate a fresh load
+      todayStatus.value = TodayStatus();
+
       // Define endpoint and send request
       String endPoint = 'fetchTodaysFaAttendance';
       final response = await _dioService.post(endPoint);
@@ -86,10 +89,21 @@ class AttendanceController extends GetxController {
       }
       // Handle unsuccessful response
       else if (response.data['success'] == false) {
-        String errorMsg = response.data['message']['device_token']?.first ??
-            'Error fetching attendance';
-        errorMessage(errorMsg);
-        throw Exception(errorMsg);
+        dynamic message = response.data['message'];
+
+        // Check if message is a string or a map
+        if (message is String) {
+          errorMessage(message);
+          throw Exception(message);
+        } else if (message is Map && message.containsKey('device_token')) {
+          String errorMsg =
+              message['device_token']?.first ?? 'Error fetching attendance';
+          errorMessage(errorMsg);
+          throw Exception(errorMsg);
+        } else {
+          errorMessage('Unknown error occurred');
+          throw Exception('Unknown error occurred');
+        }
       }
     } catch (e) {
       isError(true);
@@ -136,7 +150,6 @@ class AttendanceController extends GetxController {
         'checkin_long': checkinLong,
         'status': '0',
       };
-
 
       final response =
           await _dioService.post(endPoint, queryParams: parameters);
@@ -196,7 +209,7 @@ class AttendanceController extends GetxController {
         'checkout_lat': checkoutLat,
         'checkout_long': checkoutLong,
         'status': 1,
-        'coordicates': coordinates,
+        'coordinates': coordinates,
       };
       final response =
           await _dioService.post(endPoint, queryParams: parameters);
