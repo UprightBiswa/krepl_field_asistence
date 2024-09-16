@@ -126,29 +126,71 @@ class AttendanceListItem extends StatelessWidget {
             onPressed: () async {
               print(data.attendanceSummaries.length);
               if (data.attendanceSummaries.length > 2) {
-                // Get.dialog(const LoadingDialog(), barrierDismissible: false);
-                // // _openRouteMap(data.attendanceSummaries);
-                // try {
-                //   // Make the API call and process the result
-                //   final batches =
-                //       await _getRouteMapBatches(data.attendanceSummaries);
-                //   // Close the loading dialog
-                //   Get.back();
+                //show a dialong box with 3 type view data, google map page, google map clusster, and google app view
+                Get.defaultDialog(
+                    title: 'view on map',
+                    content: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      height: 400, // Adjust height as needed
+                      width: 300, // Adjust width as needed
+                      child: ListView(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.map),
+                            trailing: const Icon(Icons.arrow_forward_ios),
+                            title: const Text('View Data'),
+                            onTap: () {
+                              Get.back();
+                              Get.to(() => GoogleMapOpenApp(
+                                    locations: data.attendanceSummaries,
+                                  ));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.map),
+                            trailing: const Icon(Icons.arrow_forward_ios),
+                            title: const Text('View Map'),
+                            onTap: () async {
+                              Get.back();
+                              Get.dialog(const LoadingDialog(),
+                                  barrierDismissible: false);
+                              // _openRouteMap(data.attendanceSummaries);
+                              try {
+                                // Make the API call and process the result
+                                final batches = await _getRouteMapBatches(
+                                    data.attendanceSummaries);
+                                // Close the loading dialog
+                                Get.back();
 
-                //   // Show dialog with batch list
-                //   _showBatchDialog(batches);
-                // } catch (e) {
-                //   Get.back();
+                                // Show dialog with batch list
+                                _showBatchDialog(batches);
+                              } catch (e) {
+                                Get.back();
 
-                //   // Show error dialog
-                //   Get.snackbar(
-                //     'Error',
-                //     'Failed to open map: $e',
-                //     snackPosition: SnackPosition.BOTTOM,
-                //   );
-                // }
-                Get.to(() =>
-                    GoogleMapOpen(locations: data.attendanceSummaries.toSet()));
+                                // Show error dialog
+                                Get.snackbar(
+                                  'Error',
+                                  'Failed to open map: $e',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              }
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.map),
+                            trailing: const Icon(Icons.arrow_forward_ios),
+                            title: const Text('View Cluster Map'),
+                            onTap: () {
+                              Get.back();
+                              Get.to(() => GoogleMapOpen(
+                                  locations: data.attendanceSummaries.toSet()));
+                            },
+                          ),
+                        ],
+                      ),
+                    ));
               } else {
                 Get.snackbar(
                   'Error',
@@ -562,4 +604,60 @@ class GoogleMapOpen extends StatelessWidget {
       ),
     };
   }
+}
+
+class GoogleMapOpenApp extends StatelessWidget {
+  final List<AttendanceSummary> locations;
+  const GoogleMapOpenApp({super.key, required this.locations});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Route Map')),
+      body: Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        child: GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: LatLng(double.tryParse(locations.first.latitude) ?? 00.00,
+                double.tryParse(locations.first.longitude) ?? 0.0),
+            zoom: 14,
+          ),
+          markers: _buildMarkers(locations),
+          polylines: _buildPolyline(locations),
+        ),
+      ),
+    );
+  }
+}
+
+// Create markers for the locations
+Set<Marker> _buildMarkers(List<AttendanceSummary> locations) {
+  return locations.map((loc) {
+    return Marker(
+      markerId: MarkerId('${loc.latitude},${loc.longitude}'),
+      position: LatLng(double.tryParse(loc.latitude) ?? 0.0,
+          double.tryParse(loc.longitude) ?? 0.0),
+      infoWindow: InfoWindow(
+        //print index of location
+        title: 'Location: ${locations.indexOf(loc) + 1}',
+        snippet: '${loc.latitude}, ${loc.longitude}',
+      ),
+    );
+  }).toSet();
+}
+
+// Create polyline for the route
+Set<Polyline> _buildPolyline(List<AttendanceSummary> locations) {
+  List<LatLng> latLngPoints = locations
+      .map((loc) => LatLng(double.tryParse(loc.latitude) ?? 0.0,
+          double.tryParse(loc.longitude) ?? 0.0))
+      .toList();
+  return {
+    Polyline(
+      polylineId: const PolylineId('route'),
+      points: latLngPoints,
+      color: Colors.blue,
+      width: 5,
+    ),
+  };
 }
