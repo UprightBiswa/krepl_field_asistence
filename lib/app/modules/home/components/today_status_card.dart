@@ -49,44 +49,91 @@ class _TodayStatusCardState extends State<TodayStatusCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Check-In ',
-                          style: AppTypography.kLight14
-                              .copyWith(color: AppColors.kGrey),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: AppColors.kAccent1.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColors.kAccent1),
                         ),
-                        Text(
-                          todayStatus.checkinTime ?? '--/--',
-                          style: AppTypography.kLight14.copyWith(
-                            color: AppColors.kPrimary,
-                          ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 16,
+                              backgroundColor:
+                                  AppColors.kAccent1.withOpacity(0.2),
+                              child: const Icon(Icons.check,
+                                  color: AppColors.kAccent1),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Check In',
+                                    style: AppTypography.kBold12,
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    todayStatus.checkinTime ?? '--/--',
+                                    style: AppTypography.kLight12
+                                        .copyWith(color: AppColors.kAccent1),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Check-Out',
-                          style: AppTypography.kLight14.copyWith(
-                            color: AppColors.kGrey,
-                          ),
+                    SizedBox(width: 10.w),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: AppColors.kAccent2.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColors.kAccent2),
                         ),
-                        Text(
-                          todayStatus.checkoutTime ?? '--/--',
-                          style: AppTypography.kLight14.copyWith(
-                            color: AppColors.kPrimary,
-                          ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 16,
+                              backgroundColor:
+                                  AppColors.kAccent2.withOpacity(0.2),
+                              child: const Icon(Icons.check,
+                                  color: AppColors.kAccent2),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Check Out',
+                                    style: AppTypography.kBold12,
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    todayStatus.checkoutTime ?? '--/--',
+                                    style: AppTypography.kLight12
+                                        .copyWith(color: AppColors.kAccent2),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 10.h),
                 CustomSwipeButton(
                   title: 'Attendance',
                   subtitle: 'Swipe to view Attendance',

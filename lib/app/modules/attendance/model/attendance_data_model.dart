@@ -24,7 +24,7 @@ class AttendanceData {
   });
   factory AttendanceData.fromJson(Map<String, dynamic> json) {
     var summariesFromJson = json['attendance_summaries'] as List? ?? [];
-   List<AttendanceSummary> summaries =
+    List<AttendanceSummary> summaries =
         summariesFromJson.map((i) => AttendanceSummary.fromJson(i)).toList();
 
     return AttendanceData(
@@ -60,8 +60,8 @@ class AttendanceSummary {
   factory AttendanceSummary.fromJson(Map<String, dynamic> json) {
     return AttendanceSummary(
       id: json['id'],
-      latitude: json['latitude'] ?? '',
-      longitude: json['longitude'] ?? '',
+      latitude: json['longitude'] ?? '',
+      longitude: json['latitude'] ?? '',
       date: json['date'] ?? '',
       time: json['time'] ?? '',
     );

@@ -1,13 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
+import 'package:field_asistence/app/modules/widgets/dialog/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/constrants/constants.dart';
 import '../model/attendance_data_model.dart';
 import 'dart:math' as math;
-
 
 class AttendanceListItem extends StatelessWidget {
   final AttendanceData data;
@@ -121,12 +123,38 @@ class AttendanceListItem extends StatelessWidget {
           ),
           // if (data.attendanceSummaries.length > 2)
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               print(data.attendanceSummaries.length);
               if (data.attendanceSummaries.length > 2) {
-                // _openRouteMap(data.attendanceSummaries);
+                // Get.dialog(const LoadingDialog(), barrierDismissible: false);
+                // // _openRouteMap(data.attendanceSummaries);
+                // try {
+                //   // Make the API call and process the result
+                //   final batches =
+                //       await _getRouteMapBatches(data.attendanceSummaries);
+                //   // Close the loading dialog
+                //   Get.back();
+
+                //   // Show dialog with batch list
+                //   _showBatchDialog(batches);
+                // } catch (e) {
+                //   Get.back();
+
+                //   // Show error dialog
+                //   Get.snackbar(
+                //     'Error',
+                //     'Failed to open map: $e',
+                //     snackPosition: SnackPosition.BOTTOM,
+                //   );
+                // }
                 Get.to(() =>
                     GoogleMapOpen(locations: data.attendanceSummaries.toSet()));
+              } else {
+                Get.snackbar(
+                  'Error',
+                  'Not enough locations to show on the map',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
               }
             },
             icon: const Icon(
@@ -138,6 +166,154 @@ class AttendanceListItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<List<List<AttendanceSummary>>> _getRouteMapBatches(
+      List<AttendanceSummary> locations) async {
+    const int maxWaypoints = 25;
+    List<List<AttendanceSummary>> batches = [];
+
+    for (int i = 1; i < locations.length - 1; i += maxWaypoints) {
+      batches.add(locations.sublist(
+          i,
+          i + maxWaypoints > locations.length - 1
+              ? locations.length - 1
+              : i + maxWaypoints));
+    }
+
+    return batches;
+  }
+
+  void _showBatchDialog(List<List<AttendanceSummary>> batches) {
+    Get.defaultDialog(
+      title: 'Route Batches',
+      content: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: AppColors.kAccent1.withOpacity(0.1),
+        ),
+        height: 400, // Adjust height as needed
+        width: 300, // Adjust width as needed
+        child: ListView.builder(
+          itemCount: batches.length,
+          itemBuilder: (context, index) {
+            final batch = batches[index];
+            final waypoints = batch
+                .map((loc) => '${loc.latitude},${loc.longitude}')
+                .join('|');
+            final String origin =
+                '${data.attendanceSummaries.first.latitude},${data.attendanceSummaries.first.longitude}';
+            final String destination =
+                '${data.attendanceSummaries.last.latitude},${data.attendanceSummaries.last.longitude}';
+            return ListTile(
+              title: Text('Batch ${index + 1}'),
+              // subtitle: Text('Waypoints: $waypoints'),
+              onTap: () async {
+                // Construct the URL for the selected batch
+                final String googleMapsUrl =
+                    'https://www.google.com/maps/dir/?api=1'
+                    '&origin=$origin'
+                    '&destination=$destination'
+                    '&waypoints=$waypoints';
+
+                print('Google Maps URL: $googleMapsUrl');
+
+                final Uri googleMapsUri = Uri.parse(googleMapsUrl);
+                if (await canLaunchUrl(googleMapsUri)) {
+                  await launchUrl(
+                      googleMapsUri); // Opens in Google Maps or browser
+                } else {
+                  throw 'Could not launch Google Maps';
+                }
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openRouteMapWithGetRequest(
+      List<AttendanceSummary> locations) async {
+    const String url = 'https://maps.googleapis.com/maps/api/directions/json';
+
+    // Check if there are at least 3 locations
+    if (locations.isEmpty || locations.length < 3) {
+      Get.snackbar('Error', 'No sufficient locations to show on the map',
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+
+    // Define the API key here
+    const String apiKey = 'AIzaSyAgD-9KU0qJ9miZPvmmZmc1NuRa5C2TPeY';
+
+    // Ensure origin and destination are properly constructed
+    final String origin =
+        '${locations.first.latitude},${locations.first.longitude}';
+    final String destination =
+        '${locations.last.latitude},${locations.last.longitude}';
+
+    const int maxWaypoints = 25;
+    List<List<AttendanceSummary>> batches = [];
+
+    // Split the waypoints into batches of max 25 each
+    for (int i = 1; i < locations.length - 1; i += maxWaypoints) {
+      batches.add(locations.sublist(
+          i,
+          i + maxWaypoints > locations.length - 1
+              ? locations.length - 1
+              : i + maxWaypoints));
+    }
+
+    print('Origin: $origin');
+    print('Destination: $destination');
+
+    try {
+      for (List<AttendanceSummary> batch in batches) {
+        // Build waypoints for each batch
+        String waypoints =
+            batch.map((loc) => '${loc.latitude},${loc.longitude}').join('|');
+
+        print('Waypoints: $waypoints');
+
+        // Construct the URL for each batch
+        final String requestUrl =
+            '$url?origin=$origin&destination=$destination&waypoints=$waypoints&key=$apiKey';
+
+        print('Request URL: $requestUrl');
+
+        final response = await Dio().get(requestUrl);
+
+        if (response.statusCode == 200) {
+          print(response.data); // Handle the response data
+
+          // After success, open the map in Google Maps or browser
+          final String googleMapsUrl = 'https://www.google.com/maps/dir/?api=1'
+              '&origin=$origin'
+              '&destination=$destination'
+              '&waypoints=$waypoints';
+
+          print('Google Maps URL: $googleMapsUrl');
+
+          final Uri googleMapsUri = Uri.parse(googleMapsUrl);
+          if (await canLaunchUrl(googleMapsUri)) {
+            await launchUrl(googleMapsUri); // Opens in Google Maps or browser
+          } else {
+            throw 'Could not launch Google Maps';
+          }
+
+          Get.snackbar('Success', 'Map opened via API',
+              snackPosition: SnackPosition.BOTTOM);
+        } else {
+          print('Error Response: ${response.data}');
+          throw Exception('Failed to get directions from API');
+        }
+      }
+    } catch (e) {
+      print('Error: $e');
+      Get.snackbar('Error', 'Failed to open map: $e',
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
 
 //   Future<void> _openRouteMap(List<AttendanceSummary> locations) async {
