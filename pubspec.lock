@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.4"
+  animated_stack_widget:
+    dependency: transitive
+    description:
+      name: animated_stack_widget
+      sha256: ce4788dd158768c9d4388354b6fb72600b78e041a37afc4c279c63ecafcb9408
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   animations:
     dependency: "direct main"
     description:
@@ -430,6 +438,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.2.0"
+  flutter_map:
+    dependency: transitive
+    description:
+      name: flutter_map
+      sha256: cda8d72135b697f519287258b5294a57ce2f2a5ebf234f0e406aad4dc14c9399
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
+  flutter_map_marker_cluster:
+    dependency: "direct main"
+    description:
+      name: flutter_map_marker_cluster
+      sha256: a324f48da5ee83a3f29fd8d08b4b1e6e3114ff5c6cab910124d6a2e1f06f08cc
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.6"
+  flutter_map_marker_popup:
+    dependency: transitive
+    description:
+      name: flutter_map_marker_popup
+      sha256: ec563bcbae24a18ac16815fb75ac5ab33ccba609e14db70e252a67de19c6639c
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -792,6 +824,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+  latlong2:
+    dependency: "direct main"
+    description:
+      name: latlong2
+      sha256: "98227922caf49e6056f91b6c56945ea1c7b166f28ffcd5fb8e72fc0b453cc8fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -824,30 +864,70 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  location:
+  lists:
+    dependency: transitive
+    description:
+      name: lists
+      sha256: "4ca5c19ae4350de036a7e996cdd1ee39c93ac0a2b840f4915459b7d0a7d4ab27"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  location2:
     dependency: "direct main"
     description:
-      name: location
-      sha256: "37ffdadcd4b1498b769824f45ebb4de8ed46663a4a67ac27b33a590ee486579f"
+      name: location2
+      sha256: ccfc286ddb66a8f4e11ebd454d4f8d5c2412df533c8e09c71842304a9b9e5bcc
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.2"
-  location_platform_interface:
+    version: "6.0.4"
+  location2_android:
     dependency: transitive
     description:
-      name: location_platform_interface
-      sha256: "2ecde6bb0f88032b0bbbde37e18975b4468711dd92619c2235cc0c0ee93b4b8e"
+      name: location2_android
+      sha256: b1c2945ece9b9de877e48095b4d74419a92230a59d0c8f4943117cbcc929e083
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
-  location_web:
+    version: "6.0.4"
+  location2_ios:
     dependency: transitive
     description:
-      name: location_web
-      sha256: "15ad7b4c8a9f55abee513373755e093a40c04d7e24fc1b4f89676fe99523d034"
+      name: location2_ios
+      sha256: c7a5c082e92d52c468ea505c60fbfab5724d8b08b9ed681e959904f3799b5dc9
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "6.0.4"
+  location2_macos:
+    dependency: transitive
+    description:
+      name: location2_macos
+      sha256: "73aeae307f81e9052c3b78e769b71ab9eb5df3322903677a59788e1689a7c05c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.1"
+  location2_platform_interface:
+    dependency: transitive
+    description:
+      name: location2_platform_interface
+      sha256: "3a160d03a3915dd3ebded64c58a13386e93fcf581bf50aa899ecd35b1950050d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.4"
+  location2_web:
+    dependency: transitive
+    description:
+      name: location2_web
+      sha256: e2566df1abd853e64a0b903499f87cbdb278a9c1851ec34f7251b57e736c457c
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.4"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: "697d067c60c20999686a0add96cf6aba723b3aa1f83ecf806a8097231529ec32"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
   matcher:
     dependency: transitive
     description:
@@ -872,6 +952,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  mgrs_dart:
+    dependency: transitive
+    description:
+      name: mgrs_dart
+      sha256: fb89ae62f05fa0bb90f70c31fc870bcbcfd516c843fb554452ab3396f78586f7
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   mime:
     dependency: transitive
     description:
@@ -1088,6 +1176,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  polylabel:
+    dependency: transitive
+    description:
+      name: polylabel
+      sha256: "41b9099afb2aa6c1730bdd8a0fab1400d287694ec7615dd8516935fa3144214b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  proj4dart:
+    dependency: transitive
+    description:
+      name: proj4dart
+      sha256: c8a659ac9b6864aa47c171e78d41bbe6f5e1d7bd790a5814249e6b68bc44324e
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   provider:
     dependency: "direct main"
     description:
@@ -1357,6 +1461,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  unicode:
+    dependency: transitive
+    description:
+      name: unicode
+      sha256: "0f69e46593d65245774d4f17125c6084d2c20b4e473a983f6e21b7d7762218f1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
   universal_platform:
     dependency: transitive
     description:
@@ -1509,6 +1621,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.3"
+  wkt_parser:
+    dependency: transitive
+    description:
+      name: wkt_parser
+      sha256: "8a555fc60de3116c00aad67891bcab20f81a958e4219cc106e3c037aa3937f13"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   xdg_directories:
     dependency: transitive
     description:

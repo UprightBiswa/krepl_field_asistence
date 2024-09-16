@@ -76,8 +76,7 @@ class TodayStatusCard extends StatelessWidget {
                     child: Text(
                       DateFormat('hh:mm:ss a').format(DateTime.now()),
                       style: AppTypography.kLight14.copyWith(
-                        color: isDarkMode ? AppColors.kWhite : AppColors.kGrey,
-                        fontFamily: 'NexaBold',
+                        color: AppColors.kAccent1,
                       ),
                     ),
                   );

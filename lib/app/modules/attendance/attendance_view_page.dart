@@ -207,9 +207,7 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
                         content: 'Are you sure you want to check in?',
                         onConfirm: () async {
                           Get.back(); // Close confirmation dialog
-                          if (!_locationServiceController.isTracking.value) {
-                            _locationServiceController.startService();
-                          }
+
                           final now = DateTime.now();
                           Get.dialog(const LoadingDialog(),
                               barrierDismissible: false);
@@ -234,6 +232,12 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
                             Get.dialog(SuccessDialog(
                               message: "Check-In Successful!",
                               onClose: () {
+                                _locationServiceController.clearLocationData();
+
+                                if (!_locationServiceController
+                                    .isTracking.value) {
+                                  _locationServiceController.startService();
+                                }
                                 attendanceController.isSuccessUpdate(false);
                                 Get.back(); // Close the success dialog
                                 attendanceController.fetchTodayStatus();

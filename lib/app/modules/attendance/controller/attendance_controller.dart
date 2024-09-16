@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart' as dio;
+
 import 'package:get/get.dart';
 
 import '../../../data/helpers/internet/connectivity_services.dart';
@@ -203,16 +205,16 @@ class AttendanceController extends GetxController {
 
       // Define endpoint and send request
       String endPoint = 'fa_attandence';
-      Map<String, dynamic> parameters = {
+      dio.FormData formData  =  dio.FormData.fromMap({
         'checkout_date': checkoutDate,
         'checkout_time': checkoutTime,
         'checkout_lat': checkoutLat,
         'checkout_long': checkoutLong,
         'status': 1,
         'coordinates': coordinates,
-      };
+     });
       final response =
-          await _dioService.post(endPoint, queryParams: parameters);
+          await _dioService.postFormData(endPoint, formData);
       if (response.statusCode == 200 && response.data['success'] == true) {
         print(response.data);
         isSuccessCheckOut(true);
