@@ -224,7 +224,8 @@ class RetailerController extends GetxController {
         'form_value': 'all',
       };
 
-      final response = await _dioService.post(endPoint, queryParams: parameters);
+      final response =
+          await _dioService.post(endPoint, queryParams: parameters);
 
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;

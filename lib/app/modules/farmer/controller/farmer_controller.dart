@@ -209,6 +209,7 @@ class FarmerController extends GetxController {
                 onClose: () {
                   Get.back();
                   Get.back();
+                  Get.back();
                 }),
             barrierDismissible: false);
       } else {
@@ -224,6 +225,7 @@ class FarmerController extends GetxController {
           ErrorDialog(
               errorMessage: errorMessageEdit.value,
               onClose: () {
+                Get.back();
                 Get.back();
               }),
           barrierDismissible: false);

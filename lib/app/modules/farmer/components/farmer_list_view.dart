@@ -18,8 +18,6 @@ class FarmerListView extends StatefulWidget {
 }
 
 class _FarmerListViewState extends State<FarmerListView> {
-
-
   @override
   Widget build(BuildContext context) {
     return PagedListView.separated(
@@ -43,7 +41,7 @@ class _FarmerListViewState extends State<FarmerListView> {
           ),
         ),
         noItemsFoundIndicatorBuilder: (_) => const Center(
-          child: Text('No more items to load'),
+          child: Text('No Data Available'),
         ),
       ),
       separatorBuilder: (context, index) => SizedBox(height: 20.h),

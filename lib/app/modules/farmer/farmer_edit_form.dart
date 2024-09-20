@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/master_controller.dart/village_controller.dart';
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
 import '../../model/master/villages_model.dart';
 import '../../repository/auth/auth_token.dart';
 import '../activity/components/single_select_dropdown/activity_master_dropdown.dart';
 import '../activity/components/single_select_dropdown/village_single_selection_dropdown.dart';
+import '../activity/controller/activity_master_controller.dart';
 import '../activity/model/activity_master_model.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
@@ -34,37 +36,109 @@ class FarmerEditForm extends StatefulWidget {
 }
 
 class _FarmerEditFormState extends State<FarmerEditForm> {
+  final ActivityMasterController _activityMasterController =
+      Get.put(ActivityMasterController());
   final FarmerController farmerController = Get.put(FarmerController());
   final AuthState authState = AuthState();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final VillageController _villageControllerlist = Get.put(VillageController());
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _fatherNameController = TextEditingController();
-  final TextEditingController _mobileController = TextEditingController();
-  final TextEditingController _acreController = TextEditingController();
-  final TextEditingController _pinController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _fatherNameController = TextEditingController();
+  TextEditingController _mobileController = TextEditingController();
+  TextEditingController _acreController = TextEditingController();
+  TextEditingController _pinController = TextEditingController();
   final TextEditingController _villageController = TextEditingController();
-  final TextEditingController _postOfficeController = TextEditingController();
-  final TextEditingController _subDistController = TextEditingController();
-  final TextEditingController _districtController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _cowCountController = TextEditingController();
-  final TextEditingController _buffaloCountController = TextEditingController();
+  TextEditingController _postOfficeController = TextEditingController();
+  TextEditingController _subDistController = TextEditingController();
+  TextEditingController _districtController = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
+  TextEditingController _cowCountController = TextEditingController();
+  TextEditingController _buffaloCountController = TextEditingController();
   final TextEditingController _workPlaceCodeController =
       TextEditingController();
   final TextEditingController _workPlaceNameController =
       TextEditingController();
-  final TextEditingController _selectedDateController = TextEditingController();
   ActivityMaster? _selectedActivity;
   Village? _selectedVillage;
 
   @override
   void initState() {
     super.initState();
+    _loadVillageData();
+    _loadActivityData();
     _initializeControllers();
   }
 
+  void _loadActivityData() {
+    try {
+      _activityMasterController.fetchActivityMasterData("A").then((value) {
+        _setAcitivity();
+      });
+    } catch (e) {
+      Get.snackbar("Error", 'Failed to load activity');
+    }
+  }
+
+  void _setAcitivity() {
+    final activitys = _activityMasterController.activityMasterList;
+    final selectedActivity = activitys.firstWhereOrNull((activity) =>
+        activity.promotionalActivity == widget.farmer.promotionActivity);
+    if (selectedActivity != null) {
+      setState(() {
+        _selectedActivity = selectedActivity;
+      });
+    } else {
+      Get.snackbar("Error", 'Selected activity is not found in the list');
+    }
+  }
+
+  void _loadVillageData() async {
+    try {
+      await _villageControllerlist.fetchVillageMasterData().then((value) {
+        _loadSelectedVillage();
+      });
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load villages: ${e.toString()}');
+    }
+  }
+
+  void _loadSelectedVillage() {
+    final villages = _villageControllerlist.villages;
+    final selectedVillage = villages.firstWhereOrNull(
+        (village) => village.villageName == widget.farmer.villageName);
+
+    if (selectedVillage != null) {
+      setState(() {
+        _selectedVillage = selectedVillage;
+        _onVillageSelected(selectedVillage);
+      });
+    } else {
+      Get.snackbar('Error', 'Selected village not found in the list.');
+    }
+  }
+
   Future<void> _initializeControllers() async {
+    // Initial the controller value with widget value
+    _nameController =
+        TextEditingController(text: widget.farmer.farmerName ?? '');
+    _fatherNameController =
+        TextEditingController(text: widget.farmer.fatherName ?? '');
+    _mobileController =
+        TextEditingController(text: widget.farmer.mobileNo ?? '');
+    _pinController = TextEditingController(text: widget.farmer.pin ?? '');
+    _postOfficeController =
+        TextEditingController(text: widget.farmer.officeName ?? '');
+    _subDistController =
+        TextEditingController(text: widget.farmer.tehshil ?? '');
+    _districtController =
+        TextEditingController(text: widget.farmer.district ?? '');
+    _stateController = TextEditingController(text: widget.farmer.state ?? '');
+    _acreController = TextEditingController(text: widget.farmer.acre ?? '');
+    _cowCountController = TextEditingController(text: widget.farmer.cow ?? '');
+    _buffaloCountController =
+        TextEditingController(text: widget.farmer.buffalo ?? '');
+
     // Fetch workplace code and name from AuthState
     final workplaceCode = await authState.getWorkplaceCode();
     final workplaceName = await authState.getWorkplaceName();
@@ -92,7 +166,6 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
     _buffaloCountController.dispose();
     _workPlaceCodeController.dispose();
     _workPlaceNameController.dispose();
-    _selectedDateController.dispose();
     super.dispose();
   }
 

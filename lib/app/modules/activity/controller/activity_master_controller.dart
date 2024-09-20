@@ -14,7 +14,7 @@ class ActivityMasterController extends GetxController {
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
-  void fetchActivityMasterData(String formNo) async {
+  Future<void> fetchActivityMasterData(String formNo) async {
     print('Fetching data for form: $formNo');
     try {
       isLoading(true); // Start loading

@@ -60,8 +60,8 @@ class AttendanceSummary {
   factory AttendanceSummary.fromJson(Map<String, dynamic> json) {
     return AttendanceSummary(
       id: json['id'],
-      latitude: json['longitude'] ?? '',
-      longitude: json['latitude'] ?? '',
+      latitude: json['latitude'] ?? '',
+      longitude: json['longitude'] ?? '',
       date: json['date'] ?? '',
       time: json['time'] ?? '',
     );

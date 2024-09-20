@@ -17,8 +17,6 @@ class DoctorListView extends StatefulWidget {
 }
 
 class _DoctorListViewState extends State<DoctorListView> {
-  
-
   @override
   Widget build(BuildContext context) {
     return PagedListView.separated(
@@ -42,7 +40,7 @@ class _DoctorListViewState extends State<DoctorListView> {
           ),
         ),
         noItemsFoundIndicatorBuilder: (_) => const Center(
-          child: Text('No more items to load'),
+          child: Text('No Data Available'),
         ),
       ),
       separatorBuilder: (context, index) => SizedBox(height: 20.h),

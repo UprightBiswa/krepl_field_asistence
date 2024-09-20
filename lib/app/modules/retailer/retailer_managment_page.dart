@@ -8,7 +8,6 @@ import '../home/components/search_field.dart';
 import '../widgets/appbars/appbars.dart';
 import '../widgets/buttons/custom_button.dart';
 import '../widgets/no_result/error_page.dart';
-import '../widgets/no_result/no_result.dart';
 import 'components/retailer_list_view.dart';
 import 'controller/retailer_controller.dart';
 import 'retailer_form.dart';
@@ -117,14 +116,13 @@ class _RetailerManagementPageState extends State<RetailerManagementPage> {
               ),
               SizedBox(height: 20.h),
               Obx(() {
-                if (retailerController.isListLoading.value) {
+                if (retailerController.isListLoading.value &&
+                    retailerController.pagingController.itemList == null) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (retailerController.pagingController.itemList == null ||
-                    retailerController.pagingController.itemList!.isEmpty) {
-                  return const NoResultsScreen();
                 } else if (retailerController.isListError.value) {
                   return const Error404Screen();
                 }
+
                 return Column(
                   children: [
                     RetailerListView(

@@ -37,27 +37,16 @@ class DoctorListCard extends StatelessWidget {
         },
         child: PrimaryContainer(
           padding: EdgeInsets.all(10.h),
-          width: 264.w,
-          height: 150.h,
+          // width: 264.w,
+          // height: 150.h,
           child: Row(
             children: [
-              // Circular image of the doctor
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(50.r),
-              //   child: Image.network(
-              //     doctor.image,
-              //     width: 80.w,
-              //     height: 80.w,
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
-              // make a cercle avotorre to show name 2 string in cernter
               CircleAvatar(
-                radius: 40.r,
+                radius: 30.r,
                 backgroundColor: AppColors.kPrimary.withOpacity(0.15),
                 child: Text(
                   doctor.name.substring(0, 2).toUpperCase(),
-                  style: AppTypography.kBold20.copyWith(
+                  style: AppTypography.kBold14.copyWith(
                     color: AppColors.kPrimary,
                   ),
                 ),
@@ -70,9 +59,7 @@ class DoctorListCard extends StatelessWidget {
                   children: [
                     Text(
                       doctor.name,
-                      style: AppTypography.kBold20.copyWith(
-                        color: AppColors.kDarkContiner,
-                      ),
+                      style: AppTypography.kBold20.copyWith(),
                     ),
                     SizedBox(height: 4.h),
                     Text(
@@ -83,7 +70,7 @@ class DoctorListCard extends StatelessWidget {
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      'Contact: ${doctor.mobileNumber}',
+                      'No: ${doctor.mobileNumber}',
                       style: AppTypography.kLight16.copyWith(
                         color: AppColors.kNeutral04.withOpacity(0.75),
                       ),

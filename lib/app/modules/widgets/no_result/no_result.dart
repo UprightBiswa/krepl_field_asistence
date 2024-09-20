@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NoResultsScreen extends StatelessWidget {
-  //add call back function buttion press add constrctor
+//recive a callbacck function to add in constriuctor
+  final Function press;
 
-  const NoResultsScreen({super.key});
+  const NoResultsScreen({super.key, required this.press});
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +33,7 @@ class NoResultsScreen extends StatelessWidget {
             // button: you can pass your custom button,
             btnText: "Search again",
             press: () {
-              // add your CallBackfunction here
-              
-
+              press();
             },
           ),
         ],

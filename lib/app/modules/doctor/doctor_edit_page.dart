@@ -7,6 +7,7 @@ import '../../data/helpers/data/image_doctor_url.dart';
 import '../../model/master/villages_model.dart';
 import '../../controllers/master_controller.dart/village_controller.dart';
 
+import '../../repository/auth/auth_token.dart';
 import '../activity/components/single_select_dropdown/village_single_selection_dropdown.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
@@ -30,6 +31,8 @@ class EditDoctorForm extends StatefulWidget {
 
 class _EditDoctorFormState extends State<EditDoctorForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final AuthState authState = AuthState();
+
   final DoctorController doctorController = Get.find<DoctorController>();
   final VillageController _villageControllerlist = Get.put(VillageController());
 
@@ -79,7 +82,7 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
     }
   }
 
-  void _initializeControllers() {
+  void _initializeControllers() async {
     _nameController = TextEditingController(text: widget.doctor.name);
     _fatherNameController =
         TextEditingController(text: widget.doctor.fatherName);
@@ -93,10 +96,18 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
     _districtController =
         TextEditingController(text: widget.doctor.districtName);
     _stateController = TextEditingController(text: widget.doctor.stateName);
-    _workPlaceCodeController =
-        TextEditingController(text: widget.doctor.workPlaceCode);
-    _workPlaceNameController =
-        TextEditingController(text: widget.doctor.workPlaceName);
+    _workPlaceCodeController = TextEditingController();
+    _workPlaceNameController = TextEditingController();
+
+    // Fetch workplace code and name from AuthState
+    final workplaceCode = await authState.getWorkplaceCode();
+    final workplaceName = await authState.getWorkplaceName();
+
+    // Update controllers with the fetched values
+    setState(() {
+      _workPlaceCodeController.text = workplaceCode ?? '';
+      _workPlaceNameController.text = workplaceName ?? '';
+    });
   }
 
   @override

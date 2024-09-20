@@ -48,6 +48,9 @@ class _FarmerListCardState extends State<FarmerListCard> {
               });
             },
             child: PrimaryContainer(
+              padding: EdgeInsets.all(10.h),
+              // width: 264.w,
+              // height: 150.h,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -58,11 +61,13 @@ class _FarmerListCardState extends State<FarmerListCard> {
                       ClipRRect(
                           borderRadius: BorderRadius.circular(50.r),
                           child: CircleAvatar(
-                            radius: 40.r,
+                            radius: 30.r,
                             backgroundColor: AppColors.kPrimary,
                             child: Text(
-                              widget.farmer.farmerName![0].toUpperCase(),
-                              style: AppTypography.kBold20.copyWith(
+                              widget.farmer.farmerName!
+                                  .substring(0, 2)
+                                  .toUpperCase(),
+                              style: AppTypography.kBold14.copyWith(
                                 color: AppColors.kWhite,
                               ),
                             ),
@@ -86,7 +91,7 @@ class _FarmerListCardState extends State<FarmerListCard> {
                             ),
                             SizedBox(height: 8.h),
                             Text(
-                              'Contact: ${widget.farmer.mobileNo}',
+                              'No: ${widget.farmer.mobileNo}',
                               style: AppTypography.kLight16.copyWith(
                                 color: AppColors.kNeutral04.withOpacity(0.75),
                               ),

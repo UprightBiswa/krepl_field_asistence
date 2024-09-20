@@ -38,16 +38,16 @@ class RetailerListCard extends StatelessWidget {
         },
         child: PrimaryContainer(
           padding: EdgeInsets.all(10.h),
-          width: 264.w,
-          height: 150.h,
+          // width: 264.w,
+          // height: 150.h,
           child: Row(
             children: [
               CircleAvatar(
-                radius: 40.r,
+                radius: 30.r,
                 backgroundColor: AppColors.kPrimary.withOpacity(0.15),
                 child: Text(
                   retailer.retailerName.substring(0, 2).toUpperCase(),
-                  style: AppTypography.kBold20.copyWith(
+                  style: AppTypography.kBold14.copyWith(
                     color: AppColors.kPrimary,
                   ),
                 ),
@@ -60,9 +60,7 @@ class RetailerListCard extends StatelessWidget {
                   children: [
                     Text(
                       retailer.retailerName,
-                      style: AppTypography.kBold20.copyWith(
-                        color: AppColors.kDarkContiner,
-                      ),
+                      style: AppTypography.kBold20.copyWith(),
                     ),
                     SizedBox(height: 4.h),
                     Text(
@@ -73,7 +71,7 @@ class RetailerListCard extends StatelessWidget {
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      'Contact: ${retailer.mobileNumber}',
+                      'No: ${retailer.mobileNumber}',
                       style: AppTypography.kLight16.copyWith(
                         color: AppColors.kNeutral04.withOpacity(0.75),
                       ),

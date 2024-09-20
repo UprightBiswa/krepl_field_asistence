@@ -8,7 +8,6 @@ import '../home/components/search_field.dart';
 import '../widgets/appbars/appbars.dart';
 import '../widgets/buttons/custom_button.dart';
 import '../widgets/no_result/error_page.dart';
-import '../widgets/no_result/no_result.dart';
 import 'components/doctor_list_view.dart';
 import 'controller/doctor_controller.dart';
 import 'doctor_form.dart';
@@ -117,11 +116,9 @@ class _DoctorManagementPageState extends State<DoctorManagementPage> {
               ),
               SizedBox(height: 20.h),
               Obx(() {
-                if (doctorController.isListLoading.value) {
+                if (doctorController.isListLoading.value &&
+                    doctorController.pagingController.itemList == null) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (doctorController.pagingController.itemList == null ||
-                    doctorController.pagingController.itemList!.isEmpty) {
-                  return const NoResultsScreen();
                 } else if (doctorController.isListError.value) {
                   return const Error404Screen();
                 }

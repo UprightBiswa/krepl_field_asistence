@@ -223,7 +223,6 @@ class _FarmerFormState extends State<FarmerForm> {
                             ),
                             SizedBox(height: 20.h),
                             ActivitySelectionWidget(
-
                               formType: "A",
                               onSaved: (selectedActivity) {
                                 setState(() {
@@ -462,8 +461,9 @@ class _FarmerFormState extends State<FarmerForm> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
-          color:
-              isDarkMode(context) ? AppColors.kDarkContiner : AppColors.kWhite,
+          color: isDarkMode(context)
+              ? AppColors.kDarkSurfaceColor
+              : AppColors.kInput,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Row(

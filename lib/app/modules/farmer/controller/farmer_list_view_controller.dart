@@ -63,12 +63,13 @@ class FarmerListController extends GetxController {
     });
   }
 
-  void fetchFarmers(
+  Future<void> fetchFarmers(
       int pageKey, PagingController<int, Farmer> pagingController) async {
     print("Fetching Farmers for page: $pageKey");
     try {
       if (pageKey == 1) {
         isListLoading(true);
+        allFarmers.clear();
       }
       isListError(false);
       listErrorMessage.value = '';
@@ -111,6 +112,11 @@ class FarmerListController extends GetxController {
         }
         allFarmers.addAll(uniqueFarmers);
       } else {
+        listErrorMessage.value = "Failed to load farmers";
+        pagingController.error = "Failed to load farmers";
+        print(listErrorMessage.value);
+        print(response.toString);
+        print(response.statusCode.toString);
         throw Exception('Failed to load farmers');
       }
     } catch (e) {
@@ -125,6 +131,10 @@ class FarmerListController extends GetxController {
 
   void setSearchQuery(String query) {
     print('Search Query: $query');
+    print(isError);
+    print(isListLoading);
+    print(isListError);
+
     searchQuery.value = query;
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {

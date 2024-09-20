@@ -10,7 +10,6 @@ import '../home/components/search_field.dart';
 import '../widgets/appbars/appbars.dart';
 import '../widgets/buttons/buttons.dart';
 import '../widgets/buttons/custom_button.dart';
-import '../widgets/no_result/no_result.dart';
 import 'components/farmer_list_view.dart';
 import 'components/filter_bottom_sheet.dart';
 import 'controller/farmer_list_view_controller.dart';
@@ -132,14 +131,11 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
                 ],
               ),
               Obx(() {
-                if (farmerController.isListLoading.value) {
+                if (farmerController.isListLoading.value &&
+                    farmerController.pagingController.itemList == null) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (farmerController.pagingController.itemList == null ||
-                    farmerController.pagingController.itemList!.isEmpty) {
-                  return const NoResultsScreen(
-                    
-                  );
-                } else if (farmerController.isListError.value) {
+                } else if (farmerController.isListError.value &&
+                    farmerController.listErrorMessage.value.isNotEmpty) {
                   return const Error404Screen();
                 }
                 return Column(
