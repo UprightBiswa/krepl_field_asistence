@@ -9,6 +9,7 @@ import '../../controllers/theme_controller.dart';
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
 import '../../repository/auth/auth_token.dart';
+import '../attendance/controller/location_controller.dart';
 import '../auth/sign_in_page.dart';
 import '../widgets/buttons/buttons.dart';
 import 'components/setting_tile.dart';
@@ -25,6 +26,8 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
+  final LocationServiceController _locationServiceController =
+      Get.put(LocationServiceController());
   // bool isNotification = true;
   // bool isDownloadAll = true;
   String appVersion = "";
@@ -79,6 +82,10 @@ class _SettingsViewState extends State<SettingsView> {
     bool confirmLogout = await _showLogoutConfirmationDialog();
     if (confirmLogout) {
       AuthState().clearToken();
+      if (_locationServiceController.isTracking.value) {
+        _locationServiceController.stopService();
+      }
+      _locationServiceController.clearLocationData();
 
       Get.offAll(() => const SignIn());
     }

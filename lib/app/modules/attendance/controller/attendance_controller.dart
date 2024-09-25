@@ -6,6 +6,7 @@ import '../../../data/helpers/internet/connectivity_services.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import '../model/attendance_data_model.dart';
 import '../model/today_status_model.dart';
+import 'location_controller.dart';
 
 class AttendanceController extends GetxController {
   var attendanceList = <AttendanceData>[].obs;
@@ -20,7 +21,8 @@ class AttendanceController extends GetxController {
 
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
-
+  final LocationServiceController _locationServiceController =
+      Get.put(LocationServiceController());
   Future<void> fetchAttendance({
     required String month,
     required String year,
@@ -88,6 +90,23 @@ class AttendanceController extends GetxController {
       if (response.statusCode == 200 && response.data['success'] == true) {
         final data = response.data['data'];
         todayStatus.value = TodayStatus.fromJson(data);
+        // If the user is checked in but not checked out, start the location service
+        if (todayStatus.value.isCheckedIn && !todayStatus.value.isCheckedOut) {
+          if (!_locationServiceController.isTracking.value) {
+            _locationServiceController.clearLocationData();
+            // Start the location service if it's not already running
+            _locationServiceController.startService();
+          }
+        }
+
+        // If the user is checked out, stop the location service
+        if (todayStatus.value.isCheckedOut) {
+          if (_locationServiceController.isTracking.value) {
+            // Stop the location service if it's still running
+            _locationServiceController.stopService();
+            _locationServiceController.clearLocationData();
+          }
+        }
       }
       // Handle unsuccessful response
       else if (response.data['success'] == false) {
@@ -205,16 +224,15 @@ class AttendanceController extends GetxController {
 
       // Define endpoint and send request
       String endPoint = 'fa_attandence';
-      dio.FormData formData  =  dio.FormData.fromMap({
+      dio.FormData formData = dio.FormData.fromMap({
         'checkout_date': checkoutDate,
         'checkout_time': checkoutTime,
         'checkout_lat': checkoutLat,
         'checkout_long': checkoutLong,
         'status': 1,
         'coordinates': coordinates,
-     });
-      final response =
-          await _dioService.postFormData(endPoint, formData);
+      });
+      final response = await _dioService.postFormData(endPoint, formData);
       if (response.statusCode == 200 && response.data['success'] == true) {
         print(response.data);
         isSuccessCheckOut(true);

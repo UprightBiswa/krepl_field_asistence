@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
@@ -159,9 +160,8 @@ class _ProductMasterSelectionBottomSheetState
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       if (search.length >= 3) {
-        productMasterController.loadProductMasters(
-          search,
-        ); // Trigger search API
+        productMasterController
+            .loadProductMasters(search); // Trigger search API
       }
     });
   }
@@ -191,6 +191,8 @@ class _ProductMasterSelectionBottomSheetState
                 return const Center(child: CircularProgressIndicator());
               } else if (productMasterController.error.isNotEmpty) {
                 return const Center(child: Text('Error loading data.'));
+              } else if (productMasterController.noDataFound.value) {
+                return const Center(child: Text('No products found.'));
               } else if (productMasterController.productMasters.isEmpty) {
                 return const Center(child: Text('No data found.'));
               } else {
@@ -205,20 +207,21 @@ class _ProductMasterSelectionBottomSheetState
                     final isSelected = selectedItem == item;
 
                     return ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 0.h),
                       tileColor: isSelected
                           ? AppColors.kPrimary.withOpacity(0.2)
                           : null,
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Material Number: ${item.materialNumber}",
+                          Text("Material: ${item.materialDescription}",
                               style: AppTypography.kBold12),
+                          Text("No: ${item.materialNumber}",
+                              style: AppTypography.kMedium12),
                           Text("Technical Name: ${item.technicalName}",
-                              style: AppTypography.kMedium10),
-                          Text("Description: ${item.materialDescription}",
-                              style: AppTypography.kMedium10),
+                              style: AppTypography.kMedium12),
                           Text("Brand Name: ${item.brandName}",
-                              style: AppTypography.kMedium10),
+                              style: AppTypography.kLight12),
                         ],
                       ),
                       trailing: isSelected

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/containers/primary_container.dart';
 import '../model/form_a_model.dart';
 
 class FormAListView extends StatelessWidget {
@@ -11,8 +12,9 @@ class FormAListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       shrinkWrap: true,
+      separatorBuilder: (context, index) => SizedBox(height: 10.h),
       physics: const NeverScrollableScrollPhysics(),
       itemCount: formAList.length,
       itemBuilder: (context, index) {
@@ -29,49 +31,24 @@ class FormACard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      elevation: 3,
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      child: Padding(
-        padding: EdgeInsets.all(10.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              formA.farmerVillageDoctorName,
-              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5.h),
-            Text('Party Type: ${formA.partyType}',
-                style: TextStyle(fontSize: 12.sp)),
-            Text('Mobile: ${formA.mobileNumber}',
-                style: TextStyle(fontSize: 12.sp)),
-            Text('Season: ${formA.season}', style: TextStyle(fontSize: 12.sp)),
-            Text('Crop: ${formA.crop}', style: TextStyle(fontSize: 12.sp)),
-            // Add more details as needed
-            SizedBox(height: 5.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.blue),
-                  onPressed: () {
-                    // Navigate to edit form page
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
-                    // Delete form logic
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+    return PrimaryContainer(
+      width: double.infinity,
+      padding: EdgeInsets.all(10.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            formA.farmerVillageDoctorName,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 5.h),
+          Text('Party Type: ${formA.partyType}',
+              style: TextStyle(fontSize: 12.sp)),
+          Text('Mobile: ${formA.mobileNumber}',
+              style: TextStyle(fontSize: 12.sp)),
+          Text('Season: ${formA.season}', style: TextStyle(fontSize: 12.sp)),
+          Text('Crop: ${formA.crop}', style: TextStyle(fontSize: 12.sp)),
+        ],
       ),
     );
   }

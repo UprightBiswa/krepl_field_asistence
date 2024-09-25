@@ -7,6 +7,7 @@ class ProductMasterController extends GetxController {
   var productMasters = <ProductMaster>[].obs;
   var isLoading = false.obs;
   var error = ''.obs;
+  var noDataFound = false.obs;
 
   // Inject services (replace with your actual services)
   final DioService _dioService =
@@ -24,6 +25,7 @@ class ProductMasterController extends GetxController {
   Future<void> loadProductMasters(String search) async {
     isLoading.value = true;
     error.value = '';
+    noDataFound.value = false;
 
     try {
       // Check internet connection
@@ -43,22 +45,27 @@ class ProductMasterController extends GetxController {
       final response =
           await _dioService.post(endPoint, queryParams: queryParams);
 
-      // Check if response is successful
-      if (response.statusCode == 200 && response.data['success'] == true) {
-        var data = response.data['data'] as List;
-
-        // Convert the response data into ProductMaster models
-        productMasters.assignAll(
-          data.map((json) => ProductMaster.fromJson(json)).toList(),
-        );
+      if (response.statusCode == 200) {
+        if (response.data['success'] == true) {
+          var data = response.data['data'] as List;
+          if (data.isEmpty) {
+            noDataFound.value = true;
+          } else {
+            productMasters.assignAll(
+              data.map((json) => ProductMaster.fromJson(json)).toList(),
+            );
+          }
+        } else {
+          error.value = response.data['message'] ?? 'Unknown error';
+          noDataFound.value = response.data['data'].isEmpty;
+        }
       } else {
         throw Exception(response.data['message'] ?? 'Failed to load products');
       }
     } catch (e) {
-      // Handle exceptions and set error message
       error.value = e.toString();
     } finally {
-      isLoading.value = false; // Always stop loading after try-catch
+      isLoading.value = false;
     }
   }
 }

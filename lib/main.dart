@@ -59,10 +59,7 @@ class MyApp extends StatelessWidget {
                   .copyWith(physics: const BouncingScrollPhysics()),
               defaultTransition: Transition.fadeIn,
               theme: AppTheme.lightTheme,
-
               darkTheme: AppTheme.darkTheme,
-
-              // themeMode: getThemeMode(themeController.theme),
               themeMode: ThemeMode.system,
               home: const SplashScreen(),
             ),

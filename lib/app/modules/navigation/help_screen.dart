@@ -16,8 +16,6 @@ class HelpScreen extends StatefulWidget {
 class _HelpScreenState extends State<HelpScreen> {
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool isLightMode = brightness == Brightness.light;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -26,8 +24,6 @@ class _HelpScreenState extends State<HelpScreen> {
           style: AppTypography.kMedium15,
         ),
       ),
-      backgroundColor:
-          isLightMode ? AppColors.kWhite : AppColors.kDarkBackground,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0.h),
         child: Column(
