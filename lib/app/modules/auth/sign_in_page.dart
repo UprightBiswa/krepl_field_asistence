@@ -112,7 +112,8 @@ class _SignInState extends State<SignIn> {
         try {
           UserDetailsResponse response =
               await loginProvider.getUserInfo(deviceToken, context);
-          print('User info fetched successfully: ${response.data!.employeeName}');
+          print(
+              'User info fetched successfully: ${response.data!.employeeName}');
           // if (loginProvider.cacheRsponse != null &&
           //     loginProvider.cacheRsponse!.success &&
           //     response.data != null) {
@@ -185,7 +186,12 @@ class _SignInState extends State<SignIn> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 100.h),
-            Center(child: Image.asset(AppAssets.kLogo)),
+            Center(
+              child: Image.asset(
+                AppAssets.kLogo,
+                height: 200,
+              ),
+            ),
             SizedBox(height: 62.h),
             Text('Sign in', style: AppTypography.kMedium32),
             SizedBox(height: 24.h),

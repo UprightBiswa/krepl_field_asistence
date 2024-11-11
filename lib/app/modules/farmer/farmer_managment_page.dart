@@ -126,7 +126,9 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
                       // Logic to see all farmers
                     },
                     text: 'See All',
-                    color: AppColors.kDarkContiner.withOpacity(0.3),
+                    color: isDarkMode(context)
+                        ? AppColors.kWhite
+                        : AppColors.kDarkContiner,
                   ),
                 ],
               ),

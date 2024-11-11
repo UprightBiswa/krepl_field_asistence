@@ -190,7 +190,7 @@ class _ProductMasterSelectionBottomSheetState
               if (productMasterController.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               } else if (productMasterController.error.isNotEmpty) {
-                return const Center(child: Text('Error loading data.'));
+                return Center(child: Text(productMasterController.error.value));
               } else if (productMasterController.noDataFound.value) {
                 return const Center(child: Text('No products found.'));
               } else if (productMasterController.productMasters.isEmpty) {

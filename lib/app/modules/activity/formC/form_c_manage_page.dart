@@ -5,24 +5,37 @@ import 'package:get/get.dart';
 import '../../../data/constrants/constants.dart';
 import '../../home/components/search_field.dart';
 import '../../widgets/buttons/custom_button.dart';
+import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
-import '../components/form_a_list_view.dart';
-import '../controller/form_a_controller.dart';
+import '../controller/form_c_controller.dart';
 import 'form_c_create_from_page.dart';
+import 'form_c_list_view.dart';
 
-class FormCManagementPage extends StatelessWidget {
-  final FormAController formAController = Get.put(FormAController());
+class FormCManagementPage extends StatefulWidget {
+  const FormCManagementPage({super.key});
+
+  @override
+  State<FormCManagementPage> createState() => _FormCManagementPageState();
+}
+
+class _FormCManagementPageState extends State<FormCManagementPage> {
+  final FormCController formCController = Get.put(FormCController());
+
   final TextEditingController textController = TextEditingController();
-
-  FormCManagementPage({super.key});
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
+  @override
+  void initState() {
+    super.initState();
+    formCController.fetchFormCData(1);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
+        spaceBar: true,
         leadingCallback: () {
           Get.back<void>();
         },
@@ -30,7 +43,7 @@ class FormCManagementPage extends StatelessWidget {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'FormC Management',
+          'Dealer Stock',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -41,7 +54,7 @@ class FormCManagementPage extends StatelessWidget {
         action: [
           CustomButton(
             icon: Icons.add,
-            text: 'Add FormC',
+            text: 'Add Stock',
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormCpage(),
@@ -53,69 +66,53 @@ class FormCManagementPage extends StatelessWidget {
           )
         ],
       ),
-      body: Obx(() {
-        if (formAController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                Row(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          formCController.refreshItems();
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+                child: Column(
                   children: [
-                    Expanded(
-                      child: SearchField(
-                        controller: textController,
-                        onChanged: (query) {
-                          formAController.filterFormAList(query);
-                        },
-                        isEnabled: true,
-                        hintText: 'Search FormC',
-                      ),
-                    ),
-                    SizedBox(width: 10.w),
-                    GestureDetector(
-                      onTap: () {
-                        // Logic for filter action
+                    SizedBox(height: 20.h),
+                    SearchField(
+                      controller: textController,
+                      onChanged: (query) {
+                        formCController.setSearchQuery(query);
                       },
-                      child: CircleAvatar(
-                        radius: 20.w,
-                        backgroundColor: Colors.blue.withOpacity(0.15),
-                        child: const Icon(
-                          Icons.filter_list,
-                          color: Colors.blue,
-                        ),
-                      ),
+                      isEnabled: true,
+                      hintText: 'Search Stock',
                     ),
+                    const SizedBox(height: 10),
+                    CustomHeaderText(text: 'Stock List', fontSize: 16.sp),
+                    const SizedBox(height: 10),
+                    Obx(() {
+                      if (formCController.isListLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (formCController.isListError.value) {
+                        return Center(
+                            child:
+                                Text(formCController.listErrorMessage.value));
+                      }
+                      return Column(
+                        children: [
+                          FormCListView(
+                              pagingController:
+                                  formCController.pagingController),
+                          SizedBox(height: 20.h),
+                        ],
+                      );
+                    }),
                   ],
                 ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Text('Form C List',
-                        style: TextStyle(
-                            fontSize: 16.sp, fontWeight: FontWeight.bold)),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        // Logic to see all forms
-                      },
-                      child: const Text('See All',
-                          style: TextStyle(color: Colors.grey)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                FormAListView(formAList: formAController.filteredFormAList),
-                SizedBox(height: 20.h),
-              ],
+              ),
             ),
-          ),
-        );
-      }),
+          ],
+        ),
+      ),
     );
   }
 }

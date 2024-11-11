@@ -6,23 +6,35 @@ import '../../../data/constrants/constants.dart';
 import '../../home/components/search_field.dart';
 import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/widgets.dart';
-import '../components/form_a_list_view.dart';
-import '../controller/form_a_controller.dart';
+import '../controller/form_d_controller.dart';
 import 'form_d_create_from_page.dart';
+import 'form_d_list_view.dart';
 
-class FormDManagementPage extends StatelessWidget {
-  final FormAController formAController = Get.put(FormAController());
+class FormDManagementPage extends StatefulWidget {
+  const FormDManagementPage({super.key});
+
+  @override
+  State<FormDManagementPage> createState() => _FormDManagementPageState();
+}
+
+class _FormDManagementPageState extends State<FormDManagementPage> {
+  final FormDController formDController = Get.put(FormDController());
+
   final TextEditingController textController = TextEditingController();
-
-  FormDManagementPage({super.key});
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
+  @override
+  void initState() {
+    super.initState();
+    formDController.fetchFormDData(1);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
+        spaceBar: true,
         leadingCallback: () {
           Get.back<void>();
         },
@@ -30,7 +42,7 @@ class FormDManagementPage extends StatelessWidget {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'FormD Management',
+          'Demo Management',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -41,7 +53,7 @@ class FormDManagementPage extends StatelessWidget {
         action: [
           CustomButton(
             icon: Icons.add,
-            text: 'Add FormD',
+            text: 'Add Demo',
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormDpage(),
@@ -53,69 +65,38 @@ class FormDManagementPage extends StatelessWidget {
           )
         ],
       ),
-      body: Obx(() {
-        if (formAController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SearchField(
-                        controller: textController,
-                        onChanged: (query) {
-                          formAController.filterFormAList(query);
-                        },
-                        isEnabled: true,
-                        hintText: 'Search FormD',
-                      ),
-                    ),
-                    SizedBox(width: 10.w),
-                    GestureDetector(
-                      onTap: () {
-                        // Logic for filter action
-                      },
-                      child: CircleAvatar(
-                        radius: 20.w,
-                        backgroundColor: Colors.blue.withOpacity(0.15),
-                        child: const Icon(
-                          Icons.filter_list,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Text('Form D List',
-                        style: TextStyle(
-                            fontSize: 16.sp, fontWeight: FontWeight.bold)),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        // Logic to see all forms
-                      },
-                      child: const Text('See All',
-                          style: TextStyle(color: Colors.grey)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                FormAListView(formAList: formAController.filteredFormAList),
-                SizedBox(height: 20.h),
-              ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          formDController.refreshItems();
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.w),
+              child: SearchField(
+                controller: textController,
+                onChanged: (query) {
+                  formDController.setSearchQuery(query);
+                },
+                isEnabled: true,
+                hintText: 'Search',
+              ),
             ),
-          ),
-        );
-      }),
+            Obx(() {
+              if (formDController.isListLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (formDController.isListError.value) {
+                return Center(
+                    child: Text(formDController.listErrorMessage.value));
+              }
+              return Expanded(
+                child: FormDListView(
+                    pagingController: formDController.pagingController),
+              );
+            }),
+          ],
+        ),
+      ),
     );
   }
 }

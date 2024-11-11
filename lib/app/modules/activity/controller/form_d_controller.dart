@@ -1,90 +1,111 @@
+// form_d_controller.dart
+import 'dart:async';
 import 'package:get/get.dart';
-import '../model/form_a_model.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import '../../../data/helpers/internet/connectivity_services.dart';
+import '../../../data/helpers/utils/dioservice/dio_service.dart';
+import '../model/form_d_model.dart';
 
 class FormDController extends GetxController {
-  RxList<FormAModel> formAList = <FormAModel>[].obs;
-  RxList<FormAModel> filteredFormAList = <FormAModel>[].obs;
-  RxBool isLoading = false.obs;
+  final DioService _dioService = DioService();
+  final ConnectivityService _connectivityService = ConnectivityService();
+
+  final PagingController<int, FormD> pagingController =
+      PagingController(firstPageKey: 1);
+  static const int pageSize = 10;
+  Timer? _debounce;
+  final Set<int> _existingItemIds = <int>{};
+
+  var searchQuery = ''.obs;
+  var isListLoading = false.obs;
+  var isListError = false.obs;
+  var listErrorMessage = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadDummyData();
-  }
-
-  void loadDummyData() {
-    isLoading.value = true;
-    Future.delayed(const Duration(seconds: 2), () {
-      formAList.addAll([
-        FormAModel(
-          formName: 'Form A1',
-          promotionalActivitiesType: 'Demonstration',
-          partyType: 'Farmer',
-          mobileNumber: '1234567890',
-          farmerVillageDoctorName: 'John Doe',
-          season: 'Kharif',
-          crop: 'Wheat',
-          cropStage: 'Vegetative',
-          product: 'Pesticide',
-          pest: 'Aphids',
-          totalNumberFarmerVillageDoctor: 10,
-          expense: 500.0,
-          photoRequired: true,
-          jioLocationTickRequired: false,
-          updateMobileNumber: 'Yes',
-          remark: 'N/A',
-        ),
-        FormAModel(
-          formName: 'Form A2',
-          promotionalActivitiesType: 'Field Day',
-          partyType: 'Village',
-          mobileNumber: '0987654321',
-          farmerVillageDoctorName: 'Jane Doe',
-          season: 'Rabi',
-          crop: 'Rice',
-          cropStage: 'Flowering',
-          product: 'Fertilizer',
-          pest: 'Bollworm',
-          totalNumberFarmerVillageDoctor: 20,
-          expense: 1000.0,
-          photoRequired: true,
-          jioLocationTickRequired: true,
-          updateMobileNumber: 'No',
-          remark: 'N/A',
-        ),
-        FormAModel(
-          formName: 'Form A3',
-          promotionalActivitiesType: 'Training',
-          partyType: 'Doctor',
-          mobileNumber: '1122334455',
-          farmerVillageDoctorName: 'Dr. Smith',
-          season: 'Kharif',
-          crop: 'Corn',
-          cropStage: 'Harvesting',
-          product: 'Herbicide',
-          pest: 'Armyworm',
-          totalNumberFarmerVillageDoctor: 15,
-          expense: 750.0,
-          photoRequired: false,
-          jioLocationTickRequired: true,
-          updateMobileNumber: 'Yes',
-          remark: 'N/A',
-        ),
-      ]);
-      filteredFormAList.assignAll(formAList);
-      isLoading.value = false;
+    pagingController.addPageRequestListener((pageKey) {
+      fetchFormDData(pageKey);
     });
   }
 
-  void filterFormAList(String query) {
-    if (query.isEmpty) {
-      filteredFormAList.assignAll(formAList);
-    } else {
-      filteredFormAList.assignAll(
-        formAList.where(
-          (form) => form.farmerVillageDoctorName.toLowerCase().contains(query.toLowerCase()),
-        ),
+  Future<void> fetchFormDData(int pageKey) async {
+    try {
+      if (pageKey == 1) {
+        isListLoading(true);
+      }
+      isListError(false);
+      listErrorMessage.value = '';
+
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      Map<String, dynamic> parameters = {
+        'page': pageKey,
+        'limit': pageSize,
+        'order': -1,
+        'order_by': '',
+        'filter_value': searchQuery.value,
+        'form_value': 'all',
+      };
+
+      final response = await _dioService.post(
+        'viewFormD',
+        queryParams: parameters,
       );
+
+      if (response.statusCode == 200) {
+        final data = response.data['data'] as List;
+        final formDList = data.map((item) => FormD.fromJson(item)).toList();
+
+        final List<FormD> uniqueFormDList = formDList.where((formD) {
+          final isDuplicate = _existingItemIds.contains(formD.id);
+          if (!isDuplicate) {
+            _existingItemIds.add(formD.id);
+          }
+          return !isDuplicate;
+        }).toList();
+
+        final isLastPage = pageKey >= response.data['total_pages'];
+        if (isLastPage) {
+          pagingController.appendLastPage(uniqueFormDList);
+        } else {
+          final nextPageKey = pageKey + 1;
+          pagingController.appendPage(uniqueFormDList, nextPageKey);
+        }
+      } else {
+        listErrorMessage.value = "Failed to load data";
+        pagingController.error = listErrorMessage.value;
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      isListError(true);
+      listErrorMessage.value = e.toString();
+      pagingController.error = e;
+    } finally {
+      isListLoading(false);
     }
+  }
+
+  void setSearchQuery(String query) {
+    searchQuery.value = query;
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _existingItemIds.clear();
+      pagingController.refresh();
+    });
+  }
+
+  void refreshItems() {
+    _existingItemIds.clear();
+    pagingController.refresh();
+  }
+
+  @override
+  void onClose() {
+    pagingController.dispose();
+    _debounce?.cancel();
+    super.onClose();
   }
 }

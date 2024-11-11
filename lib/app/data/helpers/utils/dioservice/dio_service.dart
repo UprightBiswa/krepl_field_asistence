@@ -72,7 +72,7 @@ class DioService {
   Response _handleNullDeviceToken() {
     getx.Get.defaultDialog(
       barrierDismissible: false,
-      title: 'Device Token is null',
+      title: 'Login Required',
       content: const Text('Please login again'),
       actions: [
         TextButton(

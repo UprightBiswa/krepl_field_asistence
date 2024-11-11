@@ -5,24 +5,38 @@ import 'package:get/get.dart';
 import '../../../data/constrants/constants.dart';
 import '../../home/components/search_field.dart';
 import '../../widgets/buttons/custom_button.dart';
+import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
-import '../components/form_a_list_view.dart';
 import '../controller/form_b_controller.dart';
 import 'form_b_create_form_page.dart';
+import 'form_b_list_view.dart';
 
-class FormBManagementPage extends StatelessWidget {
+class FormBManagementPage extends StatefulWidget {
+  const FormBManagementPage({super.key});
+
+  @override
+  State<FormBManagementPage> createState() => _FormBManagementPageState();
+}
+
+class _FormBManagementPageState extends State<FormBManagementPage> {
   final FormBController formBController = Get.put(FormBController());
-  final TextEditingController textController = TextEditingController();
 
-  FormBManagementPage({super.key});
+  final TextEditingController textController = TextEditingController();
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
   @override
+  void initState() {
+    super.initState();
+    formBController.fetchFormBData(1);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
+        spaceBar: true,
         leadingCallback: () {
           Get.back<void>();
         },
@@ -53,69 +67,53 @@ class FormBManagementPage extends StatelessWidget {
           )
         ],
       ),
-      body: Obx(() {
-        if (formBController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                Row(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          formBController.refreshItems();
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+                child: Column(
                   children: [
-                    Expanded(
-                      child: SearchField(
-                        controller: textController,
-                        onChanged: (query) {
-                          formBController.filterFormAList(query);
-                        },
-                        isEnabled: true,
-                        hintText: 'Search Campaign',
-                      ),
-                    ),
-                    SizedBox(width: 10.w),
-                    GestureDetector(
-                      onTap: () {
-                        // Logic for filter action
+                    SizedBox(height: 20.h),
+                    SearchField(
+                      controller: textController,
+                      onChanged: (query) {
+                        formBController.setSearchQuery(query);
                       },
-                      child: CircleAvatar(
-                        radius: 20.w,
-                        backgroundColor: Colors.blue.withOpacity(0.15),
-                        child: const Icon(
-                          Icons.filter_list,
-                          color: Colors.blue,
-                        ),
-                      ),
+                      isEnabled: true,
+                      hintText: 'Search Campaign',
                     ),
+                    const SizedBox(height: 10),
+                    CustomHeaderText(text: 'Campaign List', fontSize: 16.sp),
+                    const SizedBox(height: 10),
+                    Obx(() {
+                      if (formBController.isListLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (formBController.isListError.value) {
+                        return Center(
+                            child:
+                                Text(formBController.listErrorMessage.value));
+                      }
+                      return Column(
+                        children: [
+                          FormBListView(
+                              pagingController:
+                                  formBController.pagingController),
+                          SizedBox(height: 20.h),
+                        ],
+                      );
+                    }),
                   ],
                 ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    Text('Form B List',
-                        style: TextStyle(
-                            fontSize: 16.sp, fontWeight: FontWeight.bold)),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        // Logic to see all forms
-                      },
-                      child: const Text('See All',
-                          style: TextStyle(color: Colors.grey)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                FormAListView(formAList: formBController.filteredFormAList),
-                SizedBox(height: 20.h),
-              ],
+              ),
             ),
-          ),
-        );
-      }),
+          ],
+        ),
+      ),
     );
   }
 }

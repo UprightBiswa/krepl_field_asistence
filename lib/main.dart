@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: GetMaterialApp(
-              title: 'Field Asistence',
+              title: 'KRISHAJ SAHAYAK',
               debugShowCheckedModeBanner: false,
               useInheritedMediaQuery: true,
               scrollBehavior: const ScrollBehavior()

@@ -114,7 +114,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8, left: 4),
                     child: Text(
-                      'Field Asistence',
+                      'KRISHAJ SAHAYAK',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: isDarkMode(context)

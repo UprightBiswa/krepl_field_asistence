@@ -261,20 +261,20 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                             ],
                             const SizedBox(height: 16),
                             //print text in list of selected items in id selectedPartyNameListId
-                            if (selectedVillages.isNotEmpty) ...[
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.green[100],
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  'Selected Party Name Ids: ${selectedVillages.map((village) => village.id.toString()).join(', ')}',
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                            ],
+                            // if (selectedVillages.isNotEmpty) ...[
+                            //   Container(
+                            //     width: double.infinity,
+                            //     padding: const EdgeInsets.all(8),
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.green[100],
+                            //       borderRadius: BorderRadius.circular(10),
+                            //     ),
+                            //     child: Text(
+                            //       'Selected Party Name Ids: ${selectedVillages.map((village) => village.id.toString()).join(', ')}',
+                            //     ),
+                            //   ),
+                            //   const SizedBox(height: 16),
+                            // ],
 
                             SeasionSelectionScreen(
                               onSelectionChanged: (selectedSeasonsitems) {
