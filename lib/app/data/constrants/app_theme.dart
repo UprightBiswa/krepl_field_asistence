@@ -58,6 +58,12 @@ class AppTheme {
       showSelectedLabels: false,
       showUnselectedLabels: false,
     ),
+    dataTableTheme: DataTableThemeData(
+      headingRowColor: MaterialStateProperty.all(
+        AppColors.kPrimary,
+      ),
+      dataTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -114,6 +120,15 @@ class AppTheme {
       elevation: 0,
       showSelectedLabels: false,
       showUnselectedLabels: false,
+    ),
+    dataTableTheme: DataTableThemeData(
+      // headingRowColor: MaterialStateProperty.all(Colors.grey[300]),
+      // dataTextStyle: TextStyle(fontSize: 12),
+      //handel for dark theme
+      headingRowColor: MaterialStateProperty.all(
+        AppColors.kPrimary,
+      ),
+      dataTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
     ),
   );
 }

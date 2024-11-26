@@ -732,6 +732,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                             SizedBox(height: 16.h),
                             CustomDatePicker(
                               labelText: 'Next Demo Date',
+                              hintText: 'Select Date',
                               icon: Icons.calendar_today,
                               textEditingController: _dateController,
                               onDateSelected: (context) =>

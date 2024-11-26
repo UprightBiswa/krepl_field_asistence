@@ -221,6 +221,7 @@ class _RouteFormPageState extends State<RouteFormPage> {
                 SizedBox(height: 16.h),
                 CustomDatePicker(
                   labelText: 'From Date',
+                  hintText: 'select from date',
                   icon: Icons.calendar_today,
                   textEditingController: fromDateController,
                   onDateSelected: (context) => _selectDateRange(context),
@@ -228,6 +229,7 @@ class _RouteFormPageState extends State<RouteFormPage> {
                 SizedBox(height: 16.h),
                 CustomDatePicker(
                   labelText: 'To Date',
+                  hintText: 'select to date',
                   icon: Icons.calendar_today,
                   textEditingController: toDateController,
                   onDateSelected: (context) => _selectDateRange(context),

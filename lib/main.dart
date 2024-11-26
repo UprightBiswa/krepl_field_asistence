@@ -1,4 +1,4 @@
-import 'package:field_asistence/app/controllers/theme_controller.dart';
+// import 'package:field_asistence/app/controllers/theme_controller.dart';
 import 'package:field_asistence/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final themeController = Get.put(ThemeController());
-    debugPrint(themeController.theme);
+    // final themeController = Get.put(ThemeController());
+    // debugPrint(themeController.theme);
     return MultiProvider(
       providers: [
         CommonProviders.connectionProvider(),
@@ -59,8 +59,8 @@ class MyApp extends StatelessWidget {
                   .copyWith(physics: const BouncingScrollPhysics()),
               defaultTransition: Transition.fadeIn,
               theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
-              themeMode: ThemeMode.system,
+              // darkTheme: AppTheme.darkTheme,
+              // themeMode: ThemeMode.system,
               home: const SplashScreen(),
             ),
           );

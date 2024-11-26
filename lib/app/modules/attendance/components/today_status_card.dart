@@ -44,10 +44,9 @@ class TodayStatusCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //replace the hi with check user device curent time and make Goodmording , goodnight , eving text with check curent time
           Text(
-            '${getGreeting()}, 👋',
-            style: AppTypography.kMedium16.copyWith(color: AppColors.kGrey),
+            "Today's Status",
+            style: AppTypography.kMedium16,
           ),
 
           SizedBox(height: 10.h),
@@ -57,8 +56,8 @@ class TodayStatusCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Today's Status",
-                style: AppTypography.kMedium16,
+                '${getGreeting()}, 👋',
+                style: AppTypography.kMedium16.copyWith(color: AppColors.kGrey),
               ),
               SizedBox(
                 width: 10.w,

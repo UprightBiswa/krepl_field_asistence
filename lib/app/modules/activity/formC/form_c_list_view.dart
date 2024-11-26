@@ -6,6 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../model/form_c_model.dart';
 import 'form_c_details_page.dart';
+import '../../../data/constrants/constants.dart';
 
 class FormCListView extends StatelessWidget {
   final PagingController<int, FormC> pagingController;
@@ -32,6 +33,9 @@ class FormCListView extends StatelessWidget {
     );
   }
 }
+
+bool isDarkMode(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark;
 
 class FormCCard extends StatelessWidget {
   final FormC formC;
@@ -129,13 +133,14 @@ class FormCSummary extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 12.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkMode(context) ? AppColors.kDarkContiner : AppColors.kWhite,
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 2,
-            blurRadius: 6,
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),

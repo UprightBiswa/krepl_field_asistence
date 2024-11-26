@@ -206,11 +206,11 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
           ],
         ),
       ),
-      bottomNavigationBar: DoctorActionSheet(
-        editCallback: () {
-          // Logic for editing doctor details
-        },
-      ),
+      // bottomNavigationBar: DoctorActionSheet(
+      //   editCallback: () {
+      //     // Logic for editing doctor details
+      //   },
+      // ),
     );
   }
 }

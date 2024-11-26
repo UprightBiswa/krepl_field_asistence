@@ -1,7 +1,9 @@
-import 'package:field_asistence/app/modules/activity/model/form_c_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import 'package:field_asistence/app/modules/activity/model/form_c_model.dart';
+
 import '../../../data/constrants/constants.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../../widgets/widgets.dart';
@@ -69,12 +71,12 @@ class FormCDetailPage extends StatelessWidget {
               totalProduct: totalProduct(formC.formCDetails),
             ),
             SizedBox(height: 10.h),
-            _buildInfoCard(
+            BuildInfoCard(
                 title: 'Activity Type', content: formC.promotionActivityType),
             SizedBox(height: 10.h),
-            _buildInfoCard(title: 'Party Type', content: formC.partyType),
+            BuildInfoCard(title: 'Party Type', content: formC.partyType),
             SizedBox(height: 10.h),
-            _buildInfoCard(title: 'Activity Date', content: formC.createdAt),
+            BuildInfoCard(title: 'Activity Date', content: formC.createdAt),
             SizedBox(height: 10.h),
             Text(
               'User Details',
@@ -88,7 +90,7 @@ class FormCDetailPage extends StatelessWidget {
               ),
             ),
             if (formC.remarks.isNotEmpty)
-              _buildInfoCard(title: 'Remarks', content: formC.remarks),
+              BuildInfoCard(title: 'Remarks', content: formC.remarks),
           ],
         ),
       ),
@@ -96,11 +98,12 @@ class FormCDetailPage extends StatelessWidget {
   }
 }
 
-class _buildInfoCard extends StatelessWidget {
+class BuildInfoCard extends StatelessWidget {
   final String title;
   final String content;
 
-  const _buildInfoCard({
+  const BuildInfoCard({
+    super.key,
     required this.title,
     required this.content,
   });

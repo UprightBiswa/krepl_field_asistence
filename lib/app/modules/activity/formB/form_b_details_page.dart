@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../data/constrants/constants.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../../widgets/widgets.dart';
+import '../formC/form_c_details_page.dart';
 import '../model/form_b_model.dart';
 
 class FormBDetailPage extends StatelessWidget {
@@ -40,39 +41,21 @@ class FormBDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoCard('Activity Type', formB.promotionActivityType),
+            BuildInfoCard(
+                title: 'Activity Type', content: formB.promotionActivityType),
             SizedBox(height: 10.h),
-            _buildInfoCard('Party Type', formB.partyType),
+            BuildInfoCard(title: 'Party Type', content: formB.partyType),
             SizedBox(height: 10.h),
-            _buildInfoCard('Activity Date', formB.createdAt),
+            BuildInfoCard(title: 'Activity Date', content: formB.createdAt),
             SizedBox(height: 10.h),
             _buildUserDetails(),
             SizedBox(height: 10.h),
             _buildFormDetails(),
             SizedBox(height: 10.h),
             if (formB.remarks != null)
-              _buildInfoCard('Remarks', formB.remarks!),
+              BuildInfoCard(title: 'Remarks', content: formB.remarks!),
           ],
         ),
-      ),
-    );
-  }
-
-  // Builds the information card for Activity and Party Type, etc.
-  Widget _buildInfoCard(String title, String content) {
-    return PrimaryContainer(
-      padding: EdgeInsets.all(12.h),
-      width: double.infinity, // Full width
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 5.h),
-          Text(content, style: TextStyle(fontSize: 12.sp)),
-        ],
       ),
     );
   }

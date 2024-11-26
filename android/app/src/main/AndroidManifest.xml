@@ -27,7 +27,7 @@
         </intent>
     </queries>
     <application
-        android:label="KRISHAJ SAHAYAK"
+        android:label="Krishaj Sahayak"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"

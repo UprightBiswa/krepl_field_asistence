@@ -104,3 +104,36 @@ final List<RouteMap> dummyRouteData = [
     status: RouteStatus.Delete,
   ),
 ];
+
+
+class RouteModel {
+  final String routeCode;
+  final String routeName;
+  final String? villageName;
+  final String? pin;
+  final String? officename;
+  final String validFrom;
+  final String validTo;
+
+  RouteModel({
+    required this.routeCode,
+    required this.routeName,
+    this.villageName,
+    this.pin,
+    this.officename,
+    required this.validFrom,
+    required this.validTo,
+  });
+
+  factory RouteModel.fromJson(Map<String, dynamic> json) {
+    return RouteModel(
+      routeCode: json['route_code'],
+      routeName: json['route_name'],
+      villageName: json['village_name'],
+      pin: json['pin'],
+      officename: json['officename'],
+      validFrom: json['valid_from'],
+      validTo: json['valid_to'],
+    );
+  }
+}

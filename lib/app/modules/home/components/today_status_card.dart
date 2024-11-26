@@ -31,8 +31,20 @@ class _TodayStatusCardState extends State<TodayStatusCard> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode(BuildContext context) =>
-        Theme.of(context).brightness == Brightness.dark;
+    String getGreeting() {
+      final now = DateTime.now();
+      final hour = now.hour;
+
+      if (hour < 12) {
+        return 'Good Morning';
+      } else if (hour < 18) {
+        return 'Good Afternoon';
+      } else if (hour < 21) {
+        return 'Good Evening';
+      } else {
+        return 'Good Night';
+      }
+    }
 
     return Obx(() {
       var todayStatus = attendanceController.todayStatus.value;
@@ -48,6 +60,12 @@ class _TodayStatusCardState extends State<TodayStatusCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  '${getGreeting()}, 👋',
+                  style:
+                      AppTypography.kMedium16.copyWith(color: AppColors.kGrey),
+                ),
+                SizedBox(height: 10.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

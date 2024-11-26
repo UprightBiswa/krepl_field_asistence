@@ -36,13 +36,22 @@ class CustomDropdownField extends StatelessWidget {
         ),
         fillColor:
             isDarkMode(context) ? AppColors.kContentColor : AppColors.kInput,
-            
-        prefixIcon: Icon(icon),
+        prefixIcon: Icon(icon, color: AppColors.kPrimary),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Colors.grey,
+          ),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen),
+        ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: isDarkMode(context)
-                ? AppColors.kInput
-                : AppColors.kContentColor,
+          borderSide: const BorderSide(
+            color: Colors.grey,
+          ),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusTen),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: AppColors.kPrimary,
           ),
           borderRadius: BorderRadius.circular(AppSpacing.radiusTen),
         ),

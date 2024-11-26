@@ -198,6 +198,7 @@ class FarmerController extends GetxController {
       // API call
       final response =
           await _dioService.post(endPoint, queryParams: parameters);
+      print(response.data);
 
       // Handle response
       if (response.statusCode == 200 && response.data['success'] == true) {

@@ -1,10 +1,11 @@
+import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../widgets/containers/primary_container.dart';
 import '../../widgets/widgets.dart';
+import '../formC/form_c_details_page.dart';
 import '../model/form_d_model.dart';
 
 class FormDDetailPage extends StatelessWidget {
@@ -33,75 +34,168 @@ class FormDDetailPage extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.w),
-        child: PrimaryContainer(
-          padding: EdgeInsets.all(10.h),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BuildInfoCard(
+                title: 'Activity Type', content: formD.promotionActivityType),
+            SizedBox(height: 10.h),
+            BuildInfoCard(title: 'Party Type', content: formD.partyType),
+            SizedBox(height: 10.h),
+            BuildInfoCard(
+                title: 'Total Party No',
+                content: formD.totalPartyNo.toString()),
+            SizedBox(height: 10.h),
+            BuildInfoCard(title: 'Activity Date', content: formD.createdAt),
+            SizedBox(height: 10.h),
+            SizedBox(height: 10.h),
+            _buildUserDetails(),
+            SizedBox(height: 10.h),
+            _buildFormDetails(),
+            SizedBox(height: 10.h),
+            if (formD.remarks.isNotEmpty)
+              BuildInfoCard(title: 'Remarks', content: formD.remarks),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Builds the User Details section
+  Widget _buildUserDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'User Details',
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 10.h),
+        PrimaryContainer(
+          padding: EdgeInsets.all(12.h),
+          width: double.infinity, // Full width
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Activity Type: ${formD.promotionActivityType}',
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 5.h),
-              Text('Party Type: ${formD.partyType}',
-                  style: TextStyle(fontSize: 14.sp)),
-              if (formD.remarks.isNotEmpty)
-                Text('Remarks: ${formD.remarks}',
-                    style: TextStyle(fontSize: 14.sp)),
-              Text('Total Party No: ${formD.totalPartyNo}',
-                  style: TextStyle(fontSize: 14.sp)),
-              Text('Created At: ${formD.createdAt}',
-                  style: TextStyle(fontSize: 14.sp)),
-              SizedBox(height: 10.h),
-              ExpansionTile(
-                title: Text('Details', style: TextStyle(fontSize: 14.sp)),
-                children: formD.formDDetails.map((detail) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Crop Name: ${detail.cropName}',
-                            style: TextStyle(fontSize: 14.sp)),
-                        Text('Stage: ${detail.cropStageName}',
-                            style: TextStyle(fontSize: 14.sp)),
-                        Text('Product: ${detail.productName}',
-                            style: TextStyle(fontSize: 14.sp)),
-                        Text('Pest: ${detail.pestName}',
-                            style: TextStyle(fontSize: 14.sp)),
-                        Text('Season: ${detail.seasonName}',
-                            style: TextStyle(fontSize: 14.sp)),
-                        SizedBox(height: 5.h),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 10.h),
-              ExpansionTile(
-                title: Text('User Details', style: TextStyle(fontSize: 14.sp)),
-                children: formD.formDUserDetails.map((userDetail) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Party Name: ${userDetail.partyName}',
-                            style: TextStyle(fontSize: 14.sp)),
-                        Text('Mobile No: ${userDetail.mobileNo}',
-                            style: TextStyle(fontSize: 14.sp)),
-                        SizedBox(height: 5.h),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
+              ...formD.formDUserDetails.map((userDetail) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Party Name: ${userDetail.partyName}',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                      Text(
+                        'Mobile: ${userDetail.mobileNo}',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
         ),
-      ),
+      ],
+    );
+  }
+
+  // Builds the Form Details section
+  Widget _buildFormDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Details',
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 10.h),
+        ...formD.formDDetails.map((detail) {
+          return PrimaryContainer(
+            padding: EdgeInsets.all(12.h),
+            width: double.infinity, // Full width
+            margin: EdgeInsets.only(bottom: 10.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Crop: ',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                    Text(
+                      detail.cropName,
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Stage: ',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                    Text(
+                      detail.cropStageName,
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Product: ',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                    Text(
+                      detail.productName,
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Pest: ',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                    Text(
+                      detail.pestName,
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Season: ',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                    Text(
+                      detail.seasonName,
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
     );
   }
 }

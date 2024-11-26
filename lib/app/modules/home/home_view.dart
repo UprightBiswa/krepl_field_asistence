@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
-import '../landing_screens/components/gradient_appbar.dart';
 import '../profile/settings_view.dart';
 import '../search/search_view.dart';
 import '../widgets/widgets.dart';
@@ -25,17 +24,67 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
+Widget _circularContainer(double height, Color color,
+    {Color borderColor = Colors.transparent, double borderWidth = 2}) {
+  return Container(
+    height: height,
+    width: height,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: color,
+      border: Border.all(color: borderColor, width: borderWidth),
+    ),
+  );
+}
+
 class _HomeViewState extends State<HomeView> {
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
+    //app bar height for the current screen\ add a app status bar size
+    final appBarHeight =
+        AppBar().preferredSize.height + AppBar().preferredSize.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        flexibleSpace: GradientContainer(
-          child: Container(),
+        flexibleSpace: Container(
+          height: Size.fromHeight(appBarHeight).height,
+          width: double.maxFinite,
+          decoration: const BoxDecoration(
+            color: AppColors.kPrimary,
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned(
+                top: -150,
+                right: -50,
+                child: _circularContainer(
+                    200, AppColors.kPrimary2.withOpacity(0.2)),
+              ),
+              Positioned(
+                top: -100,
+                right: -100,
+                child: _circularContainer(
+                    180, AppColors.kPrimary2.withOpacity(0.4)),
+              ),
+              Positioned(
+                top: -100,
+                left: -45,
+                child: _circularContainer(
+                    width * .5, AppColors.kPrimary2.withOpacity(0.2)),
+              ),
+              Positioned(
+                top: -180,
+                right: -30,
+                child: _circularContainer(width * .7, Colors.transparent,
+                    borderColor: Colors.white38),
+              ),
+            ],
+          ),
         ),
         title: Text('Home', style: AppTypography.kBold16),
         centerTitle: true,

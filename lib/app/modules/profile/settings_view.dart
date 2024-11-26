@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../controllers/theme_controller.dart';
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
 import '../../repository/auth/auth_token.dart';
@@ -216,28 +214,28 @@ class _SettingsViewState extends State<SettingsView> {
                     },
                   ),
                   const Divider(height: 0.5),
-                  GetBuilder<ThemeController>(
-                    init: ThemeController(),
-                    initState: (_) {},
-                    builder: (_) {
-                      final isLightMode = _.theme == 'light';
-                      return SettingTile(
-                        icon: AppAssets.kTheme,
-                        isSwitch: true,
-                        title: 'Light Mode',
-                        switchValue: isLightMode,
-                        onChanged: (value) {
-                          if (isLightMode) {
-                            _.setTheme('dark');
-                          } else {
-                            _.setTheme('light');
-                          }
-                        },
-                        trailing: true,
-                      );
-                    },
-                  ),
-                  const Divider(),
+                  // GetBuilder<ThemeController>(
+                  //   init: ThemeController(),
+                  //   initState: (_) {},
+                  //   builder: (_) {
+                  //     final isLightMode = _.theme == 'light';
+                  //     return SettingTile(
+                  //       icon: AppAssets.kTheme,
+                  //       isSwitch: true,
+                  //       title: 'Light Mode',
+                  //       switchValue: isLightMode,
+                  //       onChanged: (value) {
+                  //         if (isLightMode) {
+                  //           _.setTheme('dark');
+                  //         } else {
+                  //           _.setTheme('light');
+                  //         }
+                  //       },
+                  //       trailing: true,
+                  //     );
+                  //   },
+                  // ),
+                  // const Divider(),
                   SettingTile(
                     icon: AppAssets.kPrivacy,
                     title: "Privacy Policy",

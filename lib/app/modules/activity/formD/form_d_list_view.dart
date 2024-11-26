@@ -16,8 +16,8 @@ class FormDListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return PagedListView<int, FormD>(
       pagingController: pagingController,
-      physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       builderDelegate: PagedChildBuilderDelegate<FormD>(
         itemBuilder: (context, formD, index) => GestureDetector(
           onTap: () => Get.to(() => FormDDetailPage(formD: formD)),
@@ -47,54 +47,45 @@ class FormDCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Activity Type: ${formD.promotionActivityType}',
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 5.h),
-          Text('Party Type: ${formD.partyType}', style: TextStyle(fontSize: 12.sp)),
-          if (formD.remarks.isNotEmpty)
-            Text('Remarks: ${formD.remarks}', style: TextStyle(fontSize: 12.sp)),
-          Text('Total Party No: ${formD.totalPartyNo}', style: TextStyle(fontSize: 12.sp)),
-          Text('Created At: ${formD.createdAt}', style: TextStyle(fontSize: 12.sp)),
-          SizedBox(height: 10.h),
-
-          ExpansionTile(
-            title: Text('Details', style: TextStyle(fontSize: 12.sp)),
-            children: formD.formDDetails.map((detail) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Crop Name: ${detail.cropName}', style: TextStyle(fontSize: 12.sp)),
-                    Text('Stage: ${detail.cropStageName}', style: TextStyle(fontSize: 12.sp)),
-                    Text('Product: ${detail.productName}', style: TextStyle(fontSize: 12.sp)),
-                    Text('Pest: ${detail.pestName}', style: TextStyle(fontSize: 12.sp)),
-                    Text('Season: ${detail.seasonName}', style: TextStyle(fontSize: 12.sp)),
-                    SizedBox(height: 5.h),
-                  ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(Icons.campaign, color: Colors.blueAccent, size: 20.sp),
+              Expanded(
+                child: Text(
+                  formD.promotionActivityType,
+                  style:
+                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              );
-            }).toList(),
+              ),
+              Icon(Icons.arrow_forward_ios, size: 16.sp, color: Colors.grey),
+            ],
           ),
-          SizedBox(height: 10.h),
-
-          ExpansionTile(
-            title: Text('User Details', style: TextStyle(fontSize: 12.sp)),
-            children: formD.formDUserDetails.map((userDetail) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Party Name: ${userDetail.partyName}', style: TextStyle(fontSize: 12.sp)),
-                    Text('Mobile No: ${userDetail.mobileNo}', style: TextStyle(fontSize: 12.sp)),
-                    SizedBox(height: 5.h),
-                  ],
-                ),
-              );
-            }).toList(),
+          SizedBox(height: 8.h),
+          Row(
+            children: [
+              Icon(Icons.perm_identity, size: 16.sp, color: Colors.grey),
+              SizedBox(width: 5.w),
+              Text('Party Type: ${formD.partyType}',
+                  style: TextStyle(fontSize: 12.sp)),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.contacts_outlined, size: 16.sp, color: Colors.grey),
+              SizedBox(width: 5.w),
+              Text('Total Party No: ${formD.totalPartyNo}',
+                  style: TextStyle(fontSize: 12.sp)),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.calendar_today, size: 16.sp, color: Colors.grey),
+              SizedBox(width: 5.w),
+              Text('Date: ${formD.createdAt}',
+                  style: TextStyle(fontSize: 12.sp)),
+            ],
           ),
         ],
       ),

@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
-import '../../home/components/action_menue.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../controller/retailer_controller.dart';
@@ -79,15 +78,15 @@ class RetailerListCard extends StatelessWidget {
                   ],
                 ),
               ),
-              // Action menu icon
-              ActionMenuIcon(
-                onEdit: () {
-                  // Edit doctor logic
-                },
-                onDelete: () {
-                  // Delete doctor logic
-                },
-              ),
+              // // Action menu icon
+              // ActionMenuIcon(
+              //   onEdit: () {
+              //     // Edit doctor logic
+              //   },
+              //   onDelete: () {
+              //     // Delete doctor logic
+              //   },
+              // ),
             ],
           ),
         ),

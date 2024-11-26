@@ -1,34 +1,34 @@
+import 'package:field_asistence/app/modules/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../data/constrants/constants.dart';
-import '../../home/components/search_field.dart';
-import '../../widgets/buttons/custom_button.dart';
-import '../../widgets/texts/custom_header_text.dart';
-import '../../widgets/widgets.dart';
-import '../controller/form_d_controller.dart';
-import 'form_d_create_from_page.dart';
-import 'form_d_list_view.dart';
+import '../../data/constrants/constants.dart';
+import '../home/components/search_field.dart';
+import '../widgets/buttons/custom_button.dart';
+import '../widgets/texts/custom_header_text.dart';
+import 'components/expense_list_view.dart';
+import 'controller/expense_lsit_controller.dart';
+import 'fa_expense_create_page.dart';
 
-class FormDManagementPage extends StatefulWidget {
-  const FormDManagementPage({super.key});
+class ExpenseManagementPage extends StatefulWidget {
+  const ExpenseManagementPage({super.key});
 
   @override
-  State<FormDManagementPage> createState() => _FormDManagementPageState();
+  State<ExpenseManagementPage> createState() => _FormBManagementPageState();
 }
 
-class _FormDManagementPageState extends State<FormDManagementPage> {
-  final FormDController formDController = Get.put(FormDController());
-
+class _FormBManagementPageState extends State<ExpenseManagementPage> {
+  final ExpenseController controller = Get.put(ExpenseController());
   final TextEditingController textController = TextEditingController();
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
+
   @override
   void initState() {
     super.initState();
-    formDController.fetchFormDData(1);
+    controller.fetchExpenses(1);
   }
 
   @override
@@ -43,7 +43,7 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Demo Management',
+          'Expense Management',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -54,10 +54,10 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
         action: [
           CustomButton(
             icon: Icons.add,
-            text: 'Add Demo',
+            text: 'Add Expense',
             isBorder: true,
             onTap: () {
-              Get.to(() => const CreateFormDpage(),
+              Get.to(() => const ExpenseCreatePage(),
                   transition: Transition.rightToLeftWithFade);
             },
           ),
@@ -68,7 +68,7 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          formDController.refreshItems();
+          controller.refreshItems();
         },
         child: CustomScrollView(
           slivers: [
@@ -81,27 +81,27 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
                     SearchField(
                       controller: textController,
                       onChanged: (query) {
-                        formDController.setSearchQuery(query);
+                        controller.setSearchQuery(query);
                       },
                       isEnabled: true,
-                      hintText: 'Search',
+                      hintText: 'Search Expense',
                     ),
                     const SizedBox(height: 10),
-                    CustomHeaderText(text: 'Demo List', fontSize: 16.sp),
+                    CustomHeaderText(text: 'Ex List', fontSize: 16.sp),
                     const SizedBox(height: 10),
-                    Obx(() {
-                      if (formDController.isListLoading.value) {
+                     Obx(() {
+                      if (controller.isListLoading.value) {
                         return const Center(child: CircularProgressIndicator());
-                      } else if (formDController.isListError.value) {
+                      } else if (controller.isListError.value) {
                         return Center(
                             child:
-                                Text(formDController.listErrorMessage.value));
+                                Text(controller.listErrorMessage.value));
                       }
                       return Column(
                         children: [
-                          FormDListView(
+                          ExpenseListView(
                               pagingController:
-                                  formDController.pagingController),
+                                  controller.pagingController),
                           SizedBox(height: 20.h),
                         ],
                       );

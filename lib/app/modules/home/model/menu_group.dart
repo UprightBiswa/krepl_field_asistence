@@ -9,8 +9,12 @@ import '../../activity/formC/form_c_manage_page.dart';
 import '../../activity/formD/form_d_manage_page.dart';
 import '../../activity/formE/form_e_manage_page.dart';
 import '../../doctor/doctor_managment_page.dart';
+import '../../expense/expense_manage_page.dart';
 import '../../farmer/controller/farmer_controller.dart';
 import '../../farmer/farmer_managment_page.dart';
+import '../../report/activity/activity_report_page.dart';
+import '../../report/activity_summery/activity_summery_report_page.dart';
+import '../../report/customer/customer_report_page.dart';
 import '../../retailer/retailer_managment_page.dart';
 import '../../route_plan/route_managment_page.dart';
 
@@ -91,7 +95,7 @@ List<MenuItem> reportMenuItems = [
     icon: Icons.map, // Example icon
     onTap: () {
       Get.to<void>(
-        () => RoutePlanManagementPage(),
+        () => const RoutePlanManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -100,21 +104,30 @@ List<MenuItem> reportMenuItems = [
     title: 'Activity Summary',
     icon: Icons.analytics,
     onTap: () {
-      // Handle navigation to Activity Summary page
+      Get.to<void>(
+        () => const ActivitySummaryPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
     title: 'Activity',
     icon: Icons.event, // Example icon
     onTap: () {
-      // Handle navigation to Activity page
+     Get.to<void>(
+        () => const ActivityReportPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
     title: 'Customer',
     icon: Icons.person_pin, // Example icon
     onTap: () {
-      // Handle navigation to Retailer page
+      Get.to<void>(
+        () => const CustomerReportPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
@@ -133,7 +146,7 @@ List<MenuItem> reportMenuItems = [
     icon: Icons.route, // Example icon
     onTap: () {
       Get.to<void>(
-        () => RoutePlanManagementPage(),
+        () => const RoutePlanManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -153,7 +166,7 @@ List<MenuItem> formMenuItems = [
     icon: Icons.local_activity_outlined, // Example icon
     onTap: () {
       Get.to<void>(
-        () => FormAManagementPage(),
+        () => const FormAManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -164,7 +177,7 @@ List<MenuItem> formMenuItems = [
     onTap: () {
       //
       Get.to<void>(
-        () => FormBManagementPage(),
+        () => const FormBManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -174,7 +187,7 @@ List<MenuItem> formMenuItems = [
     icon: Icons.inventory_rounded, // Example icon
     onTap: () {
       Get.to<void>(
-        () => FormCManagementPage(),
+        () => const FormCManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -184,7 +197,7 @@ List<MenuItem> formMenuItems = [
     icon: Icons.preview_outlined, // Example icon
     onTap: () {
       Get.to<void>(
-        () => FormDManagementPage(),
+        () => const FormDManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -194,7 +207,7 @@ List<MenuItem> formMenuItems = [
     icon: Icons.pages, // Example icon
     onTap: () {
       Get.to<void>(
-        () => FormEManagementPage(),
+        () => const FormEManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },
@@ -239,7 +252,10 @@ List<MenuItem> shortcutMenuItems = [
     title: 'Expense Management',
     icon: Icons.attach_money,
     onTap: () {
-      // Handle navigation to Expense page
+      Get.to<void>(
+        () => const ExpenseManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
 ];

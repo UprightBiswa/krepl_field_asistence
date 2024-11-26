@@ -591,6 +591,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
   void _submitForm() async {
     Get.dialog(const LoadingDialog(), barrierDismissible: false);
     final parameters = {
+      'farmer_id': widget.farmer.id,
       'promotion_activity': _selectedActivity?.id,
       'farmer_name': _nameController.text,
       'father_name': _fatherNameController.text,
