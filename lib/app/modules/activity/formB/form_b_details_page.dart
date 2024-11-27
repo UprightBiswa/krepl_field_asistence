@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../data/constrants/constants.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../formC/form_c_details_page.dart';
 import '../model/form_b_model.dart';
+import 'form_b_list_view.dart';
 
 class FormBDetailPage extends StatelessWidget {
   final FormB formB;
@@ -41,12 +43,9 @@ class FormBDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildInfoCard(
-                title: 'Activity Type', content: formB.promotionActivityType),
-            SizedBox(height: 10.h),
-            BuildInfoCard(title: 'Party Type', content: formB.partyType),
-            SizedBox(height: 10.h),
-            BuildInfoCard(title: 'Activity Date', content: formB.createdAt),
+            FormBCard(
+              formB: formB,
+            ),
             SizedBox(height: 10.h),
             _buildUserDetails(),
             SizedBox(height: 10.h),
@@ -65,9 +64,9 @@ class FormBDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'User Details',
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        CustomHeaderText(
+          text: 'Party Details',
+          fontSize: 18.sp,
         ),
         SizedBox(height: 10.h),
         PrimaryContainer(
@@ -86,10 +85,11 @@ class FormBDetailPage extends StatelessWidget {
                         'Party Name: ${userDetail.partyName}',
                         style: TextStyle(fontSize: 12.sp),
                       ),
-                      Text(
-                        'Mobile: ${userDetail.mobileNo}',
-                        style: TextStyle(fontSize: 12.sp),
-                      ),
+                      if (userDetail.mobileNo.isNotEmpty)
+                        Text(
+                          'Mobile: ${userDetail.mobileNo}',
+                          style: TextStyle(fontSize: 12.sp),
+                        ),
                     ],
                   ),
                 );
@@ -106,9 +106,9 @@ class FormBDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Details',
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        CustomHeaderText(
+          text: 'Campaign Details',
+          fontSize: 18.sp,
         ),
         SizedBox(height: 10.h),
         ...formB.formBDetails.map((detail) {

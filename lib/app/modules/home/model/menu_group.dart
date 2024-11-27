@@ -15,8 +15,10 @@ import '../../farmer/farmer_managment_page.dart';
 import '../../report/activity/activity_report_page.dart';
 import '../../report/activity_summery/activity_summery_report_page.dart';
 import '../../report/customer/customer_report_page.dart';
+import '../../report/demo/demo_report_page.dart';
 import '../../retailer/retailer_managment_page.dart';
 import '../../route_plan/route_managment_page.dart';
+import '../../tour_plan/tour_plan_manage_page.dart';
 
 class RandomColorGenerator {
   final Random _random = Random();
@@ -114,7 +116,7 @@ List<MenuItem> reportMenuItems = [
     title: 'Activity',
     icon: Icons.event, // Example icon
     onTap: () {
-     Get.to<void>(
+      Get.to<void>(
         () => const ActivityReportPage(),
         transition: Transition.rightToLeftWithFade,
       );
@@ -155,7 +157,11 @@ List<MenuItem> reportMenuItems = [
     title: 'Demo',
     icon: Icons.play_circle_fill, // Example icon
     onTap: () {
-      // Handle navigation to Demo page
+      // Handle navigation to Demo page DemoReportPage
+      Get.to<void>(
+        () => const DemoReportPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
 ];
@@ -238,7 +244,6 @@ List<MenuItem> shortcutMenuItems = [
           .then((value) {
         _farmerController.fetchRecentFarmers();
       });
-      ;
     },
   ),
   MenuItem(
@@ -246,11 +251,15 @@ List<MenuItem> shortcutMenuItems = [
     icon: Icons.map,
     onTap: () {
       // Handle navigation to Tour Plan page
+      Get.to<void>(
+        () => const TourPlanManagementPage(),
+        transition: Transition.rightToLeftWithFade,
+      );
     },
   ),
   MenuItem(
     title: 'Expense Management',
-    icon: Icons.attach_money,
+    icon: Icons.currency_rupee_rounded,
     onTap: () {
       Get.to<void>(
         () => const ExpenseManagementPage(),

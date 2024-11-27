@@ -32,7 +32,7 @@ class AppTheme {
       labelColor: AppColors.kDarkContiner,
       unselectedLabelColor: AppColors.kLightBrown,
     ),
-    textTheme: GoogleFonts.poppinsTextTheme(),
+    textTheme: GoogleFonts.latoTextTheme(),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.symmetric(
         horizontal: AppSpacing.twentyHorizontal,
@@ -94,7 +94,7 @@ class AppTheme {
       labelColor: AppColors.kWhite,
       unselectedLabelColor: Colors.grey,
     ),
-    textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
+    textTheme: GoogleFonts.latoTextTheme(ThemeData.dark().textTheme),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.symmetric(
         horizontal: AppSpacing.twentyHorizontal,

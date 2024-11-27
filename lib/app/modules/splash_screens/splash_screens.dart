@@ -17,7 +17,7 @@ import '../../provider/login_provider/login_provider.dart';
 import '../../repository/auth/auth_token.dart';
 import '../auth/sign_in_page.dart';
 import '../navigation/navigation_home_screen.dart';
-import '../onboarding_scrrens.dart/onboarding_screen.dart';
+import '../onboarding_scrrens/onboarding_screen.dart';
 import 'components/place_holder_dialog.dart';
 import 'controller/app_info_controller.dart';
 

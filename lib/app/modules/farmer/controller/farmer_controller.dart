@@ -185,7 +185,8 @@ class FarmerController extends GetxController {
     isLoadingEdit(true);
     isErrorEdit(false);
     errorMessageEdit('');
-
+    print('editFarmer');
+    print(parameters);
     try {
       // Check connectivity
       if (!await _connectivityService.checkInternet()) {
@@ -199,6 +200,7 @@ class FarmerController extends GetxController {
       final response =
           await _dioService.post(endPoint, queryParams: parameters);
       print(response.data);
+      //make a api and data log
 
       // Handle response
       if (response.statusCode == 200 && response.data['success'] == true) {

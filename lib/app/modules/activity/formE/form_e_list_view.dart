@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
+import '../../../data/constrants/constants.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../model/form_e_model.dart';
 import 'form_e_details_page.dart';
@@ -42,46 +44,122 @@ class FormECard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PrimaryContainer(
-      margin: EdgeInsets.only(bottom: 20.h),
-      padding: EdgeInsets.all(12.h),
+   return PrimaryContainer(
+      margin: EdgeInsets.only(bottom: 10.h),
+      padding: EdgeInsets.all(10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.campaign, color: Colors.blueAccent, size: 20.sp),
-              Expanded(
-                child: Text(
-                  formE.promotionActivityType,
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
-                  overflow: TextOverflow.ellipsis,
+              // Circle Avatar for initials
+              CircleAvatar(
+                radius: 30.r,
+                backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                child: const Icon(
+                  Icons.campaign,
+                  color: AppColors.kPrimary,
                 ),
               ),
-              Icon(Icons.arrow_forward_ios, size: 16.sp, color: Colors.grey),
+              SizedBox(width: 16.w),
+              // Expense Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Employee Name
+                    Text(
+                      formE.promotionActivityType,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    // Employee Code
+                    Text(
+                      'Party Type: ${formE.partyType}',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          // Divider
+          Divider(
+            color: Colors.grey.withOpacity(0.5),
+            thickness: 1.h,
+            height: 25.h,
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.groups,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    'Total Parties:',
+                    style: AppTypography.kMedium14,
+                  ),
+                ],
+              ),
+              Text(
+                ' ${formE.totalPartyNo}',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                ),
+              ),
             ],
           ),
           SizedBox(height: 8.h),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.groups, size: 16.sp, color: Colors.grey),
-              SizedBox(width: 5.w),
-              Text('Parties: ${formE.totalPartyNo}',
-                  style: TextStyle(fontSize: 12.sp)),
-            ],
-          ),
-          Row(
-            children: [
-              Icon(Icons.calendar_today, size: 16.sp, color: Colors.grey),
-              SizedBox(width: 5.w),
-              Text('Date: ${formE.createdAt}',
-                  style: TextStyle(fontSize: 12.sp)),
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    'Created Date:',
+                    style: AppTypography.kMedium14,
+                  ),
+                ],
+              ),
+              Text(
+                formatDate(formE.createdAt),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                ),
+              ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  // Helper: Format the Date
+  String formatDate(String dateStr) {
+    try {
+      final DateTime date = DateTime.parse(dateStr);
+      return DateFormat('dd-MMM-yyyy').format(date);
+    } catch (_) {
+      return dateStr; // Return as-is if parsing fails
+    }
   }
 }

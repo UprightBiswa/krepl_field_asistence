@@ -7,19 +7,19 @@ import '../../data/constrants/constants.dart';
 import '../home/components/search_field.dart';
 import '../widgets/buttons/custom_button.dart';
 import '../widgets/texts/custom_header_text.dart';
-import 'components/expense_list_view.dart';
-import 'controller/expense_lsit_controller.dart';
-import 'fa_expense_create_page.dart';
+import 'components/tour_list_view.dart';
+import 'controller/tour_plan_lsit_controller.dart';
+import 'tour_plan_create_page.dart';
 
-class ExpenseManagementPage extends StatefulWidget {
-  const ExpenseManagementPage({super.key});
+class TourPlanManagementPage extends StatefulWidget {
+  const TourPlanManagementPage({super.key});
 
   @override
-  State<ExpenseManagementPage> createState() => _FormBManagementPageState();
+  State<TourPlanManagementPage> createState() => _TourPlanManagementPageState();
 }
 
-class _FormBManagementPageState extends State<ExpenseManagementPage> {
-  final ExpenseController controller = Get.put(ExpenseController());
+class _TourPlanManagementPageState extends State<TourPlanManagementPage> {
+  final TourPlanController controller = Get.put(TourPlanController());
   final TextEditingController textController = TextEditingController();
 
   bool isDarkMode(BuildContext context) =>
@@ -28,7 +28,7 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
   @override
   void initState() {
     super.initState();
-    controller.fetchExpenses(1);
+    controller.fetchTourPlans(1);
   }
 
   @override
@@ -43,7 +43,7 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Expense Management',
+          'Tour Plan Management',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -54,12 +54,12 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
         action: [
           CustomButton(
             icon: Icons.add,
-            text: 'Add Expense',
+            text: 'Add Tour',
             isBorder: true,
             onTap: () {
-              Get.to(() => const ExpenseCreatePage(),
+              Get.to(() => const TourPlanCreatePage(),
                       transition: Transition.rightToLeftWithFade)!
-                  .then((value) => {controller.fetchExpenses(1)});
+                  .then((value) => {controller.fetchTourPlans(1)});
             },
           ),
           SizedBox(
@@ -85,10 +85,10 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
                         controller.setSearchQuery(query);
                       },
                       isEnabled: true,
-                      hintText: 'Search Expense',
+                      hintText: 'Search Tour',
                     ),
                     const SizedBox(height: 10),
-                    CustomHeaderText(text: 'Expense List', fontSize: 16.sp),
+                    CustomHeaderText(text: 'Tour Plan List', fontSize: 16.sp),
                     const SizedBox(height: 10),
                     Obx(() {
                       if (controller.isListLoading.value) {
@@ -99,7 +99,7 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
                       }
                       return Column(
                         children: [
-                          ExpenseListView(
+                          TourPlanListView(
                               pagingController: controller.pagingController),
                           SizedBox(height: 20.h),
                         ],

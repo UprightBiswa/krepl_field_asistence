@@ -7,26 +7,26 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../widgets/containers/primary_container.dart';
-import '../expense_detils_page.dart';
-import '../model/expense_list_model.dart';
+import '../tour_plan_detils_page.dart';
+import '../model/tour_list_model.dart';
 
-class ExpenseListView extends StatelessWidget {
-  final PagingController<int, Expense> pagingController;
+class TourPlanListView extends StatelessWidget {
+  final PagingController<int, TourPlan> pagingController;
 
-  const ExpenseListView({super.key, required this.pagingController});
+  const TourPlanListView({super.key, required this.pagingController});
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, Expense>(
+    return PagedListView<int, TourPlan>(
       pagingController: pagingController,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      builderDelegate: PagedChildBuilderDelegate<Expense>(
-        itemBuilder: (context, expense, index) => GestureDetector(
+      builderDelegate: PagedChildBuilderDelegate<TourPlan>(
+        itemBuilder: (context, tourPlan, index) => GestureDetector(
           onTap: () {
-            Get.to(() => ExpenseDetailsPage(expense: expense));
+            Get.to(() => TourPlanDetailsPage(tourPlan: tourPlan));
           },
-          child: ExpenseListCard(expense: expense),
+          child: TourPlanListCard(tourPlan: tourPlan),
         ),
         firstPageErrorIndicatorBuilder: (context) =>
             const Center(child: Text('Failed to load data')),
@@ -39,10 +39,10 @@ class ExpenseListView extends StatelessWidget {
   }
 }
 
-class ExpenseListCard extends StatelessWidget {
-  final Expense expense;
+class TourPlanListCard extends StatelessWidget {
+  final TourPlan tourPlan;
 
-  const ExpenseListCard({super.key, required this.expense});
+  const TourPlanListCard({super.key, required this.tourPlan});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class ExpenseListCard extends StatelessWidget {
                 radius: 30.r,
                 backgroundColor: AppColors.kPrimary.withOpacity(0.15),
                 child: Text(
-                  expense.employeeName.substring(0, 2).toUpperCase(),
+                  tourPlan.tourDate.substring(0, 2).toUpperCase(),
                   style: TextStyle(
                     color: AppColors.kPrimary,
                     fontWeight: FontWeight.bold,
@@ -70,14 +70,14 @@ class ExpenseListCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 16.w),
-              // Expense Info
+              // tourPlan Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Employee Name
                     Text(
-                      expense.employeeName,
+                      tourPlan.id.toString(),
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class ExpenseListCard extends StatelessWidget {
                     SizedBox(height: 4.h),
                     // Employee Code
                     Text(
-                      'Code: ${expense.employeeCode}',
+                      'Code: ${tourPlan.id.toString()}',
                       style: TextStyle(
                         fontSize: 14.sp,
                         color: Colors.grey,
@@ -115,11 +115,11 @@ class ExpenseListCard extends StatelessWidget {
                 style: AppTypography.kMedium14,
               ),
               Text(
-                getStatusText(expense.status),
+                getStatusText(tourPlan.status),
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
-                  color: getStatusColor(expense.status),
+                  color: getStatusColor(tourPlan.status),
                 ),
               ),
             ],
@@ -134,7 +134,7 @@ class ExpenseListCard extends StatelessWidget {
                 style: AppTypography.kMedium14,
               ),
               Text(
-                formatDate(expense.createdAt),
+                formatDate(tourPlan.createdAt),
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: Colors.grey,
@@ -147,11 +147,11 @@ class ExpenseListCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total Expense:',
+                'Total Village:',
                 style: AppTypography.kMedium14,
               ),
               Text(
-                ' ${expense.details.length}',
+                ' ${tourPlan.village.length}',
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: Colors.grey,
@@ -159,25 +159,42 @@ class ExpenseListCard extends StatelessWidget {
               ),
             ],
           ),
-          if (expense.details.isNotEmpty)
-           SizedBox(height: 8.h),
-           if (expense.details.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total Amount:',
-                  style: AppTypography.kMedium14,
+
+          SizedBox(height: 8.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total Route:',
+                style: AppTypography.kMedium14,
+              ),
+              Text(
+                ' ${tourPlan.route.length}',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
                 ),
-                Text(
-                  '₹${calculateTotalAmount(expense.details)}',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.grey,
-                  ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total Activity:',
+                style: AppTypography.kMedium14,
+              ),
+              Text(
+                ' ${tourPlan.activity.length}',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          
         ],
       ),
     );
@@ -186,11 +203,11 @@ class ExpenseListCard extends StatelessWidget {
   String getStatusText(int status) {
     switch (status) {
       case 1:
-        return "Active";
-      case 0:
-        return "Inactive";
-      case -1:
-        return "Deleted";
+        return "Pending";
+      case 2:
+        return "Approved";
+      case 3:
+        return "Rejected";
       default:
         return "Unknown";
     }
@@ -199,22 +216,16 @@ class ExpenseListCard extends StatelessWidget {
   Color getStatusColor(int status) {
     switch (status) {
       case 1:
+        return Colors.yellow;
+      case 2:
         return Colors.green;
-      case 0:
+      case 3:
         return Colors.red;
-      case -1:
-        return Colors.grey;
       default:
         return Colors.black;
     }
   }
 
-  // Helper: Calculate Total Amount
-  String calculateTotalAmount(List<ExpenseDetail> details) {
-    double total = details.fold(
-        0, (sum, detail) => sum + (double.tryParse(detail.amount) ?? 0.0));
-    return total.toStringAsFixed(2); // Return as string with 2 decimals
-  }
 
   // Helper: Format the Date
   String formatDate(String dateStr) {

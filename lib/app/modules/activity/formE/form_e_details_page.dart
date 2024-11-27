@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../data/constrants/constants.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../model/form_e_model.dart';
+import 'form_e_list_view.dart';
 
 class FormEDetailPage extends StatelessWidget {
   final FormE formE;
@@ -40,11 +42,7 @@ class FormEDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoCard('Activity Type', formE.promotionActivityType),
-            SizedBox(height: 10.h),
-            _buildInfoCard('Party Type', formE.partyType),
-            SizedBox(height: 10.h),
-            _buildInfoCard('Activity Date', formE.createdAt),
+            FormECard(formE: formE),
             SizedBox(height: 10.h),
             _buildUserDetails(),
             SizedBox(height: 10.h),
@@ -94,9 +92,9 @@ class FormEDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'User Details',
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        CustomHeaderText(
+          text: 'Party Details',
+          fontSize: 18.sp,
         ),
         SizedBox(height: 10.h),
         PrimaryContainer(
@@ -115,6 +113,7 @@ class FormEDetailPage extends StatelessWidget {
                         'Party Name: ${userDetail.partyName}',
                         style: TextStyle(fontSize: 12.sp),
                       ),
+                      if(userDetail.mobileNo.isNotEmpty)
                       Text(
                         'Mobile: ${userDetail.mobileNo}',
                         style: TextStyle(fontSize: 12.sp),
@@ -135,9 +134,9 @@ class FormEDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Details',
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        CustomHeaderText(
+          text: 'POP Material Details',
+          fontSize: 18.sp,
         ),
         SizedBox(height: 10.h),
         ...formE.formEDetails.map((detail) {

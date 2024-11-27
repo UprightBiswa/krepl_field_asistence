@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/constrants/constants.dart';
 import '../../dashboard/model/cutomer _sales_data.dart';
-import '../../onboarding_scrrens.dart/components/custom_indicator.dart';
+import '../../onboarding_scrrens/components/custom_indicator.dart';
 import 'best_teachers_card.dart';
 
 class BestTeachers extends StatefulWidget {

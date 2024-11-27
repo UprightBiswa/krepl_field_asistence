@@ -6,6 +6,7 @@ import 'package:field_asistence/app/modules/activity/model/form_c_model.dart';
 
 import '../../../data/constrants/constants.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import 'form_c_list_view.dart';
 
@@ -19,28 +20,6 @@ class FormCDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int totalQuantity(List<FormCDetail> formCDetails) {
-      int total = 0;
-      for (var i = 0; i < formCDetails.length; i++) {
-        total += int.parse(formCDetails[i].quantity);
-      }
-      return total;
-    }
-
-    int totalExpense(List<FormCDetail> formCDetails) {
-      int total = 0;
-      for (var i = 0; i < formCDetails.length; i++) {
-        total += int.parse(formCDetails[i].expense);
-      }
-      return total;
-    }
-
-    int totalProduct(List<FormCDetail> formCDetails) {
-      int total = formCDetails.length;
-
-      return total;
-    }
-
     return Scaffold(
       appBar: CustomBackAppBar(
         spaceBar: true,
@@ -65,22 +44,13 @@ class FormCDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FormCSummary(
-              totalQuantity: totalQuantity(formC.formCDetails),
-              totalExpense: totalExpense(formC.formCDetails).toDouble(),
-              totalProduct: totalProduct(formC.formCDetails),
+            FormCCard(
+              formC: formC,
             ),
             SizedBox(height: 10.h),
-            BuildInfoCard(
-                title: 'Activity Type', content: formC.promotionActivityType),
-            SizedBox(height: 10.h),
-            BuildInfoCard(title: 'Party Type', content: formC.partyType),
-            SizedBox(height: 10.h),
-            BuildInfoCard(title: 'Activity Date', content: formC.createdAt),
-            SizedBox(height: 10.h),
-            Text(
-              'User Details',
-              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+            CustomHeaderText(
+              text: 'User Details',
+              fontSize: 18.sp,
             ),
             SizedBox(height: 10.h),
             ...formC.formCDetails.map(
@@ -135,19 +105,13 @@ class _FormCDetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return PrimaryContainer(
       padding: EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            detail.partyName.isEmpty ? 'Party Name' : detail.partyName,
-            style: AppTypography.kBold14.copyWith(
-              color: isDarkMode ? AppColors.kWhite : AppColors.kDarkContiner,
-            ),
-          ),
-          SizedBox(height: 10.h),
+          if (detail.partyName.isNotEmpty)
+            _DetailRow(label: 'Party Name', value: detail.partyName),
           _DetailRow(label: 'Mobile No', value: detail.mobileNo),
           _DetailRow(label: 'Product Name', value: detail.productName),
           _DetailRow(label: 'Quantity', value: detail.quantity),

@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
+import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../formC/form_c_details_page.dart';
 import '../model/form_d_model.dart';
+import 'form_d_list_view.dart';
 
 class FormDDetailPage extends StatelessWidget {
   final FormD formD;
@@ -39,17 +41,8 @@ class FormDDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildInfoCard(
-                title: 'Activity Type', content: formD.promotionActivityType),
-            SizedBox(height: 10.h),
-            BuildInfoCard(title: 'Party Type', content: formD.partyType),
-            SizedBox(height: 10.h),
-            BuildInfoCard(
-                title: 'Total Party No',
-                content: formD.totalPartyNo.toString()),
-            SizedBox(height: 10.h),
-            BuildInfoCard(title: 'Activity Date', content: formD.createdAt),
-            SizedBox(height: 10.h),
+            FormDCard(formD: formD),
+           
             SizedBox(height: 10.h),
             _buildUserDetails(),
             SizedBox(height: 10.h),
@@ -68,9 +61,9 @@ class FormDDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'User Details',
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        CustomHeaderText(
+          text: 'Party Details',
+          fontSize: 18.sp,
         ),
         SizedBox(height: 10.h),
         PrimaryContainer(
@@ -109,9 +102,9 @@ class FormDDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Details',
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+         CustomHeaderText(
+          text: 'Demo Details',
+          fontSize: 18.sp,
         ),
         SizedBox(height: 10.h),
         ...formD.formDDetails.map((detail) {

@@ -16,18 +16,18 @@ import '../widgets/form_field.dart/custom_text_field.dart';
 import '../widgets/form_field.dart/single_selected_dropdown.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
-import 'controller/expense_create_controller.dart';
+import 'controller/tour_plan_create_controller.dart';
 import 'controller/expense_type_controller.dart';
 import 'model/expense_type_model.dart';
 
-class ExpenseCreatePage extends StatefulWidget {
-  const ExpenseCreatePage({super.key});
+class TourPlanCreatePage extends StatefulWidget {
+  const TourPlanCreatePage({super.key});
 
   @override
-  State<ExpenseCreatePage> createState() => _ExpenseCreatePageState();
+  State<TourPlanCreatePage> createState() => _TourPlanCreatePageState();
 }
 
-class _ExpenseCreatePageState extends State<ExpenseCreatePage> {
+class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
   final ExpenseCreateController controller = Get.put(ExpenseCreateController());
   final AuthState authState = AuthState();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
