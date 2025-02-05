@@ -27,6 +27,7 @@ class _SearchViewState extends State<SearchView> {
 
     return Scaffold(
       appBar: CustomBackAppBar(
+        spaceBar: true,
         leadingCallback: () {
           Get.back<void>();
         },

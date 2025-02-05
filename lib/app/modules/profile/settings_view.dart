@@ -176,6 +176,7 @@ class _SettingsViewState extends State<SettingsView> {
 
     return Scaffold(
       appBar: CustomBackAppBar(
+        spaceBar: true,
         leadingCallback: () {
           Get.back<void>();
         },
@@ -244,7 +245,7 @@ class _SettingsViewState extends State<SettingsView> {
                           'https://krepl.indigidigital.in/krepl_privacy_policy.html');
                     },
                   ),
-                  const Divider(),
+                  const Divider(height: 0.5),
                   SettingTile(
                     icon: Icons.info,
                     title: "App Version",
@@ -252,7 +253,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onTap: () {},
                     // trailing: const AppVersionWidget(),
                   ),
-                  const Divider(),
+                  const Divider(height: 0.5),
                 ],
               ),
             ),

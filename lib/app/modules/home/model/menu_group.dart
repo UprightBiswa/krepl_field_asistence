@@ -22,7 +22,6 @@ import '../../tour_plan/tour_plan_manage_page.dart';
 
 class RandomColorGenerator {
   final Random _random = Random();
-
   Color generateColor() {
     // Generate random colors
     return Color.fromARGB(
@@ -31,6 +30,20 @@ class RandomColorGenerator {
       _random.nextInt(256),
       _random.nextInt(256),
     );
+  }
+
+  // Generate a random gradient
+  LinearGradient generateGradient() {
+    return LinearGradient(colors: [
+      generateColor().withOpacity(0.5),
+      generateColor().withOpacity(0.5)
+    ]);
+  }
+
+  // Return a gradient based on an index for consistent color mapping
+  LinearGradient getGradientForIndex(
+      int index, List<LinearGradient> predefinedGradients) {
+    return predefinedGradients[index % predefinedGradients.length];
   }
 }
 
@@ -97,7 +110,7 @@ List<MenuItem> reportMenuItems = [
     icon: Icons.map, // Example icon
     onTap: () {
       Get.to<void>(
-        () => const RoutePlanManagementPage(),
+        () => const TourPlanManagementPage(),
         transition: Transition.rightToLeftWithFade,
       );
     },

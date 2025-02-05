@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../data/constrants/constants.dart';
 import '../../../data/helpers/data/image_doctor_url.dart';
 import '../../farmer/controller/farmer_controller.dart';
 import '../../farmer/farmer_details_view.dart';
@@ -17,14 +16,14 @@ class FarmerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FarmerController farmerController = Get.put(FarmerController());
+    final FarmerController farmerController = Get.find<FarmerController>();
 
     return GestureDetector(
       onTap: () {
         Get.to<dynamic>(
           FarmerDetailView(
             farmer: farmer,
-            tag: farmer.mobileNo ?? '',
+            tag: farmer.id.toString(),
           ),
           transition: Transition.rightToLeftWithFade,
         )!
@@ -35,83 +34,116 @@ class FarmerCard extends StatelessWidget {
       child: PrimaryContainer(
         padding: const EdgeInsets.all(0.0),
         width: 264.w,
-        height: 260.h,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 6,
-              child: Hero(
-                tag: farmer.mobileNo ?? '',
-                child: Container(
-                  alignment: Alignment.topRight,
-                  padding: EdgeInsets.all(10.h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(AppSpacing.radiusFifteen),
-                    ),
-                    image: const DecorationImage(
-                      image: NetworkImage(ImageDoctorUrl.farmerImage),
-                      fit: BoxFit.cover,
-                    ),
+        height: 200.h,
+        child: Hero(
+          tag: farmer.id,
+          child: Stack(
+            children: [
+              // Background Image with Gradient Overlay
+              Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.r),
+                  image: const DecorationImage(
+                    image: NetworkImage(ImageDoctorUrl.farmerImage),
+                    fit: BoxFit.cover,
                   ),
-                  child: ActionMenuIcon(
-                    onEdit: () {
-                      // Edit farmer logic
-                      Get.to(() => FarmerEditForm(
-                                farmer: farmer,
-                                tag: farmer.mobileNo ?? '',
-                              ))!
-                          .then((value) {
-                        farmerController.fetchRecentFarmers();
-                        Get.back();
-                      });
-                    },
-                    onDelete: () {
-                      // Add logic to delete the farmer
-                    },
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(1),
+                        Colors.black.withOpacity(0.6),
+                        Colors.black.withOpacity(0.4),
+                        Colors.black.withOpacity(0.2),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Container(
-                padding: EdgeInsets.all(AppSpacing.tenVertical),
+              // Top-right ActionMenuIcon
+              Positioned(
+                top: 10.h,
+                right: 10.w,
+                child: ActionMenuIcon(
+                  onEdit: () {
+                    Get.to(() => FarmerEditForm(
+                              farmer: farmer,
+                              tag: farmer.id.toString(),
+                            ))!
+                        .then((value) {
+                      farmerController.fetchRecentFarmers();
+                      Get.back();
+                    });
+                  },
+                  onDelete: () {
+                    // Add logic to delete the farmer
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(12.w),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      farmer.farmerName ?? '',
+                      farmer.farmerName ?? 'Farmer Name',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTypography.kBold14
-                          .copyWith(color: AppColors.kPrimary),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    SizedBox(height: 5.h),
+                    SizedBox(height: 4.h),
                     Text(
-                      farmer.promotionActivity ?? '',
+                      farmer.promotionActivity ?? 'Promotion Activity',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTypography.kBold14,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14.sp,
+                      ),
                     ),
-                    const Spacer(),
+                    SizedBox(height: 10.h),
                     Row(
                       children: [
+                        Icon(Icons.location_on,
+                            color: Colors.white70, size: 16.sp),
+                        SizedBox(width: 4.w),
                         Expanded(
                           child: Text(
-                            '${farmer.villageName}, ${farmer.tehshil}',
+                            '${farmer.villageName ?? ''}, ${farmer.tehshil ?? ''}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: AppTypography.kBold12,
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12.sp,
+                            ),
                           ),
                         ),
-                        const Spacer(),
+                      ],
+                    ),
+                    SizedBox(height: 4.h),
+                    Row(
+                      children: [
+                        Icon(Icons.phone, color: Colors.white70, size: 16.sp),
+                        SizedBox(width: 4.w),
                         Expanded(
                           child: Text(
-                            'No: ${farmer.mobileNo}',
+                            'No: ${farmer.mobileNo ?? ''}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: AppTypography.kBold12,
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12.sp,
+                            ),
                           ),
                         ),
                       ],
@@ -119,8 +151,8 @@ class FarmerCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

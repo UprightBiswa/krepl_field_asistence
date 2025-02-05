@@ -20,7 +20,7 @@ class ShimmerActivityCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 10.h,
+              height: 50.h,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.grey.shade300,

@@ -15,9 +15,11 @@ class ActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDarkMode(BuildContext context) =>
         Theme.of(context).brightness == Brightness.dark;
-    double percentage =
-        (activity.achievedActivityNumbers / activity.targetActivityNumbers) *
-            100;
+    double percentage = activity.targetActivityNumbers > 0
+        ? (activity.achievedActivityNumbers / activity.targetActivityNumbers) *
+            100
+        : 0; // Default to 0% if target is 0
+
     return FadeIn(
       delay: const Duration(milliseconds: 200) * index,
       child: PrimaryContainer(
@@ -32,6 +34,10 @@ class ActivityCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10.h),
                   child: Container(
+                    // decoration: BoxDecoration(
+                    //   gradient: activity.gradientColor,
+                    //   borderRadius: BorderRadius.circular(10.h),
+                    // ),
                     color: activity.achievedActivityColor.withOpacity(0.1),
                     height: 40.h,
                     width: 40.h,
@@ -74,7 +80,9 @@ class ActivityCard extends StatelessWidget {
                 ),
             ProgressLine(
               color: activity.achievedActivityColor,
-              percentage: percentage.toInt(),
+              percentage: percentage.isNaN || percentage.isInfinite
+                  ? 0
+                  : percentage.toInt(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

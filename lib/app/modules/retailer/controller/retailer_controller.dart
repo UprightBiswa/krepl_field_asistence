@@ -40,7 +40,7 @@ class RetailerController extends GetxController {
 
     filterController = FilterController<String>(
       filterOptions: [
-        FilterOption(label: 'Doctor Name', value: 'retailer_name'),
+        FilterOption(label: 'Retailer Name', value: 'retailer_name'),
         FilterOption(label: 'Mobile NO', value: 'mobile_no'),
         FilterOption(label: 'Village Name', value: 'village_name'),
       ],

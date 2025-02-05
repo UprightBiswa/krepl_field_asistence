@@ -26,6 +26,109 @@ class UserDetailsResponse {
   }
 }
 
+// class UserDetails {
+//   final String workplaceCode;
+//   final String workplaceName;
+//   final String hrEmployeeCode;
+//   final String employeeName;
+//   final String fatherName;
+//   final String designation;
+//   final String dateOfJoining;
+//   final String headquarter;
+//   final String mobileNumber;
+//   final String email;
+//   final String company;
+//   final String dateOfLeaving;
+//   final String? staffType;
+//   final String? workplaceStartDate;
+//   final String? workplaceEndDate;
+//   final String? grade;
+//   final String? gradeStartDate;
+//   final String? gradeEndDate;
+//   final String? hqStartDate;
+//   final String? hqEndDate;
+//   final String? isActive;
+//   final String deviceToken;
+
+//   UserDetails({
+//     required this.workplaceCode,
+//     required this.workplaceName,
+//     required this.hrEmployeeCode,
+//     required this.employeeName,
+//     required this.fatherName,
+//     required this.designation,
+//     required this.dateOfJoining,
+//     required this.headquarter,
+//     required this.mobileNumber,
+//     required this.email,
+//     required this.company,
+//     required this.dateOfLeaving,
+//     this.staffType,
+//     this.workplaceStartDate,
+//     this.workplaceEndDate,
+//     this.grade,
+//     this.gradeStartDate,
+//     this.gradeEndDate,
+//     this.hqStartDate,
+//     this.hqEndDate,
+//     this.isActive,
+//     required this.deviceToken,
+//   });
+
+//   factory UserDetails.fromJson(Map<String, dynamic> json) {
+//     return UserDetails(
+//       workplaceCode: json['workplace_code'] ?? '',
+//       workplaceName: json['workplace_name'] ?? '',
+//       hrEmployeeCode: json['hr_employee_code'] ?? '',
+//       employeeName: json['employee_name'] ?? '',
+//       fatherName: json['father_name'] ?? '',
+//       designation: json['designation'] ?? '',
+//       dateOfJoining: json['date_of_joining'] ?? '',
+//       headquarter: json['headquarter'] ?? '',
+//       mobileNumber: json['mobile_number'] ?? '',
+//       email: json['email'] ?? '',
+//       company: json['company'] ?? '',
+//       dateOfLeaving: json['date_of_leaving'] ?? '',
+//       workplaceStartDate: json['workplace_start_date'],
+//       workplaceEndDate: json['workplace_end_date'],
+//       staffType: json['staff_type'],
+//       grade: json['grade'],
+//       gradeStartDate: json['grade_start_date'],
+//       gradeEndDate: json['grade_end_date'],
+//       hqStartDate: json['hq_start_date'],
+//       hqEndDate: json['hq_end_date'],
+//       isActive: json['is_active'],
+//       deviceToken: json['device_token'] ?? '',
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'workplace_code': workplaceCode,
+//       'hr_employee_code': hrEmployeeCode,
+//       'employee_name': employeeName,
+//       'father_name': fatherName,
+//       'designation': designation,
+//       'date_of_joining': dateOfJoining,
+//       'headquarter': headquarter,
+//       'mobile_number': mobileNumber,
+//       'email': email,
+//       'company': company,
+//       'date_of_leaving': dateOfLeaving,
+//       'workplace_start_date': workplaceStartDate,
+//       'workplace_end_date': workplaceEndDate,
+//       'grade': grade,
+//       'staff_type': staffType,
+//       'grade_start_date': gradeStartDate,
+//       'grade_end_date': gradeEndDate,
+//       'hq_start_date': hqStartDate,
+//       'hq_end_date': hqEndDate,
+//       'is_active': isActive,
+//       'device_token': deviceToken,
+//     };
+//   }
+// }
+
 class UserDetails {
   final String workplaceCode;
   final String workplaceName;
@@ -35,6 +138,8 @@ class UserDetails {
   final String designation;
   final String dateOfJoining;
   final String headquarter;
+  final String territoryCode;
+  final String territoryName;
   final String mobileNumber;
   final String email;
   final String company;
@@ -49,6 +154,7 @@ class UserDetails {
   final String? hqEndDate;
   final String? isActive;
   final String deviceToken;
+  final List<MappingInfo> mappingInfo;
 
   UserDetails({
     required this.workplaceCode,
@@ -59,6 +165,8 @@ class UserDetails {
     required this.designation,
     required this.dateOfJoining,
     required this.headquarter,
+    required this.territoryCode,
+    required this.territoryName,
     required this.mobileNumber,
     required this.email,
     required this.company,
@@ -73,6 +181,7 @@ class UserDetails {
     this.hqEndDate,
     this.isActive,
     required this.deviceToken,
+    required this.mappingInfo,
   });
 
   factory UserDetails.fromJson(Map<String, dynamic> json) {
@@ -85,6 +194,8 @@ class UserDetails {
       designation: json['designation'] ?? '',
       dateOfJoining: json['date_of_joining'] ?? '',
       headquarter: json['headquarter'] ?? '',
+      territoryCode: json['territory_code'] ?? '',
+      territoryName: json['territory_name'] ?? '',
       mobileNumber: json['mobile_number'] ?? '',
       email: json['email'] ?? '',
       company: json['company'] ?? '',
@@ -99,18 +210,25 @@ class UserDetails {
       hqEndDate: json['hq_end_date'],
       isActive: json['is_active'],
       deviceToken: json['device_token'] ?? '',
+      mappingInfo: (json['mapping_info'] as List<dynamic>?)
+              ?.map((e) => MappingInfo.fromJson(e))
+              .toList() ??
+          [],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'workplace_code': workplaceCode,
+      'workplace_name': workplaceName,
       'hr_employee_code': hrEmployeeCode,
       'employee_name': employeeName,
       'father_name': fatherName,
       'designation': designation,
       'date_of_joining': dateOfJoining,
       'headquarter': headquarter,
+      'territory_code': territoryCode,
+      'territory_name': territoryName,
       'mobile_number': mobileNumber,
       'email': email,
       'company': company,
@@ -125,10 +243,38 @@ class UserDetails {
       'hq_end_date': hqEndDate,
       'is_active': isActive,
       'device_token': deviceToken,
+      'mapping_info': mappingInfo.map((e) => e.toJson()).toList(),
     };
   }
 }
 
+class MappingInfo {
+  final String userType;
+  final String employeeCode;
+  final String employeeName;
+
+  MappingInfo({
+    required this.userType,
+    required this.employeeCode,
+    required this.employeeName,
+  });
+
+  factory MappingInfo.fromJson(Map<String, dynamic> json) {
+    return MappingInfo(
+      userType: json['user_type'] ?? '',
+      employeeCode: json['employee_code'] ?? '',
+      employeeName: json['employee_name'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'user_type': userType,
+      'employee_code': employeeCode,
+      'employee_name': employeeName,
+    };
+  }
+}
 
 // class UserDetails {
 //   final String userType;

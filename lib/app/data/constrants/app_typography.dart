@@ -56,6 +56,9 @@ class AppTypography {
       GoogleFonts.lato(fontSize: 8.sp, fontWeight: FontWeight.w500);
   static TextStyle kLight9 =
       GoogleFonts.lato(fontSize: 9.sp, fontWeight: FontWeight.w500);
+      //10
+  static TextStyle kLight10 =
+      GoogleFonts.lato(fontSize: 10.sp, fontWeight: FontWeight.w500);
   static TextStyle kLight12 =
       GoogleFonts.lato(fontSize: 12.sp, fontWeight: FontWeight.w500);
   static TextStyle kLight13 =

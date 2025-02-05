@@ -54,7 +54,6 @@ class ExpenseListCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Circle Avatar for initials
               CircleAvatar(
@@ -114,12 +113,19 @@ class ExpenseListCard extends StatelessWidget {
                 'Status:',
                 style: AppTypography.kMedium14,
               ),
-              Text(
-                getStatusText(expense.status),
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  color: getStatusColor(expense.status),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: getStatusColor(expense.status).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Text(
+                  getStatusText(expense.status),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    color: getStatusColor(expense.status),
+                  ),
                 ),
               ),
             ],
@@ -159,9 +165,8 @@ class ExpenseListCard extends StatelessWidget {
               ),
             ],
           ),
+          if (expense.details.isNotEmpty) SizedBox(height: 8.h),
           if (expense.details.isNotEmpty)
-           SizedBox(height: 8.h),
-           if (expense.details.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -184,13 +189,14 @@ class ExpenseListCard extends StatelessWidget {
   }
 
   String getStatusText(int status) {
+    print('${status}');
     switch (status) {
-      case 1:
-        return "Active";
       case 0:
-        return "Inactive";
-      case -1:
-        return "Deleted";
+        return "Pending";
+      case 1:
+        return "Approved";
+      case 2:
+        return "Rejected";
       default:
         return "Unknown";
     }
@@ -198,12 +204,12 @@ class ExpenseListCard extends StatelessWidget {
 
   Color getStatusColor(int status) {
     switch (status) {
+      case 0:
+        return AppColors.kWarning;
       case 1:
         return Colors.green;
-      case 0:
-        return Colors.red;
-      case -1:
-        return Colors.grey;
+      case 2:
+        return AppColors.kAccent7;
       default:
         return Colors.black;
     }

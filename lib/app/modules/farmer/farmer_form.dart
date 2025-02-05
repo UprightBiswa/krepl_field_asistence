@@ -10,7 +10,7 @@ import '../../data/helpers/data/image_doctor_url.dart';
 import '../../model/master/villages_model.dart';
 import '../../repository/auth/auth_token.dart';
 import '../activity/components/single_select_dropdown/activity_master_dropdown.dart';
-import '../activity/components/single_select_dropdown/village_single_selection_dropdown.dart';
+import '../activity/components/single_select_dropdown/pin_selection_dropdown.dart';
 import '../activity/model/activity_master_model.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
@@ -18,9 +18,12 @@ import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
 import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/form_field.dart/form_hader.dart';
+import '../widgets/form_field.dart/single_selected_dropdown.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/farmer_controller.dart';
+import 'controller/village_pin_controller.dart';
+import 'model/pin_model.dart';
 
 class FarmerForm extends StatefulWidget {
   const FarmerForm({super.key});
@@ -31,6 +34,7 @@ class FarmerForm extends StatefulWidget {
 
 class _FarmerFormState extends State<FarmerForm> {
   final FarmerController farmerController = Get.put(FarmerController());
+  final VillagePinController _villagePinController = Get.put(VillagePinController());
   final AuthState authState = AuthState();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -38,7 +42,7 @@ class _FarmerFormState extends State<FarmerForm> {
   final TextEditingController _fatherNameController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
   final TextEditingController _acreController = TextEditingController();
-  final TextEditingController _pinController = TextEditingController();
+  // final TextEditingController _pinController = TextEditingController();
   final TextEditingController _villageController = TextEditingController();
   final TextEditingController _postOfficeController = TextEditingController();
   final TextEditingController _subDistController = TextEditingController();
@@ -52,6 +56,7 @@ class _FarmerFormState extends State<FarmerForm> {
       TextEditingController();
   final TextEditingController _selectedDateController = TextEditingController();
   ActivityMaster? _selectedActivity;
+  PinModel? _selectedPin;
   Village? _selectedVillage;
 
   @override
@@ -78,7 +83,7 @@ class _FarmerFormState extends State<FarmerForm> {
     _fatherNameController.dispose();
     _mobileController.dispose();
     _acreController.dispose();
-    _pinController.dispose();
+    // _pinController.dispose();
     _villageController.dispose();
     _postOfficeController.dispose();
     _subDistController.dispose();
@@ -97,8 +102,8 @@ class _FarmerFormState extends State<FarmerForm> {
       setState(() {
         _selectedVillage = selectedVillage;
         _villageController.text = selectedVillage.id.toString();
-        // Auto-fill the address fields
-        _pinController.text = selectedVillage.pin;
+        // // Auto-fill the address fields
+        // _pinController.text = selectedVillage.pin;
         _postOfficeController.text = selectedVillage.officeName;
         _subDistController.text = selectedVillage.tehsil;
         _districtController.text = selectedVillage.district;
@@ -108,7 +113,7 @@ class _FarmerFormState extends State<FarmerForm> {
       setState(() {
         _selectedVillage = null;
         _villageController.clear();
-        _pinController.clear();
+        // _pinController.clear();
         _postOfficeController.clear();
         _subDistController.clear();
         _districtController.clear();
@@ -263,16 +268,134 @@ class _FarmerFormState extends State<FarmerForm> {
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
-                            VillageSingleSelectionWidget(
-                              onVillageSelected: _onVillageSelected,
-                              selectedItem: _selectedVillage,
+                            //pin section
+                            PinSingleSelectionWidget(
+                              onPinModelSelected: (selectedPin) {
+                                setState(() {
+                                  _selectedPin = selectedPin;
+                                });
+                                _villagePinController
+                                    .fetchVillages(selectedPin!.pin);
+
+                                ///claer old value
+                                _selectedVillage = null;
+                                _villageController.clear();
+                                _postOfficeController.clear();
+                                _subDistController.clear();
+                                _districtController.clear();
+                                _stateController.clear();
+                              },
+                              selectedItem: _selectedPin,
                               validator: (selected) {
                                 if (selected == null) {
-                                  return "Please select a village";
+                                  return "Please select a pin";
                                 }
                                 return null;
                               },
                             ),
+                            SizedBox(height: 16.h),
+                            Obx(() {
+                              if (_villagePinController.isLoading.value) {
+                                return const ShimmerLoading(); // Show shimmer loading effect while data is being fetched
+                              } else if (_villagePinController.isError.value ||
+                                  _villagePinController
+                                      .errorMessage.isNotEmpty) {
+                                return Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red[100],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Error loading villages'),
+                                  ),
+                                );
+                              } else {
+                                return SingleSelectDropdown<Village>(
+                                  labelText: "Select Village",
+                                  items: _villagePinController.villages,
+                                  selectedItem: _selectedVillage,
+                                  itemAsString: (village) =>
+                                      village.villageName,
+                                  onChanged: (selected) {
+                                    setState(() {
+                                      _selectedVillage =
+                                          selected; // Update the selected village
+                                    });
+                                    _onVillageSelected(selected);
+                                  },
+                                  searchableFields: {
+                                    "village_name": (village) =>
+                                        village.villageName,
+                                    "village_code": (village) =>
+                                        village.villageCode,
+                                  },
+                                  validator: (selected) {
+                                    if (selected == null) {
+                                      return "Please select a village";
+                                    }
+                                    return null;
+                                  },
+                                );
+                              }
+                            }),
+                            // Village Dropdown
+                            // Obx(() {
+                            //   if (_villagePinController.isLoading.value) {
+                            //     return const CircularProgressIndicator();
+                            //   } else if (_villagePinController.isError.value ||
+                            //       _villagePinController
+                            //           .errorMessage.isNotEmpty) {
+                            //     return Container(
+                            //       width: double.infinity,
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.red[100],
+                            //         borderRadius: BorderRadius.circular(10),
+                            //       ),
+                            //       child: Padding(
+                            //         padding: const EdgeInsets.all(8.0),
+                            //         child: Text(_villagePinController
+                            //             .errorMessage.value),
+                            //       ),
+                            //     );
+                            //   } else {
+                            //     return DropdownButtonFormField<Village>(
+                            //       decoration: InputDecoration(
+                            //         labelText: 'Select Village',
+                            //         border: OutlineInputBorder(),
+                            //       ),
+                            //       value: _selectedVillage,
+                            //       items: _villagePinController.villages
+                            //           .map((village) => DropdownMenuItem(
+                            //                 value: village,
+                            //                 child: Text(village.villageName),
+                            //               ))
+                            //           .toList(),
+                            //       onChanged: (selected) {
+                            //         setState(() {
+                            //           _selectedVillage = selected;
+                            //         });
+                            //       },
+                            //       validator: (selected) {
+                            //         if (selected == null) {
+                            //           return "Please select a village";
+                            //         }
+                            //         return null;
+                            //       },
+                            //     );
+                            //   }
+                            // }),
+                            // VillageSingleSelectionWidget(
+                            //   onVillageSelected: _onVillageSelected,
+                            //   selectedItem: _selectedVillage,
+                            //   validator: (selected) {
+                            //     if (selected == null) {
+                            //       return "Please select a village";
+                            //     }
+                            //     return null;
+                            //   },
+                            // ),
                             if (_selectedVillage == null) ...[
                               //show text veldaition
                               const Padding(
@@ -286,25 +409,25 @@ class _FarmerFormState extends State<FarmerForm> {
                             ],
                             SizedBox(height: 20.h),
 
-                            CustomTextField(
-                              readonly: true,
-                              labelText: "PIN Code",
-                              hintText: "Enter the PIN code",
-                              icon: Icons.pin_drop,
-                              controller: _pinController,
-                              inputFormatter: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                LengthLimitingTextInputFormatter(6),
-                              ],
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the PIN code';
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 20.h),
+                            // CustomTextField(
+                            //   readonly: true,
+                            //   labelText: "PIN Code",
+                            //   hintText: "Enter the PIN code",
+                            //   icon: Icons.pin_drop,
+                            //   controller: _pinController,
+                            //   inputFormatter: [
+                            //     FilteringTextInputFormatter.digitsOnly,
+                            //     LengthLimitingTextInputFormatter(6),
+                            //   ],
+                            //   keyboardType: TextInputType.number,
+                            //   validator: (value) {
+                            //     if (value == null || value.isEmpty) {
+                            //       return 'Please enter the PIN code';
+                            //     }
+                            //     return null;
+                            //   },
+                            // ),
+                            // SizedBox(height: 20.h),
                             CustomTextField(
                               readonly: true,
                               labelText: "Post Office Name",
@@ -520,7 +643,7 @@ class _FarmerFormState extends State<FarmerForm> {
       'father_name': _fatherNameController.text,
       'mobile_no': _mobileController.text,
       'acre': _acreController.text,
-      'pin': _pinController.text,
+      'pin': _selectedPin?.pin,
       'village_name': _villageController.text,
       'officename': _postOfficeController.text,
       'tehshil': _subDistController.text,

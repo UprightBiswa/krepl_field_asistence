@@ -1,3 +1,97 @@
+// import 'package:dio/dio.dart';
+// import 'package:field_asistence/app/modules/auth/sign_in_page.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart' as getx;
+// import 'package:shared_preferences/shared_preferences.dart';
+
+// import '../../../constrants/api_base_url.dart';
+
+// class DioService {
+//   final Dio _dio = Dio();
+//   String? _deviceToken;
+
+//   DioService() {
+//     _dio.options.baseUrl = BaseURL.baseUrl;
+//     _initialize();
+//   }
+
+//   Future<void> _initialize() async {
+//     await setDeviceToken();
+//   }
+
+//   Future<void> setDeviceToken() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     _deviceToken = prefs.getString('deviceToken');
+//     if (_deviceToken == null) {
+//       print('Warning: Device token is null. Retry or reauthenticate!');
+//     } else {
+//       print('Device Token initialized: $_deviceToken');
+//     }
+//   }
+
+//   Future<Response> post(String endPoint,
+//       {Map<String, dynamic>? queryParams}) async {
+//     try {
+//       queryParams = queryParams ?? {};
+
+//       if (_deviceToken == null) {
+//         // Handle null device token
+//         return _handleNullDeviceToken();
+//       } else {
+//         queryParams['device_token'] = _deviceToken;
+//       }
+
+//       final response = await _dio.post(endPoint, queryParameters: queryParams);
+//       return response;
+//     } catch (e) {
+//       if (e is DioException) {
+//         print('DioError: ${e.message}');
+//         throw Exception('DioError: ${e.message}');
+//       }
+//       print('Exception: $e');
+//       throw Exception('Failed to make POST request: $e');
+//     }
+//   }
+
+//   Future<Response> postFormData(String endPoint, FormData formData) async {
+//     try {
+//       if (_deviceToken == null) {
+//         return _handleNullDeviceToken();
+//       } else {
+//         formData.fields.add(MapEntry('device_token', _deviceToken!));
+//       }
+
+//       final response = await _dio.post(endPoint, data: formData);
+//       return response;
+//     } catch (e) {
+//       if (e is DioException) {
+//         print('DioError: ${e.message}');
+//         throw Exception('DioError: ${e.message}');
+//       }
+//       print('Exception: $e');
+//       throw Exception('Failed to make POST request: $e');
+//     }
+//   }
+
+//   Response _handleNullDeviceToken() {
+//     getx.Get.defaultDialog(
+//       barrierDismissible: false,
+//       title: 'Login Required',
+//       content: const Text('Please login again'),
+//       actions: [
+//         TextButton(
+//           onPressed: () {
+//             getx.Get.offAll(() => const SignIn(),
+//                 transition: getx.Transition.rightToLeftWithFade);
+//           },
+//           child: const Text('Login'),
+//         ),
+//       ],
+//     );
+//     throw Exception('Device Token is null');
+//   }
+// }
+
 import 'package:dio/dio.dart';
 import 'package:field_asistence/app/modules/auth/sign_in_page.dart';
 import 'package:flutter/material.dart';
@@ -16,67 +110,87 @@ class DioService {
   }
 
   Future<void> _initialize() async {
-    await setDeviceToken();
+    await _setDeviceToken();
   }
 
-  Future<void> setDeviceToken() async {
+  Future<void> _setDeviceToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _deviceToken = prefs.getString('deviceToken');
-    print('Device Token set in DioService: $_deviceToken');
+    if (_deviceToken == null) {
+      print('Warning: Device token is null. Retry or reauthenticate!');
+    } else {
+      print('Device Token initialized: $_deviceToken');
+    }
   }
 
   Future<Response> post(String endPoint,
       {Map<String, dynamic>? queryParams}) async {
+    queryParams ??= {};
+
+    if (_deviceToken == null) return _handleNullDeviceToken();
+    queryParams['device_token'] = _deviceToken;
+
     try {
-      queryParams = queryParams ?? {};
-
-      if (_deviceToken == null) {
-        // Handle null device token
-        return _handleNullDeviceToken();
-      } else {
-        queryParams['device_token'] = _deviceToken;
-      }
-
       final response = await _dio.post(endPoint, queryParameters: queryParams);
-      return response;
+      print(response.data);
+      return _handleResponse(response);
     } catch (e) {
-      if (e is DioException) {
-        print('DioError: ${e.message}');
-        throw Exception('DioError: ${e.message}');
-      }
-      print('Exception: $e');
-      throw Exception('Failed to make POST request: $e');
+      return _handleDioError(e);
     }
   }
 
   Future<Response> postFormData(String endPoint, FormData formData) async {
-    try {
-      if (_deviceToken == null) {
-        return _handleNullDeviceToken();
-      } else {
-        formData.fields.add(MapEntry('device_token', _deviceToken!));
-      }
+    if (_deviceToken == null) return _handleNullDeviceToken();
+    formData.fields.add(MapEntry('device_token', _deviceToken!));
 
+    try {
       final response = await _dio.post(endPoint, data: formData);
-      return response;
+      print(response.data);
+      return _handleResponse(response);
     } catch (e) {
-      if (e is DioException) {
-        print('DioError: ${e.message}');
-        throw Exception('DioError: ${e.message}');
-      }
-      print('Exception: $e');
-      throw Exception('Failed to make POST request: $e');
+      return _handleDioError(e);
     }
   }
 
+  Response _handleResponse(Response response) {
+    if (response.data is Map && response.data['success'] == false) {
+      String errorMessage =
+          (response.data['message'] ?? '').toLowerCase().trim();
+
+      if (errorMessage == 'user not found') {
+        _logoutUser();
+        return response; // Return instead of throwing an exception immediately
+      }
+
+      throw Exception(response.data['message'] ?? 'Unknown error occurred');
+    }
+    return response;
+  }
+
+  Response _handleDioError(dynamic e) {
+    if (e is DioException) {
+      print('DioError: ${e.message}');
+      throw Exception('DioError: ${e.message}');
+    }
+    print('Exception: $e');
+    throw Exception('Failed to make API request: $e');
+  }
+
   Response _handleNullDeviceToken() {
+    _logoutUser();
+    throw Exception('Device Token is null');
+  }
+
+  void _logoutUser() {
     getx.Get.defaultDialog(
       barrierDismissible: false,
       title: 'Login Required',
       content: const Text('Please login again'),
       actions: [
         TextButton(
-          onPressed: () {
+          onPressed: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.clear(); // Clear stored session data
             getx.Get.offAll(() => const SignIn(),
                 transition: getx.Transition.rightToLeftWithFade);
           },
@@ -84,6 +198,5 @@ class DioService {
         ),
       ],
     );
-    throw Exception('Device Token is null');
   }
 }

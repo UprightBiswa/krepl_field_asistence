@@ -7,6 +7,7 @@ import '../../data/constrants/constants.dart';
 import '../home/components/search_field.dart';
 import '../widgets/buttons/custom_button.dart';
 import '../widgets/texts/custom_header_text.dart';
+import 'components/filter_list_view.dart';
 import 'components/tour_list_view.dart';
 import 'controller/tour_plan_lsit_controller.dart';
 import 'tour_plan_create_page.dart';
@@ -20,7 +21,6 @@ class TourPlanManagementPage extends StatefulWidget {
 
 class _TourPlanManagementPageState extends State<TourPlanManagementPage> {
   final TourPlanController controller = Get.put(TourPlanController());
-  final TextEditingController textController = TextEditingController();
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
@@ -59,7 +59,7 @@ class _TourPlanManagementPageState extends State<TourPlanManagementPage> {
             onTap: () {
               Get.to(() => const TourPlanCreatePage(),
                       transition: Transition.rightToLeftWithFade)!
-                  .then((value) => {controller.fetchTourPlans(1)});
+                  .then((value) => controller.refreshItems());
             },
           ),
           SizedBox(
@@ -79,16 +79,41 @@ class _TourPlanManagementPageState extends State<TourPlanManagementPage> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.h),
-                    SearchField(
-                      controller: textController,
-                      onChanged: (query) {
-                        controller.setSearchQuery(query);
-                      },
-                      isEnabled: true,
-                      hintText: 'Search Tour',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SearchField(
+                            controller: controller.textEditingController,
+                            onChanged: (query) {
+                              controller.setSearchQuery(query);
+                            },
+                            isEnabled: true,
+                            hintText: 'Search Tour',
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        GestureDetector(
+                          onTap: () {
+                            Get.bottomSheet(
+                              DateFilterBottomSheet(),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 20.w,
+                            backgroundColor:
+                                AppColors.kPrimary.withOpacity(0.15),
+                            child: const Icon(
+                              Icons.filter_list,
+                              color: AppColors.kPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
-                    CustomHeaderText(text: 'Tour Plan List', fontSize: 16.sp),
+                    CustomHeaderText(text: 'Tour List', fontSize: 16.sp),
                     const SizedBox(height: 10),
                     Obx(() {
                       if (controller.isListLoading.value) {

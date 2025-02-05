@@ -58,7 +58,10 @@ class _FormCManagementPageState extends State<FormCManagementPage> {
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormCpage(),
-                  transition: Transition.rightToLeftWithFade);
+                      transition: Transition.rightToLeftWithFade)!
+                  .then((value) {
+                formCController.refreshItems();
+              });
             },
           ),
           SizedBox(

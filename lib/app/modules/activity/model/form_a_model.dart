@@ -13,7 +13,8 @@ class FormAModel {
   double expense; // Assuming expense is a numeric field
   bool photoRequired;
   bool jioLocationTickRequired;
-  String updateMobileNumber; // Assuming it's a string if it involves updating a mobile number
+  String
+      updateMobileNumber; // Assuming it's a string if it involves updating a mobile number
   String remark;
 
   FormAModel({
@@ -35,6 +36,7 @@ class FormAModel {
     required this.remark,
   });
 }
+
 class FormA {
   final int id;
   final String promotionActivityType;
@@ -65,14 +67,14 @@ class FormA {
   factory FormA.fromJson(Map<String, dynamic> json) {
     return FormA(
       id: json['id'],
-      promotionActivityType: json['promotion_activity_type'],
-      partyType: json['party_type'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-      remarks: json['remarks'],
-      totalPartyNo: json['total_party_no'],
-      imageUrl: json['imageUrl'],
-      createdAt: json['createdAt'],
+      promotionActivityType: json['promotion_activity_type'] ?? '',
+      partyType: json['party_type'] ?? '',
+      latitude: json['latitude'] ?? '',
+      longitude: json['longitude'] ?? '',
+      remarks: json['remarks'] ?? '',
+      totalPartyNo: json['total_party_no'] ?? '',
+      imageUrl: json['imageUrl'] ?? '',
+      createdAt: json['createdAt'] ?? '',
       formADetails: (json['formADetails'] as List)
           .map((item) => FormADetails.fromJson(item))
           .toList(),
@@ -82,6 +84,7 @@ class FormA {
     );
   }
 }
+
 class FormADetails {
   final int id;
   final String cropName;
@@ -104,15 +107,16 @@ class FormADetails {
   factory FormADetails.fromJson(Map<String, dynamic> json) {
     return FormADetails(
       id: json['id'],
-      cropName: json['crop_name'],
-      cropStageName: json['crop_stage_name'],
-      productName: json['product_name'],
-      pestName: json['pest_name'],
-      expense: json['expense'],
-      seasonName: json['season_name'],
+      cropName: json['crop_name'] ?? '',
+      cropStageName: json['crop_stage_name'] ?? '',
+      productName: json['product_name'] ?? '',
+      pestName: json['pest_name'] ?? '',
+      expense: json['expense'] ?? '',
+      seasonName: json['season_name'] ?? '',
     );
   }
 }
+
 class FormAUserDetails {
   final int id;
   final String partyName;
@@ -127,8 +131,8 @@ class FormAUserDetails {
   factory FormAUserDetails.fromJson(Map<String, dynamic> json) {
     return FormAUserDetails(
       id: json['id'],
-      partyName: json['party_name'],
-      mobileNo: json['mobile_no'],
+      partyName: json['party_name'] ?? '',
+      mobileNo: json['mobile_no'] ?? '',
     );
   }
 }

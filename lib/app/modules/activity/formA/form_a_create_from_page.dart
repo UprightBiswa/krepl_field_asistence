@@ -356,24 +356,24 @@ class _CreateFormApageState extends State<CreateFormApage> {
                               maxLines: 1,
                             ),
                             const SizedBox(height: 16),
-                            //print text in list of selected items in id selectedPartyNameListId
-                            if (selectedPartyNameListId != null) ...[
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.green[100],
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  //in ui show like [2,1] but i want to show like 2,1
-                                  'Selected Party Name Ids: ${selectedPartyNameListId!.join(', ')}',
-                                  // 'Selected Party Name Ids: $selectedPartyNameListId',
-                                  style: const TextStyle(color: Colors.green),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                            ],
+                            // //print text in list of selected items in id selectedPartyNameListId
+                            // if (selectedPartyNameListId != null) ...[
+                            //   Container(
+                            //     width: double.infinity,
+                            //     padding: const EdgeInsets.all(8),
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.green[100],
+                            //       borderRadius: BorderRadius.circular(10),
+                            //     ),
+                            //     child: Text(
+                            //       //in ui show like [2,1] but i want to show like 2,1
+                            //       'Selected Party Name Ids: ${selectedPartyNameListId!.join(', ')}',
+                            //       // 'Selected Party Name Ids: $selectedPartyNameListId',
+                            //       style: const TextStyle(color: Colors.green),
+                            //     ),
+                            //   ),
+                            //   const SizedBox(height: 16),
+                            // ],
 
                             SeasionSelectionScreen(
                               onSelectionChanged: (selectedSeasonsitems) {
@@ -664,6 +664,10 @@ class _CreateFormApageState extends State<CreateFormApage> {
                               },
                             ),
                             const SizedBox(height: 16),
+                           
+
+
+
                             GestureDetector(
                               onTap: () => _showImagePickerOptions(context),
                               child: Container(
@@ -700,6 +704,34 @@ class _CreateFormApageState extends State<CreateFormApage> {
                                       ),
                               ),
                             ),
+                            const SizedBox(height: 16),
+                             // add a delte image iocn in image
+                             if(_selectedImagePath != null)
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _selectedImagePath = null;
+                                  attachment = null;
+                                });
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.red[100],
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.red),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Delete Image',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            //
                             const SizedBox(height: 16),
                             CustomTextField(
                               labelText: 'Remarks',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
@@ -20,8 +21,15 @@ class RetailerDetailView extends StatefulWidget {
 }
 
 class _RetailerDetailViewState extends State<RetailerDetailView> {
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+  String formatDate(String dateStr) {
+    try {
+      final DateTime date = DateTime.parse(dateStr);
+      return DateFormat('dd-MMM-yyyy').format(date);
+    } catch (e) {
+      return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,16 +38,10 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'Retailer Details',
-          style: AppTypography.kBold20.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
-          ),
+          style: AppTypography.kBold20.copyWith(color: AppColors.kWhite),
         ),
       ),
       body: SizedBox(
@@ -81,10 +83,15 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                             label: "Mobile No",
                             value: widget.retailer.mobileNumber,
                           ),
+                          InfoRow(
+                            label: "Created Date",
+                            value: formatDate(
+                                widget.retailer.createdAt.toString()),
+                          ),
                           Container(
                             padding: EdgeInsets.all(8.h),
                             decoration: BoxDecoration(
-                              color: widget.retailer.isActive
+                              color: widget.retailer.isActive == '1'
                                   ? Colors.green.withOpacity(0.1)
                                   : Colors.red.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8.r),
@@ -93,21 +100,21 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  widget.retailer.isActive
+                                  widget.retailer.isActive == '1'
                                       ? Icons.check_circle
                                       : Icons.cancel,
-                                  color: widget.retailer.isActive
+                                  color: widget.retailer.isActive == '1'
                                       ? Colors.green
                                       : Colors.red,
                                   size: 20.sp,
                                 ),
                                 SizedBox(width: 8.w),
                                 Text(
-                                  widget.retailer.isActive
+                                  widget.retailer.isActive == '1'
                                       ? 'Active'
                                       : 'Inactive',
                                   style: TextStyle(
-                                    color: widget.retailer.isActive
+                                    color: widget.retailer.isActive == '1'
                                         ? Colors.green
                                         : Colors.red,
                                     fontSize: 16.sp,
@@ -132,9 +139,7 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                           SizedBox(height: 16.h),
                           for (var customer in widget.retailer.customerDetails)
                             InfoRow(
-                              label: customer.customerName != ''
-                                  ? customer.customerName
-                                  : "Customer Name",
+                              label: customer.customerName,
                               value: customer.customerCode,
                             )
                         ]),

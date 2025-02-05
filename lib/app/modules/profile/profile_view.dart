@@ -60,7 +60,7 @@ class _ProfileViewState extends State<ProfileView> {
         ],
       ),
       body: DefaultTabController(
-        length: 5,
+        length: 4,
         child: NestedScrollView(
           headerSliverBuilder: (context, _) {
             return [
@@ -142,9 +142,6 @@ class _ProfileViewState extends State<ProfileView> {
                     Tab(
                       text: 'Mapping',
                     ),
-                    Tab(
-                      text: 'Reports',
-                    ),
                   ],
                 ),
               ),
@@ -159,8 +156,8 @@ class _ProfileViewState extends State<ProfileView> {
                         buildWorkDetails(widget.userDetails)),
                     _buildTabContent(context, 'Mapping Information',
                         buildMappingDetails(widget.userDetails)),
-                    _buildTabContent(context, 'Reports and Activities',
-                        buildReportsAndActivities(widget.userDetails)),
+                    // _buildTabContent(context, 'Reports and Activities',
+                    //     buildReportsAndActivities(widget.userDetails)),
                   ],
                 ),
               ),
@@ -172,29 +169,19 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Widget _buildTabContent(BuildContext context, String title, Widget content) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDarkMode(context)
-            ? AppColors.kPrimary.withOpacity(0.08)
-            : AppColors.kPrimary.withOpacity(0.15),
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppSpacing.radiusThirty),
-        ),
-      ),
+    return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
         horizontal: 20.h,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: AppSpacing.tenHorizontal),
-            // Text(title, style: AppTypography.kBold20),
-            // SizedBox(height: AppSpacing.twentyVertical),
-            // content,
-            _buildDetailsContainer(context, title, content),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: AppSpacing.tenHorizontal),
+          // Text(title, style: AppTypography.kBold20),
+          // SizedBox(height: AppSpacing.twentyVertical),
+          // content,
+          _buildDetailsContainer(context, title, content),
+        ],
       ),
     );
   }

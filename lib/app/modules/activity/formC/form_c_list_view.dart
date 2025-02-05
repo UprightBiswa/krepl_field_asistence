@@ -52,7 +52,6 @@ class FormCCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Circle Avatar for initials
               CircleAvatar(
@@ -237,7 +236,7 @@ class _SummaryColumn extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 24.sp, color: Colors.blue),
+        Icon(icon, size: 24.sp, color: Colors.teal),
         SizedBox(height: 4.h),
         Text(
           title,

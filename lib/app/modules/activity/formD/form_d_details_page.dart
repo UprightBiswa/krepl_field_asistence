@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constrants/constants.dart';
+import '../../widgets/components/Info_row_widget.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../formC/form_c_details_page.dart';
@@ -28,7 +29,7 @@ class FormDDetailPage extends StatelessWidget {
             ? Colors.black
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          formD.promotionActivityType,
+          'Demonstration Details',
           style: AppTypography.kBold14.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
@@ -42,7 +43,6 @@ class FormDDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FormDCard(formD: formD),
-           
             SizedBox(height: 10.h),
             _buildUserDetails(),
             SizedBox(height: 10.h),
@@ -50,6 +50,49 @@ class FormDDetailPage extends StatelessWidget {
             SizedBox(height: 10.h),
             if (formD.remarks.isNotEmpty)
               BuildInfoCard(title: 'Remarks', content: formD.remarks),
+            SizedBox(height: 10.h),
+            if (formD.imageUrl.isNotEmpty)
+              GestureDetector(
+                onTap: () {
+                  //open a dialog show image and user can zoom
+                  Get.dialog(
+                    Dialog(
+                      backgroundColor: Colors.transparent,
+                      surfaceTintColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Image.network(
+                          formD.imageUrl,
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: PrimaryContainer(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  child: Image.network(
+                    formD.imageUrl,
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: 200.h,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Text('Failed to load image'),
+                      );
+                    },
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -73,21 +116,9 @@ class FormDDetailPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ...formD.formDUserDetails.map((userDetail) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Party Name: ${userDetail.partyName}',
-                        style: TextStyle(fontSize: 12.sp),
-                      ),
-                      Text(
-                        'Mobile: ${userDetail.mobileNo}',
-                        style: TextStyle(fontSize: 12.sp),
-                      ),
-                    ],
-                  ),
+                return InfoRow(
+                  label: userDetail.partyName,
+                  value: userDetail.mobileNo,
                 );
               }),
             ],
@@ -102,7 +133,7 @@ class FormDDetailPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         CustomHeaderText(
+        CustomHeaderText(
           text: 'Demo Details',
           fontSize: 18.sp,
         ),
@@ -115,74 +146,27 @@ class FormDDetailPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Crop: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.cropName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
+                InfoRow(
+                  label: 'Crop',
+                  value: detail.cropName,
                 ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Stage: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.cropStageName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
+                //stage
+                InfoRow(
+                  label: 'Stage',
+                  value: detail.cropStageName,
                 ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Product: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.productName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
+                InfoRow(
+                  label: 'Product',
+                  value: detail.productName,
                 ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Pest: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.pestName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
+
+                InfoRow(
+                  label: 'Pest',
+                  value: detail.pestName,
                 ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Season: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.seasonName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
+                InfoRow(
+                  label: 'Season',
+                  value: detail.seasonName,
                 ),
               ],
             ),

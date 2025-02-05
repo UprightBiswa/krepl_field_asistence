@@ -16,7 +16,10 @@ class InfoRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Expanded(
@@ -25,7 +28,9 @@ class InfoRow extends StatelessWidget {
               textAlign: TextAlign.end,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 12.sp,
+              ),
             ),
           ),
         ],

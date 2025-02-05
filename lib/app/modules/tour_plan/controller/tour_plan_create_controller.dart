@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:intl/intl.dart';
 
 import '../../../data/helpers/internet/connectivity_services.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
-import '../model/expense_type_model.dart';
+import '../../../model/master/villages_model.dart';
+import '../model/tour_activity_type_model.dart';
+import '../model/tour_route_master.dart';
 
-class ExpenseCreateController extends GetxController {
+class TourPlanCreateController extends GetxController {
   // Services
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
@@ -16,25 +19,10 @@ class ExpenseCreateController extends GetxController {
   var errorMessage = ''.obs;
 
   // API Endpoint
-  final String _endpoint = "createFaExpense";
-
-  // Generate dynamic financial year list
-  List<String> getFinancialYears() {
-    final currentYear = DateTime.now().year;
-    return List.generate(5, (index) {
-      final startYear = currentYear + index;
-      return "$startYear-${startYear + 1}";
-    });
-  }
+  final String _endpoint = "createFaTourPlan";
 
   // Submit the form
-  Future<void> submitForm({
-    required String workplaceCode,
-    required String workplaceName,
-    required String hrEmployeeCode,
-    required String employeeName,
-    required List<MapEntry<String, String>> fields,
-  }) async {
+  Future<void> submitTourPlan(TourItem tourItem) async {
     isLoading.value = true;
 
     try {
@@ -44,27 +32,36 @@ class ExpenseCreateController extends GetxController {
       }
       // Prepare form data
       dio.FormData formData = dio.FormData();
+      final formattedDate = DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MMM-yyyy').parse(tourItem.tourDateController.text));
+      formData.fields.add(MapEntry("tour_date", formattedDate));
 
-      // Add single fields
-      formData.fields.addAll([
-        MapEntry('workplace_code', workplaceCode),
-        MapEntry('workplace_name', workplaceName),
-        MapEntry('hr_employee_code', hrEmployeeCode),
-        MapEntry('employee_name', employeeName),
-      ]);
+      // Add remarks
+      formData.fields.add(MapEntry("remarks", tourItem.remarksController.text));
 
-      // Add array/list fields using the MapEntry list `fields`
-      formData.fields.addAll(fields);
+      // Add villages
+      for (var village in tourItem.selectedVillages) {
+        formData.fields.add(MapEntry("village[]", village.id.toString()));
+      }
+
+      // Add routes
+      for (var route in tourItem.selectedRoutes) {
+        formData.fields.add(MapEntry("route[]", route.id.toString()));
+      }
+
+      // Add activities
+      for (var activity in tourItem.selectedActivities) {
+        formData.fields.add(MapEntry("activity[]", activity.id.toString()));
+      }
 
       // Make the API call
       final response = await _dioService.postFormData(_endpoint, formData);
 
       // Handle the response
       if (response.statusCode == 200 && response.data['success'] == true) {
-        Get.snackbar('Success', 'Expense submitted successfully.',
+        Get.snackbar('Success', 'Tour plan submitted successfully.',
             snackPosition: SnackPosition.BOTTOM);
       } else {
-        // Handle server-side errors
         throw Exception(response.data['message'] ?? 'Submission failed.');
       }
     } catch (e) {
@@ -79,17 +76,16 @@ class ExpenseCreateController extends GetxController {
   }
 }
 
-// ExpenseItem model
-class ExpenseItem {
-  ExpenseType? expenseType;
-  TextEditingController monthController = TextEditingController();
-  TextEditingController financialYearController = TextEditingController();
-  TextEditingController amountController = TextEditingController();
+class TourItem {
+  List<Village> selectedVillages = [];
+  List<TourRouteMaster> selectedRoutes = [];
+  List<TourActivity> selectedActivities = [];
+  TextEditingController tourDateController = TextEditingController();
+  TextEditingController remarksController = TextEditingController();
 
   // Dispose controllers to prevent memory leaks
   void disposeControllers() {
-    monthController.dispose();
-    financialYearController.dispose();
-    amountController.dispose();
+    tourDateController.dispose();
+    remarksController.dispose();
   }
 }

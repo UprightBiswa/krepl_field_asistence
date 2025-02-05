@@ -54,14 +54,13 @@ class TourPlanListCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Circle Avatar for initials
               CircleAvatar(
                 radius: 30.r,
                 backgroundColor: AppColors.kPrimary.withOpacity(0.15),
                 child: Text(
-                  tourPlan.tourDate.substring(0, 2).toUpperCase(),
+                  tourPlan.employeename.substring(0, 2).toUpperCase(),
                   style: TextStyle(
                     color: AppColors.kPrimary,
                     fontWeight: FontWeight.bold,
@@ -77,7 +76,7 @@ class TourPlanListCard extends StatelessWidget {
                   children: [
                     // Employee Name
                     Text(
-                      tourPlan.id.toString(),
+                      tourPlan.employeename.toString(),
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
@@ -86,7 +85,7 @@ class TourPlanListCard extends StatelessWidget {
                     SizedBox(height: 4.h),
                     // Employee Code
                     Text(
-                      'Code: ${tourPlan.id.toString()}',
+                      'Code: ${tourPlan.hremployeecode.toString()}',
                       style: TextStyle(
                         fontSize: 14.sp,
                         color: Colors.grey,
@@ -106,31 +105,38 @@ class TourPlanListCard extends StatelessWidget {
           // Status and Total Count
 
           // Status
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     //show text ststus
+          //     Text(
+          //       'Status:',
+          //       style: AppTypography.kMedium14,
+          //     ),
+          //     Container(
+          //       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          //       decoration: BoxDecoration(
+          //         color: getStatusColor(tourPlan.status).withOpacity(0.2),
+          //         borderRadius: BorderRadius.circular(8.r),
+          //       ),
+          //       child: Text(
+          //         getStatusText(tourPlan.status),
+          //         style: TextStyle(
+          //           fontSize: 14.sp,
+          //           fontWeight: FontWeight.bold,
+          //           color: getStatusColor(tourPlan.status),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // SizedBox(height: 8.h),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              //show text ststus
               Text(
-                'Status:',
-                style: AppTypography.kMedium14,
-              ),
-              Text(
-                getStatusText(tourPlan.status),
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  color: getStatusColor(tourPlan.status),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          // Created Date
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Created At:',
+                'Created Date:',
                 style: AppTypography.kMedium14,
               ),
               Text(
@@ -143,70 +149,60 @@ class TourPlanListCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 8.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total Village:',
-                style: AppTypography.kMedium14,
-              ),
-              Text(
-                ' ${tourPlan.village.length}',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.grey,
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 12.w),
+            decoration: BoxDecoration(
+              color: AppColors.kWhite,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                // Created Date
 
-          SizedBox(height: 8.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total Route:',
-                style: AppTypography.kMedium14,
-              ),
-              Text(
-                ' ${tourPlan.route.length}',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.grey,
+                _SummaryColumn(
+                  icon: Icons.holiday_village,
+                  title: 'Total Village',
+                  value: '${tourPlan.village.length}',
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total Activity:',
-                style: AppTypography.kMedium14,
-              ),
-              Text(
-                ' ${tourPlan.activity.length}',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.grey,
+
+                _VerticalDivider(),
+                _SummaryColumn(
+                  icon: Icons.tour,
+                  title: 'Total Route',
+                  value: '${tourPlan.route.length}',
                 ),
-              ),
-            ],
+
+                _VerticalDivider(),
+                _SummaryColumn(
+                  icon: Icons.local_activity,
+                  title: 'Total Activity',
+                  value: '${tourPlan.activity.length}',
+                ),
+              ],
+            ),
           ),
-          
         ],
       ),
     );
   }
 
   String getStatusText(int status) {
+    print('${status}');
     switch (status) {
-      case 1:
+      case 0:
         return "Pending";
-      case 2:
+      case 1:
         return "Approved";
-      case 3:
+      case 2:
         return "Rejected";
       default:
         return "Unknown";
@@ -215,17 +211,16 @@ class TourPlanListCard extends StatelessWidget {
 
   Color getStatusColor(int status) {
     switch (status) {
+      case 0:
+        return AppColors.kWarning;
       case 1:
-        return Colors.yellow;
-      case 2:
         return Colors.green;
-      case 3:
-        return Colors.red;
+      case 2:
+        return AppColors.kAccent7;
       default:
         return Colors.black;
     }
   }
-
 
   // Helper: Format the Date
   String formatDate(String dateStr) {
@@ -235,5 +230,49 @@ class TourPlanListCard extends StatelessWidget {
     } catch (_) {
       return dateStr; // Return as-is if parsing fails
     }
+  }
+}
+
+class _SummaryColumn extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+
+  const _SummaryColumn({
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 24.sp, color: Colors.teal),
+        SizedBox(height: 4.h),
+        Text(
+          title,
+          style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          value,
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+}
+
+class _VerticalDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40.h,
+      width: 1.w,
+      color: Colors.grey.shade300,
+      margin: EdgeInsets.symmetric(horizontal: 8.w),
+    );
   }
 }

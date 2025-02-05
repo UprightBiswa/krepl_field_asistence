@@ -29,11 +29,11 @@ class FormE {
         id: json['id'],
         promotionActivityType: json['promotion_activity_type'],
         partyType: json['party_type'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
-        remarks: json['remarks'],
-        totalPartyNo: json['total_party_no'],
-        createdAt: json['createdAt'],
+        latitude: json['latitude'] ?? '',
+        longitude: json['longitude'] ?? '',
+        remarks: json['remarks'] ?? '',
+        totalPartyNo: json['total_party_no'] ?? '',
+        createdAt: json['createdAt'] ?? '',
         formEDetails: (json['formEDetails'] as List)
             .map((e) => FormEDetail.fromJson(e))
             .toList(),
@@ -88,7 +88,8 @@ class FormEUserDetail {
     required this.mobileNo,
   });
 
-  factory FormEUserDetail.fromJson(Map<String, dynamic> json) => FormEUserDetail(
+  factory FormEUserDetail.fromJson(Map<String, dynamic> json) =>
+      FormEUserDetail(
         id: json['id'],
         partyName: json['party_name'],
         mobileNo: json['mobile_no'],

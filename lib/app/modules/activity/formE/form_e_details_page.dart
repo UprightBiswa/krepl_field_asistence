@@ -47,19 +47,50 @@ class FormEDetailPage extends StatelessWidget {
             _buildUserDetails(),
             SizedBox(height: 10.h),
             _buildFormDetails(),
-            SizedBox(height: 10.h),
-            if (formE.remarks != null)
+            if (formE.remarks != '')
               _buildInfoCard('Remarks', formE.remarks!),
             SizedBox(height: 10.h),
             // Conditionally show the image if the URL is not empty
             if (formE.imageUrl.isNotEmpty)
-              PrimaryContainer(
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                child: Image.network(
-                  formE.imageUrl,
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: 200.h,
+              GestureDetector(
+                onTap: () {
+                  //open a dialog show image and user can zoom
+                  Get.dialog(
+                    Dialog(
+                      backgroundColor: Colors.transparent,
+                      surfaceTintColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Image.network(
+                          formE.imageUrl,
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: PrimaryContainer(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  child: Image.network(
+                    formE.imageUrl,
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: 200.h,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Text('Failed to load image'),
+                      );
+                    },
+                  ),
                 ),
               ),
           ],
@@ -113,11 +144,11 @@ class FormEDetailPage extends StatelessWidget {
                         'Party Name: ${userDetail.partyName}',
                         style: TextStyle(fontSize: 12.sp),
                       ),
-                      if(userDetail.mobileNo.isNotEmpty)
-                      Text(
-                        'Mobile: ${userDetail.mobileNo}',
-                        style: TextStyle(fontSize: 12.sp),
-                      ),
+                      if (userDetail.mobileNo.isNotEmpty)
+                        Text(
+                          'Mobile: ${userDetail.mobileNo}',
+                          style: TextStyle(fontSize: 12.sp),
+                        ),
                     ],
                   ),
                 );

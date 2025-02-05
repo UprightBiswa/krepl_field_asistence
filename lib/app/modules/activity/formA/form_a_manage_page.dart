@@ -59,7 +59,10 @@ class _FormAManagementPageState extends State<FormAManagementPage> {
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormApage(),
-                  transition: Transition.rightToLeftWithFade);
+                      transition: Transition.rightToLeftWithFade)!
+                  .then(
+                (value) => formAController.refreshItems(),
+              );
             },
           ),
           SizedBox(

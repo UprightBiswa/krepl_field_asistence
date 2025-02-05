@@ -107,61 +107,56 @@ class _SignInState extends State<SignIn> {
       }
     }
 
-    Future<void> handleVerifyOTP() async {
-      Future<void> userInfoRequest(String deviceToken) async {
-        try {
-          UserDetailsResponse response =
-              await loginProvider.getUserInfo(deviceToken, context);
-          print(
-              'User info fetched successfully: ${response.data!.employeeName}');
-          // if (loginProvider.cacheRsponse != null &&
-          //     loginProvider.cacheRsponse!.success &&
-          //     response.data != null) {
-          //   setState(() {
-          //     userDetails = response.data!;
-          //   });
-          //   print('User details: $userDetails');
-          //   Get.offAll(() => LandingPage(userDetails: userDetails!));
-          // Additional debug prints
-          print('Response success: ${response.success}');
-          print('Response data: ${response.data}');
-
-          if (response.success && response.data != null) {
-            setState(() {
-              userDetails = response.data!;
-            });
-            print('User details saved: $userDetails');
-            Get.offAll(() => NavigationHomeScreen(userDetails: userDetails!));
-          } else {
-            // Display an error message if OTP request failed
-            final errorMessage = loginProvider.cacheRsponse != null
-                ? loginProvider.cacheRsponse!.message
-                : 'Failed to fetch user info';
-            print('Failed to fetch user info: $errorMessage');
-            throw errorMessage;
-          }
-        } catch (error) {
-          // Handle error
-          print('Error fetching user info $error');
-          // You can display a snackbar or toast to show the error message
-        }
+    Future<void> saveDeviceToken(String? token) async {
+      if (token != null && token.isNotEmpty) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('deviceToken', token);
+        print('Device token saved: $token');
       }
+    }
 
+    Future<void> userInfoRequest(String deviceToken) async {
+      try {
+        UserDetailsResponse response =
+            await loginProvider.getUserInfo(deviceToken, context);
+        print('User info fetched successfully: ${response.data!.employeeName}');
+        print('Response success: ${response.success}');
+        print('Response data: ${response.data}');
+
+        if (response.success && response.data != null) {
+          setState(() {
+            userDetails = response.data!;
+          });
+          print('User details saved: $userDetails');
+          saveDeviceToken(deviceToken);
+          Get.offAll(() => NavigationHomeScreen(userDetails: userDetails!));
+        } else {
+          final errorMessage = loginProvider.cacheRsponse != null
+              ? loginProvider.cacheRsponse!.message
+              : 'Failed to fetch user info';
+          print('Failed to fetch user info: $errorMessage');
+          throw errorMessage;
+        }
+      } catch (error) {
+        print('Error fetching user info $error');
+      }
+    }
+
+    Future<void> handleVerifyOTP() async {
       if (isOTPValidated) {
         try {
           final fcmToken = await getFCMToken();
           if (fcmToken == null) {
             print('FCM token is missing');
-            // Optionally, handle the missing token case here
           }
           await loginProvider.verifyOTP(_phoneController.text,
               _pinController.text, fcmToken ?? '', context);
 
           if (loginProvider.loginResponse != null &&
               loginProvider.loginResponse!.success) {
-            // Get the user code from the login response
             String deviceToken =
                 loginProvider.loginResponse!.data['device_token'];
+            await saveDeviceToken(fcmToken);
             await userInfoRequest(deviceToken);
           } else {
             final errorMessage = loginProvider.loginResponse != null

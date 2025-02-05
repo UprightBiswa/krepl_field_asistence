@@ -14,6 +14,7 @@ class Doctor {
   final String stateName;
   final String workPlaceCode;
   final String workPlaceName;
+  final String? createdAt;
 
   Doctor({
     required this.id,
@@ -29,6 +30,7 @@ class Doctor {
     required this.stateName,
     required this.workPlaceCode,
     required this.workPlaceName,
+    this.createdAt, // Nullable field
   });
 
   // Convert JSON response to Doctor object
@@ -47,6 +49,7 @@ class Doctor {
       stateName: json['state'],
       workPlaceCode: json['workplace_code'],
       workPlaceName: json['workplace_name'],
+      createdAt: json['createdAt'],
     );
   }
 }

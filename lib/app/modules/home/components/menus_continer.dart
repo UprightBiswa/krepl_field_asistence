@@ -27,7 +27,7 @@ class ShortcutMenus extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            childAspectRatio: 1.2,
+            childAspectRatio: 1.1,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
           ),
@@ -63,10 +63,10 @@ class ShortcutMenus extends StatelessWidget {
                         color: AppColors.kWhite,
                       ),
                     ),
-                    const Spacer(),
+                    SizedBox(height: 5.h),
                     Text(
                       menuItem.title,
-                      style: AppTypography.kLight12,
+                      style: AppTypography.kLight10,
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

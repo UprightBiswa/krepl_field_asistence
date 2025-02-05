@@ -105,6 +105,14 @@ class LandingPageState extends State<LandingPage> {
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: _onItemTapped,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            selectedItemColor: AppColors.kWhite,
+            selectedLabelStyle: const TextStyle(
+              color: AppColors.kWhite,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
             items: const [
               BottomNavigationBarItem(
                 label: 'Dashboard',
@@ -119,7 +127,7 @@ class LandingPageState extends State<LandingPage> {
                   size: 24,
                   color: AppColors.kWhite,
                 ),
-                backgroundColor: AppColors.kPrimary,
+                backgroundColor: AppColors.kWhite,
               ),
               BottomNavigationBarItem(
                 label: 'Home',
@@ -134,7 +142,7 @@ class LandingPageState extends State<LandingPage> {
                   size: 24,
                   color: AppColors.kWhite,
                 ),
-                backgroundColor: AppColors.kPrimary,
+                backgroundColor: AppColors.kWhite,
               ),
               BottomNavigationBarItem(
                 icon: Icon(
@@ -149,7 +157,7 @@ class LandingPageState extends State<LandingPage> {
                   size: 24,
                   color: AppColors.kWhite,
                 ),
-                backgroundColor: AppColors.kPrimary,
+                backgroundColor: AppColors.kWhite,
               ),
             ],
           ),

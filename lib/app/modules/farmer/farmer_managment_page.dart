@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import '../../data/constrants/constants.dart';
 import '../home/components/search_field.dart';
 import '../widgets/appbars/appbars.dart';
-import '../widgets/buttons/buttons.dart';
 import '../widgets/buttons/custom_button.dart';
 import 'components/farmer_list_view.dart';
 import 'components/filter_bottom_sheet.dart';
@@ -117,21 +116,9 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  CustomHeaderText(text: 'Farmers', fontSize: 16.sp),
-                  const Spacer(),
-                  CustomTextButton(
-                    onPressed: () {
-                      // Logic to see all farmers
-                    },
-                    text: 'See All',
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kDarkContiner,
-                  ),
-                ],
-              ),
+              SizedBox(height: 20.h),
+              CustomHeaderText(text: 'Farmers', fontSize: 16.sp),
+              SizedBox(height: 20.h),
               Obx(() {
                 if (farmerController.isListLoading.value &&
                     farmerController.pagingController.itemList == null) {

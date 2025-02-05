@@ -8,6 +8,7 @@ import '../home/components/search_field.dart';
 import '../widgets/buttons/custom_button.dart';
 import '../widgets/texts/custom_header_text.dart';
 import 'components/expense_list_view.dart';
+import 'components/filter_expense_list_view.dart';
 import 'controller/expense_lsit_controller.dart';
 import 'fa_expense_create_page.dart';
 
@@ -20,7 +21,6 @@ class ExpenseManagementPage extends StatefulWidget {
 
 class _FormBManagementPageState extends State<ExpenseManagementPage> {
   final ExpenseController controller = Get.put(ExpenseController());
-  final TextEditingController textController = TextEditingController();
 
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
@@ -59,7 +59,7 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
             onTap: () {
               Get.to(() => const ExpenseCreatePage(),
                       transition: Transition.rightToLeftWithFade)!
-                  .then((value) => {controller.fetchExpenses(1)});
+                  .then((value) => controller.refreshItems());
             },
           ),
           SizedBox(
@@ -79,13 +79,38 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.h),
-                    SearchField(
-                      controller: textController,
-                      onChanged: (query) {
-                        controller.setSearchQuery(query);
-                      },
-                      isEnabled: true,
-                      hintText: 'Search Expense',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SearchField(
+                            controller: controller.textController,
+                            onChanged: (query) {
+                              controller.setSearchQuery(query);
+                            },
+                            isEnabled: true,
+                            hintText: 'Search Expense',
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        GestureDetector(
+                          onTap: () {
+                            Get.bottomSheet(
+                              DateFilterBottomSheet(),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 20.w,
+                            backgroundColor:
+                                AppColors.kPrimary.withOpacity(0.15),
+                            child: const Icon(
+                              Icons.filter_list,
+                              color: AppColors.kPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     CustomHeaderText(text: 'Expense List', fontSize: 16.sp),

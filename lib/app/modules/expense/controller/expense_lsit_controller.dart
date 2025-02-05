@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import 'dart:async';
 import 'package:get/get.dart';
@@ -14,8 +17,11 @@ class ExpenseController extends GetxController {
   static const int pageSize = 10;
   Timer? _debounce;
   final Set<int> _existingItemIds = <int>{};
+  final TextEditingController textController = TextEditingController();
 
   var searchQuery = ''.obs;
+  var fromDate = Rxn<DateTime>(); // Nullable DateTime
+  var toDate = Rxn<DateTime>();
   var isListLoading = false.obs;
   var isListError = false.obs;
   var listErrorMessage = ''.obs;
@@ -46,6 +52,12 @@ class ExpenseController extends GetxController {
         'order': -1,
         'order_by': 'created_at',
         'filter_value': searchQuery.value,
+        'from_date': fromDate.value != null
+            ? DateFormat('yyyy-MM-dd').format(fromDate.value!)
+            : null,
+        'to_date': toDate.value != null
+            ? DateFormat('yyyy-MM-dd').format(toDate.value!)
+            : null,
       };
 
       final response = await _dioService.post(
@@ -98,6 +110,40 @@ class ExpenseController extends GetxController {
   void refreshItems() {
     _existingItemIds.clear();
     pagingController.refresh();
+  }
+
+  void setFromDate(DateTime date) {
+    fromDate.value = date;
+    if (toDate.value != null && fromDate.value!.isAfter(toDate.value!)) {
+      toDate.value = fromDate.value; // Adjust toDate if invalid
+    }
+  }
+
+  void setToDate(DateTime date) {
+    if (fromDate.value != null && date.isBefore(fromDate.value!)) {
+      return; // Prevent invalid date selection
+    }
+    toDate.value = date;
+  }
+
+  void clearFilters() {
+    print("From Date: ${fromDate.value}");
+    print("To Date: ${toDate.value}");
+    fromDate.value = null;
+    toDate.value = null;
+    searchQuery.value = '';
+    textController.clear();
+    _existingItemIds.clear();
+    pagingController.refresh();
+  }
+
+  void applyDateFilter() {
+    if (fromDate.value != null || toDate.value != null) {
+      print("From Date: ${fromDate.value}");
+      print("To Date: ${toDate.value}");
+      _existingItemIds.clear();
+      pagingController.refresh();
+    }
   }
 
   @override

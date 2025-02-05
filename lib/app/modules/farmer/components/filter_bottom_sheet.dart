@@ -1,4 +1,3 @@
-import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,66 +61,111 @@ class _FilterBottomSheetState<T> extends State<FilterBottomSheet<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(20.w),
-      child: PrimaryContainer(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Filter Options',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
-            SizedBox(height: 20.h),
-            DropdownButton<T>(
-              value: orderBy,
-              items:
-                  widget.controller.filterOptions.map((FilterOption<T> option) {
-                return DropdownMenuItem<T>(
-                  value: option.value,
-                  child: Text(option.label),
-                );
-              }).toList(),
-              onChanged: (T? newValue) {
-                setState(() {
-                  orderBy = newValue as T;
-                  widget.controller.setOrderBy(orderBy);
-                });
-              },
-            ),
-            Slider(
-              value: order.toDouble(),
-              min: -1,
-              max: 1,
-              divisions: 1,
-              label: order == -1 ? 'Descending' : 'Ascending',
-              onChanged: (double value) {
-                setState(() {
-                  order = value.toInt();
-                  widget.controller.setOrder(order);
-                });
-              },
-            ),
-            SizedBox(height: 20.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    widget.onClear();
-                  },
-                  child: const Text('Clear'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    widget.controller.applyFilters(widget.onApply);
-                  },
-                  child: const Text('Apply Filters'),
-                ),
-              ],
-            ),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Filter Options',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+          //devider
+          const Divider(
+            color: Colors.grey,
+            thickness: 1,
+            height: 25,
+          ),
+
+          //label sort by order
+          Text('Sort By Order',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+          //do same thing for dropdown dont use  make list select option items with slected order
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.controller.filterOptions.length,
+            itemBuilder: (BuildContext context, int index) {
+              final FilterOption<T> option =
+                  widget.controller.filterOptions[index];
+              return ListTile(
+                title: Text(option.label),
+                onTap: () {
+                  setState(() {
+                    orderBy = option.value;
+                    widget.controller.setOrderBy(orderBy);
+                  });
+                },
+                selected: orderBy == option.value,
+              );
+            },
+          ),
+
+          // do wrpe list of options same like dropdown fileds
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FilterOption(
+                label: 'Descending',
+                value: -1,
+              ),
+              FilterOption(
+                label: 'Ascending',
+                value: 1,
+              ),
+            ]
+                .map(
+                  (FilterOption<int> option) => FilterChip(
+                    label: Text(option.label),
+                    selected: order == option.value,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        order = option.value;
+                        widget.controller.setOrder(order);
+                      });
+                    },
+                  ),
+                )
+                .toList(),
+          ),
+
+          Slider(
+            value: order.toDouble(),
+            min: -1,
+            max: 1,
+            divisions: 1,
+            label: order == -1 ? 'Descending' : 'Ascending',
+            onChanged: (double value) {
+              setState(() {
+                order = value.toInt();
+                widget.controller.setOrder(order);
+              });
+            },
+          ),
+          SizedBox(height: 20.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.onClear();
+                },
+                child: const Text('Clear'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.controller.applyFilters(widget.onApply);
+                },
+                child: const Text('Apply Filters'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

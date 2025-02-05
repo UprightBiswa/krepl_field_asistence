@@ -9,8 +9,9 @@ import '../profile/settings_view.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/widgets.dart';
 import 'component/customer_sales_continer.dart';
-import 'component/mtb_tab_bar_data.dart';
+import 'component/mtd_tab_bar_data.dart';
 import 'component/ytd_tab_bar_data.dart';
+import 'controllers/activity_controller.dart';
 
 class DashboardPage extends StatefulWidget {
   final UserDetails userDetails;
@@ -21,9 +22,53 @@ class DashboardPage extends StatefulWidget {
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends State<DashboardPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+// ActivityController
+  final ActivityController controller = Get.put(ActivityController());
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize TabController
+    _tabController = TabController(length: 2, vsync: this);
+
+    // Add listener to handle tab changes
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging == false) {
+        // Call respective API based on the selected tab
+        if (_tabController.index == 0) {
+          fetchYtdData();
+        } else if (_tabController.index == 1) {
+          fetchMtdData();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  // Dummy functions for API calls
+  void fetchYtdData() {
+    print('Fetching YTD Data...');
+    // controller.fetchYtdData();
+    // controller.fetchYtdSalesData();
+  }
+
+  void fetchMtdData() {
+    print('Fetching MTD Data...');
+    // Add your API call logic here
+    // controller.fetchMtdData();
+    // controller.fetchMtdSalesData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +160,7 @@ class _DashboardPageState extends State<DashboardPage> {
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
                   TabBar(
+                    controller: _tabController,
                     indicatorSize: TabBarIndicatorSize.tab,
                     labelColor: isDarkMode(context)
                         ? AppColors.kBackground
@@ -158,6 +204,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ];
           },
           body: TabBarView(
+            controller: _tabController,
             children: [
               SingleChildScrollView(
                 padding:

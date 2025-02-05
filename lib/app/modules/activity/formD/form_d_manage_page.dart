@@ -58,7 +58,10 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormDpage(),
-                  transition: Transition.rightToLeftWithFade);
+                      transition: Transition.rightToLeftWithFade)!
+                  .then(
+                (value) => formDController.refreshItems(),
+              );
             },
           ),
           SizedBox(

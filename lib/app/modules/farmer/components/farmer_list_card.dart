@@ -3,12 +3,14 @@ import 'package:field_asistence/app/modules/farmer/farmer_edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/constrants/constants.dart';
 import '../../../provider/connction_provider/connectivity_provider.dart';
 import '../../home/components/action_menue.dart';
 import '../../widgets/buttons/buttons.dart';
+import '../../widgets/components/Info_row_widget.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../controller/farmer_list_view_controller.dart';
 import '../farmer_details_view.dart';
@@ -49,8 +51,6 @@ class _FarmerListCardState extends State<FarmerListCard> {
             },
             child: PrimaryContainer(
               padding: EdgeInsets.all(10.h),
-              // width: 264.w,
-              // height: 150.h,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -58,20 +58,18 @@ class _FarmerListCardState extends State<FarmerListCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(50.r),
-                          child: CircleAvatar(
-                            radius: 30.r,
-                            backgroundColor: AppColors.kPrimary,
-                            child: Text(
-                              widget.farmer.farmerName!
-                                  .substring(0, 2)
-                                  .toUpperCase(),
-                              style: AppTypography.kBold14.copyWith(
-                                color: AppColors.kWhite,
-                              ),
-                            ),
-                          )),
+                      CircleAvatar(
+                        radius: 30.r,
+                        backgroundColor: AppColors.kPrimary,
+                        child: Text(
+                          widget.farmer.farmerName!
+                              .substring(0, 2)
+                              .toUpperCase(),
+                          style: AppTypography.kBold14.copyWith(
+                            color: AppColors.kWhite,
+                          ),
+                        ),
+                      ),
                       SizedBox(width: 16.w),
                       // Farmer details
                       Expanded(
@@ -87,13 +85,6 @@ class _FarmerListCardState extends State<FarmerListCard> {
                               widget.farmer.promotionActivity ?? '',
                               style: AppTypography.kBold14.copyWith(
                                 color: AppColors.kPrimary,
-                              ),
-                            ),
-                            SizedBox(height: 8.h),
-                            Text(
-                              'No: ${widget.farmer.mobileNo}',
-                              style: AppTypography.kLight16.copyWith(
-                                color: AppColors.kNeutral04.withOpacity(0.75),
                               ),
                             ),
                           ],
@@ -117,6 +108,17 @@ class _FarmerListCardState extends State<FarmerListCard> {
                       ),
                     ],
                   ),
+                  Divider(
+                    color: AppColors.kPrimary.withOpacity(0.15),
+                  ),
+                  InfoRow(
+                    label: "Mobile No",
+                    value: widget.farmer.mobileNo ?? '',
+                  ),
+                  InfoRow(
+                    label: "Created Date",
+                    value: formatDate(widget.farmer.createdAt.toString()),
+                  ),
                 ],
               ),
             ),
@@ -124,5 +126,14 @@ class _FarmerListCardState extends State<FarmerListCard> {
         );
       },
     );
+  }
+
+  String formatDate(String dateStr) {
+    try {
+      final DateTime date = DateTime.parse(dateStr);
+      return DateFormat('dd-MMM-yyyy').format(date);
+    } catch (e) {
+      return '';
+    }
   }
 }

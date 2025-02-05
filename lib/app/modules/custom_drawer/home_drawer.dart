@@ -119,7 +119,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         fontWeight: FontWeight.w600,
                         color: isDarkMode(context)
                             ? AppColors.kHint
-                            : AppColors.kWhite,
+                            : AppColors.kPrimary,
                         fontSize: 18,
                       ),
                     ),

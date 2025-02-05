@@ -55,6 +55,7 @@ class AppTheme {
       type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.kPrimary,
       elevation: 0,
+      selectedLabelStyle: TextStyle(color: AppColors.kWhite),
       showSelectedLabels: false,
       showUnselectedLabels: false,
     ),

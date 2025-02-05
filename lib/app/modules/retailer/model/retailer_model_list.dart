@@ -1,3 +1,5 @@
+
+
 class CustomerDetails {
   final String customerCode;
   final String customerName;
@@ -30,7 +32,7 @@ class Retailer {
   final List<CustomerDetails> customerDetails;
   final String workplaceCode;
   final String workplaceName;
-  final bool isActive;
+  final String isActive;
   final DateTime createdAt;
 
   Retailer({
@@ -56,6 +58,7 @@ class Retailer {
     var customerDetailsJson = json['customer_details'] as List;
     List<CustomerDetails> customerDetailsList =
         customerDetailsJson.map((i) => CustomerDetails.fromJson(i)).toList();
+  
 
     return Retailer(
       id: json['id'],
@@ -72,8 +75,12 @@ class Retailer {
       customerDetails: customerDetailsList,
       workplaceCode: json['workplace_code'],
       workplaceName: json['workplace_name'],
-      isActive: json['is_active'] == 1,
+      isActive: json['is_active'].toString(),
+      // dd-MM-yyyy  make formete date
       createdAt: DateTime.parse(json['createdAt']),
+
+      
+      // createdAt: DateTime.parse(json['createdAt']),
     );
   }
 }

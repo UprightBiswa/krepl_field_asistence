@@ -59,7 +59,10 @@ class _FormBManagementPageState extends State<FormBManagementPage> {
             isBorder: true,
             onTap: () {
               Get.to(() => const CreateFormBpage(),
-                  transition: Transition.rightToLeftWithFade);
+                      transition: Transition.rightToLeftWithFade)!
+                  .then(
+                (value) => formBController.refreshItems(),
+              );
             },
           ),
           SizedBox(

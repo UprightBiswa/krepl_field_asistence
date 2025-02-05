@@ -1,4 +1,3 @@
-import 'package:field_asistence/app/data/constrants/app_typography.dart';
 import 'package:field_asistence/app/modules/widgets/buttons/custom_button.dart';
 import 'package:field_asistence/app/modules/widgets/texts/custom_header_text.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../model/login/user_details_reponse.dart';
-import '../../home/model/menu_group.dart';
 import '../../widgets/loading/shimmer_activity_card.dart';
 import '../controllers/activity_controller.dart';
+import '../model/cutomer _sales_data.dart';
 
 class CustomerSalesContainer extends StatefulWidget {
   final UserDetails userDetails;
@@ -40,13 +39,13 @@ class _CustomerSalesContainerState extends State<CustomerSalesContainer> {
               fontSize: 18.sp,
             ),
             const Spacer(),
-            CustomButton(
-              text: 'See All',
-              onTap: () {},
-              icon: Icons.arrow_forward_ios,
-              iconSize: 16.h,
-              isBorder: true,
-            ),
+            // CustomButton(
+            //   text: 'See All',
+            //   onTap: () {},
+            //   icon: Icons.arrow_forward_ios,
+            //   iconSize: 16.h,
+            //   isBorder: true,
+            // ),
           ],
         ),
         SizedBox(height: 10.h),
@@ -100,89 +99,187 @@ class CustomerSalesListView extends StatelessWidget {
             final salesData = isYtd
                 ? controller.ytdSalesData[index]
                 : controller.mtdSalesData[index];
-            return ListTile(
-              // tileColor:
-              //     isDarkMode(context) ? Colors.grey[800] : Colors.grey[200],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.r),
-                side: BorderSide(
-                  color: isDarkMode(context)
-                      ? Colors.grey[200]!
-                      : Colors.grey[400]!,
-                ),
-              ),
-              minVerticalPadding: 0,
-              minLeadingWidth: 0,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 10.w,
-              ),
-              leading: CircleAvatar(
-                radius: 30.r,
-                backgroundColor:
-                    colorGenerator.generateColor().withOpacity(0.5),
-                foregroundColor: Colors.white,
-                child: Text(
-                  salesData.customerName[0],
-                  style: AppTypography.kBold20,
-                ),
-              ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    salesData.customerName,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: AppTypography.kMedium16,
-                  ),
-                  Text('Cus No: ${salesData.customerNo}',
-                      style: AppTypography.kMedium10),
-                ],
-              ),
-              subtitle: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Curt Year: ', style: AppTypography.kLight12),
-                        Text(
-                          '\u{20B9}${salesData.currentYearData}',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: AppTypography.kBold12,
-                        ),
-                      ],
-                    ),
-                  ),
-                  // const Spacer(),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Last Year: ', style: AppTypography.kLight12),
-                        Text(
-                          '\u{20B9}${salesData.previousYearData}',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: AppTypography.kBold12,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                // Handle item tap, maybe navigate to a details page
-              },
+            return CustomerSalesCard(
+              salesData: salesData,
+              isYtd: isYtd,
             );
           },
         );
       }
     });
+  }
+}
+
+class CustomerSalesCard extends StatelessWidget {
+  final SalesData salesData;
+  final bool isYtd;
+
+  const CustomerSalesCard({
+    super.key,
+    required this.salesData,
+    required this.isYtd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.r),
+        color: isDark ? Colors.grey[800] : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black26 : Colors.grey[300]!,
+            offset: const Offset(0, 2),
+            blurRadius: 6,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Customer Info
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 30.r,
+                backgroundColor: Colors.blueAccent.withOpacity(0.2),
+                child: Text(
+                  salesData.customerName[0].toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      salesData.customerName,
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    Text(
+                      'Customer No: ${salesData.customerNo}',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: isDark ? Colors.grey[400] : Colors.grey[700],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 10.w),
+              // Total Comparison Badge
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20.r),
+                ),
+                child: Text(
+                  isYtd ? 'YTD' : 'MTD',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 20.h),
+          // Comparison Chart (Bar Chart Representation)
+          Row(
+            children: [
+              // Current Total Section
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      isYtd ? 'Current Year' : 'Current Month',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: isDark ? Colors.grey[400] : Colors.grey[700],
+                      ),
+                    ),
+                    Text(
+                      '\u{20B9}${isYtd ? salesData.currentYearTotal.toStringAsFixed(2) : salesData.currentMonthTotal.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Container(
+                      height: 10.h,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.greenAccent.withOpacity(0.7),
+                            Colors.green,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 10.w),
+              // Previous Total Section
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      isYtd ? 'Last Year' : 'Last Month',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: isDark ? Colors.grey[400] : Colors.grey[700],
+                      ),
+                    ),
+                    Text(
+                      '\u{20B9}${isYtd ? salesData.previousYearTotal.toStringAsFixed(2) : salesData.previousMonthTotal.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Container(
+                      height: 10.h,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.redAccent.withOpacity(0.7),
+                            Colors.red,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

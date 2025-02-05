@@ -48,6 +48,7 @@ class DemoReportController extends GetxController {
           'limit': 10,
         },
       );
+      print(response.data);
 
       if (response.statusCode == 200) {
         final data = response.data;

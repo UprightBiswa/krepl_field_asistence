@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/helpers/internet/connectivity_services.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
@@ -16,6 +19,11 @@ class CustomerReportController extends GetxController {
   // Pagination variables
   var currentPage = 1.obs;
   var totalPages = 1.obs;
+
+   var searchQuery = ''.obs;
+  TextEditingController searchController = TextEditingController();
+
+  Timer? _debounce;
 
   @override
   void onInit() {
@@ -39,6 +47,7 @@ class CustomerReportController extends GetxController {
         queryParams: {
           'page': page,
           'limit': 10,
+          'filter_value': searchQuery.value,
         },
       );
 
@@ -67,6 +76,13 @@ class CustomerReportController extends GetxController {
     }
   }
 
+ void setSearchQuery(String query) {
+    searchQuery.value = query;
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      fetchCustomerReport(page: 1);
+    });
+  }
   void loadNextPage() {
     if (currentPage.value < totalPages.value) {
       fetchCustomerReport(page: currentPage.value + 1);

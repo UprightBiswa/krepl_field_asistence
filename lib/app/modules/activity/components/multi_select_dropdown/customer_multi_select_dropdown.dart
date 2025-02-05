@@ -45,7 +45,9 @@ class _CustomerMultiPleSelectionScreenState
           labelText: 'Select Customers',
           selectedItems: selectedCustomers,
           items: customerController.customer,
-          itemAsString: (customers) => customers.customerName,
+          itemAsString: (customers) {
+            return '${customers.customerName} (${customers.customerNumber})';
+          },
           searchableFields: {
             'name': (customers) => customers.customerName,
             'code': (customers) => customers.customerNumber,

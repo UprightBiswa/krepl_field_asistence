@@ -1,5 +1,7 @@
 class TourPlan {
   final int id;
+  final String hremployeecode;
+  final String employeename;
   final String tourDate;
   final List<String> village;
   final List<String> route;
@@ -10,6 +12,8 @@ class TourPlan {
 
   TourPlan({
     required this.id,
+    required this.hremployeecode,
+    required this.employeename,
     required this.tourDate,
     required this.village,
     required this.route,
@@ -22,6 +26,8 @@ class TourPlan {
   factory TourPlan.fromJson(Map<String, dynamic> json) {
     return TourPlan(
       id: json['id'],
+      hremployeecode: json['hr_employee_code'] ?? '',
+      employeename: json['employee_name'] ?? '',
       tourDate: json['tour_date'] ?? '',
       village: List<String>.from(json['village'] ?? []),
       route: List<String>.from(json['route'] ?? []),

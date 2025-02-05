@@ -8,19 +8,14 @@ import '../components/filter_bottom_sheet.dart';
 import '../model/farmer_list.dart';
 
 class FarmerListController extends GetxController {
-  // //for list pegination of farmers filter search
   final PagingController<int, Farmer> pagingController =
       PagingController(firstPageKey: 1);
 
   static const int pageSize = 10;
   var searchQuery = ''.obs;
-  // var orderBy = 'farmer_name'.obs;
-  // var order = 1.obs;
-
   var isListLoading = false.obs;
   var isListError = false.obs;
   var listErrorMessage = ''.obs;
-
   var allFarmers = <Farmer>[].obs;
 
   // Services
@@ -38,9 +33,9 @@ class FarmerListController extends GetxController {
 
     filterController = FilterController<String>(
       filterOptions: [
+        FilterOption(label: 'Farmer Name', value: 'farmer_name'),
         FilterOption(label: 'Village Name', value: 'village_name'),
         FilterOption(label: 'Mobile NO', value: 'mobile_no'),
-        FilterOption(label: 'Farmer Name', value: 'farmer_name'),
       ],
       initialOrderBy: 'farmer_name',
     );

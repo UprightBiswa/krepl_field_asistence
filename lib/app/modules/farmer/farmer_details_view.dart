@@ -175,7 +175,7 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
         editCallback: () {
           Get.to(() => FarmerEditForm(
                     farmer: widget.farmer,
-                    tag: widget.farmer.mobileNo ?? '',
+                    tag: widget.farmer.id.toString(),
                   ))!
               .then((value) {
             Get.back();

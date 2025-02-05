@@ -49,7 +49,6 @@ class FormBCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Circle Avatar for initials
               CircleAvatar(

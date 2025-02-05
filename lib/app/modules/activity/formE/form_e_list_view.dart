@@ -44,14 +44,13 @@ class FormECard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   return PrimaryContainer(
+    return PrimaryContainer(
       margin: EdgeInsets.only(bottom: 10.h),
       padding: EdgeInsets.all(10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Circle Avatar for initials
               CircleAvatar(

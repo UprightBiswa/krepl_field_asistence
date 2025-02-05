@@ -18,7 +18,7 @@ class FarmerList extends StatefulWidget {
 }
 
 class _FarmerListState extends State<FarmerList> {
-  final FarmerController _farmerController = Get.put(FarmerController());
+  final FarmerController _farmerController = Get.find<FarmerController>();
   @override
   void initState() {
     _farmerController.fetchRecentFarmers();
@@ -40,9 +40,11 @@ class _FarmerListState extends State<FarmerList> {
                   () => const FarmerManagementPage(),
                   transition: Transition.rightToLeftWithFade,
                 )!
-                    .then((value) {
-                  _farmerController.fetchRecentFarmers();
-                });
+                    .then(
+                  (value) {
+                    _farmerController.fetchRecentFarmers();
+                  },
+                );
               },
               text: 'See All',
             ),
@@ -71,7 +73,7 @@ class _FarmerListState extends State<FarmerList> {
             return const Center(child: Text('No recent farmers found'));
           } else {
             return SizedBox(
-              height: 260.h,
+              height: 200.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
@@ -95,7 +97,7 @@ class _FarmerListState extends State<FarmerList> {
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: SizedBox(
-        height: 260.h,
+        height: 200.h,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (_, __) => Padding(

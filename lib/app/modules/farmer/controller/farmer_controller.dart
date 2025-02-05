@@ -46,7 +46,7 @@ class FarmerController extends GetxController {
       // Replace 'yourApiEndpoint' with the actual endpoint for fetching farmers
       final response =
           await _dioService.post(endPoint, queryParams: parameters);
-
+      print(response.data);
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
         final farmers = data.map((item) => Farmer.fromJson(item)).toList();

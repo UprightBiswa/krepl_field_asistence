@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -33,6 +35,8 @@ class FormAController extends GetxController {
       fetchFormAData(pageKey);
     });
   }
+
+  //add dispose method
 
   Future<void> fetchFormAData(int pageKey) async {
     try {
@@ -131,6 +135,12 @@ class FormAController extends GetxController {
         throw Exception('No internet connection');
       }
 
+      // Compress image before uploading
+      File? finalImageFile = imageFile;
+      if (imageFile != null && imageFile.existsSync()) {
+        finalImageFile = await compressImage(imageFile);
+      }
+
       // Prepare the multipart form data
       dio.FormData formData = dio.FormData();
 
@@ -143,13 +153,24 @@ class FormAController extends GetxController {
       // Add array/list fields using the MapEntry list `fields`
       formData.fields.addAll(fields);
 
-      if (imageFile != null && imageFile.existsSync()) {
+      // if (imageFile != null && imageFile.existsSync()) {
+      //   formData.files.add(
+      //     MapEntry(
+      //       'photo',
+      //       dio.MultipartFile.fromFileSync(
+      //         imageFile.path,
+      //         filename: imageFile.path.split('/').last,
+      //       ),
+      //     ),
+      //   );
+      // }
+      if (finalImageFile != null && finalImageFile.existsSync()) {
         formData.files.add(
           MapEntry(
             'photo',
             dio.MultipartFile.fromFileSync(
-              imageFile.path,
-              filename: imageFile.path.split('/').last,
+              finalImageFile.path,
+              filename: finalImageFile.path.split('/').last,
             ),
           ),
         );
@@ -192,6 +213,59 @@ class FormAController extends GetxController {
           barrierDismissible: false);
     } finally {
       isloading(false);
+    }
+  }
+
+  Future<File?> compressImage(File file) async {
+    try {
+      int fileSize = file.lengthSync();
+      int targetSize = 2 * 1024 * 1024; // 2MB in bytes
+      int minSize = 1 * 1024 * 1024; // 1MB in bytes
+
+      if (fileSize <= targetSize) {
+        print('Image is already under 2MB, compressing slightly.');
+      } else {
+        print('Image is larger than 2MB, starting compression...');
+      }
+
+      int quality = 90; // Start with high quality
+      File compressedFile = file;
+
+      while (compressedFile.lengthSync() > targetSize && quality > 10) {
+        final dir = await getTemporaryDirectory();
+        final targetPath =
+            path.join(dir.path, '${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+        final result = await FlutterImageCompress.compressAndGetFile(
+          file.absolute.path,
+          targetPath,
+          quality: quality,
+        );
+
+        if (result != null) {
+          compressedFile = File(result.path);
+        } else {
+          print('Compression failed at quality: $quality');
+          break;
+        }
+
+        print(
+            'Compressed size: ${compressedFile.lengthSync() / 1024 / 1024} MB');
+
+        // Stop compressing if it's within the acceptable range
+        if (compressedFile.lengthSync() <= targetSize &&
+            compressedFile.lengthSync() >= minSize) {
+          break;
+        }
+
+        // Reduce quality step-by-step
+        quality -= 10;
+      }
+
+      return compressedFile;
+    } catch (e) {
+      print('Error in image compression: $e');
+      return file; // Return original file if compression fails
     }
   }
 }

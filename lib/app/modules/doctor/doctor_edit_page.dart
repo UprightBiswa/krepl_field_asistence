@@ -8,13 +8,18 @@ import '../../model/master/villages_model.dart';
 import '../../controllers/master_controller.dart/village_controller.dart';
 
 import '../../repository/auth/auth_token.dart';
-import '../activity/components/single_select_dropdown/village_single_selection_dropdown.dart';
+import '../activity/components/single_select_dropdown/activity_master_dropdown.dart';
+import '../activity/components/single_select_dropdown/pin_selection_dropdown.dart';
+import '../farmer/controller/pin_list_controller.dart';
+import '../farmer/controller/village_pin_controller.dart';
+import '../farmer/model/pin_model.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
 import '../widgets/form_field.dart/form_field.dart';
 import '../widgets/form_field.dart/form_hader.dart';
+import '../widgets/form_field.dart/single_selected_dropdown.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/doctor_controller.dart';
@@ -35,12 +40,13 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
 
   final DoctorController doctorController = Get.find<DoctorController>();
   final VillageController _villageControllerlist = Get.put(VillageController());
-
+  final PinController _pinController = Get.put(PinController());
+  final VillagePinController _villagePinController =
+      Get.put(VillagePinController());
   late TextEditingController _nameController;
   late TextEditingController _fatherNameController;
   late TextEditingController _mobileController;
   late TextEditingController _acreController;
-  late TextEditingController _pinController;
   late TextEditingController _villageController;
   late TextEditingController _postOfficeController;
   late TextEditingController _subDistController;
@@ -48,13 +54,44 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
   late TextEditingController _stateController;
   late TextEditingController _workPlaceCodeController;
   late TextEditingController _workPlaceNameController;
-
+  PinModel? _selectedPin;
   Village? _selectedVillage;
   @override
   void initState() {
     super.initState();
-    _initializeControllers();
+    _loadSelectedPin();
     _loadVillageData();
+
+    _initializeControllers();
+  }
+
+  void _loadSelectedPin() {
+    // Fetch pins and wait for the result
+    _pinController.fetchPins().then((_) {
+      // After fetching pins, access the pin list
+      final pinList = _pinController.pinList;
+
+      if (pinList.isEmpty) {
+        Get.snackbar('Error', 'Pin list is empty. Please load the list first.');
+        return;
+      }
+
+      final selectedPin =
+          pinList.firstWhereOrNull((pin) => pin.pin == widget.doctor.pinCode);
+
+      if (selectedPin != null) {
+        setState(() {
+          _selectedPin = selectedPin;
+          // Optionally load related villages or perform additional actions
+          // _loadSelectedVillage();
+        });
+      } else {
+        Get.snackbar('Error', 'Selected Pin not found in the list.');
+      }
+    }).catchError((error) {
+      // Handle errors during the fetch process
+      Get.snackbar('Error', 'Failed to fetch pins: ${error.toString()}');
+    });
   }
 
   void _loadVillageData() async {
@@ -88,7 +125,7 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
         TextEditingController(text: widget.doctor.fatherName);
     _mobileController = TextEditingController(text: widget.doctor.mobileNumber);
     _acreController = TextEditingController(text: widget.doctor.acre);
-    _pinController = TextEditingController(text: widget.doctor.pinCode);
+    // _pinController = TextEditingController(text: widget.doctor.pinCode);
     _villageController = TextEditingController(text: widget.doctor.villageName);
     _postOfficeController =
         TextEditingController(text: widget.doctor.postOfficeName);
@@ -233,32 +270,94 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
-                            VillageSingleSelectionWidget(
-                              onVillageSelected: _onVillageSelected,
-                              selectedItem: _selectedVillage,
+                            //pin section
+                            PinSingleSelectionWidget(
+                              onPinModelSelected: (selectedPin) {
+                                setState(() {
+                                  _selectedPin = selectedPin;
+                                });
+                                _villagePinController
+                                    .fetchVillages(selectedPin!.pin);
+
+                                ///claer old value
+                                _selectedVillage = null;
+                                _villageController.clear();
+                                _postOfficeController.clear();
+                                _subDistController.clear();
+                                _districtController.clear();
+                                _stateController.clear();
+                              },
+                              selectedItem: _selectedPin,
                               validator: (selected) {
                                 if (selected == null) {
-                                  return "Please select a village";
+                                  return "Please select a pin";
                                 }
                                 return null;
                               },
                             ),
+                            SizedBox(height: 16.h),
+                            Obx(() {
+                              if (_villagePinController.isLoading.value) {
+                                return const ShimmerLoading(); // Show shimmer loading effect while data is being fetched
+                              } else if (_villagePinController.isError.value ||
+                                  _villagePinController
+                                      .errorMessage.isNotEmpty) {
+                                return Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red[100],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text('Error loading villages'),
+                                  ),
+                                );
+                              } else {
+                                return SingleSelectDropdown<Village>(
+                                  labelText: "Select Village",
+                                  items: _villagePinController.villages,
+                                  selectedItem: _selectedVillage,
+                                  itemAsString: (village) =>
+                                      village.villageName,
+                                  onChanged: (selected) {
+                                    setState(() {
+                                      _selectedVillage =
+                                          selected; // Update the selected village
+                                    });
+                                    _onVillageSelected(selected);
+                                  },
+                                  searchableFields: {
+                                    "village_name": (village) =>
+                                        village.villageName,
+                                    "village_code": (village) =>
+                                        village.villageCode,
+                                  },
+                                  validator: (selected) {
+                                    if (selected == null) {
+                                      return "Please select a village";
+                                    }
+                                    return null;
+                                  },
+                                );
+                              }
+                            }),
                             SizedBox(height: 20.h),
-                            CustomTextField(
-                              readonly: true,
-                              labelText: "PIN Code",
-                              hintText: "Enter the PIN code",
-                              icon: Icons.pin_drop,
-                              controller: _pinController,
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the PIN code';
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 20.h),
+                            // CustomTextField(
+                            //   readonly: true,
+                            //   labelText: "PIN Code",
+                            //   hintText: "Enter the PIN code",
+                            //   icon: Icons.pin_drop,
+                            //   controller: _pinController,
+                            //   keyboardType: TextInputType.number,
+                            //   validator: (value) {
+                            //     if (value == null || value.isEmpty) {
+                            //       return 'Please enter the PIN code';
+                            //     }
+                            //     return null;
+                            //   },
+                            // ),
+                            // SizedBox(height: 20.h),
                             CustomTextField(
                               readonly: true,
                               labelText: "Post Office Name",
@@ -421,7 +520,7 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
       setState(() {
         _selectedVillage = selectedVillage;
         _villageController.text = selectedVillage.id.toString();
-        _pinController.text = selectedVillage.pin;
+        // _pinController.text = selectedVillage.pin;
         _postOfficeController.text = selectedVillage.officeName;
         _subDistController.text = selectedVillage.tehsil;
         _districtController.text = selectedVillage.district;
@@ -458,7 +557,7 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
       'doctor_father_name': _fatherNameController.text,
       'mobile_no': _mobileController.text,
       'acre': _acreController.text,
-      'pin': _pinController.text,
+      'pin': _selectedPin?.pin,
       'village': _villageController.text,
       'officename': _postOfficeController.text,
       'tehshil': _subDistController.text,

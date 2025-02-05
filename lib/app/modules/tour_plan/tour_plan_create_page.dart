@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../repository/auth/auth_token.dart';
-import '../activity/components/expanded_object.dart';
+import '../activity/components/multi_select_dropdown/village_multi_selecton_dropdown.dart';
 import '../activity/components/single_select_dropdown/activity_master_dropdown.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/form_field.dart/custom_datepicker_filed.dart';
-import '../widgets/form_field.dart/custom_dropdown_field.dart';
 import '../widgets/form_field.dart/custom_text_field.dart';
-import '../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
+import 'controller/tour_activity_type_controller.dart';
 import 'controller/tour_plan_create_controller.dart';
-import 'controller/expense_type_controller.dart';
-import 'model/expense_type_model.dart';
+import 'controller/tour_route_controller.dart';
+import 'model/tour_activity_type_model.dart';
+import 'model/tour_route_master.dart';
 
 class TourPlanCreatePage extends StatefulWidget {
   const TourPlanCreatePage({super.key});
@@ -28,38 +28,39 @@ class TourPlanCreatePage extends StatefulWidget {
 }
 
 class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
-  final ExpenseCreateController controller = Get.put(ExpenseCreateController());
+  final TourPlanCreateController controller =
+      Get.put(TourPlanCreateController());
   final AuthState authState = AuthState();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ExpenseTypeController expenseTypeController =
-      Get.put(ExpenseTypeController());
-
   // Controllers for text fields
   final TextEditingController workPlaceCodeController = TextEditingController();
   final TextEditingController workPlaceNameController = TextEditingController();
   final TextEditingController hrEmployeeCodeController =
       TextEditingController();
   final TextEditingController employeeNameController = TextEditingController();
+  final TourActivityController activityController =
+      Get.put(TourActivityController());
+  final TourRouteController routeController = Get.put(TourRouteController());
 
-  List<ExpenseItem> expenseObjects = [ExpenseItem()];
+  // Controllers for the day
+  final TextEditingController dayController = TextEditingController();
+
+  final TourItem tourItem = TourItem();
   @override
   void initState() {
     super.initState();
     initializeControllers();
-    expenseTypeController.fetchExpenseTypes();
+    activityController.fetchActivities();
   }
 
-  void addNewObject() {
-    setState(() {
-      expenseObjects.add(ExpenseItem());
-    });
-  }
-
-  void removeObject(int index) {
-    setState(() {
-      expenseObjects[index].disposeControllers();
-      expenseObjects.removeAt(index);
-    });
+  @override
+  void dispose() {
+    tourItem.disposeControllers();
+    workPlaceCodeController.dispose();
+    workPlaceNameController.dispose();
+    hrEmployeeCodeController.dispose();
+    employeeNameController.dispose();
+    super.dispose();
   }
 
   Future<void> initializeControllers() async {
@@ -75,15 +76,6 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
   }
 
   @override
-  void dispose() {
-    workPlaceCodeController.dispose();
-    workPlaceNameController.dispose();
-    hrEmployeeCodeController.dispose();
-    employeeNameController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
@@ -93,7 +85,7 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
         },
         iconColor: AppColors.kPrimary.withOpacity(0.15),
         title: Text(
-          'Create Expense',
+          'Create Tour Plan',
           style: AppTypography.kBold14.copyWith(
             color: AppColors.kDarkContiner,
           ),
@@ -174,175 +166,190 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Add expense items dynamically
-
-                ...expenseObjects.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final expense = entry.value;
-                  return ExpandedObject(
-                    title: 'Expense ${index + 1}',
-                    onDismissed: () {
-                      if (expenseObjects.length > 1) {
-                        removeObject(index);
-                      }
-                    },
-                    isExpanded: true,
-                    onExpansionChanged: (isExpanded) {
-                      return true;
-                    },
+                PrimaryContainer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Obx(() {
-                            if (expenseTypeController.isLoading.value) {
-                              return const ShimmerLoading();
-                            } else if (expenseTypeController.isError.value) {
-                              return Container(
+                      CustomHeaderText(
+                        text: 'Tour  Details',
+                        fontSize: 20.sp,
+                      ),
+                      SizedBox(height: 16.h),
+                      CustomDatePicker(
+                        labelText: 'Tour Date',
+                        hintText: "Select Date",
+                        icon: Icons.calendar_today,
+                        onDateSelected: (context) async {
+                          final date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (date != null) {
+                            tourItem.tourDateController.text =
+                                DateFormat('dd-MMM-yyyy').format(date);
+                            // Update the dayController with the day of the week
+                            dayController.text =
+                                DateFormat('EEEE').format(date);
+                          }
+                        },
+                        textEditingController: tourItem.tourDateController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Field is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextField(
+                        readonly: true,
+                        labelText: "Day",
+                        hintText: "Enter the day",
+                        icon: Icons.calendar_today,
+                        controller: dayController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the day';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      VillageSelectionScreen(
+                        onSelectionChanged: (selectedVillagesitems) {
+                          setState(() {
+                            tourItem.selectedVillages = selectedVillagesitems;
+                          });
+                          routeController.fetchRoutes(
+                              selectedVillagesitems.map((v) => v.id).toList());
+                          tourItem.selectedRoutes.clear();
+                        },
+                        selectedItems: tourItem.selectedVillages,
+                      ),
+                      const SizedBox(height: 20),
+                      if (tourItem.selectedVillages.isNotEmpty) ...[
+                        Obx(() {
+                          if (routeController.isLoadingList.value) {
+                            return const ShimmerLoading();
+                          } else if (routeController.isErrorList.value) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Select Routes',
+                                ),
+                                SizedBox(height: 8.h),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red[100],
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.red),
+                                  ),
+                                  child: const Text(
+                                    'Failed to fetch routes. Please try again.',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                MultiSelectDropdown<TourRouteMaster>(
+                                  labelText: 'Select Routes',
+                                  selectedItems: tourItem.selectedRoutes,
+                                  items: routeController.routeList,
+                                  itemAsString: (route) => route.routeName,
+                                  searchableFields: {
+                                    'route_name': (route) => route.routeName,
+                                    'route_code': (route) => route.routeCode,
+                                  },
+                                  validator: (selectedRoutes) {
+                                    if (selectedRoutes.isEmpty) {
+                                      return 'Please select at least one route.';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (items) {
+                                    setState(() {
+                                      tourItem.selectedRoutes = items;
+                                    });
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                        }),
+                        const SizedBox(height: 20),
+                      ],
+                      Obx(() {
+                        if (activityController.isLoading.value) {
+                          return const ShimmerLoading();
+                        } else if (activityController.error.value.isNotEmpty) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Select Activities',
+                              ),
+                              SizedBox(height: 8.h),
+                              Container(
                                 width: double.infinity,
+                                padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: Colors.red[100],
                                   borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.red),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    expenseTypeController.errorMessage.value,
-                                    style: const TextStyle(
-                                        color: Colors.red, fontSize: 16),
-                                  ),
+                                child: const Text(
+                                  'Failed to fetch activities. Please try again.',
+                                  style: TextStyle(color: Colors.red),
                                 ),
-                              );
-                            } else {
-                              return SingleSelectDropdown<ExpenseType>(
-                                labelText: "Select Expense Type",
-                                items: expenseTypeController.expenseTypes,
-                                selectedItem: expense.expenseType,
-                                itemAsString: (item) => item.expenseType,
-                                onChanged: (selectedItem) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    setState(() {
-                                      expense.expenseType = selectedItem;
-                                    });
-                                  });
-                                },
-                                searchableFields: {
-                                  'expense_type': (item) => item.expenseType,
-                                  'id': (item) => item.id.toString(),
-                                },
-                              );
-                            }
-                          }),
-                          const SizedBox(height: 20),
-                          // Month Picker
-                          CustomDatePicker(
-                            labelText: 'Month',
-                            hintText: "Select month",
-                            icon: Icons.calendar_today,
-                            onDateSelected: (context) async {
-                              final selectedMonth = await showMonthPicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime(2030),
-                              );
-                              if (selectedMonth != null) {
-                                expense.monthController.text =
-                                    "${selectedMonth.month.toString().padLeft(2, '0')}-${selectedMonth.year}";
-                              }
-                            },
-                            textEditingController: expense.monthController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Field is required';
-                              }
-                              return null;
-                            },
-                          ),
-
-                          const SizedBox(height: 20),
-                          // Financial Year Dropdown
-                          CustomDropdownField(
-                            labelText: "Financial Year",
-                            icon: Icons.calendar_today,
-                            items: controller.getFinancialYears(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                expense.financialYearController.text = value;
-                              }
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Field is required';
-                              }
-                              return null;
-                            },
-                            value:
-                                expense.financialYearController.text.isNotEmpty
-                                    ? expense.financialYearController.text
-                                    : null,
-                          ),
-
-                          const SizedBox(height: 20),
-                          CustomTextField(
-                            labelText: "Amount",
-                            hintText: "Enter amount",
-                            icon: Icons.currency_rupee_rounded,
-                            inputFormatter: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d+\.?\d{0,2}'),
                               ),
-                              LengthLimitingTextInputFormatter(10),
                             ],
-                            controller: expense.amountController,
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Field is required';
-                              }
-                              if (double.tryParse(value!) == null ||
-                                  double.parse(value) <= 0) {
-                                return 'Enter a valid amount';
+                          );
+                        } else {
+                          return MultiSelectDropdown<TourActivity>(
+                            labelText: 'Select Activities',
+                            selectedItems: tourItem.selectedActivities,
+                            items: activityController.activities,
+                            itemAsString: (activity) =>
+                                activity.promotionalActivity,
+                            searchableFields: {
+                              'promotionalActivity': (activity) =>
+                                  activity.promotionalActivity,
+                              'id': (activity) => activity.id.toString(),
+                            },
+                            validator: (selectedRoutes) {
+                              if (selectedRoutes.isEmpty) {
+                                return 'Please select at least one activity.';
                               }
                               return null;
                             },
-                          ),
-                        ],
+                            onChanged: (items) {
+                              setState(() {
+                                tourItem.selectedActivities = items;
+                              });
+                            },
+                          );
+                        }
+                      }),
+                      const SizedBox(height: 20),
+                      CustomTextField(
+                        labelText: 'Remarks',
+                        hintText: 'Enter remarks',
+                        icon: Icons.comment,
+                        controller: tourItem.remarksController,
+                        keyboardType: TextInputType.text,
+                        maxLines: 3,
                       ),
                     ],
-                  );
-                }),
-                // Add New Expense Button
-                PrimaryButton(
-                  color: AppColors.kSecondary,
-                  isBorder: true,
-                  onTap: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      // Check if all expense objects are valid
-                      bool allValid = expenseObjects.every((expense) {
-                        return expense.expenseType != null &&
-                            expense.monthController.text.isNotEmpty &&
-                            expense.financialYearController.text.isNotEmpty &&
-                            expense.amountController.text.isNotEmpty;
-                      });
-                      if (!allValid) {
-                        Get.snackbar('Error',
-                            'Please fill all fields for each expense item.');
-                        return;
-                      }
-                      addNewObject();
-                    } else {
-                      Get.snackbar(
-                        'Error',
-                        'Please fill all the fields',
-                        snackPosition: SnackPosition.BOTTOM,
-                      );
-                    }
-                  },
-                  text: 'Add New Expense',
+                  ),
                 ),
-
                 const SizedBox(height: 20),
               ],
             ),
@@ -355,34 +362,38 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
         ),
         child: PrimaryButton(
           onTap: () {
-            if (_formKey.currentState?.validate() ?? false) {
-              // Check if all expense objects are valid
-              bool allValid = expenseObjects.every((expense) {
-                return expense.expenseType != null &&
-                    expense.monthController.text.isNotEmpty &&
-                    expense.financialYearController.text.isNotEmpty &&
-                    expense.amountController.text.isNotEmpty;
-              });
-
-              if (!allValid) {
-                Get.snackbar(
-                    'Error', 'Please fill all fields for each expense item.');
-                return;
-              }
-              _formKey.currentState?.save();
+            if (validateAllFields()) {
               _showConfirmationDialog(context);
-            } else {
-              Get.snackbar(
-                'Error',
-                'Please fill all the fields',
-                snackPosition: SnackPosition.BOTTOM,
-              );
             }
           },
           text: "Submit",
         ),
       ),
     );
+  }
+
+  bool validateAllFields() {
+    if (!_formKey.currentState!.validate()) {
+      return false; // Standard form validation
+    }
+
+    // Check if the selected villages and activities are not empty
+    if (tourItem.selectedVillages.isEmpty) {
+      Get.snackbar('Error', 'Please select at least one village.');
+      return false;
+    }
+    // Check if the selected villages and activities are not empty
+    if (tourItem.selectedRoutes.isEmpty) {
+      Get.snackbar('Error', 'Please select at least one routs.');
+      return false;
+    }
+
+    if (tourItem.selectedActivities.isEmpty) {
+      Get.snackbar('Error', 'Please select at least one activity.');
+      return false;
+    }
+
+    return true; // All fields are valid
   }
 
   void _showConfirmationDialog(BuildContext context) {
@@ -405,95 +416,22 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
   }
 
   void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Check if all expense objects are valid
-      bool allValid = expenseObjects.every((expense) {
-        return expense.expenseType != null &&
-            expense.monthController.text.isNotEmpty &&
-            expense.financialYearController.text.isNotEmpty &&
-            expense.amountController.text.isNotEmpty;
-      });
+    // Show loading dialog
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
 
-      if (!allValid) {
-        Get.snackbar('Error', 'Please fill all fields for each expense item.');
-        return;
-      }
+    controller.submitTourPlan(tourItem).then((_) {
+      // Close loading dialog
+      Get.back();
 
-      // Show loading dialog
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
-
-      List<MapEntry<String, String>> fields = [];
-
-      // Add list fields
-      for (var item in expenseObjects) {
-        fields.addAll([
-          MapEntry('expense_type[]', item.expenseType?.id.toString() ?? ''),
-          MapEntry('month[]', item.monthController.text.trim()),
-          MapEntry(
-              'financial_year[]', item.financialYearController.text.trim()),
-          MapEntry('amount[]', item.amountController.text.trim()),
-        ]);
-      }
-
-      // Proceed with submission
-      controller
-          .submitForm(
-        workplaceCode: workPlaceCodeController.text,
-        workplaceName: workPlaceNameController.text,
-        hrEmployeeCode: hrEmployeeCodeController.text,
-        employeeName: employeeNameController.text,
-        fields: fields,
-      )
-          .then((_) {
-        // Close loading dialog
-        Get.back();
-
-        if (controller.isError.value) {
-          // Show error dialog
-          Get.dialog(
-            AlertDialog(
-              title: const Text('Error'),
-              content: Text(controller.errorMessage.value),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Get.back(); // Close dialog
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
-          );
-        } else {
-          // Show success dialog
-          Get.dialog(
-            AlertDialog(
-              title: const Text('Success'),
-              content: const Text('Expense submitted successfully.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Get.back(); // Close dialog
-                    Get.back(); // Return to previous screen
-                    //claeer all the fields object
-                    Get.back();
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
-          );
-        }
-      }).catchError((error) {
-        Get.back(); // Close loading dialog
-        // Handle unexpected errors
+      if (controller.isError.value) {
+        // Show error dialog
         Get.dialog(
           AlertDialog(
             title: const Text('Error'),
-            content: Text('An unexpected error occurred: $error'),
+            content: Text(controller.errorMessage.value),
             actions: [
               TextButton(
                 onPressed: () {
@@ -504,7 +442,42 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
             ],
           ),
         );
-      });
-    }
+      } else {
+        // Show success dialog
+        Get.dialog(
+          AlertDialog(
+            title: const Text('Success'),
+            content: const Text('Tour submitted successfully.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back(); // Close dialog
+                  Get.back(); // Return to previous screen
+                  Get.back();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }).catchError((error) {
+      Get.back(); // Close loading dialog
+      // Handle unexpected errors
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Error'),
+          content: Text('An unexpected error occurred: $error'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back(); // Close dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

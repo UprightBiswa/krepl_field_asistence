@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
-import '../widgets/components/Info_row_widget.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'components/tour_list_view.dart';
@@ -76,12 +75,7 @@ class TourPlanDetailsPage extends StatelessWidget {
 
             // Remarks Section
             if (tourPlan.remarks.isNotEmpty)
-              PrimaryContainer(
-                child: InfoRow(
-                  label: 'Remarks:',
-                  value: tourPlan.remarks,
-                ),
-              ),
+              BuildInfoCard(title: 'Remarks', content: tourPlan.remarks),
           ],
         ),
       ),
@@ -89,14 +83,16 @@ class TourPlanDetailsPage extends StatelessWidget {
   }
 
   /// Builds a section for displaying lists of strings
-  Widget _buildListSection({required String title, required List<String> items}) {
+  Widget _buildListSection(
+      {required String title, required List<String> items}) {
     return PrimaryContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: AppTypography.kBold14.copyWith(color: AppColors.kDarkContiner),
+            style:
+                AppTypography.kBold14.copyWith(color: AppColors.kDarkContiner),
           ),
           SizedBox(height: 8.h),
           ...items.map((item) => Padding(
@@ -120,6 +116,42 @@ class TourPlanDetailsPage extends StatelessWidget {
                   ],
                 ),
               )),
+        ],
+      ),
+    );
+  }
+}
+
+class BuildInfoCard extends StatelessWidget {
+  final String title;
+  final String content;
+
+  const BuildInfoCard({
+    super.key,
+    required this.title,
+    required this.content,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryContainer(
+      padding: EdgeInsets.all(12.h),
+      width: double.infinity, // Full width
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style:
+                AppTypography.kBold14.copyWith(color: AppColors.kDarkContiner),
+          ),
+          SizedBox(height: 5.h),
+          Text(
+            content,
+            style: AppTypography.kBold12.copyWith(
+              color: AppColors.kDarkContiner,
+            ),
+          ),
         ],
       ),
     );
