@@ -45,8 +45,9 @@ class _FarmerListCardState extends State<FarmerListCard> {
                 transition: Transition.rightToLeftWithFade,
               )!
                   .then((value) {
-                farmerController.fetchFarmers(
-                    1, farmerController.pagingController);
+                // farmerController.fetchFarmers(
+                //     1, farmerController.pagingController);
+                farmerController.refreshItems();
               });
             },
             child: PrimaryContainer(
@@ -99,8 +100,9 @@ class _FarmerListCardState extends State<FarmerListCard> {
                                     tag: widget.farmer.mobileNo ?? '',
                                   ))!
                               .then((value) {
-                            farmerController.fetchFarmers(
-                                1, farmerController.pagingController);
+                            // farmerController.fetchFarmers(
+                            //     1, farmerController.pagingController);
+                            farmerController.refreshItems();
                             Get.back();
                           });
                         },

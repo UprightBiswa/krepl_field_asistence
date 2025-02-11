@@ -44,7 +44,7 @@ class CustomerReportPage extends StatelessWidget {
                 controller.setSearchQuery(query);
               },
               isEnabled: true,
-              hintText: 'Search farmers',
+              hintText: 'Search by customer name or code',
             ),
           ),
           Expanded(
@@ -59,7 +59,7 @@ class CustomerReportPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Error: ${controller.errorMessage.value}',
+                        controller.errorMessage.value,
                         style: const TextStyle(color: Colors.red, fontSize: 16),
                       ),
                       ElevatedButton(

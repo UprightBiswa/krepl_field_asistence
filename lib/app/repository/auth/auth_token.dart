@@ -179,7 +179,6 @@ class AuthState with ChangeNotifier {
   String _email = '';
   String _company = '';
   String _dateOfLeaving = '';
-  String _staffType = '';
   String _deviceToken = '';
 
   String get workplaceCode => _workplaceCode;
@@ -194,7 +193,6 @@ class AuthState with ChangeNotifier {
   String get email => _email;
   String get company => _company;
   String get dateOfLeaving => _dateOfLeaving;
-  String get staffType => _staffType;
   String get deviceToken => _deviceToken;
 
   Future<void> setToken(
@@ -210,7 +208,6 @@ class AuthState with ChangeNotifier {
     String newEmail,
     String newCompany,
     String newDateOfLeaving,
-    String newStaffType,
     String newDeviceToken,
   ) async {
     _workplaceCode = newWorkplaceCode;
@@ -225,7 +222,6 @@ class AuthState with ChangeNotifier {
     _email = newEmail;
     _company = newCompany;
     _dateOfLeaving = newDateOfLeaving;
-    _staffType = newStaffType;
     _deviceToken = newDeviceToken;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -241,7 +237,6 @@ class AuthState with ChangeNotifier {
     await prefs.setString('email', _email);
     await prefs.setString('company', _company);
     await prefs.setString('dateOfLeaving', _dateOfLeaving);
-    await prefs.setString('staffType', _staffType);
     await prefs.setString('deviceToken', _deviceToken);
 
     print('Workplace Code saved: $_workplaceCode');
@@ -255,7 +250,6 @@ class AuthState with ChangeNotifier {
     print('Email saved: $_email');
     print('Company saved: $_company');
     print('Date of Leaving saved: $_dateOfLeaving');
-    print('Staff Type saved: $_staffType');
     print('Device Token saved: $_deviceToken');
 
     notifyListeners();
@@ -321,10 +315,6 @@ class AuthState with ChangeNotifier {
     return prefs.getString('dateOfLeaving');
   }
 
-  Future<String?> getStaffType() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('staffType');
-  }
 
   Future<String?> getDeviceToken() async {
     
@@ -349,7 +339,6 @@ class AuthState with ChangeNotifier {
     await prefs.remove('email');
     await prefs.remove('company');
     await prefs.remove('dateOfLeaving');
-    await prefs.remove('staffType');
     await prefs.remove('deviceToken');
 
     // Notify listeners after clearing data

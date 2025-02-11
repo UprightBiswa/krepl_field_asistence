@@ -155,7 +155,7 @@ class _ProfileViewState extends State<ProfileView> {
                     _buildTabContent(context, 'Work Details',
                         buildWorkDetails(widget.userDetails)),
                     _buildTabContent(context, 'Mapping Information',
-                        buildMappingDetails(widget.userDetails)),
+                        buildMappingDetails(widget.userDetails.mappingInfo)),
                     // _buildTabContent(context, 'Reports and Activities',
                     //     buildReportsAndActivities(widget.userDetails)),
                   ],
@@ -229,58 +229,87 @@ class _ProfileViewState extends State<ProfileView> {
         buildAnimatedListTile(
           icon: Icons.location_city,
           title: 'HQ',
-          subtitle: '${userDetails.headquarter}\n('
-              ' Start Date: '
-              '${userDetails.hqStartDate ?? 'dd-mm-yyyy'} - '
-              'End Date: '
-              '${userDetails.hqEndDate ?? 'dd-mm-yyyy'} )',
+          subtitle: userDetails.headquarter,
         ),
         const Divider(),
         buildAnimatedListTile(
-          icon: Icons.grade,
-          title: 'Grade',
-          subtitle: '${userDetails.grade ?? 'N/A'}\n('
-              ' Start Date: '
-              '${userDetails.gradeStartDate ?? 'dd-mm-yyyy'} - '
-              'End Date: '
-              '${userDetails.gradeEndDate ?? 'dd-mm-yyyy'} )',
+          icon: Icons.terrain,
+          title: 'Territory',
+          subtitle: '${userDetails.territoryName}\n'
+              '${userDetails.territoryCode}',
         ),
       ],
     );
   }
 
-  Widget buildMappingDetails(UserDetails userDetails) {
+  // Widget buildMappingDetails(UserDetails userDetails) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       buildAnimatedListTile(
+  //         icon: Icons.terrain,
+  //         title: 'Territory',
+  //         subtitle:
+  //             '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
+  //       ),
+  //       const Divider(),
+  //       buildAnimatedListTile(
+  //         icon: Icons.group,
+  //         title: 'Customer',
+  //         subtitle:
+  //             '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
+  //       ),
+  //       const Divider(),
+  //       buildAnimatedListTile(
+  //         icon: Icons.villa,
+  //         title: 'Village',
+  //         subtitle:
+  //             '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
+  //       ),
+  //       const Divider(),
+  //       buildAnimatedListTile(
+  //         icon: Icons.store,
+  //         title: 'Retailer',
+  //         subtitle:
+  //             '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
+  //       ),
+  //     ],
+  //   );
+  // }
+  Widget buildMappingDetails(List<MappingInfo> mappingInfoList) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildAnimatedListTile(
-          icon: Icons.terrain,
-          title: 'Territory',
-          subtitle:
-              '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
-        ),
-        const Divider(),
-        buildAnimatedListTile(
-          icon: Icons.group,
-          title: 'Customer',
-          subtitle:
-              '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
-        ),
-        const Divider(),
-        buildAnimatedListTile(
-          icon: Icons.villa,
-          title: 'Village',
-          subtitle:
-              '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
-        ),
-        const Divider(),
-        buildAnimatedListTile(
-          icon: Icons.store,
-          title: 'Retailer',
-          subtitle:
-              '${userDetails.hrEmployeeCode} (${userDetails.hrEmployeeCode})',
-        ),
-      ],
+      children: mappingInfoList
+          .where((info) => info.employeeDetails.isNotEmpty)
+          .map((mappingInfo) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+              child: Text(
+                mappingInfo.designation,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: mappingInfo.employeeDetails.length,
+              itemBuilder: (context, index) {
+                final employee = mappingInfo.employeeDetails[index];
+                return buildAnimatedListTile(
+                  icon: Icons.person,
+                  title: employee.employeeName,
+                  subtitle: '${employee.userType} (${employee.employeeCode})',
+                );
+              },
+            ),
+            const Divider(),
+          ],
+        );
+      }).toList(),
     );
   }
 
@@ -309,6 +338,18 @@ class _ProfileViewState extends State<ProfileView> {
       children: [
         buildAnimatedListTile(
           icon: Icons.person,
+          title: 'Name',
+          subtitle: userDetails.employeeName,
+        ),
+        const Divider(),
+        buildAnimatedListTile(
+          icon: Icons.card_membership,
+          title: 'Employee Code',
+          subtitle: userDetails.hrEmployeeCode,
+        ),
+        const Divider(),
+        buildAnimatedListTile(
+          icon: Icons.person,
           title: 'Father Name',
           subtitle: userDetails.fatherName,
         ),
@@ -326,15 +367,11 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         const Divider(),
         buildAnimatedListTile(
-          icon: Icons.badge,
-          title: 'Staff Type',
-          subtitle: userDetails.staffType ?? 'None',
-        ),
-        const Divider(),
-        buildAnimatedListTile(
           icon: Icons.check_circle,
           title: 'Status',
-          subtitle: userDetails.isActive ?? 'Active',
+          subtitle: userDetails.isActive!.isNotEmpty
+              ? userDetails.isActive!
+              : 'Active',
         ),
       ],
     );

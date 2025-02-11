@@ -47,8 +47,7 @@ class FormEDetailPage extends StatelessWidget {
             _buildUserDetails(),
             SizedBox(height: 10.h),
             _buildFormDetails(),
-            if (formE.remarks != '')
-              _buildInfoCard('Remarks', formE.remarks!),
+            if (formE.remarks != '') _buildInfoCard('Remarks', formE.remarks!),
             SizedBox(height: 10.h),
             // Conditionally show the image if the URL is not empty
             if (formE.imageUrl.isNotEmpty)
@@ -141,12 +140,12 @@ class FormEDetailPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Party Name: ${userDetail.partyName}',
+                        userDetail.partyName,
                         style: TextStyle(fontSize: 12.sp),
                       ),
                       if (userDetail.mobileNo.isNotEmpty)
                         Text(
-                          'Mobile: ${userDetail.mobileNo}',
+                          userDetail.mobileNo,
                           style: TextStyle(fontSize: 12.sp),
                         ),
                     ],

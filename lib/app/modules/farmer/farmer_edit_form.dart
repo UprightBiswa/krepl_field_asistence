@@ -343,9 +343,16 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                                 });
                               },
                               selectedItem: _selectedActivity,
+                              // validator: (selectedActivity) {
+                              //   if (selectedActivity == null) {
+                              //     return 'Please select an activity';
+                              //   }
+                              //   return null;
+                              // }, selectedActivity && _selectedActivity
                               validator: (selectedActivity) {
-                                if (selectedActivity == null) {
-                                  return 'Please select an activity';
+                                if (selectedActivity == null &&
+                                    _selectedActivity == null) {
+                                  return 'Please select a promotional activity';
                                 }
                                 return null;
                               },

@@ -182,7 +182,6 @@ class LoginProvider extends ChangeNotifier {
             _userDetails!.email,
             _userDetails!.company,
             _userDetails!.dateOfLeaving,
-            _userDetails!.staffType ?? '',
             _userDetails!.deviceToken,
           );
 
@@ -254,7 +253,6 @@ class LoginProvider extends ChangeNotifier {
               _userDetails!.email,
               _userDetails!.company,
               _userDetails!.dateOfLeaving,
-              _userDetails!.staffType ?? '',
               _userDetails!.deviceToken,
             );
           } else {

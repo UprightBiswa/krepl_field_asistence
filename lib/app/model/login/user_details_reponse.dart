@@ -144,14 +144,8 @@ class UserDetails {
   final String email;
   final String company;
   final String dateOfLeaving;
-  final String? staffType;
   final String? workplaceStartDate;
   final String? workplaceEndDate;
-  final String? grade;
-  final String? gradeStartDate;
-  final String? gradeEndDate;
-  final String? hqStartDate;
-  final String? hqEndDate;
   final String? isActive;
   final String deviceToken;
   final List<MappingInfo> mappingInfo;
@@ -171,14 +165,8 @@ class UserDetails {
     required this.email,
     required this.company,
     required this.dateOfLeaving,
-    this.staffType,
     this.workplaceStartDate,
     this.workplaceEndDate,
-    this.grade,
-    this.gradeStartDate,
-    this.gradeEndDate,
-    this.hqStartDate,
-    this.hqEndDate,
     this.isActive,
     required this.deviceToken,
     required this.mappingInfo,
@@ -202,18 +190,9 @@ class UserDetails {
       dateOfLeaving: json['date_of_leaving'] ?? '',
       workplaceStartDate: json['workplace_start_date'],
       workplaceEndDate: json['workplace_end_date'],
-      staffType: json['staff_type'],
-      grade: json['grade'],
-      gradeStartDate: json['grade_start_date'],
-      gradeEndDate: json['grade_end_date'],
-      hqStartDate: json['hq_start_date'],
-      hqEndDate: json['hq_end_date'],
-      isActive: json['is_active'],
+      isActive: json['is_active'] ,
       deviceToken: json['device_token'] ?? '',
-      mappingInfo: (json['mapping_info'] as List<dynamic>?)
-              ?.map((e) => MappingInfo.fromJson(e))
-              .toList() ??
-          [],
+      mappingInfo: (json['mapping_info'] as List?)?.map((e) => MappingInfo.fromJson(e)).toList() ?? [],
     );
   }
 
@@ -235,12 +214,6 @@ class UserDetails {
       'date_of_leaving': dateOfLeaving,
       'workplace_start_date': workplaceStartDate,
       'workplace_end_date': workplaceEndDate,
-      'grade': grade,
-      'staff_type': staffType,
-      'grade_start_date': gradeStartDate,
-      'grade_end_date': gradeEndDate,
-      'hq_start_date': hqStartDate,
-      'hq_end_date': hqEndDate,
       'is_active': isActive,
       'device_token': deviceToken,
       'mapping_info': mappingInfo.map((e) => e.toJson()).toList(),
@@ -249,18 +222,42 @@ class UserDetails {
 }
 
 class MappingInfo {
+  final String designation;
+  final List<EmployeeDetails> employeeDetails;
+
+  MappingInfo({
+    required this.designation,
+    required this.employeeDetails,
+  });
+
+  factory MappingInfo.fromJson(Map<String, dynamic> json) {
+    return MappingInfo(
+      designation: json['designation'] ?? '',
+      employeeDetails: (json['employee_details'] as List?)?.map((e) => EmployeeDetails.fromJson(e)).toList() ?? [],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'designation': designation,
+      'employee_details': employeeDetails.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+class EmployeeDetails {
   final String userType;
   final String employeeCode;
   final String employeeName;
 
-  MappingInfo({
+  EmployeeDetails({
     required this.userType,
     required this.employeeCode,
     required this.employeeName,
   });
 
-  factory MappingInfo.fromJson(Map<String, dynamic> json) {
-    return MappingInfo(
+  factory EmployeeDetails.fromJson(Map<String, dynamic> json) {
+    return EmployeeDetails(
       userType: json['user_type'] ?? '',
       employeeCode: json['employee_code'] ?? '',
       employeeName: json['employee_name'] ?? '',

@@ -34,7 +34,8 @@ class DoctorListCard extends StatelessWidget {
             transition: Transition.rightToLeftWithFade,
           )!
               .then((value) {
-            doctorController.fetchDoctors(1, doctorController.pagingController);
+            // doctorController.fetchDoctors(1, doctorController.pagingController);
+            doctorController.refreshItems();
           });
         },
         child: PrimaryContainer(
@@ -84,8 +85,9 @@ class DoctorListCard extends StatelessWidget {
                       )!
                           .then((value) {
                         Get.back();
-                        doctorController.fetchDoctors(
-                            1, doctorController.pagingController);
+                        // doctorController.fetchDoctors(
+                        //     1, doctorController.pagingController);
+                        doctorController.refreshItems();
                       });
                     },
                     onDelete: () {
