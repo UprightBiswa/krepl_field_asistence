@@ -132,6 +132,7 @@ class DioService {
 
     try {
       final response = await _dio.post(endPoint, queryParameters: queryParams);
+      print(response.statusCode);
       print(response.data);
       return _handleResponse(response);
     } catch (e) {
@@ -159,10 +160,10 @@ class DioService {
 
       if (errorMessage == 'user not found') {
         _logoutUser();
-        return response; // Return instead of throwing an exception immediately
+        return response;
       }
-
-      throw Exception(response.data['message'] ?? 'Unknown error occurred');
+      return response;
+      //throw Exception(response.data['message'] ?? 'Unknown error occurred');
     }
     return response;
   }
@@ -172,7 +173,7 @@ class DioService {
       print('DioError: ${e.message}');
       throw Exception('DioError: ${e.message}');
     }
-    print('Exception: $e');
+    print(e);
     throw Exception('Failed to make API request: $e');
   }
 

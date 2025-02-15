@@ -154,7 +154,8 @@ class FormCCard extends StatelessWidget {
   int totalExpense(List<FormCDetail> formCDetails) {
     int total = 0;
     for (var i = 0; i < formCDetails.length; i++) {
-      total += int.parse(formCDetails[i].expense);
+      double expenseValue = double.tryParse(formCDetails[i].expense) ?? 0.0;
+      total += expenseValue.toInt(); // Convert to int after parsing
     }
     return total;
   }

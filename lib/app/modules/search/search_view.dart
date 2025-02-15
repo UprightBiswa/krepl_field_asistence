@@ -87,16 +87,18 @@ class _SearchViewState extends State<SearchView> {
                     itemBuilder: (context, index) {
                       final menuItem =
                           searchPageController.filteredItems[index];
-                      return CustomChips(
-                        isSelected:
-                            searchPageController.selectedIndex.value == index,
-                        menuItem: menuItem,
-                        index: index,
-                        onTap: () {
-                          searchPageController.selectItem(index);
-                          menuItem.onTap();
-                        },
-                      );
+                      return Obx(() {
+                        return CustomChips(
+                          isSelected:
+                              searchPageController.selectedIndex.value == index,
+                          menuItem: menuItem,
+                          index: index,
+                          onTap: () {
+                            searchPageController.selectItem(index);
+                            menuItem.onTap();
+                          },
+                        );
+                      });
                     },
                     itemCount: searchPageController.filteredItems.length,
                   ),

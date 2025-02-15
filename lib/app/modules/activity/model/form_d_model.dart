@@ -58,6 +58,10 @@ class FormDDetails {
   final String pestName;
   final String demoStatus;
   final String seasonName;
+  final String? dosage;
+  final String? areaofdemo;
+  final String? totalarea;
+  final String? expense;
 
   FormDDetails({
     required this.id,
@@ -67,6 +71,11 @@ class FormDDetails {
     required this.pestName,
     required this.demoStatus,
     required this.seasonName,
+    this.dosage,
+    this.areaofdemo,
+    this.totalarea,
+    this.expense,
+
   });
 
   factory FormDDetails.fromJson(Map<String, dynamic> json) {
@@ -78,6 +87,10 @@ class FormDDetails {
       pestName: json['pest_name'],
       demoStatus: json['demo_status'],
       seasonName: json['season_name'],
+      dosage: json['dosage'],
+      areaofdemo: json['areaofdemo'],
+      totalarea: json['totalarea'],
+      expense: json['expense'],
     );
   }
 }

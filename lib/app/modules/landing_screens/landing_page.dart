@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
 import '../../repository/auth/auth_token.dart';
 import '../dashboard/dashboard_page.dart';
+import '../farmer/controller/farmer_controller.dart';
 import '../home/home_view.dart';
 import '../profile/profile_view.dart';
 
@@ -34,6 +36,7 @@ class LandingPageState extends State<LandingPage> {
     super.initState();
     _currentIndex = widget.pageIndex ?? 0;
     userDetails = widget.userDetails;
+    Get.put(FarmerController());
     _widgetOptions = [
       DashboardPage(userDetails: userDetails!),
       HomeView(userDetails: userDetails!),

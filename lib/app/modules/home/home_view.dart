@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
-import '../farmer/controller/farmer_controller.dart';
 import '../profile/settings_view.dart';
 import '../search/search_view.dart';
 import '../widgets/widgets.dart';
@@ -25,66 +23,59 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
+Widget _circularContainer(
+  double height,
+  Color color, {
+  Color borderColor = Colors.transparent,
+  double borderWidth = 2,
+}) {
+  return Container(
+    height: height,
+    width: height,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: color,
+      border: Border.all(color: borderColor, width: borderWidth),
+    ),
+  );
+}
+
 class _HomeViewState extends State<HomeView> {
-  final FarmerController _farmerController = Get.put(FarmerController());
-
-  Widget _circularContainer(
-    double height,
-    Color color, {
-    Color borderColor = Colors.transparent,
-    double borderWidth = 2,
-  }) {
-    return Container(
-      height: height,
-      width: height,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color,
-        border: Border.all(color: borderColor, width: borderWidth),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final appBarHeight =
-        AppBar().preferredSize.height + AppBar().preferredSize.height;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         flexibleSpace: Container(
-          height: Size.fromHeight(appBarHeight).height,
-          width: double.maxFinite,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.kPrimary,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.kPrimary.withAlpha(100),
+                blurRadius: 0,
+                spreadRadius: 5,
+              ),
+            ],
           ),
           child: Stack(
             fit: StackFit.expand,
             children: [
               Positioned(
-                top: -150,
+                top: -50,
                 right: -50,
+                child: _circularContainer(
+                    150, AppColors.kPrimary2.withOpacity(0.3)),
+              ),
+              Positioned(
+                top: -80,
+                right: -80,
                 child: _circularContainer(
                     200, AppColors.kPrimary2.withOpacity(0.2)),
               ),
-              Positioned(
-                top: -100,
-                right: -100,
-                child: _circularContainer(
-                    180, AppColors.kPrimary2.withOpacity(0.4)),
-              ),
-              // Positioned(
-              //   top: -100,
-              //   left: -45,
-              //   child: _circularContainer(
-              //       width * .5, AppColors.kPrimary2.withOpacity(0.2)),
-              // ),
-              // Positioned(
-              //   top: -180,
-              //   right: -30,
-              //   child: _circularContainer(width * .7, Colors.transparent,
-              //       borderColor: Colors.white38),
-              // ),
             ],
           ),
         ),
@@ -105,109 +96,49 @@ class _HomeViewState extends State<HomeView> {
           ),
           SizedBox(width: AppSpacing.tenHorizontal),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(70.h),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.tenHorizontal,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10.h),
+                GestureDetector(
+                  onTap: () {
+                    Get.to<void>(
+                      () => const SearchView(),
+                      transition: Transition.cupertino,
+                    );
+                  },
+                  child: SearchField(
+                    controller: TextEditingController(),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            ),
+          ),
+        ),
       ),
-      body: SafeArea(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.twentyHorizontal,
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                color: AppColors.kPrimary,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.kPrimary.withOpacity(0.5),
-                    blurRadius: 0,
-                    spreadRadius: 5,
-                  )
-                ],
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.twentyHorizontal,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // SizedBox(height: 10.h),
-                    // Row(
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     CircleAvatar(
-                    //       radius: 24.r,
-                    //       backgroundColor: AppColors.kWhite.withOpacity(0.8),
-                    //       child: Text(
-                    //         widget.userDetails.employeeName[0].toUpperCase(),
-                    //         style: AppTypography.kBold20.copyWith(
-                    //           color: AppColors.kPrimary,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     SizedBox(width: 10.w),
-                    //     Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           'Welcome back,',
-                    //           style: AppTypography.kLight14
-                    //               .copyWith(color: AppColors.kWhite),
-                    //         ),
-                    //         Text(
-                    //           '${widget.userDetails.employeeName} 👋',
-                    //           style: AppTypography.kBold16
-                    //               .copyWith(color: AppColors.kWhite),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     SizedBox(width: 10.w),
-                    //   ],
-                    // ),
-                    SizedBox(height: 10.h),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to<void>(
-                          () => const SearchView(),
-                          transition: Transition.rightToLeftWithFade,
-                        );
-                      },
-                      child: SearchField(
-                        controller: TextEditingController(),
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                  ],
-                ),
-              ),
+            SizedBox(height: 20.h),
+            const ShortcutMenus(),
+            SizedBox(height: 20.h),
+            TodayStatusCard(
+              userDetails: widget.userDetails,
             ),
-            SizedBox(height: 10.h),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.twentyHorizontal,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20.h),
-                    const ShortcutMenus(),
-                    SizedBox(height: 20.h),
-                    TodayStatusCard(
-                      userDetails: widget.userDetails,
-                    ),
-                    const FarmerList(),
-                    SizedBox(height: 20.h),
-                    const ReportView(),
-                    SizedBox(height: 20.h),
-                    // const BestTeachers(),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
-            ),
+            const FarmerList(),
+            SizedBox(height: 20.h),
+            const ReportView(),
+            SizedBox(height: 20.h),
           ],
         ),
       ),

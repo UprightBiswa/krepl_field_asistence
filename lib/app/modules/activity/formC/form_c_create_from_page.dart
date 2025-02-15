@@ -235,16 +235,21 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                                     icon: Icons.currency_rupee,
                                     controller:
                                         activityObject.expenseController,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
                                     inputFormatter: [
                                       FilteringTextInputFormatter.allow(
-                                        RegExp(r'^\d+\.?\d{0,2}'),
-                                      ),
+                                          // RegExp(r'^\d*\.?\d{0,2}$')),
+                                          RegExp(r'^\d+\.?\d{0,2}')),
                                       LengthLimitingTextInputFormatter(10),
                                     ],
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter the expense';
+                                      }
+                                      if (double.tryParse(value) == null) {
+                                        return 'Enter a valid number';
                                       }
                                       return null;
                                     },
@@ -320,6 +325,12 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
               child: PrimaryButton(
                 onTap: () {
                   if (_formKey.currentState?.validate() ?? false) {
+                    if (selectedRetailers.isEmpty) {
+                      Get.snackbar(
+                          'Error', 'Please select at least one party.');
+                      return;
+                    }
+
                     for (var activityObject in activityObjectsC) {
                       if (!activityObject.validate()) {
                         Get.snackbar('Error',
@@ -329,6 +340,8 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                       }
                     }
                     _showConfirmationDialog(context);
+                  } else {
+                    Get.snackbar('Error', 'Please fill all required fields.');
                   }
                 },
                 text: "Submit",

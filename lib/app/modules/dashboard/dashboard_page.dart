@@ -215,7 +215,7 @@ class _DashboardPageState extends State<DashboardPage>
                     YTDTabBarData(
                       userDetails: widget.userDetails,
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 20.h),
                     CustomerSalesContainer(
                       userDetails: widget.userDetails,
                       isYtd: true,
@@ -233,7 +233,7 @@ class _DashboardPageState extends State<DashboardPage>
                     MTDTabBarData(
                       userDetails: widget.userDetails,
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 20.h),
                     CustomerSalesContainer(
                       userDetails: widget.userDetails,
                       isYtd: false,

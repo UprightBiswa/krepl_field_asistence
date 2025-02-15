@@ -631,6 +631,10 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                     icon: Icons.medication_liquid_outlined,
                                     controller: activityObject.dosageController,
                                     keyboardType: TextInputType.number,
+                                    inputFormatter: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter the dosage';
@@ -646,6 +650,12 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                     icon: Icons.area_chart_outlined,
                                     controller: activityObject.areaController,
                                     keyboardType: TextInputType.number,
+                                    inputFormatter: [
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d+\.?\d{0,2}'),
+                                      ),
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter the area of demonstration';
@@ -662,6 +672,12 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                     controller:
                                         activityObject.totalAreaController,
                                     keyboardType: TextInputType.number,
+                                    inputFormatter: [
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d+\.?\d{0,2}'),
+                                      ),
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter the total area covered';
@@ -783,33 +799,33 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                       ),
                               ),
                             ),
-                             const SizedBox(height: 16),
-                             // add a delte image iocn in image
-                             if(_selectedImagePath != null)
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _selectedImagePath = null;
-                                  attachment = null;
-                                });
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.red[100],
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.red),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Delete Image',
-                                    style: TextStyle(color: Colors.red),
+                            const SizedBox(height: 16),
+                            // add a delte image iocn in image
+                            if (_selectedImagePath != null)
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedImagePath = null;
+                                    attachment = null;
+                                  });
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red[100],
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.red),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Delete Image',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
                             const SizedBox(height: 16),
                             CustomTextField(
                               labelText: 'Remarks',

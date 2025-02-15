@@ -17,9 +17,9 @@ class DashboardMTD extends StatefulWidget {
   final UserDetails userDetails;
 
   const DashboardMTD({
-    Key? key,
+    super.key,
     required this.userDetails,
-  }) : super(key: key);
+  });
 
   @override
   State<DashboardMTD> createState() => _DashboardMTDState();

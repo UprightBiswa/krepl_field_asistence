@@ -91,7 +91,7 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                           Container(
                             padding: EdgeInsets.all(8.h),
                             decoration: BoxDecoration(
-                              color: widget.retailer.isActive == '1'
+                              color: widget.retailer.isActive == 'Active'
                                   ? Colors.green.withOpacity(0.1)
                                   : Colors.red.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8.r),
@@ -100,21 +100,19 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  widget.retailer.isActive == '1'
+                                  widget.retailer.isActive == 'Active'
                                       ? Icons.check_circle
                                       : Icons.cancel,
-                                  color: widget.retailer.isActive == '1'
+                                  color: widget.retailer.isActive == 'Active'
                                       ? Colors.green
                                       : Colors.red,
                                   size: 20.sp,
                                 ),
                                 SizedBox(width: 8.w),
                                 Text(
-                                  widget.retailer.isActive == '1'
-                                      ? 'Active'
-                                      : 'Inactive',
+                                  widget.retailer.isActive,
                                   style: TextStyle(
-                                    color: widget.retailer.isActive == '1'
+                                    color: widget.retailer.isActive == 'Active'
                                         ? Colors.green
                                         : Colors.red,
                                     fontSize: 16.sp,

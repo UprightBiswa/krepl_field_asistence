@@ -24,6 +24,7 @@ class SearchField extends StatelessWidget {
 
     return PrimaryContainer(
       padding: const EdgeInsets.all(0.0),
+      height: 48,
       child: TextFormField(
         controller: controller,
         enabled: isEnabled,

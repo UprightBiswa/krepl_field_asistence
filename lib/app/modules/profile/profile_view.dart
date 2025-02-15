@@ -120,7 +120,7 @@ class _ProfileViewState extends State<ProfileView> {
                     ? AppColors.kDarkContiner
                     : AppColors.kWhite,
                 child: TabBar(
-                  tabAlignment: TabAlignment.start,
+                  tabAlignment: TabAlignment.center,
                   dividerColor: Colors.transparent,
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,

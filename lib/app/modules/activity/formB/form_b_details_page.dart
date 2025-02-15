@@ -27,7 +27,7 @@ class FormBDetailPage extends StatelessWidget {
         },
         iconColor: isDarkMode(context)
             ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+            : AppColors.kPrimary.withAlpha(50),
         title: Text(
           'Campaign Details',
           style: AppTypography.kBold14.copyWith(
@@ -65,33 +65,65 @@ class FormBDetailPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomHeaderText(
-          text: 'Party Details',
+          text: 'Village Details',
           fontSize: 18.sp,
         ),
         SizedBox(height: 10.h),
         PrimaryContainer(
           padding: EdgeInsets.all(12.h),
           width: double.infinity, // Full width
+          margin: EdgeInsets.only(bottom: 10.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ...formB.formBUserDetails.map((userDetail) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Party Name: ${userDetail.partyName}',
-                        style: TextStyle(fontSize: 12.sp),
+                return Column(
+                  spacing: 5.h,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (userDetail.partyName.isNotEmpty)
+                      Row(
+                        children: [
+                          Icon(Icons.location_on,
+                              color: Colors.green, size: 16.sp),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Text(
+                              userDetail.partyName,
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      if (userDetail.mobileNo.isNotEmpty)
-                        Text(
-                          'Mobile: ${userDetail.mobileNo}',
-                          style: TextStyle(fontSize: 12.sp),
-                        ),
-                    ],
-                  ),
+
+                    if (userDetail.routeName.isNotEmpty)
+                      Row(
+                        children: [
+                          Icon(Icons.route, color: Colors.blue, size: 16.sp),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Text(
+                              userDetail.routeName,
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    // if(its last index dont shoe)
+                    if (formB.formBUserDetails.indexOf(userDetail) !=
+                        formB.formBUserDetails.length - 1)
+                      Divider(
+                        color: Colors.grey.shade300,
+                      ),
+                  ],
                 );
               }),
             ],
@@ -116,83 +148,53 @@ class FormBDetailPage extends StatelessWidget {
             padding: EdgeInsets.all(12.h),
             width: double.infinity, // Full width
             margin: EdgeInsets.only(bottom: 10.h),
+
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Crop: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.cropName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Stage: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.cropStageName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Product: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.productName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Pest: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.pestName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Season: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.seasonName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
+                _buildDetailRow(
+                    Icons.shopping_bag, 'Product', detail.productName),
+                _buildDetailRow(Icons.eco, 'Crop', detail.cropName),
+                _buildDetailRow(Icons.timeline, 'Stage', detail.cropStageName),
+                _buildDetailRow(Icons.bug_report, 'Pest', detail.pestName),
+                _buildDetailRow(
+                    Icons.calendar_today, 'Season', detail.seasonName),
               ],
             ),
           );
         }),
       ],
+    );
+  }
+
+// Widget for reusable row with icon
+  Widget _buildDetailRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.blue, size: 18.sp),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.blueGrey[700],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

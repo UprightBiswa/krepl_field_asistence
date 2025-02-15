@@ -13,7 +13,7 @@ import 'component/dashboard_ytd.dart';
 class DashboardView extends StatefulWidget {
   final UserDetails userDetails;
 
-  const DashboardView({Key? key, required this.userDetails}) : super(key: key);
+  const DashboardView({super.key, required this.userDetails});
 
   @override
   State<DashboardView> createState() => _DashboardViewState();

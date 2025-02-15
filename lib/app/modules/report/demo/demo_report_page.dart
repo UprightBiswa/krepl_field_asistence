@@ -160,11 +160,11 @@ class DemoReportPage extends StatelessWidget {
               DataColumn(label: Text('Area of Demo')),
               DataColumn(label: Text('Dosages')),
               DataColumn(label: Text('Crop Name')),
-              DataColumn(label: Text('Status')),
+              DataColumn(label: Text('Demo Status')),
             ],
             rows: controller.demoReports.map((demoReport) {
               return DataRow(
-                color: MaterialStateProperty.resolveWith<Color?>(
+                color: WidgetStateProperty.resolveWith<Color?>(
                   (_) => controller.demoReports.indexOf(demoReport).isEven
                       ? (isDarkMode(context)
                           ? Colors.grey[800]
@@ -181,13 +181,7 @@ class DemoReportPage extends StatelessWidget {
                   DataCell(Text(demoReport.areaOfDemo)),
                   DataCell(Text(demoReport.dosages)),
                   DataCell(Text(demoReport.cropName)),
-                  DataCell(Text(
-                    demoReport.status == 1 ? 'Active' : 'Inactive',
-                    style: TextStyle(
-                      color: demoReport.status == 1 ? Colors.green : Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
+                  DataCell(Text(demoReport.status)),
                 ],
               );
             }).toList(),
@@ -239,7 +233,7 @@ class DemoReportPage extends StatelessWidget {
   /// Date Picker Fields (From Date & To Date)
   Widget _buildDateFilter(
       BuildContext context, DemoReportController controller) {
-    final DateFormat dateFormat = DateFormat('dd-MMM-yyyy');
+    final DateFormat dateFormat = DateFormat('dd-MMM-yy');
 
     Future<void> selectDate(BuildContext context, bool isFromDate) async {
       final DateTime? pickedDate = await showDatePicker(

@@ -60,7 +60,7 @@ class AppTheme {
       showUnselectedLabels: false,
     ),
     dataTableTheme: DataTableThemeData(
-      headingRowColor: MaterialStateProperty.all(
+      headingRowColor: WidgetStateProperty.all(
         AppColors.kPrimary,
       ),
       dataTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
@@ -126,7 +126,7 @@ class AppTheme {
       // headingRowColor: MaterialStateProperty.all(Colors.grey[300]),
       // dataTextStyle: TextStyle(fontSize: 12),
       //handel for dark theme
-      headingRowColor: MaterialStateProperty.all(
+      headingRowColor: WidgetStateProperty.all(
         AppColors.kPrimary,
       ),
       dataTextStyle: const TextStyle(fontSize: 12, color: Colors.white),

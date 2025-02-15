@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -171,9 +172,17 @@ class _DoctorFormState extends State<DoctorForm> {
                               hintText: "Enter the doctor's name",
                               icon: Icons.person,
                               controller: _nameController,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^[a-zA-Z\s]+')),
+                                LengthLimitingTextInputFormatter(30),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the name';
+                                } else if (!RegExp(r'^[a-zA-Z\s]+$')
+                                    .hasMatch(value)) {
+                                  return 'Only letters are allowed';
                                 }
                                 return null;
                               },
@@ -184,9 +193,17 @@ class _DoctorFormState extends State<DoctorForm> {
                               hintText: "Enter the father's name",
                               icon: Icons.person,
                               controller: _fatherNameController,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^[a-zA-Z\s]+')),
+                                LengthLimitingTextInputFormatter(30),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the father\'s name';
+                                } else if (!RegExp(r'^[a-zA-Z\s]+')
+                                    .hasMatch(value)) {
+                                  return 'Only letters are allowed';
                                 }
                                 return null;
                               },
@@ -198,9 +215,16 @@ class _DoctorFormState extends State<DoctorForm> {
                               icon: Icons.phone,
                               controller: _mobileController,
                               keyboardType: TextInputType.phone,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter a mobile number';
+                                } else if (!RegExp(r'^\d{10}$')
+                                    .hasMatch(value)) {
+                                  return 'Enter a valid 10-digit mobile number';
                                 }
                                 return null;
                               },
@@ -404,6 +428,12 @@ class _DoctorFormState extends State<DoctorForm> {
                               icon: Icons.landscape,
                               controller: _acreController,
                               keyboardType: TextInputType.number,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}'),
+                                ),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the number of acres';

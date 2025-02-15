@@ -213,7 +213,7 @@ class ActivitySummaryPage extends StatelessWidget {
   /// Date Picker Fields (From Date & To Date)
   Widget _buildDateFilter(
       BuildContext context, ActivitySummaryController controller) {
-    final DateFormat dateFormat = DateFormat('dd-MMM-yyyy');
+    final DateFormat dateFormat = DateFormat('dd-MMM-yy');
 
     Future<void> selectDate(BuildContext context, bool isFromDate) async {
       final DateTime? pickedDate = await showDatePicker(

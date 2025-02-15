@@ -40,11 +40,14 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxLines,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: AppTypography.kLight14,
+        labelStyle: TextStyle(
+          color: AppColors.kGrey,
+          fontSize: 14.sp,
+        ),
         hintText: hintText,
         hintStyle: TextStyle(
-          color: isDarkMode(context) ? AppColors.kLightBrown : AppColors.kGrey,
-          fontSize: 1.sp,
+          color: AppColors.kHint,
+          fontSize: 14.sp,
         ),
         contentPadding: EdgeInsets.symmetric(
           horizontal: AppSpacing.tenHorizontal,

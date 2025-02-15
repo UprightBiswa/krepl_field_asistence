@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../data/constrants/constants.dart';
+import '../../widgets/components/Info_row_widget.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
@@ -47,6 +49,53 @@ class FormEDetailPage extends StatelessWidget {
             _buildUserDetails(),
             SizedBox(height: 10.h),
             _buildFormDetails(),
+            SizedBox(height: 10.h),
+            CustomHeaderText(
+              text: 'Location',
+              fontSize: 18.sp,
+            ),
+            SizedBox(height: 10.h),
+            PrimaryContainer(
+              padding: EdgeInsets.all(12.h),
+              width: double.infinity, // Full width
+              margin: EdgeInsets.only(bottom: 10.h),
+              child: GestureDetector(
+                onTap: () {
+                  String googleMapsUrl =
+                      "https://www.google.com/maps/search/?api=1&query=${formE.latitude},${formE.longitude}";
+                  launchUrl(Uri.parse(googleMapsUrl),
+                      mode: LaunchMode.externalApplication);
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InfoRow(
+                      label: 'Latitude',
+                      value: formE.latitude,
+                    ),
+                    InfoRow(
+                      label: 'Longitude',
+                      value: formE.longitude,
+                    ),
+                    // show text to press go to the location with icons
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: AppColors.kPrimary,
+                        ),
+                        Text(
+                          'Press to go to the location',
+                          style: AppTypography.kBold12.copyWith(
+                            color: AppColors.kPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             if (formE.remarks != '') _buildInfoCard('Remarks', formE.remarks!),
             SizedBox(height: 10.h),
             // Conditionally show the image if the URL is not empty
@@ -172,80 +221,20 @@ class FormEDetailPage extends StatelessWidget {
         ...formE.formEDetails.map((detail) {
           return PrimaryContainer(
             padding: EdgeInsets.all(12.h),
-            width: double.infinity, // Full width
+            width: double.infinity,
             margin: EdgeInsets.only(bottom: 10.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Crop: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.cropName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Stage: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.cropStageName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Product: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.productName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Pest: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.pestName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Season: ',
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                    Text(
-                      detail.seasonName,
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
-                  ],
-                ),
+                InfoRow(label: 'Crop Name', value: detail.cropName),
+                InfoRow(label: 'Stage', value: detail.cropStageName),
+                InfoRow(label: 'Product', value: detail.productName),
+                InfoRow(label: 'Pest', value: detail.pestName),
+                InfoRow(label: 'Expense', value: detail.expense.toString()),
+                InfoRow(
+                    label: 'Publicity Material',
+                    value: detail.publicityMat.toString()),
+                InfoRow(label: 'Season', value: detail.seasonName),
               ],
             ),
           );

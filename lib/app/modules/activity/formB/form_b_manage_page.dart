@@ -74,44 +74,53 @@ class _FormBManagementPageState extends State<FormBManagementPage> {
         onRefresh: () async {
           formBController.refreshItems();
         },
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20.h),
-                    SearchField(
-                      controller: textController,
-                      onChanged: (query) {
-                        formBController.setSearchQuery(query);
-                      },
-                      isEnabled: true,
-                      hintText: 'Search Campaign',
+        child: Column(
+          children: [
+            SizedBox(height: 20.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+              child: SearchField(
+                controller: textController,
+                onChanged: (query) {
+                  formBController.setSearchQuery(query);
+                },
+                isEnabled: true,
+                hintText: 'Search Campaign',
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+              child: CustomHeaderText(text: 'Campaign List', fontSize: 16.sp),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+                    sliver: SliverToBoxAdapter(
+                      child: Obx(() {
+                        if (formBController.isListLoading.value) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (formBController.isListError.value) {
+                          return Center(
+                              child:
+                                  Text(formBController.listErrorMessage.value));
+                        }
+                        return Column(
+                          children: [
+                            FormBListView(
+                                pagingController:
+                                    formBController.pagingController),
+                            SizedBox(height: 20.h),
+                          ],
+                        );
+                      }),
                     ),
-                    const SizedBox(height: 10),
-                    CustomHeaderText(text: 'Campaign List', fontSize: 16.sp),
-                    const SizedBox(height: 10),
-                    Obx(() {
-                      if (formBController.isListLoading.value) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (formBController.isListError.value) {
-                        return Center(
-                            child:
-                                Text(formBController.listErrorMessage.value));
-                      }
-                      return Column(
-                        children: [
-                          FormBListView(
-                              pagingController:
-                                  formBController.pagingController),
-                          SizedBox(height: 20.h),
-                        ],
-                      );
-                    }),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

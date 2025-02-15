@@ -144,26 +144,28 @@ class ProductMasterSelectionBottomSheet extends StatefulWidget {
 
 class _ProductMasterSelectionBottomSheetState
     extends State<ProductMasterSelectionBottomSheet> {
-  final ProductMasterController productMasterController =
-      Get.put(ProductMasterController());
+  late ProductMasterController productMasterController;
   TextEditingController searchController = TextEditingController();
-  dynamic selectedItem; // Changed from List to a single item
+  dynamic selectedItem;
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    selectedItem = widget.initialSelectedItem; // Set initial selected item
+    productMasterController = Get.put(ProductMasterController());
+    selectedItem = widget.initialSelectedItem;
   }
 
   void _filterItems(String search) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      if (search.length >= 3) {
-        productMasterController
-            .loadProductMasters(search); // Trigger search API
-      }
+      productMasterController.loadProductMasters(search);
     });
+  }
+
+  void _clearSearch() {
+    searchController.clear();
+    productMasterController.loadProductMasters('000');
   }
 
   @override
@@ -177,11 +179,23 @@ class _ProductMasterSelectionBottomSheetState
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: SearchField(
-              controller: searchController,
-              onChanged: _filterItems,
-              isEnabled: true,
-              hintText: 'Search',
+            child: Row(
+              children: [
+                Expanded(
+                  child: SearchField(
+                    controller: searchController,
+                    onChanged: _filterItems,
+                    isEnabled: true,
+                    hintText: 'Search',
+                  ),
+                ),
+
+                //add suffix icon x
+                IconButton(
+                  onPressed: _clearSearch,
+                  icon: const Icon(Icons.clear),
+                )
+              ],
             ),
           ),
           const SizedBox(height: 8),
@@ -189,53 +203,61 @@ class _ProductMasterSelectionBottomSheetState
             child: Obx(() {
               if (productMasterController.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (productMasterController.error.isNotEmpty) {
-                return Center(child: Text(productMasterController.error.value));
-              } else if (productMasterController.noDataFound.value) {
-                return const Center(child: Text('No products found.'));
-              } else if (productMasterController.productMasters.isEmpty) {
-                return const Center(child: Text('No data found.'));
-              } else {
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  itemCount: productMasterController.productMasters.length,
-                  separatorBuilder: (context, index) => const Divider(
-                    height: 0,
-                  ),
-                  itemBuilder: (context, index) {
-                    final item = productMasterController.productMasters[index];
-                    final isSelected = selectedItem == item;
-
-                    return ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 0.h),
-                      tileColor: isSelected
-                          ? AppColors.kPrimary.withOpacity(0.2)
-                          : null,
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Material: ${item.materialDescription}",
-                              style: AppTypography.kBold12),
-                          Text("No: ${item.materialNumber}",
-                              style: AppTypography.kMedium12),
-                          Text("Technical Name: ${item.technicalName}",
-                              style: AppTypography.kMedium12),
-                          Text("Brand Name: ${item.brandName}",
-                              style: AppTypography.kLight12),
-                        ],
-                      ),
-                      trailing: isSelected
-                          ? const Icon(Icons.check_box)
-                          : const Icon(Icons.check_box_outline_blank),
-                      onTap: () {
-                        setState(() {
-                          selectedItem = item; // Update selected item
-                        });
-                      },
-                    );
-                  },
-                );
               }
+              if (productMasterController.error.isNotEmpty) {
+                return Center(
+                    child: Text(
+                  'Error: ${productMasterController.error.value}',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                ));
+              }
+              if (productMasterController.productMasters.isEmpty) {
+                return const Center(
+                    child: Text(
+                  'No products found.',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ));
+              }
+              return ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: productMasterController.productMasters.length,
+                separatorBuilder: (context, index) => const Divider(
+                  height: 0,
+                ),
+                itemBuilder: (context, index) {
+                  final item = productMasterController.productMasters[index];
+                  final isSelected = selectedItem == item;
+
+                  return ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 8.h),
+                    tileColor: isSelected
+                        ? AppColors.kPrimary.withValues(
+                            alpha: 90,
+                          )
+                        : null,
+                    title: Text(item.brandName, style: AppTypography.kBold14),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(item.materialDescription,
+                            style: AppTypography.kBold12),
+                        Text(item.materialNumber,
+                            style: AppTypography.kMedium12),
+                        Text(item.technicalName,
+                            style: AppTypography.kMedium12),
+                      ],
+                    ),
+                    trailing: isSelected
+                        ? const Icon(Icons.check_box)
+                        : const Icon(Icons.check_box_outline_blank),
+                    onTap: () {
+                      setState(() {
+                        selectedItem = item; // Update selected item
+                      });
+                    },
+                  );
+                },
+              );
             }),
           ),
         ],

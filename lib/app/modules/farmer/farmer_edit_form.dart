@@ -288,13 +288,17 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                               hintText: "Enter the farmer's name",
                               icon: Icons.person,
                               inputFormatter: [
-                                FilteringTextInputFormatter.singleLineFormatter,
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^[a-zA-Z\s]+$')),
                                 LengthLimitingTextInputFormatter(30),
                               ],
                               controller: _nameController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the name';
+                                } else if (!RegExp(r'^[a-zA-Z\s]+$')
+                                    .hasMatch(value)) {
+                                  return 'Only letters are allowed';
                                 }
                                 return null;
                               },
@@ -305,13 +309,17 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                               hintText: "Enter the father's name",
                               icon: Icons.person,
                               inputFormatter: [
-                                FilteringTextInputFormatter.singleLineFormatter,
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^[a-zA-Z\s]+$')),
                                 LengthLimitingTextInputFormatter(30),
                               ],
                               controller: _fatherNameController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the father\'s name';
+                                } else if (!RegExp(r'^[a-zA-Z\s]+$')
+                                    .hasMatch(value)) {
+                                  return 'Only letters are allowed';
                                 }
                                 return null;
                               },
@@ -330,6 +338,9 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter a mobile number';
+                                } else if (!RegExp(r'^\d{10}$')
+                                    .hasMatch(value)) {
+                                  return 'Enter a valid 10-digit mobile number';
                                 }
                                 return null;
                               },
@@ -574,6 +585,12 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                               icon: Icons.landscape,
                               controller: _acreController,
                               keyboardType: TextInputType.number,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}'),
+                                ),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the number of acres';
@@ -588,6 +605,10 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                               icon: Icons.pets,
                               controller: _cowCountController,
                               keyboardType: TextInputType.number,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the number of cows';
@@ -602,6 +623,10 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                               icon: Icons.pets,
                               controller: _buffaloCountController,
                               keyboardType: TextInputType.number,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the number of buffaloes';

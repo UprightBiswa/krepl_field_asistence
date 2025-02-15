@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../model/login/user_details_reponse.dart';
 import '../../widgets/loading/shimmer_activity_card.dart';
 import '../controllers/activity_controller.dart';
+import '../customer_sales_view_page.dart';
 import '../model/cutomer _sales_data.dart';
 
 class CustomerSalesContainer extends StatefulWidget {
@@ -39,13 +40,15 @@ class _CustomerSalesContainerState extends State<CustomerSalesContainer> {
               fontSize: 18.sp,
             ),
             const Spacer(),
-            // CustomButton(
-            //   text: 'See All',
-            //   onTap: () {},
-            //   icon: Icons.arrow_forward_ios,
-            //   iconSize: 16.h,
-            //   isBorder: true,
-            // ),
+            CustomButton(
+              text: 'See All',
+              onTap: () {
+                Get.to(() => CustomerSalesPage());
+              },
+              icon: Icons.arrow_forward_ios,
+              iconSize: 16.h,
+              isBorder: true,
+            ),
           ],
         ),
         SizedBox(height: 10.h),
@@ -146,7 +149,7 @@ class CustomerSalesCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 30.r,
-                backgroundColor: Colors.blueAccent.withOpacity(0.2),
+                backgroundColor: Colors.blueAccent.withAlpha(50),
                 child: Text(
                   salesData.customerName[0].toUpperCase(),
                   style: TextStyle(
@@ -184,7 +187,7 @@ class CustomerSalesCard extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.2),
+                  color: Colors.blueAccent.withAlpha(50),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
@@ -229,7 +232,7 @@ class CustomerSalesCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.greenAccent.withOpacity(0.7),
+                            Colors.greenAccent.withAlpha(100),
                             Colors.green,
                           ],
                         ),
@@ -266,7 +269,7 @@ class CustomerSalesCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.redAccent.withOpacity(0.7),
+                            Colors.redAccent.withAlpha(100),
                             Colors.red,
                           ],
                         ),

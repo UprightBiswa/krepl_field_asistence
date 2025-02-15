@@ -664,9 +664,6 @@ class _CreateFormApageState extends State<CreateFormApage> {
                               },
                             ),
                             const SizedBox(height: 16),
-                           
-
-
 
                             GestureDetector(
                               onTap: () => _showImagePickerOptions(context),
@@ -705,32 +702,32 @@ class _CreateFormApageState extends State<CreateFormApage> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                             // add a delte image iocn in image
-                             if(_selectedImagePath != null)
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _selectedImagePath = null;
-                                  attachment = null;
-                                });
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.red[100],
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.red),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Delete Image',
-                                    style: TextStyle(color: Colors.red),
+                            // add a delte image iocn in image
+                            if (_selectedImagePath != null)
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedImagePath = null;
+                                    attachment = null;
+                                  });
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red[100],
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.red),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Delete Image',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
                             //
                             const SizedBox(height: 16),
                             CustomTextField(

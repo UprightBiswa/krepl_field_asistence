@@ -6,7 +6,7 @@ class DemoReport {
   final String areaOfDemo;
   final String dosages;
   final String cropName;
-  final int status;
+  final String status;
 
   DemoReport({
     required this.farmerName,
@@ -28,7 +28,7 @@ class DemoReport {
       areaOfDemo: json['area_of_demo'] ?? '',
       dosages: json['dosages'] ?? '',
       cropName: json['cropname'] ?? '',
-      status: json['status'] ?? 0,
+      status: json['status'].toString(),
     );
   }
 }

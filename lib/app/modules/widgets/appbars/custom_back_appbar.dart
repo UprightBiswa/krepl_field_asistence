@@ -28,6 +28,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? action;
   final bool centerTitle;
   final bool? spaceBar;
+  final PreferredSizeWidget? bottom;
   const CustomBackAppBar({
     this.leadingCallback,
     this.iconColor,
@@ -35,6 +36,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.action,
     this.centerTitle = true,
     this.spaceBar,
+    this.bottom,
     super.key,
   });
 
@@ -67,6 +69,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       title: title,
       actions: action,
+      bottom: bottom,
       //hide back buttion
       automaticallyImplyLeading: leadingCallback != null,
     );

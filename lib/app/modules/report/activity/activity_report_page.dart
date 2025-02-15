@@ -154,7 +154,13 @@ class ActivityReportPage extends StatelessWidget {
                                       (controller.activities.indexOf(activity) +
                                               1)
                                           .toString())),
-                                  DataCell(Text(activity.createdAt)),
+                                  DataCell(
+                                    Text(
+                                      formatDate(
+                                        activity.createdAt.toString(),
+                                      ),
+                                    ),
+                                  ),
                                   DataCell(Text(activity.promotionalActivity)),
                                   DataCell(Text(activity.partyType)),
                                   DataCell(Text(activity.farmerName)),
@@ -217,6 +223,15 @@ class ActivityReportPage extends StatelessWidget {
     );
   }
 
+  String formatDate(String dateStr) {
+    try {
+      final DateTime date = DateTime.parse(dateStr);
+      return DateFormat('dd-MMM-yyyy').format(date);
+    } catch (e) {
+      return '';
+    }
+  }
+
   // /// Date Range Filter
   // Widget _buildDateFilter(
   //     BuildContext context, ActivityReportController controller) {
@@ -270,7 +285,7 @@ class ActivityReportPage extends StatelessWidget {
   /// Date Picker Fields (From Date & To Date)
   Widget _buildDateFilter(
       BuildContext context, ActivityReportController controller) {
-    final DateFormat dateFormat = DateFormat('dd-MMM-yyyy');
+    final DateFormat dateFormat = DateFormat('dd-MMM-yy');
 
     Future<void> selectDate(BuildContext context, bool isFromDate) async {
       final DateTime? pickedDate = await showDatePicker(

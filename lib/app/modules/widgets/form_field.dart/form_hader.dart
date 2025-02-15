@@ -7,7 +7,7 @@ class FormImageHeader extends StatelessWidget {
   final String image;
   final String header;
   final String subtitle;
-  final String tag ;
+  final String tag;
 
   const FormImageHeader({
     super.key,
@@ -19,12 +19,12 @@ class FormImageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Hero(
+    return Hero(
       tag: tag,
       child: Container(
         height: 270.h,
         width: Get.width,
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(image),
             fit: BoxFit.cover,

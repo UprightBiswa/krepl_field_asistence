@@ -163,8 +163,9 @@ class ActivityController extends GetxController {
             dataList.map((data) => SalesData.fromJson(data)).toList();
 
         // Filter data for MTD
-        mtdSalesData.assignAll(
-            salesDataList.where((data) => data.currentMonthTotal > 0).toList());
+        // mtdSalesData.assignAll(
+        //     salesDataList.where((data) => data.currentMonthTotal > 0).toList());
+        mtdSalesData.assignAll(salesDataList);
       } else {
         isErrorMtdSales(true);
       }
@@ -194,8 +195,9 @@ class ActivityController extends GetxController {
             dataList.map((data) => SalesData.fromJson(data)).toList();
 
         // Filter data for YTD
-        ytdSalesData.assignAll(
-            salesDataList.where((data) => data.currentYearTotal > 0).toList());
+        // ytdSalesData.assignAll(
+        //     salesDataList.where((data) => data.currentYearTotal > 0).toList());
+        ytdSalesData.assignAll(salesDataList);
       } else {
         isErrorYtdSales(true);
       }

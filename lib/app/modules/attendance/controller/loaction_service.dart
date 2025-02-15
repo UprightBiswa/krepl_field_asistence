@@ -16,7 +16,7 @@ class BackgroundService {
       const androidConfig = fg.FlutterBackgroundAndroidConfig(
         notificationTitle: 'Location Tracking',
         notificationText: 'Running in background',
-        notificationImportance: fg.AndroidNotificationImportance.Max,
+        notificationImportance: fg.AndroidNotificationImportance.normal,
         notificationIcon:
             fg.AndroidResource(name: 'background_icon', defType: 'drawable'),
       );

@@ -172,6 +172,11 @@ class _RetailerFormState extends State<RetailerForm> {
                               hintText: "Enter the retaile's name",
                               icon: Icons.person,
                               controller: _nameController,
+                              inputFormatter: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^[a-zA-Z\s]+')),
+                                LengthLimitingTextInputFormatter(30),
+                              ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter the name';
@@ -193,6 +198,9 @@ class _RetailerFormState extends State<RetailerForm> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter a mobile number';
+                                } else if (!RegExp(r'^\d{10}$')
+                                    .hasMatch(value)) {
+                                  return 'Enter a valid 10-digit mobile number';
                                 }
                                 return null;
                               },
@@ -206,6 +214,7 @@ class _RetailerFormState extends State<RetailerForm> {
                               keyboardType: TextInputType.emailAddress,
                               //input eamil
                               inputFormatter: [
+                                LengthLimitingTextInputFormatter(30),
                                 FilteringTextInputFormatter.singleLineFormatter,
                               ],
                               validator: (value) {

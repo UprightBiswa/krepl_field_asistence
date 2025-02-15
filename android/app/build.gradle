@@ -27,17 +27,27 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.krepl.field_asistence"
-    compileSdk 34
+    compileSdk 35
     ndkVersion flutter.ndkVersion
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+    // compileOptions {
+    //     sourceCompatibility JavaVersion.VERSION_1_8
+    //     targetCompatibility JavaVersion.VERSION_1_8
+    // }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
+    // kotlinOptions {
+    //     jvmTarget = '1.8'
+    // }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17 // Ensure consistency with JavaVersion.VERSION_17
+    }
+    
+
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -49,7 +59,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -77,6 +87,7 @@ flutter {
 }
 
 dependencies {
+    
     implementation 'com.android.support:multidex:1.0.3'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

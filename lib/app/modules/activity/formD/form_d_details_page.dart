@@ -2,6 +2,7 @@ import 'package:field_asistence/app/modules/widgets/containers/primary_container
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/constrants/constants.dart';
 import '../../widgets/components/Info_row_widget.dart';
@@ -48,6 +49,52 @@ class FormDDetailPage extends StatelessWidget {
             SizedBox(height: 10.h),
             _buildFormDetails(),
             SizedBox(height: 10.h),
+            CustomHeaderText(
+              text: 'Location',
+              fontSize: 18.sp,
+            ),
+            SizedBox(height: 10.h),
+            PrimaryContainer(
+              padding: EdgeInsets.all(12.h),
+              width: double.infinity, // Full width
+              margin: EdgeInsets.only(bottom: 10.h),
+              child: GestureDetector(
+                onTap: () {
+                  String googleMapsUrl =
+                      "https://www.google.com/maps/search/?api=1&query=${formD.latitude},${formD.longitude}";
+                  launchUrl(Uri.parse(googleMapsUrl),
+                      mode: LaunchMode.externalApplication);
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InfoRow(
+                      label: 'Latitude',
+                      value: formD.latitude,
+                    ),
+                    InfoRow(
+                      label: 'Longitude',
+                      value: formD.longitude,
+                    ),
+                    // show text to press go to the location with icons
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: AppColors.kPrimary,
+                        ),
+                        Text(
+                          'Press to go to the location',
+                          style: AppTypography.kBold12.copyWith(
+                            color: AppColors.kPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             if (formD.remarks.isNotEmpty)
               BuildInfoCard(title: 'Remarks', content: formD.remarks),
             SizedBox(height: 10.h),
@@ -168,6 +215,15 @@ class FormDDetailPage extends StatelessWidget {
                   label: 'Season',
                   value: detail.seasonName,
                 ),
+                // New fields (only show if they are not null)
+                if (detail.dosage != null)
+                  InfoRow(label: 'Dosage', value: detail.dosage!),
+                if (detail.areaofdemo != null)
+                  InfoRow(label: 'Demo Area', value: detail.areaofdemo!),
+                if (detail.totalarea != null)
+                  InfoRow(label: 'Total Area', value: detail.totalarea!),
+                if (detail.expense != null)
+                  InfoRow(label: 'Expense', value: detail.expense!),
               ],
             ),
           );

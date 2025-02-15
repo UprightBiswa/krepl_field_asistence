@@ -33,7 +33,7 @@ class RouteActionMenu extends StatelessWidget {
       ),
       itemBuilder: (BuildContext context) {
         List<PopupMenuEntry> menuItems = [];
-        
+
         if (status == RouteStatus.Active) {
           menuItems.add(
             PopupMenuItem(

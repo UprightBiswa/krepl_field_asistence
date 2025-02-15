@@ -14,17 +14,18 @@ import '../../../model/master/crop_model.dart';
 import '../../../model/master/crop_stage.dart';
 import '../../../model/master/pest_master.dart';
 import '../../../model/master/villages_model.dart';
-import '../../route_plan/model/route_list.dart';
+import '../../tour_plan/controller/tour_route_controller.dart';
+import '../../tour_plan/model/tour_route_master.dart';
 import '../../widgets/dialog/confirmation.dart';
 import '../../widgets/dialog/error.dart';
 import '../../widgets/dialog/loading.dart';
+import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
 import '../../widgets/form_field.dart/form_field.dart';
 import '../../widgets/form_field.dart/form_hader.dart';
 import '../../widgets/form_field.dart/single_selected_dropdown.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../components/expanded_object.dart';
-import '../components/multi_select_dropdown/route_selection_dropdown.dart';
 import '../components/single_select_dropdown/activity_master_dropdown.dart';
 import '../components/multi_select_dropdown/seasion_selection_dropdown.dart';
 import '../components/multi_select_dropdown/village_multi_selecton_dropdown.dart';
@@ -49,6 +50,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
   final _formKey = GlobalKey<FormState>();
   List<ActivityObject> activityObjects = [ActivityObject()];
   final TextEditingController _remarksController = TextEditingController();
+  final TourRouteController routeController = Get.put(TourRouteController());
 
   ActivityMaster? _selectedActivity;
   String? selectedPartyType;
@@ -57,7 +59,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
 
   List<Village> selectedVillages = [];
 
-  List<RouteMaster> selectedRoutes = [];
+  List<TourRouteMaster> selectedRoutes = [];
 
   List<Season> selectedSeasons = [];
 
@@ -194,36 +196,78 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                                   setState(() {
                                     selectedVillages = selectedVillagesitems;
                                   });
+                                  routeController.fetchRoutes(
+                                      selectedVillagesitems
+                                          .map((v) => v.id)
+                                          .toList());
+                                  selectedRoutes.clear();
                                 },
                                 selectedItems: selectedVillages,
                               ),
                             ],
                             const SizedBox(height: 16),
-                            //print text in list of selected items in id selectedPartyNameListId
                             if (selectedVillages.isNotEmpty) ...[
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.greenAccent[100],
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  'Selected Party Name Ids: ${selectedVillages.map((village) => village.id.toString()).join(', ')}',
-                                ),
-                              ),
+                              Obx(() {
+                                if (routeController.isLoadingList.value) {
+                                  return const ShimmerLoading();
+                                } else if (routeController.isErrorList.value) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Select Routes',
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red[100],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(color: Colors.red),
+                                        ),
+                                        child: const Text(
+                                          'Failed to fetch routes. Please try again.',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return Column(
+                                    children: [
+                                      MultiSelectDropdown<TourRouteMaster>(
+                                        labelText: 'Select Routes',
+                                        selectedItems: selectedRoutes,
+                                        items: routeController.routeList,
+                                        itemAsString: (route) =>
+                                            route.routeName,
+                                        searchableFields: {
+                                          'route_name': (route) =>
+                                              route.routeName,
+                                          'route_code': (route) =>
+                                              route.routeCode,
+                                        },
+                                        validator: (selectedRoutes) {
+                                          if (selectedRoutes.isEmpty) {
+                                            return 'Please select at least one route.';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (items) {
+                                          setState(() {
+                                            selectedRoutes = items;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                }
+                              }),
                               const SizedBox(height: 16),
                             ],
-
-                            RouteSelectionScreen(
-                              onSelectionChanged: (selectedRoutesItem) {
-                                setState(() {
-                                  selectedRoutes = selectedRoutesItem;
-                                });
-                              },
-                              selectedItems: selectedRoutes,
-                            ),
-                            const SizedBox(height: 16),
 
                             SeasionSelectionScreen(
                               onSelectionChanged: (selectedSeasonsitems) {
@@ -521,8 +565,46 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
           children: [
             Expanded(
               child: PrimaryButton(
+                // onTap: () {
+                //   if (_formKey.currentState?.validate() ?? false) {
+                //     for (var activityObject in activityObjects) {
+                //       if (!activityObject.validate()) {
+                //         Get.snackbar('Error',
+                //             'Please fill all fields before submitting.');
+                //         return;
+                //       }
+                //     }
+                //     _showConfirmationDialog(context);
+                //   }
+                //   // Get.snackbar(
+                //   //   'Error',
+                //   //   'Please fill all fields before submitting.',
+                //   //   snackPosition: SnackPosition.BOTTOM,
+                //   // );
+                // },
+
                 onTap: () {
                   if (_formKey.currentState?.validate() ?? false) {
+                    // Check if required fields are selected
+                    if (selectedPartyType == "Village" &&
+                        selectedVillages.isEmpty) {
+                      Get.snackbar(
+                          'Error', 'Please select at least one village.');
+                      return;
+                    }
+
+                    if (selectedVillages.isNotEmpty && selectedRoutes.isEmpty) {
+                      Get.snackbar(
+                          'Error', 'Please select at least one route.');
+                      return;
+                    }
+
+                    if (selectedSeasons.isEmpty) {
+                      Get.snackbar(
+                          'Error', 'Please select at least one season.');
+                      return;
+                    }
+
                     for (var activityObject in activityObjects) {
                       if (!activityObject.validate()) {
                         Get.snackbar('Error',
@@ -530,14 +612,14 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                         return;
                       }
                     }
+
+                    // If everything is filled correctly, show confirmation dialog
                     _showConfirmationDialog(context);
+                  } else {
+                    Get.snackbar('Error', 'Please fill all required fields.');
                   }
-                  // Get.snackbar(
-                  //   'Error',
-                  //   'Please fill all fields before submitting.',
-                  //   snackPosition: SnackPosition.BOTTOM,
-                  // );
                 },
+
                 text: "Submit",
               ),
             ),

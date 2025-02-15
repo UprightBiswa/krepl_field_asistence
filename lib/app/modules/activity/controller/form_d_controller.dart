@@ -55,6 +55,8 @@ class FormDController extends GetxController {
         queryParams: parameters,
       );
 
+      print(response.data);
+
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
         final formDList = data.map((item) => FormD.fromJson(item)).toList();

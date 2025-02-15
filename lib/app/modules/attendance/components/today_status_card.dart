@@ -48,9 +48,7 @@ class TodayStatusCard extends StatelessWidget {
             "Today's Status",
             style: AppTypography.kMedium16,
           ),
-
           SizedBox(height: 10.h),
-
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

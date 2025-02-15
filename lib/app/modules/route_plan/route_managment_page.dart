@@ -328,32 +328,42 @@ class RoutePlanManagementPage extends StatelessWidget {
                           ],
                           rows: controller.routes.map((route) {
                             return DataRow(
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
-                                  (_) {
-                                    return controller.routes
-                                            .indexOf(route)
-                                            .isEven
-                                        ? (isDarkMode(context)
-                                            ? Colors.grey[800]
-                                            : Colors.grey[200])
-                                        : (isDarkMode(context)
-                                            ? Colors.grey[700]
-                                            : Colors.white);
-                                  },
+                              color: MaterialStateProperty.resolveWith<Color?>(
+                                (_) {
+                                  return controller.routes.indexOf(route).isEven
+                                      ? (isDarkMode(context)
+                                          ? Colors.grey[800]
+                                          : Colors.grey[200])
+                                      : (isDarkMode(context)
+                                          ? Colors.grey[700]
+                                          : Colors.white);
+                                },
+                              ),
+                              cells: [
+                                DataCell(Text(
+                                    (controller.routes.indexOf(route) + 1)
+                                        .toString())),
+                                DataCell(Text(route.routeCode)),
+                                DataCell(Text(route.routeName)),
+                                DataCell(Text(route.villageName ?? '')),
+                                DataCell(Text(route.pin ?? '')),
+                                DataCell(Text(route.officename ?? '')),
+                                DataCell(
+                                  Text(
+                                    formatDate(
+                                      route.validFrom.toString(),
+                                    ),
+                                  ),
                                 ),
-                                cells: [
-                                  DataCell(Text(
-                                      (controller.routes.indexOf(route) + 1)
-                                          .toString())),
-                                  DataCell(Text(route.routeCode)),
-                                  DataCell(Text(route.routeName)),
-                                  DataCell(Text(route.villageName ?? '')),
-                                  DataCell(Text(route.pin ?? '')),
-                                  DataCell(Text(route.officename ?? '')),
-                                  DataCell(Text(route.validFrom)),
-                                  DataCell(Text(route.validTo)),
-                                ]);
+                                DataCell(
+                                  Text(
+                                    formatDate(
+                                      route.validTo.toString(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
                           }).toList(),
                         ),
                       ),
@@ -368,6 +378,15 @@ class RoutePlanManagementPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String formatDate(String dateStr) {
+    try {
+      final DateTime date = DateTime.parse(dateStr);
+      return DateFormat('dd-MMM-yyyy').format(date);
+    } catch (e) {
+      return '';
+    }
   }
 
 // Pagination Controls
@@ -462,7 +481,7 @@ class RoutePlanManagementPage extends StatelessWidget {
   /// Date Picker Fields (From Date & To Date)
   Widget _buildDateFilter(
       BuildContext context, RouteReportController controller) {
-    final DateFormat dateFormat = DateFormat('dd-MMM-yyyy');
+    final DateFormat dateFormat = DateFormat('dd-MMM-yy');
 
     Future<void> selectDate(BuildContext context, bool isFromDate) async {
       final DateTime? pickedDate = await showDatePicker(
