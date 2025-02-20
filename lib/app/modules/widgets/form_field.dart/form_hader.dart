@@ -43,27 +43,27 @@ class FormImageHeader extends StatelessWidget {
                   end: Alignment.bottomCenter,
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    header,
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      color: Colors.white.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
+              // child: Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Text(
+              //       header,
+              //       style: TextStyle(
+              //         fontSize: 24.sp,
+              //         fontWeight: FontWeight.bold,
+              //         color: Colors.white,
+              //       ),
+              //     ),
+              //     Text(
+              //       subtitle,
+              //       style: TextStyle(
+              //         fontSize: 18.sp,
+              //         color: Colors.white.withOpacity(0.7),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ),
           ],
         ),

@@ -123,11 +123,11 @@ class FormCCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10.h),
-          FormCSummary(
-            totalQuantity: totalQuantity(formC.formCDetails),
-            totalExpense: totalExpense(formC.formCDetails).toDouble(),
-            totalProduct: totalProduct(formC.formCDetails),
-          ),
+          // FormCSummary(
+          //   totalQuantity: totalQuantity(formC.formCDetails),
+          //   totalExpense: totalExpense(formC.formCDetails).toDouble(),
+          //   totalProduct: totalProduct(formC.formCDetails),
+          // ),
         ],
       ),
     );
@@ -143,22 +143,22 @@ class FormCCard extends StatelessWidget {
     }
   }
 
-  int totalQuantity(List<FormCDetail> formCDetails) {
-    int total = 0;
-    for (var i = 0; i < formCDetails.length; i++) {
-      total += int.parse(formCDetails[i].quantity);
-    }
-    return total;
-  }
+  // int totalQuantity(List<FormCDetail> formCDetails) {
+  //   int total = 0;
+  //   for (var i = 0; i < formCDetails.length; i++) {
+  //     total += int.parse(formCDetails[i].quantity);
+  //   }
+  //   return total;
+  // }
 
-  int totalExpense(List<FormCDetail> formCDetails) {
-    int total = 0;
-    for (var i = 0; i < formCDetails.length; i++) {
-      double expenseValue = double.tryParse(formCDetails[i].expense) ?? 0.0;
-      total += expenseValue.toInt(); // Convert to int after parsing
-    }
-    return total;
-  }
+  // int totalExpense(List<FormCDetail> formCDetails) {
+  //   int total = 0;
+  //   for (var i = 0; i < formCDetails.length; i++) {
+  //     double expenseValue = double.tryParse(formCDetails[i].expense) ?? 0.0;
+  //     total += expenseValue.toInt(); // Convert to int after parsing
+  //   }
+  //   return total;
+  // }
 
   int totalProduct(List<FormCDetail> formCDetails) {
     int total = formCDetails.length;

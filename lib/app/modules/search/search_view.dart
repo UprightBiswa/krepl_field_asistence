@@ -20,7 +20,6 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     final SearchPageController searchPageController =
         Get.put(SearchPageController());
-    TextEditingController textController = TextEditingController();
 
     bool isDarkMode(BuildContext context) =>
         Theme.of(context).brightness == Brightness.dark;
@@ -53,14 +52,46 @@ class _SearchViewState extends State<SearchView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: AppSpacing.twentyVertical),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 20.w),
+              //   child: SearchField(
+              //     controller: textController,
+              //     onChanged: (query) {
+              //       searchPageController.updateSearchQuery(query);
+              //     },
+              //     isEnabled: true,
+              //   ),
+              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: SearchField(
-                  controller: textController,
-                  onChanged: (query) {
-                    searchPageController.updateSearchQuery(query);
-                  },
-                  isEnabled: true,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SearchField(
+                        controller: searchPageController.textController,
+                        onChanged: (query) {
+                          searchPageController.updateSearchQuery(query);
+                        },
+                        hintText: 'Speak or type...',
+                        isEnabled: !searchPageController.isListening.value,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        searchPageController.isListening.value
+                            ? Icons.mic_off
+                            : Icons.mic,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        if (searchPageController.isListening.value) {
+                          searchPageController.stopListening();
+                        } else {
+                          searchPageController.startListening();
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: AppSpacing.twentyVertical),

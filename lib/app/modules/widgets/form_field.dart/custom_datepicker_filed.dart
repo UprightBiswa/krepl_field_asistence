@@ -38,7 +38,15 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       onTap: () => widget.onDateSelected(context),
       decoration: InputDecoration(
         labelText: widget.labelText,
-        labelStyle: AppTypography.kLight14,
+        labelStyle: TextStyle(
+          color: AppColors.kGrey,
+          fontSize: 14.sp,
+        ),
+        hintText: widget.hintText,
+        hintStyle: TextStyle(
+          color: AppColors.kHint,
+          fontSize: 14.sp,
+        ),
         filled: true,
         contentPadding: EdgeInsets.symmetric(
           horizontal: AppSpacing.tenHorizontal,
@@ -72,7 +80,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           borderRadius: BorderRadius.circular(AppSpacing.radiusTen),
           borderSide: const BorderSide(color: Colors.red),
         ),
-        hintText: widget.hintText,
       ),
       validator: widget.validator ??
           (value) {

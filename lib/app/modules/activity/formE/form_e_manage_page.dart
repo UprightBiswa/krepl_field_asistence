@@ -8,6 +8,7 @@ import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../controller/form_e_controller.dart';
+import 'filter_list_view.dart';
 import 'form_e_create_from_page.dart';
 import 'form_e_list_view.dart';
 
@@ -78,13 +79,38 @@ class _FormEManagementPageState extends State<FormEManagementPage> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.h),
-                    SearchField(
-                      controller: textController,
-                      onChanged: (query) {
-                        formEController.setSearchQuery(query);
-                      },
-                      isEnabled: true,
-                      hintText: 'Search POP',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SearchField(
+                            controller: textController,
+                            onChanged: (query) {
+                              formEController.setSearchQuery(query);
+                            },
+                            isEnabled: true,
+                            hintText: 'Search POP',
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        GestureDetector(
+                          onTap: () {
+                            Get.bottomSheet(
+                              EFilterBottomSheet(),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 20.w,
+                            backgroundColor:
+                                AppColors.kPrimary.withOpacity(0.15),
+                            child: const Icon(
+                              Icons.filter_list,
+                              color: AppColors.kPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     CustomHeaderText(

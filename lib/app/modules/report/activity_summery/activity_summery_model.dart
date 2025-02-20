@@ -1,10 +1,10 @@
 class ActivitySummary {
   final int id;
   final String promotionalActivity;
-  final int activityNumbers;
-  final int totalVillage;
-  final int totalFarmers;
-  final int totalAreaCover;
+  final String activityNumbers;
+  final String totalVillage;
+  final String totalFarmers;
+  final String totalAreaCover;
 
   ActivitySummary({
     required this.id,
@@ -19,10 +19,10 @@ class ActivitySummary {
     return ActivitySummary(
       id: json['id'],
       promotionalActivity: json['promotional_activity'],
-      activityNumbers: json['activityNumbers'],
-      totalVillage: json['totalVillage'],
-      totalFarmers: json['totalFarmers'],
-      totalAreaCover: json['totalAreaCover'],
+      activityNumbers: json['activityNumbers'].toString(),
+      totalVillage: json['totalVillage'].toString(),
+      totalFarmers: json['totalFarmers'].toString(),
+      totalAreaCover: json['totalAreaCover'].toString(),
     );
   }
 }

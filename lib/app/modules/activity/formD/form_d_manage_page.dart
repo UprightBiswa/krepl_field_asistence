@@ -8,6 +8,7 @@ import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../controller/form_d_controller.dart';
+import 'filter_list_view.dart';
 import 'form_d_create_from_page.dart';
 import 'form_d_list_view.dart';
 
@@ -81,13 +82,38 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.h),
-                    SearchField(
-                      controller: textController,
-                      onChanged: (query) {
-                        formDController.setSearchQuery(query);
-                      },
-                      isEnabled: true,
-                      hintText: 'Search',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SearchField(
+                            controller: textController,
+                            onChanged: (query) {
+                              formDController.setSearchQuery(query);
+                            },
+                            isEnabled: true,
+                            hintText: 'Search',
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        GestureDetector(
+                          onTap: () {
+                            Get.bottomSheet(
+                              DFilterBottomSheet(),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 20.w,
+                            backgroundColor:
+                                AppColors.kPrimary.withOpacity(0.15),
+                            child: const Icon(
+                              Icons.filter_list,
+                              color: AppColors.kPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     CustomHeaderText(text: 'Demo List', fontSize: 16.sp),

@@ -52,6 +52,7 @@ class ProductMasterController extends GetxController {
           if (data.isNotEmpty) {
             productMasters
                 .assignAll(data.map((e) => ProductMaster.fromJson(e)));
+            print(productMasters.length);
           } else {
             productMasters.clear();
           }

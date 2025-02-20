@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:dio/dio.dart' as dio;
@@ -13,7 +14,6 @@ import '../../widgets/dialog/success.dart';
 import '../model/form_a_model.dart';
 
 class FormAController extends GetxController {
-  // Services
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
@@ -27,6 +27,10 @@ class FormAController extends GetxController {
   var isListLoading = false.obs;
   var isListError = false.obs;
   var listErrorMessage = ''.obs;
+
+  var fromDate = Rxn<DateTime>(); // Nullable DateTime
+  var toDate = Rxn<DateTime>(); // Nullable DateTime
+  var partyType = Rxn<String>(); // Nullable partyType (Village, Doctor, Farmer)
 
   @override
   void onInit() {
@@ -57,6 +61,13 @@ class FormAController extends GetxController {
         'order_by': '',
         'filter_value': searchQuery.value,
         'form_value': 'all',
+        'from_date': fromDate.value != null
+            ? DateFormat('yyyy-MM-dd').format(fromDate.value!)
+            : null,
+        'to_date': toDate.value != null
+            ? DateFormat('yyyy-MM-dd').format(toDate.value!)
+            : null,
+        'party_type': partyType.value,
       };
 
       final response = await _dioService.post(
@@ -108,6 +119,44 @@ class FormAController extends GetxController {
 
   void refreshItems() {
     print("Refreshing items...");
+    _existingItemIds.clear();
+    pagingController.refresh();
+  }
+
+  void setFromDate(DateTime date) {
+    fromDate.value = date;
+    if (toDate.value != null && fromDate.value!.isAfter(toDate.value!)) {
+      toDate.value = fromDate.value; // Adjust toDate if invalid
+    }
+  }
+
+  void setToDate(DateTime date) {
+    if (fromDate.value != null && date.isBefore(fromDate.value!)) {
+      return; // Prevent invalid date selection
+    }
+    toDate.value = date;
+  }
+
+  void setPartyType(String? type) {
+    partyType.value = type;
+  }
+
+  void applyDateFilter() {
+    if ((fromDate.value != null || toDate.value != null) ||
+        partyType.value != null) {
+      print("From Date: ${fromDate.value}");
+      print("To Date: ${toDate.value}");
+      _existingItemIds.clear();
+      pagingController.refresh();
+    }
+  }
+
+  void clearFilters() {
+    print("From Date: ${fromDate.value}");
+    print("To Date: ${toDate.value}");
+    fromDate.value = null;
+    toDate.value = null;
+    partyType.value = null;
     _existingItemIds.clear();
     pagingController.refresh();
   }

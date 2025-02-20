@@ -102,7 +102,6 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
     if (chips.isEmpty) {
       chips.add(Text(
         widget.labelText,
-        // style: TextStyle(color: Colors.grey[600]),
       ));
     }
 

@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:field_asistence/app/model/master/demo_status_model.dart';
 import 'package:field_asistence/app/model/master/product_master.dart';
 import 'package:field_asistence/app/model/master/result_model.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import '../../../controllers/master_controller.dart/crop_controller.dart';
 import '../../../controllers/master_controller.dart/crop_stage_controller.dart';
 import '../../../controllers/master_controller.dart/get_demo_result.dart';
@@ -65,7 +63,10 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
   //date text controller for next demo date
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
+  final TextEditingController _activityDateController = TextEditingController();
 
+  final TextEditingController _activityLocationController =
+      TextEditingController();
   ActivityMaster? _selectedActivity;
   String? selectedPartyType;
 
@@ -75,7 +76,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
   LocationData? gioLocation;
   //make a date selcted date veriable // date fromate yyyy-mm-dd
   DateTime selectedDate = DateTime.now();
-
+  DateTime selectedactivityDate = DateTime.now();
   List<Farmer> selectedFarmers = [];
 
   List<Season> selectedSeasons = [];
@@ -134,6 +135,8 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
   void initState() {
     super.initState();
     _dateController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+    _activityDateController.text =
+        DateFormat('dd-MM-yyyy').format(selectedactivityDate);
     _cropStageController.loadCropStages();
     _pestController.loadPests();
     _getDomoResultController.loaddemoResultData();
@@ -144,7 +147,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       firstDate: DateTime(2017, 1),
-      lastDate: DateTime(2025, 12),
+      lastDate: DateTime(9999, 12),
       helpText: 'Select Date',
     );
 
@@ -156,9 +159,31 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
     }
   }
 
+  Future<void> _selectActivityDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2017, 1),
+      lastDate: DateTime(9999, 12),
+      helpText: 'Select Date',
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        selectedactivityDate = pickedDate;
+        _activityDateController.text =
+            DateFormat('dd-MM-yyyy').format(selectedactivityDate);
+      });
+    }
+  }
+
   @override
   void dispose() {
     _remarksController.dispose();
+    _dateController.dispose();
+
+    _activityDateController.dispose();
+    _activityLocationController.dispose();
+
     for (var object in activityObjects) {
       object.expenseController.dispose();
       object.dosageController.dispose();
@@ -199,11 +224,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'Create Demo',
-          style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
-          ),
+          style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
         ),
       ),
       body: SizedBox(
@@ -233,7 +254,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Activity\'s Basic Details',
+                              text: 'Basic Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
@@ -295,6 +316,10 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                               onSelectionChanged: (selectedSeasonsitems) {
                                 setState(() {
                                   selectedSeasons = selectedSeasonsitems;
+                                  //clear the selection crops for activityObjects
+                                  for (var activityObject in activityObjects) {
+                                    activityObject.crop = null;
+                                  }
                                 });
                                 if (selectedSeasons.isNotEmpty) {
                                   _loadNewData(selectedSeasons
@@ -649,13 +674,8 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                     hintText: 'Enter the area of demonstration',
                                     icon: Icons.area_chart_outlined,
                                     controller: activityObject.areaController,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatter: [
-                                      FilteringTextInputFormatter.allow(
-                                        RegExp(r'^\d+\.?\d{0,2}'),
-                                      ),
-                                      LengthLimitingTextInputFormatter(10),
-                                    ],
+                                    keyboardType: TextInputType.streetAddress,
+                                    inputFormatter: [],
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter the area of demonstration';
@@ -742,8 +762,17 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                         child: Column(
                           children: [
                             CustomHeaderText(
-                              text: 'Activity\'s Other\'s Details',
+                              text: 'Other\'s Details',
                               fontSize: 20.sp,
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomDatePicker(
+                              labelText: 'Activity Performed Date',
+                              hintText: 'Select Date',
+                              icon: Icons.calendar_today,
+                              textEditingController: _activityDateController,
+                              onDateSelected: (context) =>
+                                  _selectActivityDate(context),
                             ),
                             SizedBox(height: 16.h),
                             CustomDatePicker(
@@ -753,6 +782,14 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                               textEditingController: _dateController,
                               onDateSelected: (context) =>
                                   _selectDateRange(context),
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomTextField(
+                              labelText: 'Activity Performed Location',
+                              hintText: 'Enter Location',
+                              icon: Icons.location_on,
+                              controller: _activityLocationController,
+                              keyboardType: TextInputType.text,
                             ),
                             SizedBox(height: 16.h),
                             GeoLocationInputField(
@@ -801,7 +838,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                             ),
                             const SizedBox(height: 16),
                             // add a delte image iocn in image
-                            if (_selectedImagePath != null)
+                            if (_selectedImagePath != null) ...[
                               InkWell(
                                 onTap: () {
                                   setState(() {
@@ -826,7 +863,8 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                   ),
                                 ),
                               ),
-                            const SizedBox(height: 16),
+                              const SizedBox(height: 16),
+                            ],
                             CustomTextField(
                               labelText: 'Remarks',
                               hintText: 'Enter remarks',
@@ -912,6 +950,9 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
         'latitude': gioLocation?.latitude.toString() ?? '',
         'longitude': gioLocation?.longitude.toString() ?? '',
         'next_demo_date': DateFormat('yyyy-MM-dd').format(selectedDate),
+        'activity_performed_date':
+            DateFormat('yyyy-MM-dd').format(selectedactivityDate),
+        'activity_performed_location': _activityLocationController.text,
       };
       print('Parameters: $parameters');
       List<MapEntry<String, String>> fields = [];

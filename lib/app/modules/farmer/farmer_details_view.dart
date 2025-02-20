@@ -42,7 +42,7 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'Farmer Details',
-          style: AppTypography.kBold20.copyWith(
+          style: AppTypography.kBold24.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
                 : AppColors.kDarkContiner,

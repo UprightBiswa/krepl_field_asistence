@@ -8,6 +8,7 @@ import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../controller/form_b_controller.dart';
+import 'filter_list_view.dart';
 import 'form_b_create_form_page.dart';
 import 'form_b_list_view.dart';
 
@@ -79,13 +80,37 @@ class _FormBManagementPageState extends State<FormBManagementPage> {
             SizedBox(height: 20.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-              child: SearchField(
-                controller: textController,
-                onChanged: (query) {
-                  formBController.setSearchQuery(query);
-                },
-                isEnabled: true,
-                hintText: 'Search Campaign',
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SearchField(
+                      controller: textController,
+                      onChanged: (query) {
+                        formBController.setSearchQuery(query);
+                      },
+                      isEnabled: true,
+                      hintText: 'Search Campaign',
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () {
+                      Get.bottomSheet(
+                        BFilterBottomSheet(),
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 20.w,
+                      backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                      child: const Icon(
+                        Icons.filter_list,
+                        color: AppColors.kPrimary,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),

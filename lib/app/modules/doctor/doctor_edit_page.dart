@@ -180,11 +180,7 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'Edit Doctor',
-          style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
-          ),
+          style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
         ),
       ),
       body: SizedBox(
@@ -214,7 +210,7 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Doctor\'s Basic Details',
+                              text: 'Basic Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
@@ -290,7 +286,7 @@ class _EditDoctorFormState extends State<EditDoctorForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Doctor\'s Address Details',
+                              text: 'Address Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),

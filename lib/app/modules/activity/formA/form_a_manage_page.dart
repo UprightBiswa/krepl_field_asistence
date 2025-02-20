@@ -7,6 +7,7 @@ import '../../home/components/search_field.dart';
 import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
+import 'filter_list_view.dart';
 import 'form_a_list_view.dart';
 import '../controller/form_a_controller.dart';
 import 'form_a_create_from_page.dart';
@@ -82,13 +83,38 @@ class _FormAManagementPageState extends State<FormAManagementPage> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.h),
-                    SearchField(
-                      controller: textController,
-                      onChanged: (query) {
-                        formAController.setSearchQuery(query);
-                      },
-                      isEnabled: true,
-                      hintText: 'Search Activity',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SearchField(
+                            controller: textController,
+                            onChanged: (query) {
+                              formAController.setSearchQuery(query);
+                            },
+                            isEnabled: true,
+                            hintText: 'Search Activity',
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        GestureDetector(
+                          onTap: () {
+                            Get.bottomSheet(
+                              AFilterBottomSheet(),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 20.w,
+                            backgroundColor:
+                                AppColors.kPrimary.withOpacity(0.15),
+                            child: const Icon(
+                              Icons.filter_list,
+                              color: AppColors.kPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     CustomHeaderText(text: 'Activity List', fontSize: 16.sp),

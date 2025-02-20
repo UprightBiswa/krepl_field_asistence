@@ -246,7 +246,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'Farmer Edit Form',
-          style: AppTypography.kBold14.copyWith(
+          style: AppTypography.kBold24.copyWith(
             color: isDarkMode(context)
                 ? AppColors.kWhite
                 : AppColors.kDarkContiner,
@@ -279,7 +279,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Farmer\'s Basic Details',
+                              text: 'Basic Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
@@ -390,7 +390,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Farmer\'s Address Details',
+                              text: 'Address Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),

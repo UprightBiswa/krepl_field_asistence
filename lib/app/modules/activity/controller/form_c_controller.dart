@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
 import '../../../data/helpers/internet/connectivity_services.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import '../model/form_c_model.dart';
@@ -20,6 +21,9 @@ class FormCController extends GetxController {
   var isListLoading = false.obs;
   var isListError = false.obs;
   var listErrorMessage = ''.obs;
+
+  var fromDate = Rxn<DateTime>(); // Nullable DateTime
+  var toDate = Rxn<DateTime>(); // Nullable DateTime
 
   @override
   void onInit() {
@@ -48,6 +52,12 @@ class FormCController extends GetxController {
         'order_by': '',
         'filter_value': searchQuery.value,
         'form_value': 'all',
+        'from_date': fromDate.value != null
+            ? DateFormat('yyyy-MM-dd').format(fromDate.value!)
+            : null,
+        'to_date': toDate.value != null
+            ? DateFormat('yyyy-MM-dd').format(toDate.value!)
+            : null,
       };
 
       final response = await _dioService.post(
@@ -98,6 +108,38 @@ class FormCController extends GetxController {
   }
 
   void refreshItems() {
+    _existingItemIds.clear();
+    pagingController.refresh();
+  }
+
+  void setFromDate(DateTime date) {
+    fromDate.value = date;
+    if (toDate.value != null && fromDate.value!.isAfter(toDate.value!)) {
+      toDate.value = fromDate.value; // Adjust toDate if invalid
+    }
+  }
+
+  void setToDate(DateTime date) {
+    if (fromDate.value != null && date.isBefore(fromDate.value!)) {
+      return; // Prevent invalid date selection
+    }
+    toDate.value = date;
+  }
+
+  void applyDateFilter() {
+    if (fromDate.value != null || toDate.value != null) {
+      print("From Date: ${fromDate.value}");
+      print("To Date: ${toDate.value}");
+      _existingItemIds.clear();
+      pagingController.refresh();
+    }
+  }
+
+  void clearFilters() {
+    print("From Date: ${fromDate.value}");
+    print("To Date: ${toDate.value}");
+    fromDate.value = null;
+    toDate.value = null;
     _existingItemIds.clear();
     pagingController.refresh();
   }

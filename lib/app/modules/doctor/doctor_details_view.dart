@@ -41,11 +41,7 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'doctor Details',
-          style: AppTypography.kBold20.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
-          ),
+          style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
         ),
       ),
       body: SizedBox(

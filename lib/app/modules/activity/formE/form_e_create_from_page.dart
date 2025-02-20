@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:field_asistence/app/model/master/product_master.dart';
 import 'package:field_asistence/app/model/master/season_model.dart';
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
@@ -9,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:intl/intl.dart';
 import '../../../controllers/master_controller.dart/crop_controller.dart';
 import '../../../controllers/master_controller.dart/crop_stage_controller.dart';
 import '../../../controllers/master_controller.dart/pest_controller.dart';
@@ -56,7 +55,10 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
   final _formKey = GlobalKey<FormState>();
   List<ActivityObject> activityObjects = [ActivityObject()];
   final TextEditingController _remarksController = TextEditingController();
+  final TextEditingController _activityDateController = TextEditingController();
 
+  final TextEditingController _activityLocationController =
+      TextEditingController();
   ActivityMaster? _selectedActivity;
   String? selectedPartyType;
 
@@ -68,6 +70,8 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
   List<Village> selectedVillages = [];
 
   List<Season> selectedSeasons = [];
+
+  DateTime selectedDate = DateTime.now();
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -117,11 +121,30 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
     );
   }
 
+  Future<void> _selectActivityDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2017, 1),
+      lastDate: DateTime(9999, 12),
+      helpText: 'Select Date',
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        selectedDate = pickedDate;
+        _activityDateController.text =
+            DateFormat('dd-MM-yyyy').format(selectedDate);
+      });
+    }
+  }
+
   bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
   @override
   void initState() {
     super.initState();
+    _activityDateController.text =
+        DateFormat('dd-MM-yyyy').format(selectedDate);
     _cropController.loadCrops([]);
     _cropStageController.loadCropStages();
     _pestController.loadPests();
@@ -131,6 +154,9 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
   @override
   void dispose() {
     _remarksController.dispose();
+    _activityDateController.dispose();
+    _activityLocationController.dispose();
+
     for (var object in activityObjects) {
       object.expenseController.dispose();
     }
@@ -168,11 +194,7 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
             : AppColors.kPrimary.withOpacity(0.15),
         title: Text(
           'Create POP Material',
-          style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
-          ),
+          style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
         ),
       ),
       body: SizedBox(
@@ -202,7 +224,7 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
-                              text: 'Activity\'s Basic Details',
+                              text: 'Basic Details',
                               fontSize: 20.sp,
                             ),
                             SizedBox(height: 16.h),
@@ -226,7 +248,6 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                                 return null;
                               },
                             ),
-
                             if (_selectedActivity != null) ...[
                               SizedBox(height: 16.h),
                               CustomTextField(
@@ -248,7 +269,6 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                               ),
                               SizedBox(height: 16.h),
                             ],
-                            // Conditional Fields based on the selected party type
                             if (selectedPartyType == "Village") ...[
                               VillageSelectionScreen(
                                 onSelectionChanged: (selectedVillagesitems) {
@@ -260,27 +280,10 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                               ),
                             ],
                             const SizedBox(height: 16),
-                            //print text in list of selected items in id selectedPartyNameListId
-                            // if (selectedVillages.isNotEmpty) ...[
-                            //   Container(
-                            //     width: double.infinity,
-                            //     padding: const EdgeInsets.all(8),
-                            //     decoration: BoxDecoration(
-                            //       color: Colors.green[100],
-                            //       borderRadius: BorderRadius.circular(10),
-                            //     ),
-                            //     child: Text(
-                            //       'Selected Party Name Ids: ${selectedVillages.map((village) => village.id.toString()).join(', ')}',
-                            //     ),
-                            //   ),
-                            //   const SizedBox(height: 16),
-                            // ],
-
                             SeasionSelectionScreen(
                               onSelectionChanged: (selectedSeasonsitems) {
                                 setState(() {
                                   selectedSeasons = selectedSeasonsitems;
-                                  //clear the selection crops for activityObjects
                                   for (var activityObject in activityObjects) {
                                     activityObject.crop = null;
                                   }
@@ -607,8 +610,25 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                         child: Column(
                           children: [
                             CustomHeaderText(
-                              text: 'Activity\'s Other\'s Details',
+                              text: 'Other\'s Details',
                               fontSize: 20.sp,
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomDatePicker(
+                              labelText: 'Activity Performed Date',
+                              hintText: 'Select Date',
+                              icon: Icons.calendar_today,
+                              textEditingController: _activityDateController,
+                              onDateSelected: (context) =>
+                                  _selectActivityDate(context),
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomTextField(
+                              labelText: 'Activity Performed Location',
+                              hintText: 'Enter Location',
+                              icon: Icons.location_on,
+                              controller: _activityLocationController,
+                              keyboardType: TextInputType.text,
                             ),
                             SizedBox(height: 16.h),
                             GeoLocationInputField(
@@ -657,7 +677,7 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                             ),
                             const SizedBox(height: 16),
                             // add a delte image iocn in image
-                            if (_selectedImagePath != null)
+                            if (_selectedImagePath != null) ...[
                               InkWell(
                                 onTap: () {
                                   setState(() {
@@ -682,7 +702,8 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                                   ),
                                 ),
                               ),
-                            const SizedBox(height: 16),
+                              const SizedBox(height: 16),
+                            ],
                             CustomTextField(
                               labelText: 'Remarks',
                               hintText: 'Enter remarks',
@@ -775,6 +796,9 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
         'remarks': _remarksController.text,
         'latitude': gioLocation?.latitude.toString() ?? '',
         'longitude': gioLocation?.longitude.toString() ?? '',
+        'activity_performed_date':
+            DateFormat('yyyy-MM-dd').format(selectedDate),
+        'activity_performed_location': _activityLocationController.text,
       };
       List<MapEntry<String, String>> fields = [];
 
@@ -805,7 +829,6 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
             _selectedImagePath != null ? File(_selectedImagePath!) : null,
       );
 
-      // clear all data
       _selectedActivity = null;
       selectedPartyType = null;
       selectedVillages.clear();
@@ -817,19 +840,17 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
       attachment = null;
       gioLocation = null;
     } catch (e) {
-      // On error
-      Get.back(); // Close loading dialog
+      Get.back();
       Get.dialog(
           ErrorDialog(
             errorMessage: e.toString(),
             onClose: () {
-              Get.back(); // Close error dialog
+              Get.back();
             },
           ),
           barrierDismissible: false);
     } finally {
-      // Ensure loading dialog is closed
-      Get.back(); // Close loading dialog if not already closed
+      Get.back();
     }
   }
 }
