@@ -134,13 +134,13 @@ class FormECard extends StatelessWidget {
                   ),
                   SizedBox(width: 5.w),
                   Text(
-                    'Total POP:',
+                    'Total POP Material:',
                     style: AppTypography.kMedium14,
                   ),
                 ],
               ),
               Text(
-                ' ${formE.formEDetails.length}',
+                ' ${formE.publicityDetails.length}',
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: Colors.grey,
@@ -149,6 +149,32 @@ class FormECard extends StatelessWidget {
             ],
           ),
 
+          SizedBox(height: 8.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    'Activity Performed Date:',
+                    style: AppTypography.kMedium14,
+                  ),
+                ],
+              ),
+              Text(
+                formatDate(formE.activityPerformedDate),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

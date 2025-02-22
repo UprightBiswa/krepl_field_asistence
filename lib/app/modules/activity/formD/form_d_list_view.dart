@@ -133,13 +133,13 @@ class FormDCard extends StatelessWidget {
                   ),
                   SizedBox(width: 5.w),
                   Text(
-                    'Total Demo:',
+                    'Total Demo products:',
                     style: AppTypography.kMedium14,
                   ),
                 ],
               ),
               Text(
-                ' ${formD.formDDetails.length}',
+                ' ${formD.productDetails.length}',
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: Colors.grey,
@@ -148,6 +148,33 @@ class FormDCard extends StatelessWidget {
             ],
           ),
 
+          SizedBox(height: 8.h),
+          //show next demo date
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    'Activity Performed Date:',
+                    style: AppTypography.kMedium14,
+                  ),
+                ],
+              ),
+              Text(
+                formatDate(formD.activityPerformedDate),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 8.h),
           //show next demo date
           Row(

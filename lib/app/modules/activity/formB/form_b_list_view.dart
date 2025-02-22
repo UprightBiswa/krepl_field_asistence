@@ -126,6 +126,32 @@ class FormBCard extends StatelessWidget {
               Row(
                 children: [
                   Icon(
+                    Icons.calendar_month,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    'Activity Performed Date:',
+                    style: AppTypography.kMedium14,
+                  ),
+                ],
+              ),
+              Text(
+                formatDate(formB.activityPerformedDate),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
                     Icons.calendar_today,
                     size: 16.sp,
                   ),

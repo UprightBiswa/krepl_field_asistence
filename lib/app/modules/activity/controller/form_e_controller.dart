@@ -12,7 +12,8 @@ class FormEController extends GetxController {
 
   final PagingController<int, FormE> pagingController =
       PagingController(firstPageKey: 1);
-  static const int pageSize = 3; // Adjusted page size as per Form E requirements
+  static const int pageSize =
+      3; // Adjusted page size as per Form E requirements
   Timer? _debounce;
   final Set<int> _existingItemIds = <int>{};
 
@@ -21,9 +22,8 @@ class FormEController extends GetxController {
   var isListError = false.obs;
   var listErrorMessage = ''.obs;
 
-   var fromDate = Rxn<DateTime>(); // Nullable DateTime
+  var fromDate = Rxn<DateTime>(); // Nullable DateTime
   var toDate = Rxn<DateTime>(); // Nullable DateTime
-
 
   @override
   void onInit() {
@@ -52,7 +52,7 @@ class FormEController extends GetxController {
         'order_by': '',
         'filter_value': searchQuery.value,
         'form_value': 'all',
-          'from_date': fromDate.value != null
+        'from_date': fromDate.value != null
             ? DateFormat('yyyy-MM-dd').format(fromDate.value!)
             : null,
         'to_date': toDate.value != null
@@ -112,7 +112,6 @@ class FormEController extends GetxController {
     pagingController.refresh();
   }
 
-  
   void setFromDate(DateTime date) {
     fromDate.value = date;
     if (toDate.value != null && fromDate.value!.isAfter(toDate.value!)) {
@@ -144,7 +143,6 @@ class FormEController extends GetxController {
     _existingItemIds.clear();
     pagingController.refresh();
   }
-
 
   @override
   void onClose() {

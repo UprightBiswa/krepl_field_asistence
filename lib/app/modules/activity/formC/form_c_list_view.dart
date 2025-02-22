@@ -103,6 +103,33 @@ class FormCCard extends StatelessWidget {
               Row(
                 children: [
                   Icon(
+                    Icons.calendar_month,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 5.w),
+                  Text(
+                    'Activity Performed Date:',
+                    style: AppTypography.kMedium14,
+                  ),
+                ],
+              ),
+              Text(
+                formatDate(formC.activityPerformedDate),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
                     Icons.calendar_today,
                     size: 16.sp,
                   ),
@@ -123,11 +150,11 @@ class FormCCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10.h),
-          // FormCSummary(
-          //   totalQuantity: totalQuantity(formC.formCDetails),
-          //   totalExpense: totalExpense(formC.formCDetails).toDouble(),
-          //   totalProduct: totalProduct(formC.formCDetails),
-          // ),
+          FormCSummary(
+            totalQuantity: formC.quantity,
+            totalExpense: formC.expense,
+            totalProduct: totalProduct(formC.productDetails),
+          ),
         ],
       ),
     );
@@ -143,34 +170,17 @@ class FormCCard extends StatelessWidget {
     }
   }
 
-  // int totalQuantity(List<FormCDetail> formCDetails) {
-  //   int total = 0;
-  //   for (var i = 0; i < formCDetails.length; i++) {
-  //     total += int.parse(formCDetails[i].quantity);
-  //   }
-  //   return total;
-  // }
-
-  // int totalExpense(List<FormCDetail> formCDetails) {
-  //   int total = 0;
-  //   for (var i = 0; i < formCDetails.length; i++) {
-  //     double expenseValue = double.tryParse(formCDetails[i].expense) ?? 0.0;
-  //     total += expenseValue.toInt(); // Convert to int after parsing
-  //   }
-  //   return total;
-  // }
-
-  int totalProduct(List<FormCDetail> formCDetails) {
+  String totalProduct(List<String> formCDetails) {
     int total = formCDetails.length;
 
-    return total;
+    return total.toString();
   }
 }
 
 class FormCSummary extends StatelessWidget {
-  final int totalQuantity;
-  final double totalExpense;
-  final int totalProduct;
+  final String totalQuantity;
+  final String totalExpense;
+  final String totalProduct;
 
   const FormCSummary({
     super.key,
@@ -201,19 +211,19 @@ class FormCSummary extends StatelessWidget {
           _SummaryColumn(
             icon: Icons.inventory,
             title: 'Total Quantity',
-            value: '$totalQuantity',
+            value: totalQuantity,
           ),
           _VerticalDivider(),
           _SummaryColumn(
             icon: Icons.currency_rupee_sharp,
             title: 'Total Expense', //add rupee symbol
-            value: '₹${totalExpense.toStringAsFixed(2)}',
+            value: '₹$totalExpense',
           ),
           _VerticalDivider(),
           _SummaryColumn(
             icon: Icons.production_quantity_limits,
             title: 'Total Product',
-            value: '$totalProduct',
+            value: totalProduct,
           ),
         ],
       ),
@@ -246,7 +256,7 @@ class _SummaryColumn extends StatelessWidget {
         SizedBox(height: 4.h),
         Text(
           value,
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
         ),
       ],
     );
