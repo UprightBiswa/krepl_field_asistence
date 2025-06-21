@@ -17,25 +17,30 @@ class ExpenseListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, Expense>(
-      pagingController: pagingController,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      builderDelegate: PagedChildBuilderDelegate<Expense>(
-        itemBuilder: (context, expense, index) => GestureDetector(
-          onTap: () {
-            Get.to(() => ExpenseDetailsPage(expense: expense));
-          },
-          child: ExpenseListCard(expense: expense),
-        ),
-        firstPageErrorIndicatorBuilder: (context) =>
-            const Center(child: Text('Failed to load data')),
-        noItemsFoundIndicatorBuilder: (context) =>
-            const Center(child: Text('No data available')),
-        newPageProgressIndicatorBuilder: (context) =>
-            const Center(child: CircularProgressIndicator()),
-      ),
-    );
+    return PagingListener<int, Expense>(
+        controller: pagingController,
+        builder: (context, state, fetchNextPage) {
+          return PagedListView<int, Expense>(
+            state: state,
+            fetchNextPage: fetchNextPage,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            builderDelegate: PagedChildBuilderDelegate<Expense>(
+              itemBuilder: (context, expense, index) => GestureDetector(
+                onTap: () {
+                  Get.to(() => ExpenseDetailsPage(expense: expense));
+                },
+                child: ExpenseListCard(expense: expense),
+              ),
+              firstPageErrorIndicatorBuilder: (context) =>
+                  const Center(child: Text('Failed to load data')),
+              noItemsFoundIndicatorBuilder: (context) =>
+                  const Center(child: Text('No data available')),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const Center(child: CircularProgressIndicator()),
+            ),
+          );
+        });
   }
 }
 
@@ -58,7 +63,7 @@ class ExpenseListCard extends StatelessWidget {
               // Circle Avatar for initials
               CircleAvatar(
                 radius: 30.r,
-                backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                backgroundColor: AppColors.kPrimary.withValues(alpha: 0.15),
                 child: Text(
                   expense.employeeName.substring(0, 2).toUpperCase(),
                   style: TextStyle(
@@ -98,7 +103,7 @@ class ExpenseListCard extends StatelessWidget {
           ),
           // Divider
           Divider(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             thickness: 1.h,
             height: 25.h,
           ),
@@ -116,7 +121,7 @@ class ExpenseListCard extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: getStatusColor(expense.status).withOpacity(0.2),
+                  color: getStatusColor(expense.status).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(

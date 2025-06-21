@@ -29,7 +29,7 @@ class CustomIndicator extends StatelessWidget {
       effect: SlideEffect(
         dotColor: isDarkMode(context)
             ? AppColors.kWhite
-            : AppColors.kSecondary.withOpacity(0.3),
+            : AppColors.kSecondary.withValues(alpha: 0.3),
         activeDotColor:
             isDarkMode(context) ? AppColors.kPrimary : AppColors.kSecondary,
         dotHeight: height ?? 8.h,

@@ -16,9 +16,9 @@ import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
-import '../widgets/form_field.dart/form_field.dart';
-import '../widgets/form_field.dart/form_hader.dart';
-import '../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../widgets/form_field/form_field.dart';
+import '../widgets/form_field/form_hader.dart';
+import '../widgets/form_field/single_selected_dropdown.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/farmer_controller.dart';
@@ -123,9 +123,6 @@ class _FarmerFormState extends State<FarmerForm> {
     }
   }
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,15 +131,11 @@ class _FarmerFormState extends State<FarmerForm> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Farmer Form',
           style: AppTypography.kBold24.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
       ),
@@ -541,12 +534,12 @@ class _FarmerFormState extends State<FarmerForm> {
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(10),
                               ],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the number of cows';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please enter the number of cows';
+                              //   }
+                              //   return null;
+                              // },
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
@@ -559,12 +552,12 @@ class _FarmerFormState extends State<FarmerForm> {
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(10),
                               ],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the number of buffaloes';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please enter the number of buffaloes';
+                              //   }
+                              //   return null;
+                              // },
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
@@ -610,9 +603,7 @@ class _FarmerFormState extends State<FarmerForm> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
-          color: isDarkMode(context)
-              ? AppColors.kDarkSurfaceColor
-              : AppColors.kInput,
+          color: AppColors.kInput,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Row(

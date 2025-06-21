@@ -10,8 +10,7 @@ class SalesComparisonChart extends StatelessWidget {
   final List<SelesDateLine> line;
 
   const SalesComparisonChart(
-      {Key? key, required this.title, required this.line})
-      : super(key: key);
+      {super.key, required this.title, required this.line});
 
   @override
   Widget build(BuildContext context) {

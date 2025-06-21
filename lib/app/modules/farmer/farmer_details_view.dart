@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
-import '../widgets/components/Info_row_widget.dart';
+import '../widgets/components/info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
-import '../widgets/form_field.dart/form_hader.dart';
+import '../widgets/form_field/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/farmer_controller.dart';
@@ -27,8 +27,7 @@ class FarmerDetailView extends StatefulWidget {
 
 class _FarmerDetailViewState extends State<FarmerDetailView> {
   final FarmerController _farmerController = Get.put(FarmerController());
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,15 +36,11 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Farmer Details',
           style: AppTypography.kBold24.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
       ),
@@ -144,14 +139,18 @@ class _FarmerDetailViewState extends State<FarmerDetailView> {
                             label: "Acre",
                             value: widget.farmer.acre.toString(),
                           ),
-                          InfoRow(
-                            label: "Cows Count",
-                            value: widget.farmer.cow.toString(),
-                          ),
-                          InfoRow(
-                            label: "Buffalos Count",
-                            value: widget.farmer.buffalo.toString(),
-                          ),
+                          if (widget.farmer.cow != null &&
+                              widget.farmer.cow!.isNotEmpty)
+                            InfoRow(
+                              label: "Cows Count",
+                              value: widget.farmer.cow ?? '',
+                            ),
+                          if (widget.farmer.buffalo != null &&
+                              widget.farmer.buffalo!.isNotEmpty)
+                            InfoRow(
+                              label: "Buffalos Count",
+                              value: widget.farmer.buffalo ?? '',
+                            ),
                           InfoRow(
                             label: "Work Place Code",
                             value: widget.farmer.workplaceCode ?? '',
@@ -238,17 +237,13 @@ class FarmerActionSheet extends StatelessWidget {
     required this.editCallback,
     required this.deleteCallback,
   });
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
-        color: isDarkMode(context)
-            ? AppColors.kDarkSurfaceColor
-            : AppColors.kInput,
+        color: AppColors.kInput,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: Row(

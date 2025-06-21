@@ -1,4 +1,5 @@
-// import 'package:field_asistence/app/controllers/theme_controller.dart';
+import 'dart:io';
+
 import 'package:field_asistence/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,14 @@ import 'app/repository/firebase/firebase_api.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(defaultOverlay);
+  if (Platform.isAndroid) {
+    final androidVersion =
+        int.parse(Platform.version.split(' ').first.split('.').first);
+    if (androidVersion >= 15) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+          overlays: [SystemUiOverlay.bottom]);
+    }
+  }
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
   );
@@ -30,11 +39,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // final themeController = Get.put(ThemeController());
-    // debugPrint(themeController.theme);
     return MultiProvider(
       providers: [
         CommonProviders.connectionProvider(),
@@ -55,13 +61,16 @@ class MyApp extends StatelessWidget {
               title: 'KRISHAJ SAHAYAK',
               debugShowCheckedModeBanner: false,
               useInheritedMediaQuery: true,
-              scrollBehavior: const ScrollBehavior()
-                  .copyWith(physics: const BouncingScrollPhysics()),
-              defaultTransition: Transition.fadeIn,
+              defaultTransition: Transition.cupertino,
               theme: AppTheme.lightTheme,
-              // darkTheme: AppTheme.darkTheme,
-              // themeMode: ThemeMode.system,
               home: const SplashScreen(),
+              builder: (context, child) {
+                return SafeArea(
+                  bottom: true,
+                  top: false,
+                  child: child ?? const SizedBox(),
+                );
+              },
             ),
           );
         },

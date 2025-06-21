@@ -25,7 +25,8 @@ class SocialShareCard extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: AppColors.kSecondary.withOpacity(0.1)),
+          border:
+              Border.all(color: AppColors.kSecondary.withValues(alpha: 0.1)),
         ),
         child: Icon(icon, color: iconColor),
       ),

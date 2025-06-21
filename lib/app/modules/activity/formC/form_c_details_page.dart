@@ -29,7 +29,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Dealer Stock Details',
 //           style: AppTypography.kBold14.copyWith(
@@ -233,7 +233,7 @@ class FormCDetailPage extends StatelessWidget {
                   _buildDetailCard(
                       "Promotion Type", formC.promotionActivityType),
                   _buildDetailCard('Party Type', formC.partyType),
-                  _buildDetailCard('Expense', formC.expense),
+                  _buildDetailCard('Value', formC.expense),
                   _buildDetailCard('Activity Performed Date',
                       formatDate(formC.activityPerformedDate)),
                   _buildDetailCard('Activity Performed Location',
@@ -262,7 +262,7 @@ class FormCDetailPage extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: 200.h,
-            color: AppColors.kPrimary.withOpacity(0.9),
+            color: AppColors.kPrimary.withValues(alpha: 0.9),
             child: Center(
               child: Text(
                 'Dealer Stock Details',
@@ -329,7 +329,7 @@ class FormCDetailPage extends StatelessWidget {
           children: formC.productDetails
               .map(
                 (product) => Chip(
-                  backgroundColor: AppColors.kPrimary.withOpacity(0.1),
+                  backgroundColor: AppColors.kPrimary.withValues(alpha: 0.1),
                   label: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

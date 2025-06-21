@@ -26,7 +26,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Activity Details',
 //           style: AppTypography.kBold14.copyWith(
@@ -242,7 +242,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Activity Details',
 //           style: AppTypography.kBold14.copyWith(
@@ -458,9 +458,6 @@ class FormADetailPage extends StatelessWidget {
 
   const FormADetailPage({super.key, required this.formA});
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   String formatDate(String dateStr) {
     try {
       final DateTime date = DateTime.parse(dateStr);
@@ -487,7 +484,7 @@ class FormADetailPage extends StatelessWidget {
                   _buildDetailCard(
                       "Activity Type", formA.promotionActivityType),
                   _buildDetailCard('Party Type', formA.partyType),
-                  _buildDetailCard('Expense', formA.expense),
+                  _buildDetailCard('Value', formA.expense),
                   _buildDetailCard('Activity Performed Date',
                       formatDate(formA.activityPerformedDate)),
                   _buildDetailCard('Activity Performed Location',
@@ -519,7 +516,7 @@ class FormADetailPage extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: 200.h,
-            color: AppColors.kPrimary.withOpacity(0.9),
+            color: AppColors.kPrimary.withValues(alpha: 0.9),
             child: Center(
               child: Text(
                 'Activity Details',
@@ -636,7 +633,8 @@ class FormADetailPage extends StatelessWidget {
                     .map(
                       (item) => Chip(
                         label: Text(item, style: TextStyle(fontSize: 12.sp)),
-                        backgroundColor: AppColors.kPrimary.withOpacity(0.1),
+                        backgroundColor:
+                            AppColors.kPrimary.withValues(alpha: 0.1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
                         ),

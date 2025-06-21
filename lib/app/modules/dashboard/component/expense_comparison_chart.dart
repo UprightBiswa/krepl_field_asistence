@@ -11,10 +11,10 @@ class ExpenseComparisonChart extends StatelessWidget {
   final List<ExpenseData> data;
 
   const ExpenseComparisonChart({
-    Key? key,
+    super.key,
     required this.title,
     required this.data,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

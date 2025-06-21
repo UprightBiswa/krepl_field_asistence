@@ -22,13 +22,10 @@ class TourPlanManagementPage extends StatefulWidget {
 class _TourPlanManagementPageState extends State<TourPlanManagementPage> {
   final TourPlanController controller = Get.put(TourPlanController());
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   void initState() {
     super.initState();
-    controller.fetchTourPlans(1);
+    controller.fetchTourPlans(refresh: true);
   }
 
   @override
@@ -39,15 +36,11 @@ class _TourPlanManagementPageState extends State<TourPlanManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'Tour Plan Management',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -56,83 +49,68 @@ class _TourPlanManagementPageState extends State<TourPlanManagementPage> {
             icon: Icons.add,
             text: 'Add Tour',
             isBorder: true,
-            onTap: () {
-              Get.to(() => const TourPlanCreatePage(),
-                      transition: Transition.rightToLeftWithFade)!
-                  .then((value) => controller.refreshItems());
+            onTap: () async {
+              await Get.to(
+                () => const TourPlanCreatePage(),
+              );
+              controller.fetchTourPlans(refresh: true);
             },
           ),
           SizedBox(
-            width: 10.w,
-          )
+            width: 10,
+          ),
         ],
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          controller.refreshItems();
+          controller.fetchTourPlans(refresh: true);
         },
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-                child: Column(
+        child: ListView(
+          controller: controller.scrollController,
+          padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+          children: [
+            Column(
+              children: [
+                SizedBox(height: 20.h),
+                Row(
                   children: [
-                    SizedBox(height: 20.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SearchField(
-                            controller: controller.textEditingController,
-                            onChanged: (query) {
-                              controller.setSearchQuery(query);
-                            },
-                            isEnabled: true,
-                            hintText: 'Search Tour',
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
-                        GestureDetector(
-                          onTap: () {
-                            Get.bottomSheet(
-                              DateFilterBottomSheet(),
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: 20.w,
-                            backgroundColor:
-                                AppColors.kPrimary.withOpacity(0.15),
-                            child: const Icon(
-                              Icons.filter_list,
-                              color: AppColors.kPrimary,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Expanded(
+                      child: SearchField(
+                        controller: controller.textEditingController,
+                        onChanged: (query) {
+                          controller.setSearchQuery(query);
+                        },
+                        isEnabled: true,
+                        hintText: 'Search Tour',
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    CustomHeaderText(text: 'Tour List', fontSize: 16.sp),
-                    const SizedBox(height: 10),
-                    Obx(() {
-                      if (controller.isListLoading.value) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (controller.isListError.value) {
-                        return Center(
-                            child: Text(controller.listErrorMessage.value));
-                      }
-                      return Column(
-                        children: [
-                          TourPlanListView(
-                              pagingController: controller.pagingController),
-                          SizedBox(height: 20.h),
-                        ],
-                      );
-                    }),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () {
+                        Get.bottomSheet(
+                          DateFilterBottomSheet(),
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 20.w,
+                        backgroundColor:
+                            AppColors.kPrimary.withValues(alpha: .15),
+                        child: const Icon(
+                          Icons.filter_list,
+                          color: AppColors.kPrimary,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 10),
+                CustomHeaderText(text: 'Tour List', fontSize: 16.sp),
+                const SizedBox(height: 10),
+                TourPlanListView(),
+                SizedBox(height: 20.h),
+              ],
             ),
           ],
         ),

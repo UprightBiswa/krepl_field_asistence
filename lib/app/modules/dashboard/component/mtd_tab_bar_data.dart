@@ -170,7 +170,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -182,7 +181,6 @@ import '../../widgets/widgets.dart';
 import '../controllers/activity_controller.dart';
 import '../model/data_model.dart';
 import 'activity_card.dart';
-
 
 class MTDTabBarData extends StatefulWidget {
   final UserDetails userDetails;
@@ -197,9 +195,7 @@ class MTDTabBarData extends StatefulWidget {
 }
 
 class _MTDTabBarDataState extends State<MTDTabBarData> {
-   final ActivityController controller = Get.put(ActivityController());
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+  final ActivityController controller = Get.put(ActivityController());
 
   // Variable to keep track of whether to show all items or just a few
   bool showAllItems = false;

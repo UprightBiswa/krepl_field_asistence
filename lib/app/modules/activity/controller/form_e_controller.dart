@@ -10,8 +10,8 @@ class FormEController extends GetxController {
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
-  final PagingController<int, FormE> pagingController =
-      PagingController(firstPageKey: 1);
+  late final PagingController<int, FormE> pagingController;
+
   static const int pageSize =
       3; // Adjusted page size as per Form E requirements
   Timer? _debounce;
@@ -28,12 +28,14 @@ class FormEController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    pagingController.addPageRequestListener((pageKey) {
-      fetchFormEData(pageKey);
-    });
+    pagingController = PagingController<int, FormE>(
+      getNextPageKey: (state) =>
+          state.lastPageIsEmpty ? null : state.nextIntPageKey,
+      fetchPage: (pageKey) => fetchFormEData(pageKey),
+    );
   }
 
-  Future<void> fetchFormEData(int pageKey) async {
+  Future<List<FormE>> fetchFormEData(int pageKey) async {
     try {
       if (pageKey == 1) {
         isListLoading(true);
@@ -77,22 +79,14 @@ class FormEController extends GetxController {
           return !isDuplicate;
         }).toList();
 
-        final isLastPage = pageKey >= response.data['total_pages'];
-        if (isLastPage) {
-          pagingController.appendLastPage(uniqueFormEList);
-        } else {
-          final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueFormEList, nextPageKey);
-        }
+        return uniqueFormEList;
       } else {
-        listErrorMessage.value = "Failed to load data";
-        pagingController.error = listErrorMessage.value;
         throw Exception('Failed to load data');
       }
     } catch (e) {
       isListError(true);
       listErrorMessage.value = e.toString();
-      pagingController.error = e;
+      rethrow;
     } finally {
       isListLoading(false);
     }

@@ -2,8 +2,8 @@ import 'package:field_asistence/app/model/master/pest_master.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../controllers/master_controller.dart/pest_controller.dart';
-import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../../../../controllers/master_controller/pest_controller.dart';
+import '../../../widgets/form_field/single_selected_dropdown.dart';
 import 'activity_master_dropdown.dart';
 
 class PestSingleSelectionWidget<T> extends StatefulWidget {

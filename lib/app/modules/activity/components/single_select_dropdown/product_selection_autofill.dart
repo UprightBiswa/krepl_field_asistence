@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
-import '../../../../controllers/master_controller.dart/product_master_controller.dart';
+import '../../../../controllers/master_controller/product_master_controller.dart';
 import '../../../../data/constrants/constants.dart';
 import '../../../home/components/search_field.dart';
 import '../../../widgets/widgets.dart';
@@ -37,9 +37,6 @@ class _ProductMasterSelectorState extends State<ProductMasterSelector> {
     super.initState();
     selectedItem = widget.selectedItem; // Set initial selected item
   }
-
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
 
   bool isValid() {
     if (selectedItem == null) {
@@ -92,9 +89,7 @@ class _ProductMasterSelectorState extends State<ProductMasterSelector> {
               border: Border.all(
                 color: validationError != null ? Colors.red : Colors.grey,
               ),
-              color: isDarkMode(context)
-                  ? AppColors.kContentColor
-                  : AppColors.kInput,
+              color: AppColors.kInput,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(

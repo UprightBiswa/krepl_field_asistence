@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../activity/components/single_select_dropdown/activity_master_dropdown.dart';
 import '../controller/expense_type_controller.dart';
 import '../model/expense_type_model.dart';
-import '../../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../../widgets/form_field/single_selected_dropdown.dart';
 
 class ExpenseTypeDropdown<T> extends StatefulWidget {
   final T? selectedItem;

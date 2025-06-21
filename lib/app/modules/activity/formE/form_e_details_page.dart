@@ -28,7 +28,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'POP Material Details',
 //           style: AppTypography.kBold14.copyWith(
@@ -260,9 +260,6 @@ class FormEDetailPage extends StatelessWidget {
 
   const FormEDetailPage({super.key, required this.formE});
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   String formatDate(String dateStr) {
     try {
       final DateTime date = DateTime.parse(dateStr);
@@ -289,7 +286,7 @@ class FormEDetailPage extends StatelessWidget {
                   _buildDetailCard(
                       "Activity Type", formE.promotionActivityType),
                   _buildDetailCard('Party Type', formE.partyType),
-                  _buildDetailCard('Expense', formE.expense),
+                  _buildDetailCard('Value', formE.expense),
                   _buildDetailCard('Activity Performed Date',
                       formatDate(formE.activityPerformedDate)),
                   _buildDetailCard('Activity Performed Location',
@@ -323,7 +320,7 @@ class FormEDetailPage extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: 200.h,
-            color: AppColors.kPrimary.withOpacity(0.9),
+            color: AppColors.kPrimary.withValues(alpha: 0.9),
             child: Center(
               child: Text(
                 'POP Material Details',
@@ -440,7 +437,8 @@ class FormEDetailPage extends StatelessWidget {
                     .map(
                       (item) => Chip(
                         label: Text(item, style: TextStyle(fontSize: 12.sp)),
-                        backgroundColor: AppColors.kPrimary.withOpacity(0.1),
+                        backgroundColor:
+                            AppColors.kPrimary.withValues(alpha: 0.1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
                         ),

@@ -31,8 +31,6 @@ class DashboardTableView extends StatefulWidget {
 class _DashboardTableViewState extends State<DashboardTableView> {
   late ConnectivityProvider connectivityProvider;
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
   late List<PieData> pieData;
   late List<SelesDateLine> salesYTDData;
   late List<ExpenseData> expensesYTDData;
@@ -66,7 +64,7 @@ class _DashboardTableViewState extends State<DashboardTableView> {
         title: Text(
           'Dashboard',
           style: AppTypography.kLight16.copyWith(
-            color: isDarkMode(context) ? AppColors.kWhite : AppColors.kGrey,
+            color: AppColors.kGrey,
           ),
         ),
         centerTitle: true,
@@ -74,14 +72,14 @@ class _DashboardTableViewState extends State<DashboardTableView> {
           CustomIconButton(
             onTap: () {
               Get.to<dynamic>(
-                  SettingsView(
-                    userDetails: widget.userDetails,
-                  ),
-                  transition: Transition.rightToLeftWithFade);
+                SettingsView(
+                  userDetails: widget.userDetails,
+                ),
+              );
             },
             icon: AppAssets.kSetting,
             iconColor: AppColors.kWhite,
-            color: AppColors.kWhite.withOpacity(0.15),
+            color: AppColors.kWhite.withValues(alpha: 0.15),
           ),
           SizedBox(width: AppSpacing.twentyHorizontal),
         ],
@@ -134,29 +132,16 @@ class _DashboardTableViewState extends State<DashboardTableView> {
                           Text(
                             widget.userDetails.employeeName,
                             style: AppTypography.kMedium15.copyWith(
-                              color: (isDarkMode(context)
-                                  ? AppColors.kWhite
-                                  : AppColors.kGrey),
+                              color: AppColors.kGrey,
                             ),
                           ),
                           SizedBox(height: 5.h),
                           Text(
                             'ID: ${widget.userDetails.hrEmployeeCode}',
                             style: AppTypography.kLight14.copyWith(
-                              color: isDarkMode(context)
-                                  ? AppColors.kWhite
-                                  : AppColors.kGrey,
+                              color: AppColors.kGrey,
                             ),
                           ),
-                          //show teretory
-                          // Text(
-                          //   'Territory: ${widget.userDetails.}',
-                          //   style: AppTypography.kLight14.copyWith(
-                          //     color: isDarkMode(context)
-                          //         ? AppColors.kWhite
-                          //         : AppColors.kGrey,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ],
@@ -213,8 +198,7 @@ class _DashboardTableViewState extends State<DashboardTableView> {
                     6: FlexColumnWidth(15),
                     7: FlexColumnWidth(15),
                   },
-                  border: TableBorder.all(
-                      color: isDarkMode(context) ? Colors.grey : Colors.black),
+                  border: TableBorder.all(color: Colors.black),
                   defaultColumnWidth: const IntrinsicColumnWidth(),
                   children: [
                     TableRow(
@@ -343,8 +327,7 @@ class _DashboardTableViewState extends State<DashboardTableView> {
                     6: FlexColumnWidth(15),
                     7: FlexColumnWidth(15),
                   },
-                  border: TableBorder.all(
-                      color: isDarkMode(context) ? Colors.grey : Colors.black),
+                  border: TableBorder.all(color: Colors.black),
                   defaultColumnWidth: const IntrinsicColumnWidth(),
                   children: [
                     TableRow(

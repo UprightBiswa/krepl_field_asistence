@@ -21,24 +21,17 @@ class _SearchViewState extends State<SearchView> {
     final SearchPageController searchPageController =
         Get.put(SearchPageController());
 
-    bool isDarkMode(BuildContext context) =>
-        Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       appBar: CustomBackAppBar(
         spaceBar: true,
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Search',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
       ),

@@ -20,31 +20,33 @@ class FarmerListView extends StatefulWidget {
 class _FarmerListViewState extends State<FarmerListView> {
   @override
   Widget build(BuildContext context) {
-    return PagedListView.separated(
-      // return PagedListView<int, Farmer>(
-      pagingController: widget.pagingController,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      clipBehavior: Clip.none,
-      builderDelegate: PagedChildBuilderDelegate<Farmer>(
-        itemBuilder: (context, farmer, index) {
-          return FarmerListCard(
-            farmer: farmer,
-            index: index,
+    return PagingListener<int, Farmer>(
+        controller: widget.pagingController,
+        builder: (context, state, fetchNextPage) {
+          return PagedListView<int, Farmer>.separated(
+            state: state,
+            fetchNextPage: fetchNextPage,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            builderDelegate: PagedChildBuilderDelegate<Farmer>(
+              itemBuilder: (context, farmer, index) {
+                return FarmerListCard(
+                  farmer: farmer,
+                  index: index,
+                );
+              },
+              newPageProgressIndicatorBuilder: (_) => const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              noItemsFoundIndicatorBuilder: (_) => const Center(
+                child: Text('No Data Available'),
+              ),
+            ),
+            separatorBuilder: (context, index) => SizedBox(height: 20.h),
           );
-        },
-        newPageProgressIndicatorBuilder: (_) => const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0),
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-        noItemsFoundIndicatorBuilder: (_) => const Center(
-          child: Text('No Data Available'),
-        ),
-      ),
-      separatorBuilder: (context, index) => SizedBox(height: 20.h),
-    );
+        });
   }
 }

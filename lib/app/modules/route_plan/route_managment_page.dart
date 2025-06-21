@@ -31,7 +31,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Route Report',
 //           style: AppTypography.kBold14.copyWith(
@@ -48,7 +48,7 @@
 //         //     isBorder: true,
 //         //     onTap: () {
 //         //       Get.to(() => const RouteFormPage(),
-//         //           transition: Transition.rightToLeftWithFade);
+//         //            );
 //         //     },
 //         //   ),
 //         //   SizedBox(
@@ -86,7 +86,7 @@
 // //                       },
 // //                       child: CircleAvatar(
 // //                         radius: 20.w,
-// //                         backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+// //                         backgroundColor: AppColors.kPrimary.   withValues(alpha:0.15),
 // //                         child: const Icon(
 // //                           Icons.filter_list,
 // //                           color: AppColors.kPrimary,
@@ -105,7 +105,7 @@
 // //                         // Logic to see all farmers
 // //                       },
 // //                       text: 'See All',
-// //                       color: AppColors.kDarkContiner.withOpacity(0.3),
+// //                       color: AppColors.kDarkContiner.   withValues(alpha:0.3),
 // //                     ),
 // //                   ],
 // //                 ),
@@ -217,15 +217,11 @@ class RoutePlanManagementPage extends StatelessWidget {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Route Report',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -328,7 +324,7 @@ class RoutePlanManagementPage extends StatelessWidget {
                           ],
                           rows: controller.routes.map((route) {
                             return DataRow(
-                              color: MaterialStateProperty.resolveWith<Color?>(
+                              color: WidgetStateProperty.resolveWith<Color?>(
                                 (_) {
                                   return controller.routes.indexOf(route).isEven
                                       ? (isDarkMode(context)

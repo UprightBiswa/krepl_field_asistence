@@ -18,15 +18,11 @@ class ActivitySummaryPage extends StatelessWidget {
       appBar: CustomBackAppBar(
         spaceBar: true,
         leadingCallback: () => Get.back<void>(),
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Activity Summary Report',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -117,7 +113,7 @@ class ActivitySummaryPage extends StatelessWidget {
                           ],
                           rows: controller.summaries.map((summary) {
                             return DataRow(
-                              color: MaterialStateProperty.resolveWith<Color?>(
+                              color: WidgetStateProperty.resolveWith<Color?>(
                                 (_) {
                                   return controller.summaries
                                           .indexOf(summary)

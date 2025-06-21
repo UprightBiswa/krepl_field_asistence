@@ -42,13 +42,13 @@ class AppColors {
   static const Color kBlack = Color(0xFF000000);
 
   static BoxShadow defaultShadow = BoxShadow(
-    color: AppColors.kPrimary.withOpacity(0.2),
+    color: AppColors.kPrimary.withValues(alpha: 0.2),
     blurRadius: 7,
     offset: const Offset(0, 5),
   );
 
   static BoxShadow darkShadow = BoxShadow(
-    color: AppColors.kDarkContiner.withOpacity(0.2),
+    color: AppColors.kDarkContiner.withValues(alpha: 0.2),
     blurRadius: 7,
     offset: const Offset(0, 5),
   );

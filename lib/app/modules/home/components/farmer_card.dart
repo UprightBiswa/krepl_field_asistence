@@ -19,17 +19,14 @@ class FarmerCard extends StatelessWidget {
     final FarmerController farmerController = Get.find<FarmerController>();
 
     return GestureDetector(
-      onTap: () {
-        Get.to<dynamic>(
+      onTap: () async {
+        await Get.to<dynamic>(
           FarmerDetailView(
             farmer: farmer,
             tag: farmer.id.toString(),
           ),
-          transition: Transition.rightToLeftWithFade,
-        )!
-            .then((value) {
-          farmerController.fetchRecentFarmers();
-        });
+        );
+        farmerController.fetchRecentFarmers();
       },
       child: PrimaryContainer(
         padding: const EdgeInsets.all(0.0),
@@ -53,10 +50,10 @@ class FarmerCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.black.withOpacity(1),
-                        Colors.black.withOpacity(0.6),
-                        Colors.black.withOpacity(0.4),
-                        Colors.black.withOpacity(0.2),
+                        Colors.black.withValues(alpha: 0.9),
+                        Colors.black.withValues(alpha: 0.6),
+                        Colors.black.withValues(alpha: 0.4),
+                        Colors.black.withValues(alpha: 0.2),
                         Colors.transparent,
                       ],
                       begin: Alignment.bottomCenter,

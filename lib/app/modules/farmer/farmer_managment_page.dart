@@ -25,15 +25,6 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
 
   final FarmerListController farmerController = Get.put(FarmerListController());
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
-  @override
-  void initState() {
-    super.initState();
-    farmerController.fetchFarmers(1, farmerController.pagingController);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,15 +33,11 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'Farmer Management',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -60,8 +47,9 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
             text: 'Add Farmer',
             isBorder: true,
             onTap: () {
-              Get.to(() => const FarmerForm(),
-                      transition: Transition.rightToLeftWithFade)!
+              Get.to(
+                () => const FarmerForm(),
+              )!
                   .then((value) {
                 farmerController.refreshItems();
               });
@@ -107,7 +95,8 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
                     },
                     child: CircleAvatar(
                       radius: 20.w,
-                      backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                      backgroundColor:
+                          AppColors.kPrimary.withValues(alpha: .15),
                       child: const Icon(
                         Icons.filter_list,
                         color: AppColors.kPrimary,
@@ -120,8 +109,7 @@ class _FarmerManagementPageState extends State<FarmerManagementPage> {
               CustomHeaderText(text: 'Farmers', fontSize: 16.sp),
               SizedBox(height: 20.h),
               Obx(() {
-                if (farmerController.isListLoading.value &&
-                    farmerController.pagingController.itemList == null) {
+                if (farmerController.isListLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (farmerController.isListError.value &&
                     farmerController.listErrorMessage.value.isNotEmpty) {

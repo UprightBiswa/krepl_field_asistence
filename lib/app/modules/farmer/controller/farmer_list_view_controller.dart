@@ -8,8 +8,7 @@ import '../components/filter_bottom_sheet.dart';
 import '../model/farmer_list.dart';
 
 class FarmerListController extends GetxController {
-  final PagingController<int, Farmer> pagingController =
-      PagingController(firstPageKey: 1);
+  late final PagingController<int, Farmer> pagingController;
 
   static const int pageSize = 10;
   var searchQuery = ''.obs;
@@ -18,7 +17,6 @@ class FarmerListController extends GetxController {
   var listErrorMessage = ''.obs;
   var allFarmers = <Farmer>[].obs;
 
-  // Services
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
   Timer? _debounce;
@@ -29,7 +27,6 @@ class FarmerListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("FarmerListController initialized");
 
     filterController = FilterController<String>(
       filterOptions: [
@@ -40,26 +37,14 @@ class FarmerListController extends GetxController {
       initialOrderBy: 'farmer_name',
     );
 
-    pagingController.addPageRequestListener((pageKey) {
-      print(
-          "Page Request Listener Triggered: ${filterController!.selectedOrderBy.value}");
-      fetchFarmers(pageKey, pagingController);
-    });
-
-    // Log and refresh items when filter changes
-    filterController!.selectedOrderBy.listen((value) {
-      print('Order By changed: $value');
-      // refreshItems();
-    });
-
-    filterController!.order.listen((value) {
-      print('Order changed: $value');
-      // refreshItems();
-    });
+    pagingController = PagingController<int, Farmer>(
+      getNextPageKey: (state) =>
+          state.lastPageIsEmpty ? null : state.nextIntPageKey,
+      fetchPage: (pageKey) => fetchFarmers(pageKey),
+    );
   }
 
-  Future<void> fetchFarmers(
-      int pageKey, PagingController<int, Farmer> pagingController) async {
+  Future<List<Farmer>> fetchFarmers(int pageKey) async {
     print("Fetching Farmers for page: $pageKey");
     try {
       if (pageKey == 1) {
@@ -98,27 +83,15 @@ class FarmerListController extends GetxController {
           return !isDuplicate;
         }).toList();
 
-        final isLastPage = pageKey >= response.data['total_pages'];
-        if (isLastPage) {
-          pagingController.appendLastPage(uniqueFarmers);
-        } else {
-          final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueFarmers, nextPageKey);
-        }
-        allFarmers.addAll(uniqueFarmers);
+        return uniqueFarmers;
       } else {
-        listErrorMessage.value = "Failed to load farmers";
-        pagingController.error = "Failed to load farmers";
-        print(listErrorMessage.value);
-        print(response.toString);
-        print(response.statusCode.toString);
         throw Exception('Failed to load farmers');
       }
     } catch (e) {
       isListError(true);
       listErrorMessage.value = e.toString();
-      pagingController.error = e;
       print('Error fetching farmers: $e');
+      rethrow;
     } finally {
       isListLoading(false);
     }

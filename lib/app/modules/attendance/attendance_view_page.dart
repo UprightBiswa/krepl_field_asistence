@@ -59,8 +59,6 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
     );
   }
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,15 +67,11 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Attendance',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: true,
@@ -86,9 +80,7 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
           IconButton(
               icon: Icon(
                 Icons.location_on,
-                color: isDarkMode(context)
-                    ? AppColors.kWhite
-                    : AppColors.kDarkContiner,
+                color: AppColors.kDarkContiner,
               ),
               onPressed: () => Get.to(() => const LocationPage())),
         ],
@@ -99,9 +91,7 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
         ),
         child: Container(
           decoration: BoxDecoration(
-              color: isDarkMode(context)
-                  ? AppColors.kDarkBackground
-                  : AppColors.kBackground,
+              color: AppColors.kBackground,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(16), topRight: Radius.circular(16))),
           child: SingleChildScrollView(
@@ -180,12 +170,10 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
         return Container(
           padding: EdgeInsets.all(10.h),
           decoration: BoxDecoration(
-            color: isDarkMode(context)
-                ? AppColors.kDarkSurfaceColor
-                : AppColors.kInput,
+            color: AppColors.kInput,
             boxShadow: [
               BoxShadow(
-                color: AppColors.kPrimary.withOpacity(0.2),
+                color: AppColors.kPrimary.withValues(alpha: 0.2),
                 offset: const Offset(0, -5),
                 blurRadius: 7,
               ),
@@ -199,7 +187,7 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
                 CustomSliderButton(
                   label: 'Slide to Check-In',
                   activeColor: AppColors.kPrimary,
-                  inactiveColor: AppColors.kPrimary.withOpacity(0.3),
+                  inactiveColor: AppColors.kPrimary.withValues(alpha: 0.3),
                   onSlideComplete: () {
                     Get.dialog(
                       ConfirmationDialog(
@@ -266,7 +254,7 @@ class _AttendanceViewPageState extends State<AttendanceViewPage> {
                 CustomSliderButton(
                   label: 'Slide to Check-Out',
                   activeColor: AppColors.kAccent7,
-                  inactiveColor: AppColors.kAccent7.withOpacity(0.3),
+                  inactiveColor: AppColors.kAccent7.withValues(alpha: 0.3),
                   onSlideComplete: () {
                     Get.dialog(
                       ConfirmationDialog(

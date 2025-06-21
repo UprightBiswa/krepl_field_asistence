@@ -27,8 +27,6 @@ class _DashboardPageState extends State<DashboardPage>
   late TabController _tabController;
 // ActivityController
   final ActivityController controller = Get.put(ActivityController());
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
 
   @override
   void initState() {
@@ -87,16 +85,14 @@ class _DashboardPageState extends State<DashboardPage>
           CustomIconButton(
             onTap: () {
               Get.to<dynamic>(
-                  SettingsView(
-                    userDetails: widget.userDetails,
-                  ),
-                  transition: Transition.rightToLeftWithFade);
+                SettingsView(
+                  userDetails: widget.userDetails,
+                ),
+              );
             },
             icon: AppAssets.kSetting,
-            iconColor: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkSurfaceColor,
-            color: AppColors.kWhite.withOpacity(0.15),
+            iconColor: AppColors.kDarkSurfaceColor,
+            color: AppColors.kWhite.withValues(alpha: 0.15),
           ),
           SizedBox(width: AppSpacing.tenHorizontal),
         ],
@@ -132,18 +128,14 @@ class _DashboardPageState extends State<DashboardPage>
                                     Text(
                                       widget.userDetails.employeeName,
                                       style: AppTypography.kMedium15.copyWith(
-                                        color: isDarkMode(context)
-                                            ? AppColors.kWhite
-                                            : AppColors.kGrey,
+                                        color: AppColors.kGrey,
                                       ),
                                     ),
                                     SizedBox(height: 5.h),
                                     Text(
                                       'ID: ${widget.userDetails.hrEmployeeCode}',
                                       style: AppTypography.kLight14.copyWith(
-                                        color: isDarkMode(context)
-                                            ? AppColors.kWhite
-                                            : AppColors.kGrey,
+                                        color: AppColors.kGrey,
                                       ),
                                     ),
                                   ],
@@ -162,14 +154,10 @@ class _DashboardPageState extends State<DashboardPage>
                   TabBar(
                     controller: _tabController,
                     indicatorSize: TabBarIndicatorSize.tab,
-                    labelColor: isDarkMode(context)
-                        ? AppColors.kBackground
-                        : AppColors.kWhite,
+                    labelColor: AppColors.kWhite,
                     indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: isDarkMode(context)
-                          ? AppColors.kSecondary
-                          : AppColors.kPrimary,
+                      color: AppColors.kPrimary,
                     ),
                     indicatorWeight: 2,
                     dividerColor: Colors.transparent,

@@ -54,7 +54,7 @@ class ReferFriendSheet extends StatelessWidget {
             onTap: () {
               Get.back<void>();
             },
-            color: AppColors.kWhite.withOpacity(0.15),
+            color: AppColors.kWhite.withValues(alpha: 0.15),
             iconColor: AppColors.kWhite,
           ),
         ),
@@ -87,7 +87,7 @@ class ReferFriendSheet extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.h),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.r),
-                  color: AppColors.kPrimary.withOpacity(0.15),
+                  color: AppColors.kPrimary.withValues(alpha: 0.15),
                 ),
                 child: Column(
                   children: [
@@ -117,7 +117,7 @@ class ReferFriendSheet extends StatelessWidget {
                         width: 50.w,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.r),
-                          color: AppColors.kPrimary.withOpacity(0.15),
+                          color: AppColors.kPrimary.withValues(alpha: 0.15),
                         ),
                         child: const Icon(Icons.add, color: AppColors.kPrimary),
                       );

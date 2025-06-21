@@ -53,4 +53,32 @@ class Village {
       territoryCode: json['territory_code'] ?? '',
     );
   }
+
+  // frommap
+  factory Village.fromMap(Map<String, dynamic> map) {
+    return Village(
+      id: map['id'],
+      villageCode: map['village_code'] ?? '',
+      villageName: map['village_name'] ?? '',
+      officeName: map['officename'] ?? '',
+      tehsil: map['tehsil'] ?? '',
+      city: map['city'] ?? '',
+      pin: map['pin'] ?? '',
+      district: map['district'] ?? '',
+      state: map['state'] ?? '',
+      country: map['country'] ?? '',
+      companyCode: map['company_code'] ?? '',
+      sbCode: map['sb_code'] ?? '',
+      zoneCode: map['zone_code'] ?? '',
+      regionCode: map['region_code'] ?? '',
+      territoryCode: map['territory_code'] ?? '',
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Village && other.id == id);
+
+  @override
+  int get hashCode => id.hashCode;
 }

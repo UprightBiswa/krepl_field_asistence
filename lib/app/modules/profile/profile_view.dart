@@ -22,22 +22,17 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          isDarkMode(context) ? AppColors.kDarkContiner : AppColors.kWhite,
+      backgroundColor: AppColors.kWhite,
       appBar: AppBar(
         backgroundColor: AppColors.kPrimary,
         elevation: 0,
         title: Text(
           'Profile',
           style: AppTypography.kBold16.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkSurfaceColor,
+            color: AppColors.kDarkSurfaceColor,
           ),
         ),
         centerTitle: true,
@@ -45,16 +40,14 @@ class _ProfileViewState extends State<ProfileView> {
           CustomIconButton(
             onTap: () {
               Get.to<dynamic>(
-                  SettingsView(
-                    userDetails: widget.userDetails,
-                  ),
-                  transition: Transition.rightToLeftWithFade);
+                SettingsView(
+                  userDetails: widget.userDetails,
+                ),
+              );
             },
             icon: AppAssets.kSetting,
-            iconColor: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkSurfaceColor,
-            color: AppColors.kWhite.withOpacity(0.15),
+            iconColor: AppColors.kDarkSurfaceColor,
+            color: AppColors.kWhite.withValues(alpha: 0.15),
           ),
           SizedBox(width: AppSpacing.tenHorizontal),
         ],
@@ -78,9 +71,7 @@ class _ProfileViewState extends State<ProfileView> {
                               Container(
                                 width: double.maxFinite,
                                 decoration: BoxDecoration(
-                                  color: isDarkMode(context)
-                                      ? AppColors.kDarkContiner
-                                      : AppColors.kWhite,
+                                  color: AppColors.kWhite,
                                   borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(
                                         AppSpacing.radiusThirty),
@@ -116,9 +107,7 @@ class _ProfileViewState extends State<ProfileView> {
           body: Column(
             children: <Widget>[
               Material(
-                color: isDarkMode(context)
-                    ? AppColors.kDarkContiner
-                    : AppColors.kWhite,
+                color: AppColors.kWhite,
                 child: TabBar(
                   tabAlignment: TabAlignment.center,
                   dividerColor: Colors.transparent,
@@ -411,7 +400,7 @@ class _ProfileViewState extends State<ProfileView> {
       leading: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         decoration: BoxDecoration(
-          color: AppColors.kPrimary.withOpacity(0.1),
+          color: AppColors.kPrimary.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(8.0),

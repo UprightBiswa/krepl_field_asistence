@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../data/constrants/constants.dart';
 import '../../home/components/action_menue.dart';
 import '../../widgets/buttons/buttons.dart';
-import '../../widgets/components/Info_row_widget.dart';
+import '../../widgets/components/info_row_widget.dart';
 import '../../widgets/containers/primary_container.dart';
 import '../doctor_details_view.dart';
 import '../doctor_edit_page.dart';
@@ -26,17 +26,11 @@ class DoctorListCard extends StatelessWidget {
     return FadeIn(
       delay: const Duration(milliseconds: 500) * index,
       child: AnimatedButton(
-        onTap: () {
-          Get.to<dynamic>(
-            DoctorDetailView(
-              doctor: doctor,
-            ),
-            transition: Transition.rightToLeftWithFade,
-          )!
-              .then((value) {
-            // doctorController.fetchDoctors(1, doctorController.pagingController);
-            doctorController.refreshItems();
-          });
+        onTap: () async {
+          await Get.to<dynamic>(DoctorDetailView(
+            doctor: doctor,
+          ));
+          doctorController.refreshItems();
         },
         child: PrimaryContainer(
           padding: EdgeInsets.all(10.h),
@@ -46,7 +40,7 @@ class DoctorListCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 30.r,
-                    backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                    backgroundColor: AppColors.kPrimary.withValues(alpha: .15),
                     child: Text(
                       doctor.name.substring(0, 2).toUpperCase(),
                       style: AppTypography.kBold14.copyWith(
@@ -76,28 +70,21 @@ class DoctorListCard extends StatelessWidget {
                   ),
                   // Action menu icon
                   ActionMenuIcon(
-                    onEdit: () {
-                      Get.to<dynamic>(
+                    onEdit: () async {
+                      await Get.to<dynamic>(
                         EditDoctorForm(
                           doctor: doctor,
                         ),
-                        transition: Transition.rightToLeftWithFade,
-                      )!
-                          .then((value) {
-                        Get.back();
-                        // doctorController.fetchDoctors(
-                        //     1, doctorController.pagingController);
-                        doctorController.refreshItems();
-                      });
+                      );
+                      Get.back();
+                      doctorController.refreshItems();
                     },
-                    onDelete: () {
-                      // Delete doctor logic
-                    },
+                    onDelete: () {},
                   ),
                 ],
               ),
               Divider(
-                color: AppColors.kPrimary.withOpacity(0.15),
+                color: AppColors.kPrimary.withValues(alpha: .15),
               ),
               InfoRow(
                 label: "Mobile No",

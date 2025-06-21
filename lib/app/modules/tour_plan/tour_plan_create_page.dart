@@ -9,9 +9,9 @@ import '../activity/components/multi_select_dropdown/village_multi_selecton_drop
 import '../activity/components/single_select_dropdown/activity_master_dropdown.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
-import '../widgets/form_field.dart/custom_datepicker_filed.dart';
-import '../widgets/form_field.dart/custom_text_field.dart';
-import '../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../widgets/form_field/custom_datepicker_filed.dart';
+import '../widgets/form_field/custom_text_field.dart';
+import '../widgets/form_field/dynamic_dropdown_input_field.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/tour_activity_type_controller.dart';
@@ -56,6 +56,7 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
   @override
   void dispose() {
     tourItem.disposeControllers();
+    dayController.dispose();
     workPlaceCodeController.dispose();
     workPlaceNameController.dispose();
     hrEmployeeCodeController.dispose();
@@ -83,7 +84,7 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Create Tour Plan',
           style: AppTypography.kBold14.copyWith(

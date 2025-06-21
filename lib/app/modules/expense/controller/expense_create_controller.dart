@@ -7,7 +7,6 @@ import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import '../model/expense_type_model.dart';
 
 class ExpenseCreateController extends GetxController {
-  // Services
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
@@ -15,10 +14,8 @@ class ExpenseCreateController extends GetxController {
   var isError = false.obs;
   var errorMessage = ''.obs;
 
-  // API Endpoint
   final String _endpoint = "createFaExpense";
 
-  // Generate dynamic financial year list
   List<String> getFinancialYears() {
     final currentYear = DateTime.now().year;
     return List.generate(5, (index) {

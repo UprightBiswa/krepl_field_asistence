@@ -10,9 +10,7 @@ import '../model/form_c_model.dart';
 class FormCController extends GetxController {
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
-
-  final PagingController<int, FormC> pagingController =
-      PagingController(firstPageKey: 1);
+  late final PagingController<int, FormC> pagingController;
   static const int pageSize = 10;
   Timer? _debounce;
   final Set<int> _existingItemIds = <int>{};
@@ -28,12 +26,14 @@ class FormCController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    pagingController.addPageRequestListener((pageKey) {
-      fetchFormCData(pageKey);
-    });
+    pagingController = PagingController<int, FormC>(
+      getNextPageKey: (state) =>
+          state.lastPageIsEmpty ? null : state.nextIntPageKey,
+      fetchPage: (pageKey) => fetchFormCData(pageKey),
+    );
   }
 
-  Future<void> fetchFormCData(int pageKey) async {
+  Future<List<FormC>> fetchFormCData(int pageKey) async {
     try {
       if (pageKey == 1) {
         isListLoading(true);
@@ -77,22 +77,14 @@ class FormCController extends GetxController {
           return !isDuplicate;
         }).toList();
 
-        final isLastPage = pageKey >= response.data['total_pages'];
-        if (isLastPage) {
-          pagingController.appendLastPage(uniqueFormCList);
-        } else {
-          final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueFormCList, nextPageKey);
-        }
+        return uniqueFormCList;
       } else {
-        listErrorMessage.value = "Failed to load data";
-        pagingController.error = listErrorMessage.value;
         throw Exception('Failed to load data');
       }
     } catch (e) {
       isListError(true);
       listErrorMessage.value = e.toString();
-      pagingController.error = e;
+      rethrow;
     } finally {
       isListLoading(false);
     }

@@ -18,7 +18,7 @@ class WaveCard extends StatelessWidget {
     return Container(
       height: height ?? 350.h,
       width: double.infinity,
-      color: color ?? AppColors.kPrimary.withOpacity(0.15),
+      color: color ?? AppColors.kPrimary.withValues(alpha: 0.15),
       child: CustomPaint(
         painter: WavePainter(
           color: isDarkMode(context) ? AppColors.kSecondary : AppColors.kWhite,

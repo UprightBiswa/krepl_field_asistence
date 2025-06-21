@@ -68,13 +68,13 @@ class _HomeViewState extends State<HomeView> {
                 top: -50,
                 right: -50,
                 child: _circularContainer(
-                    150, AppColors.kPrimary2.withOpacity(0.3)),
+                    150, AppColors.kPrimary2.withValues(alpha: .3)),
               ),
               Positioned(
                 top: -80,
                 right: -80,
                 child: _circularContainer(
-                    200, AppColors.kPrimary2.withOpacity(0.2)),
+                    200, AppColors.kPrimary2.withValues(alpha: .2)),
               ),
             ],
           ),
@@ -85,14 +85,14 @@ class _HomeViewState extends State<HomeView> {
           CustomIconButton(
             onTap: () {
               Get.to<dynamic>(
-                  SettingsView(
-                    userDetails: widget.userDetails,
-                  ),
-                  transition: Transition.rightToLeftWithFade);
+                SettingsView(
+                  userDetails: widget.userDetails,
+                ),
+              );
             },
             icon: AppAssets.kSetting,
             iconColor: AppColors.kDarkSurfaceColor,
-            color: AppColors.kWhite.withOpacity(0.15),
+            color: AppColors.kWhite.withValues(alpha: .15),
           ),
           SizedBox(width: AppSpacing.tenHorizontal),
         ],

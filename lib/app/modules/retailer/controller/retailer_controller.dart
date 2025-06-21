@@ -15,8 +15,7 @@ class RetailerController extends GetxController {
   var errorMessage = ''.obs;
   var filteredRetailers = <Retailer>[].obs;
 
-  final PagingController<int, Retailer> pagingController =
-      PagingController(firstPageKey: 1);
+  late final PagingController<int, Retailer> pagingController;
 
   static const int pageSize = 10;
   var searchQuery = ''.obs;
@@ -47,26 +46,14 @@ class RetailerController extends GetxController {
       initialOrderBy: 'retailer_name',
     );
 
-    pagingController.addPageRequestListener((pageKey) {
-      print(
-          "Page Request Listener Triggered: ${filterController!.selectedOrderBy.value}");
-      fetchFarmers(pageKey, pagingController);
-    });
-
-    // Log and refresh items when filter changes
-    filterController!.selectedOrderBy.listen((value) {
-      print('Order By changed: $value');
-      // refreshItems();
-    });
-
-    filterController!.order.listen((value) {
-      print('Order changed: $value');
-      // refreshItems();
-    });
+    pagingController = PagingController<int, Retailer>(
+      getNextPageKey: (state) =>
+          state.lastPageIsEmpty ? null : state.nextIntPageKey,
+      fetchPage: (pageKey) => fetchRetailer(pageKey),
+    );
   }
 
-  void fetchFarmers(
-      int pageKey, PagingController<int, Retailer> pagingController) async {
+  Future<List<Retailer>> fetchRetailer(int pageKey) async {
     print("Fetching retailers for page: $pageKey");
     try {
       if (pageKey == 1) {
@@ -104,21 +91,15 @@ class RetailerController extends GetxController {
           return !isDuplicate;
         }).toList();
 
-        final isLastPage = pageKey >= response.data['total_pages'];
-        if (isLastPage) {
-          pagingController.appendLastPage(uniqueRetailers);
-        } else {
-          final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueRetailers, nextPageKey);
-        }
+        return uniqueRetailers;
       } else {
         throw Exception('Failed to load retailers');
       }
     } catch (e) {
       isListError(true);
       listErrorMessage.value = e.toString();
-      pagingController.error = e;
       print('Error fetching retailers: $e');
+      rethrow;
     } finally {
       isListLoading(false);
     }

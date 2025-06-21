@@ -168,7 +168,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Create Dealer Stock',
 //           style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
@@ -233,11 +233,11 @@
 //                                 padding: EdgeInsets.all(8.w),
 //                                 width: double.infinity,
 //                                 decoration: BoxDecoration(
-//                                   color: AppColors.kSecondary.withOpacity(0.1),
+//                                   color: AppColors.kSecondary.   withValues(alpha:0.1),
 //                                   borderRadius: BorderRadius.circular(10.r),
 //                                   border: Border.all(
 //                                     color:
-//                                         AppColors.kSecondary.withOpacity(0.5),
+//                                         AppColors.kSecondary.   withValues(alpha:0.5),
 //                                   ),
 //                                 ),
 //                                 child: Text(
@@ -642,8 +642,8 @@ import '../../../model/master/customer_model.dart';
 import '../../widgets/dialog/confirmation.dart';
 import '../../widgets/dialog/error.dart';
 import '../../widgets/dialog/loading.dart';
-import '../../widgets/form_field.dart/form_field.dart';
-import '../../widgets/form_field.dart/form_hader.dart';
+import '../../widgets/form_field/form_field.dart';
+import '../../widgets/form_field/form_hader.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../components/multi_select_dropdown/customer_multi_select_dropdown.dart';
@@ -772,7 +772,7 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Create Dealer Stock',
           style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
@@ -837,11 +837,12 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                                 padding: EdgeInsets.all(8.w),
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: AppColors.kSecondary.withOpacity(0.1),
+                                  color: AppColors.kSecondary
+                                      .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(10.r),
                                   border: Border.all(
-                                    color:
-                                        AppColors.kSecondary.withOpacity(0.5),
+                                    color: AppColors.kSecondary
+                                        .withValues(alpha: 0.5),
                                   ),
                                 ),
                                 child: Text(
@@ -921,8 +922,8 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                             ),
                             const SizedBox(height: 16),
                             CustomTextField(
-                              labelText: 'Expense',
-                              hintText: 'Enter the expense',
+                              labelText: 'Value',
+                              hintText: 'Enter the value',
                               icon: Icons.currency_rupee,
                               controller: expenseController,
                               keyboardType: TextInputType.numberWithOptions(
@@ -935,7 +936,7 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                               ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter the expense';
+                                  return 'Please enter the value';
                                 }
                                 if (double.tryParse(value) == null) {
                                   return 'Enter a valid number';
@@ -950,6 +951,7 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                       const SizedBox(height: 16),
                       PrimaryContainer(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
                               text: 'Other\'s Details',
@@ -973,6 +975,8 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                               keyboardType: TextInputType.text,
                             ),
                             SizedBox(height: 16.h),
+                            Text('Upload Image:*'),
+                            SizedBox(height: 8.h),
                             GestureDetector(
                               onTap: () => _showImagePickerOptions(context),
                               child: Container(
@@ -982,7 +986,10 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                                 decoration: BoxDecoration(
                                   color: AppColors.kInput,
                                   borderRadius: BorderRadius.circular(10.r),
-                                  border: Border.all(color: Colors.grey),
+                                  border: Border.all(
+                                      color: _selectedImagePath == null
+                                          ? AppColors.kAccent7
+                                          : Colors.grey),
                                 ),
                                 child: _selectedImagePath == null
                                     ? Center(
@@ -1035,6 +1042,12 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                               controller: _remarksController,
                               keyboardType: TextInputType.text,
                               maxLines: 3,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the remarks';
+                                }
+                                return null;
+                              },
                             ),
                           ],
                         ),
@@ -1070,6 +1083,12 @@ class _CreateFormCpageState extends State<CreateFormCpage> {
                       Get.snackbar(
                           'Error', 'Please select at least one product.',
                           snackPosition: SnackPosition.BOTTOM);
+                      return;
+                    }
+
+                    if (_selectedImagePath == null) {
+                      Get.snackbar("Error", "Please upload an attachment.",
+                          backgroundColor: Colors.red, colorText: Colors.white);
                       return;
                     }
 

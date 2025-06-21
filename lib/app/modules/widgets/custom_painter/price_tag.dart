@@ -30,7 +30,7 @@ class PriceTagPaint extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = AppColors.kPrimary.withOpacity(0.15)
+      ..color = AppColors.kPrimary.withValues(alpha: 0.15)
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.fill;
 

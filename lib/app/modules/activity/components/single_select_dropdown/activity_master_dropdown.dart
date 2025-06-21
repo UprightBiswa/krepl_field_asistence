@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../../../widgets/form_field/single_selected_dropdown.dart';
 import '../../controller/activity_master_controller.dart';
 import '../../model/activity_master_model.dart';
 

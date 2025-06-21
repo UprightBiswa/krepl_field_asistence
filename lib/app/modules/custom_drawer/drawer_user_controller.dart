@@ -150,7 +150,7 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                     color: AppColors.kWhite,
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: AppColors.kHint.withOpacity(0.6),
+                          color: AppColors.kHint.withValues(alpha: 0.6),
                           blurRadius: 24),
                     ],
                   ),
@@ -186,7 +186,8 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                                 width: 40.w,
                                 margin: EdgeInsets.all(10.h),
                                 decoration: BoxDecoration(
-                                  color: AppColors.kWhite.withOpacity(0.15),
+                                  color:
+                                      AppColors.kWhite.withValues(alpha: 0.15),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Center(

@@ -19,8 +19,6 @@ class PicProfileImgWidget extends StatefulWidget {
 
 class _PicProfileImgWidgetState extends State<PicProfileImgWidget> {
   String _selectedImagePath = '';
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
 
   void _showImagePickerOptions(BuildContext context) {
     showModalBottomSheet(
@@ -86,9 +84,7 @@ class _PicProfileImgWidgetState extends State<PicProfileImgWidget> {
               children: [
                 Center(
                   child: CircleAvatar(
-                    backgroundColor: isDarkMode(context)
-                        ? AppColors.kDarkContiner
-                        : AppColors.kWhite,
+                    backgroundColor: AppColors.kWhite,
                     radius: 60,
                     backgroundImage: _selectedImagePath.isEmpty
                         ? const NetworkImage(
@@ -104,9 +100,7 @@ class _PicProfileImgWidgetState extends State<PicProfileImgWidget> {
                   backgroundColor: AppColors.kPrimary,
                   child: Icon(
                     Icons.add,
-                    color: isDarkMode(context)
-                        ? AppColors.kWhite
-                        : AppColors.kDarkContiner,
+                    color: AppColors.kDarkContiner,
                   ),
                 )
               ],

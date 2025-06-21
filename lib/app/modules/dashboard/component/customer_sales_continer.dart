@@ -8,7 +8,7 @@ import '../../../model/login/user_details_reponse.dart';
 import '../../widgets/loading/shimmer_activity_card.dart';
 import '../controllers/activity_controller.dart';
 import '../customer_sales_view_page.dart';
-import '../model/cutomer _sales_data.dart';
+import '../model/cutomer_sales_data.dart';
 
 class CustomerSalesContainer extends StatefulWidget {
   final UserDetails userDetails;
@@ -26,8 +26,7 @@ class CustomerSalesContainer extends StatefulWidget {
 
 class _CustomerSalesContainerState extends State<CustomerSalesContainer> {
   final ActivityController controller = Get.put(ActivityController());
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -67,8 +66,7 @@ class CustomerSalesListView extends StatelessWidget {
     required this.controller,
     required this.isYtd,
   });
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {

@@ -55,4 +55,8 @@ class TourRouteController extends GetxController {
       isLoadingList.value = false;
     }
   }
+
+  List<TourRouteMaster> getRoutesByIds(List<int> id) {
+    return routeList.where((r) => id.contains(r.id)).toList();
+  }
 }

@@ -56,12 +56,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
     ];
   }
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: AppColors.kWhite.withOpacity(0.2),
+      // backgroundColor: AppColors.kWhite.withValues(alpha: .2),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -96,7 +94,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               shape: BoxShape.circle,
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
-                                    color: AppColors.kHint.withOpacity(0.6),
+                                    color:
+                                        AppColors.kHint.withValues(alpha: .6),
                                     offset: const Offset(2.0, 4.0),
                                     blurRadius: 8),
                               ],
@@ -117,9 +116,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'KRISHAJ SAHAYAK',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color: isDarkMode(context)
-                            ? AppColors.kHint
-                            : AppColors.kPrimary,
+                        color: AppColors.kPrimary,
                         fontSize: 18,
                       ),
                     ),
@@ -133,7 +130,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Divider(
             height: 1,
-            color: AppColors.kHint.withOpacity(0.6),
+            color: AppColors.kHint.withValues(alpha: .6),
           ),
           Expanded(
             child: ListView.builder(
@@ -147,7 +144,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Divider(
             height: 1,
-            color: AppColors.kHint.withOpacity(0.6),
+            color: AppColors.kHint.withValues(alpha: .6),
           ),
           Column(
             children: <Widget>[
@@ -178,7 +175,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
       SettingsView(
         userDetails: widget.userDetails,
       ),
-      transition: Transition.rightToLeftWithFade,
     );
   }
 
@@ -186,7 +182,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        splashColor: Colors.grey.withOpacity(0.1),
+        splashColor: Colors.grey.withValues(alpha: .1),
         highlightColor: Colors.transparent,
         onTap: () {
           navigationtoScreen(listData.index!);
@@ -219,9 +215,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     listData.icon?.icon,
                     color: widget.screenIndex == listData.index
                         ? AppColors.kPrimary
-                        : isDarkMode(context)
-                            ? AppColors.kWhite
-                            : AppColors.kDarkHint,
+                        : AppColors.kDarkHint,
                   ),
                   const Padding(
                     padding: EdgeInsets.all(4.0),
@@ -232,12 +226,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                         color: widget.screenIndex == listData.index
-                            ? isDarkMode(context)
-                                ? AppColors.kPrimary
-                                : AppColors.kPrimary
-                            : isDarkMode(context)
-                                ? AppColors.kWhite
-                                : AppColors.kDarkHint),
+                            ? AppColors.kPrimary
+                            : AppColors.kDarkHint),
                     textAlign: TextAlign.left,
                   ),
                 ],
@@ -262,9 +252,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                 MediaQuery.of(context).size.width * 0.75 - 64,
                             height: 46,
                             decoration: BoxDecoration(
-                              color: isDarkMode(context)
-                                  ? AppColors.kPrimary.withOpacity(0.2)
-                                  : AppColors.kPrimary.withOpacity(0.2),
+                              color: AppColors.kPrimary.withValues(alpha: .2),
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(0),
                                 topRight: Radius.circular(28),

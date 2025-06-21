@@ -1,8 +1,8 @@
 import 'package:field_asistence/app/model/master/crop_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../controllers/master_controller.dart/crop_controller.dart';
-import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../../../../controllers/master_controller/crop_controller.dart';
+import '../../../widgets/form_field/single_selected_dropdown.dart';
 import 'activity_master_dropdown.dart';
 
 class CropSingleSelectionWidget<T> extends StatefulWidget {

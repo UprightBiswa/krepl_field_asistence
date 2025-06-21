@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
+import '../widgets/buttons/custom_button.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'components/tour_list_view.dart';
 import 'model/tour_list_model.dart';
+import 'tour_plan_edit_page.dart';
 
 class TourPlanDetailsPage extends StatelessWidget {
   final TourPlan tourPlan;
@@ -22,7 +24,7 @@ class TourPlanDetailsPage extends StatelessWidget {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Tour Details',
           style: AppTypography.kBold14.copyWith(
@@ -30,6 +32,24 @@ class TourPlanDetailsPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        action: [
+          CustomButton(
+            icon: Icons.edit,
+            text: 'Edit Tour',
+            isBorder: true,
+            onTap: () async {
+              await Get.to(
+                () => TourPlanEditPage(
+                  tourPlan: tourPlan,
+                ),
+              );
+              Get.back();
+            },
+          ),
+          SizedBox(
+            width: 10,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.h),
@@ -52,7 +72,7 @@ class TourPlanDetailsPage extends StatelessWidget {
             // Village Details
             _buildListSection(
               title: 'Villages Covered:',
-              items: tourPlan.village,
+              items: tourPlan.villageNames,
             ),
 
             SizedBox(height: 16.h),
@@ -60,7 +80,7 @@ class TourPlanDetailsPage extends StatelessWidget {
             // Route Details
             _buildListSection(
               title: 'Routes:',
-              items: tourPlan.route,
+              items: tourPlan.routeNames,
             ),
 
             SizedBox(height: 16.h),
@@ -68,7 +88,7 @@ class TourPlanDetailsPage extends StatelessWidget {
             // Activity Details
             _buildListSection(
               title: 'Activities:',
-              items: tourPlan.activity,
+              items: tourPlan.activityNames,
             ),
 
             SizedBox(height: 16.h),

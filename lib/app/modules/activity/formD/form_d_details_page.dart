@@ -28,7 +28,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Demonstration Details',
 //           style: AppTypography.kBold14.copyWith(
@@ -250,9 +250,6 @@ class FormDDetailPage extends StatelessWidget {
 
   const FormDDetailPage({super.key, required this.formD});
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   String formDtDate(String dateStr) {
     try {
       final DateTime date = DateTime.parse(dateStr);
@@ -281,8 +278,8 @@ class FormDDetailPage extends StatelessWidget {
                   _buildDetailCard('Party Type', formD.partyType),
                   _buildDetailCard('Dosage', formD.dosages),
                   _buildDetailCard('Demo Area', formD.areaOfDemo),
-                  _buildDetailCard('Total Area', formD.totalAreaCover),
-                  _buildDetailCard('Expense', formD.expense),
+                  _buildDetailCard('Total Acre', formD.totalAreaCover),
+                  _buildDetailCard('Value', formD.expense),
                   _buildDetailCard('Activity Performed Date',
                       formDtDate(formD.activityPerformedDate)),
                   _buildDetailCard(
@@ -316,7 +313,7 @@ class FormDDetailPage extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: 200.h,
-            color: AppColors.kPrimary.withOpacity(0.9),
+            color: AppColors.kPrimary.withValues(alpha: 0.9),
             child: Center(
               child: Text(
                 'Demonstration Details',
@@ -454,7 +451,8 @@ class FormDDetailPage extends StatelessWidget {
                     .map(
                       (item) => Chip(
                         label: Text(item, style: TextStyle(fontSize: 12.sp)),
-                        backgroundColor: AppColors.kPrimary.withOpacity(0.1),
+                        backgroundColor:
+                            AppColors.kPrimary.withValues(alpha: 0.1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
                         ),

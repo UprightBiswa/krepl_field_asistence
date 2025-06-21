@@ -16,22 +16,28 @@ class FormAListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, FormA>(
-      pagingController: pagingController,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      builderDelegate: PagedChildBuilderDelegate<FormA>(
-        itemBuilder: (context, formA, index) => GestureDetector(
-          onTap: () => Get.to(() => FormADetailPage(formA: formA)),
-          child: FormACard(formA: formA),
-        ),
-        firstPageErrorIndicatorBuilder: (context) =>
-            const Center(child: Text('Failed to load data')),
-        noItemsFoundIndicatorBuilder: (context) =>
-            const Center(child: Text('No data available')),
-        newPageProgressIndicatorBuilder: (context) =>
-            const Center(child: CircularProgressIndicator()),
-      ),
+    return PagingListener<int, FormA>(
+      controller: pagingController,
+      builder: (context, state, fetchNextPage) {
+        return PagedListView<int, FormA>(
+          state: state,
+          fetchNextPage: fetchNextPage,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          builderDelegate: PagedChildBuilderDelegate<FormA>(
+            itemBuilder: (context, formA, index) => GestureDetector(
+              onTap: () => Get.to(() => FormADetailPage(formA: formA)),
+              child: FormACard(formA: formA),
+            ),
+            firstPageErrorIndicatorBuilder: (context) =>
+                const Center(child: Text('Failed to load data')),
+            noItemsFoundIndicatorBuilder: (context) =>
+                const Center(child: Text('No data available')),
+            newPageProgressIndicatorBuilder: (context) =>
+                const Center(child: CircularProgressIndicator()),
+          ),
+        );
+      },
     );
   }
 }
@@ -54,7 +60,7 @@ class FormACard extends StatelessWidget {
               // Circle Avatar for initials
               CircleAvatar(
                 radius: 30.r,
-                backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                backgroundColor: AppColors.kPrimary.withValues(alpha: 0.15),
                 child: const Icon(
                   Icons.campaign,
                   color: AppColors.kPrimary,
@@ -90,7 +96,7 @@ class FormACard extends StatelessWidget {
           ),
           // Divider
           Divider(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             thickness: 1.h,
             height: 25.h,
           ),
@@ -132,7 +138,7 @@ class FormACard extends StatelessWidget {
                   ),
                   SizedBox(width: 5.w),
                   Text(
-                    'Total Expense:',
+                    'Total Value:',
                     style: AppTypography.kMedium14,
                   ),
                 ],

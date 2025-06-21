@@ -17,4 +17,12 @@ class TourRouteMaster {
       routeName: map['route_name'] ?? '',
     );
   }
+  //fromJson
+  factory TourRouteMaster.fromJson(Map<String, dynamic> json) {
+    return TourRouteMaster(
+      id: json['id'],
+      routeCode: json['route_code']?? '',
+      routeName: json['route_name'] ??'',
+    );
+  }
 }

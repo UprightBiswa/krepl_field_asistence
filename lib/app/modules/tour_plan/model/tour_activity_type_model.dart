@@ -18,7 +18,6 @@ class TourActivity {
     );
   }
 
-  // Method to convert Activity object to JSON (if needed later)
   Map<String, dynamic> toJson() {
     return {
       'id': id,

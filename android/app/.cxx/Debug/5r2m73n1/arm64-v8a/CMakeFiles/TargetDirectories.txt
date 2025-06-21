@@ -1,0 +1,2 @@
+D:/indigi/flutter/field_asistence/android/app/.cxx/Debug/5r2m73n1/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/indigi/flutter/field_asistence/android/app/.cxx/Debug/5r2m73n1/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../../data/helpers/internet/connectivity_services.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import '../../home/model/menu_group.dart';
-import '../model/cutomer _sales_data.dart';
+import '../model/cutomer_sales_data.dart';
 import '../model/data_model.dart';
 
 class ActivityController extends GetxController {

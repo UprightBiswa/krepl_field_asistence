@@ -192,7 +192,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Create POP Material',
 //           style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
@@ -888,10 +888,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import '../../../controllers/master_controller.dart/crop_controller.dart';
-import '../../../controllers/master_controller.dart/crop_stage_controller.dart';
-import '../../../controllers/master_controller.dart/pest_controller.dart';
-import '../../../controllers/master_controller.dart/pop_meterial_controller.dart';
+import '../../../controllers/master_controller/crop_controller.dart';
+import '../../../controllers/master_controller/crop_stage_controller.dart';
+import '../../../controllers/master_controller/pest_controller.dart';
+import '../../../controllers/master_controller/pop_meterial_controller.dart';
 import '../../../data/constrants/constants.dart';
 import '../../../data/helpers/data/image_doctor_url.dart';
 import '../../../model/master/crop_model.dart';
@@ -901,9 +901,9 @@ import '../../../model/master/villages_model.dart';
 import '../../widgets/dialog/confirmation.dart';
 import '../../widgets/dialog/error.dart';
 import '../../widgets/dialog/loading.dart';
-import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
-import '../../widgets/form_field.dart/form_field.dart';
-import '../../widgets/form_field.dart/form_hader.dart';
+import '../../widgets/form_field/dynamic_dropdown_input_field.dart';
+import '../../widgets/form_field/form_field.dart';
+import '../../widgets/form_field/form_hader.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../components/multi_select_dropdown/product_multi_selection.dart';
@@ -1055,7 +1055,7 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Create POP Material',
           style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
@@ -1388,8 +1388,8 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                             }),
                             const SizedBox(height: 16),
                             CustomTextField(
-                              labelText: 'Expense',
-                              hintText: 'Enter the expense',
+                              labelText: 'Value',
+                              hintText: 'Enter the value',
                               inputFormatter: [
                                 FilteringTextInputFormatter.allow(
                                   RegExp(r'^\d+\.?\d{0,2}'),
@@ -1401,7 +1401,7 @@ class _CreateFormEpageState extends State<CreateFormEpage> {
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter the expense';
+                                  return 'Please enter the value';
                                 }
                                 return null;
                               },

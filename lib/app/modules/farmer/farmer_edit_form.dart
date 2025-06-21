@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/master_controller.dart/village_controller.dart';
+import '../../controllers/master_controller/village_controller.dart';
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
 import '../../model/master/villages_model.dart';
@@ -18,9 +18,9 @@ import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
-import '../widgets/form_field.dart/form_field.dart';
-import '../widgets/form_field.dart/form_hader.dart';
-import '../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../widgets/form_field/form_field.dart';
+import '../widgets/form_field/form_hader.dart';
+import '../widgets/form_field/single_selected_dropdown.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/farmer_controller.dart';
@@ -162,7 +162,6 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
         TextEditingController(text: widget.farmer.fatherName ?? '');
     _mobileController =
         TextEditingController(text: widget.farmer.mobileNo ?? '');
-    // _pinController = TextEditingController(text: widget.farmer.pin ?? '');
     _postOfficeController =
         TextEditingController(text: widget.farmer.officeName ?? '');
     _subDistController =
@@ -175,11 +174,9 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
     _buffaloCountController =
         TextEditingController(text: widget.farmer.buffalo ?? '');
 
-    // Fetch workplace code and name from AuthState
     final workplaceCode = await authState.getWorkplaceCode();
     final workplaceName = await authState.getWorkplaceName();
 
-    // Update controllers with the fetched values
     setState(() {
       _workPlaceCodeController.text = workplaceCode ?? '';
       _workPlaceNameController.text = workplaceName ?? '';
@@ -192,7 +189,6 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
     _fatherNameController.dispose();
     _mobileController.dispose();
     _acreController.dispose();
-    // _pinController.dispose();
     _villageController.dispose();
     _postOfficeController.dispose();
     _subDistController.dispose();
@@ -230,9 +226,6 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
     }
   }
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -241,15 +234,11 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'Farmer Edit Form',
           style: AppTypography.kBold24.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
       ),
@@ -466,18 +455,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                                 );
                               }
                             }),
-                            // VillageSingleSelectionWidget(
-                            //   onVillageSelected: _onVillageSelected,
-                            //   selectedItem: _selectedVillage,
-                            //   validator: (selected) {
-                            //     if (selected == null) {
-                            //       return "Please select a village";
-                            //     }
-                            //     return null;
-                            //   },
-                            // ),
                             if (_selectedVillage == null) ...[
-                              //show text veldaition
                               const Padding(
                                 padding: EdgeInsets.only(top: 8.0, left: 8.0),
                                 child: Text(
@@ -487,26 +465,6 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                                 ),
                               ),
                             ],
-                            // SizedBox(height: 20.h),
-
-                            // CustomTextField(
-                            //   readonly: true,
-                            //   labelText: "PIN Code",
-                            //   hintText: "Enter the PIN code",
-                            //   icon: Icons.pin_drop,
-                            //   controller: _pinController,
-                            //   inputFormatter: [
-                            //     FilteringTextInputFormatter.digitsOnly,
-                            //     LengthLimitingTextInputFormatter(6),
-                            //   ],
-                            //   keyboardType: TextInputType.number,
-                            //   validator: (value) {
-                            //     if (value == null || value.isEmpty) {
-                            //       return 'Please enter the PIN code';
-                            //     }
-                            //     return null;
-                            //   },
-                            // ),
                             SizedBox(height: 20.h),
                             CustomTextField(
                               readonly: true,
@@ -609,12 +567,12 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(10),
                               ],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the number of cows';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please enter the number of cows';
+                              //   }
+                              //   return null;
+                              // },
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
@@ -627,12 +585,12 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(10),
                               ],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the number of buffaloes';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please enter the number of buffaloes';
+                              //   }
+                              //   return null;
+                              // },
                             ),
                             SizedBox(height: 20.h),
                             CustomTextField(
@@ -678,8 +636,7 @@ class _FarmerEditFormState extends State<FarmerEditForm> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
-          color:
-              isDarkMode(context) ? AppColors.kDarkContiner : AppColors.kWhite,
+          color: AppColors.kWhite,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Row(

@@ -8,9 +8,9 @@ import '../../model/master/villages_model.dart';
 import '../../model/workplace/workplace_model.dart';
 import '../activity/components/multi_select_dropdown/village_multi_selecton_dropdown.dart';
 import '../widgets/containers/primary_container.dart';
-import '../widgets/form_field.dart/form_field.dart';
+import '../widgets/form_field/form_field.dart';
 import '../widgets/widgets.dart';
-import '../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../widgets/form_field/dynamic_dropdown_input_field.dart';
 
 class RouteFormPage extends StatefulWidget {
   const RouteFormPage({super.key});
@@ -39,8 +39,6 @@ class _RouteFormPageState extends State<RouteFormPage> {
 
   DateTime? fromDate;
   DateTime? toDate;
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
 
   Future<void> _selectDateRange(BuildContext context) async {
     DateTimeRange? newDateRange = await showDateRangePicker(
@@ -242,9 +240,7 @@ class _RouteFormPageState extends State<RouteFormPage> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
-          color: isDarkMode(context)
-              ? AppColors.kDarkSurfaceColor
-              : AppColors.kInput,
+          color: AppColors.kInput,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Row(

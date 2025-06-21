@@ -12,8 +12,8 @@ class ExpenseController extends GetxController {
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
-  final PagingController<int, Expense> pagingController =
-      PagingController(firstPageKey: 1);
+  late final PagingController<int, Expense> pagingController;
+
   static const int pageSize = 10;
   Timer? _debounce;
   final Set<int> _existingItemIds = <int>{};
@@ -29,12 +29,14 @@ class ExpenseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    pagingController.addPageRequestListener((pageKey) {
-      fetchExpenses(pageKey);
-    });
+    pagingController = PagingController<int, Expense>(
+      getNextPageKey: (state) =>
+          state.lastPageIsEmpty ? null : state.nextIntPageKey,
+      fetchPage: (pageKey) => fetchExpenses(pageKey),
+    );
   }
 
-  Future<void> fetchExpenses(int pageKey) async {
+  Future<List<Expense>> fetchExpenses(int pageKey) async {
     try {
       if (pageKey == 1) {
         isListLoading(true);
@@ -77,22 +79,15 @@ class ExpenseController extends GetxController {
           return !isDuplicate;
         }).toList();
 
-        final isLastPage = pageKey >= response.data['total_pages'];
-        if (isLastPage) {
-          pagingController.appendLastPage(uniqueExpenseList);
-        } else {
-          final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueExpenseList, nextPageKey);
-        }
+        return uniqueExpenseList;
       } else {
         listErrorMessage.value = "Failed to load data";
-        pagingController.error = listErrorMessage.value;
         throw Exception('Failed to load data');
       }
     } catch (e) {
       isListError(true);
       listErrorMessage.value = e.toString();
-      pagingController.error = e;
+      rethrow;
     } finally {
       isListLoading(false);
     }

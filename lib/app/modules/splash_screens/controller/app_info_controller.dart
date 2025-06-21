@@ -75,8 +75,9 @@ class AppInfoController extends GetxController {
       actions: [
         TextButton(
           onPressed: () {
-            Get.offAll(() => const SignIn(),
-                transition: Transition.rightToLeftWithFade);
+            Get.offAll(
+              () => const SignIn(),
+            );
           },
           child: const Text('Login'),
         ),

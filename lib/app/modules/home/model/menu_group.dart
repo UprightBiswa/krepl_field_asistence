@@ -23,7 +23,6 @@ import '../../tour_plan/tour_plan_manage_page.dart';
 class RandomColorGenerator {
   final Random _random = Random();
   Color generateColor() {
-    // Generate random colors
     return Color.fromARGB(
       255,
       _random.nextInt(256),
@@ -35,8 +34,8 @@ class RandomColorGenerator {
   // Generate a random gradient
   LinearGradient generateGradient() {
     return LinearGradient(colors: [
-      generateColor().withOpacity(0.5),
-      generateColor().withOpacity(0.5)
+      generateColor().withValues(alpha: .5),
+      generateColor().withValues(alpha: .5)
     ]);
   }
 
@@ -85,23 +84,20 @@ List<MenuItem> reportMenuItems = [
   MenuItem(
     title: 'Farmer Registration',
     icon: Icons.agriculture, // Example icon
-    onTap: () {
-      Get.to<void>(
+    onTap: () async {
+      await Get.to(
         () => const FarmerManagementPage(),
-        transition: Transition.rightToLeftWithFade,
-      )!
-          .then((value) {
-        _farmerController.fetchRecentFarmers();
-      });
+      );
+
+      _farmerController.fetchRecentFarmers();
     },
   ),
   MenuItem(
     title: 'Doctor Registration',
     icon: Icons.local_hospital, // Example icon
-    onTap: () {
-      Get.to<void>(
+    onTap: () async {
+      await Get.to(
         () => const DoctorManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
@@ -109,60 +105,55 @@ List<MenuItem> reportMenuItems = [
     title: 'Tour Plan Management',
     icon: Icons.map, // Example icon
     onTap: () {
-      Get.to<void>(
+      Get.to(
         () => const TourPlanManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
   MenuItem(
     title: 'Activity Summary',
     icon: Icons.analytics,
-    onTap: () {
-      Get.to<void>(
+    onTap: () async {
+      await Get.to(
         () => const ActivitySummaryPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
   MenuItem(
     title: 'Activity',
     icon: Icons.event, // Example icon
-    onTap: () {
-      Get.to<void>(
+    onTap: () async {
+      await Get.to(
         () => const ActivityReportPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
   MenuItem(
     title: 'Customer',
     icon: Icons.person_pin, // Example icon
-    onTap: () {
-      Get.to<void>(
+    onTap: () async {
+      await Get.to(
         () => const CustomerReportPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
   MenuItem(
     title: 'Retailer',
     icon: Icons.store, // Example icon
-    onTap: () {
-      Get.to(() => const RetailerManagementPage(),
-              transition: Transition.rightToLeftWithFade)!
-          .then((value) {
-        _farmerController.fetchRecentFarmers();
-      });
+    onTap: () async {
+      await Get.to(
+        () => const RetailerManagementPage(),
+      );
+
+      _farmerController.fetchRecentFarmers();
     },
   ),
   MenuItem(
     title: 'Route Plan',
-    icon: Icons.route, // Example icon
+    icon: Icons.route,
     onTap: () {
-      Get.to<void>(
+      Get.to(
         () => const RoutePlanManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
@@ -170,10 +161,8 @@ List<MenuItem> reportMenuItems = [
     title: 'Demo',
     icon: Icons.play_circle_fill, // Example icon
     onTap: () {
-      // Handle navigation to Demo page DemoReportPage
-      Get.to<void>(
+      Get.to(
         () => const DemoReportPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
@@ -184,9 +173,8 @@ List<MenuItem> formMenuItems = [
     title: 'Activity Management',
     icon: Icons.local_activity_outlined, // Example icon
     onTap: () {
-      Get.to<void>(
+      Get.to(
         () => const FormAManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
@@ -194,10 +182,8 @@ List<MenuItem> formMenuItems = [
     title: 'Jeep Campaign',
     icon: Icons.campaign_outlined, // Example icon
     onTap: () {
-      //
-      Get.to<void>(
+      Get.to(
         () => const FormBManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
@@ -205,9 +191,8 @@ List<MenuItem> formMenuItems = [
     title: 'Dealer Stock',
     icon: Icons.inventory_rounded, // Example icon
     onTap: () {
-      Get.to<void>(
+      Get.to(
         () => const FormCManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
@@ -215,9 +200,8 @@ List<MenuItem> formMenuItems = [
     title: 'Demonstration Management',
     icon: Icons.preview_outlined, // Example icon
     onTap: () {
-      Get.to<void>(
+      Get.to(
         () => const FormDManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
@@ -225,21 +209,19 @@ List<MenuItem> formMenuItems = [
     title: 'POP Management',
     icon: Icons.pages, // Example icon
     onTap: () {
-      Get.to<void>(
+      Get.to(
         () => const FormEManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
   MenuItem(
     title: 'Farmer Management',
     icon: Icons.agriculture_rounded, // Example icon
-    onTap: () {
-      Get.to(() => const FarmerManagementPage(),
-              transition: Transition.rightToLeftWithFade)!
-          .then((value) {
-        _farmerController.fetchRecentFarmers();
-      });
+    onTap: () async {
+      await Get.to(
+        () => const FarmerManagementPage(),
+      );
+      _farmerController.fetchRecentFarmers();
     },
   ),
 ];
@@ -249,24 +231,19 @@ List<MenuItem> shortcutMenuItems = [
   MenuItem(
     title: 'Farmer Management',
     icon: Icons.person_add,
-    onTap: () {
-      Get.to<void>(
+    onTap: () async {
+      await Get.to(
         () => const FarmerManagementPage(),
-        transition: Transition.rightToLeftWithFade,
-      )!
-          .then((value) {
-        _farmerController.fetchRecentFarmers();
-      });
+      );
+      _farmerController.fetchRecentFarmers();
     },
   ),
   MenuItem(
     title: 'Tour Plan Management',
     icon: Icons.map,
     onTap: () {
-      // Handle navigation to Tour Plan page
-      Get.to<void>(
-        () => const TourPlanManagementPage(),
-        transition: Transition.rightToLeftWithFade,
+      Get.to(
+        (() => const TourPlanManagementPage()),
       );
     },
   ),
@@ -274,15 +251,13 @@ List<MenuItem> shortcutMenuItems = [
     title: 'Expense Management',
     icon: Icons.currency_rupee_rounded,
     onTap: () {
-      Get.to<void>(
+      Get.to(
         () => const ExpenseManagementPage(),
-        transition: Transition.rightToLeftWithFade,
       );
     },
   ),
 ];
 
-// Creating menu groups with headings
 MenuGroup reportMenuGroup = MenuGroup(
   heading: Heading(title: 'Reports Management'),
   menuItems: reportMenuItems,

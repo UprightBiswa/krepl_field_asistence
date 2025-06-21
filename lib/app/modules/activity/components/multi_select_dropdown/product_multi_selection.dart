@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
-import '../../../../controllers/master_controller.dart/product_master_controller.dart';
+import '../../../../controllers/master_controller/product_master_controller.dart';
 import '../../../../data/constrants/constants.dart';
 import '../../../../model/master/product_master.dart';
 import '../../../home/components/search_field.dart';
@@ -37,9 +37,6 @@ class _MultiProductMasterSelectorState<T>
     super.initState();
     selectedItems = List<ProductMaster>.from(widget.selectedItems);
   }
-
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
 
   bool isValid() {
     if (selectedItems.isEmpty) {
@@ -92,9 +89,7 @@ class _MultiProductMasterSelectorState<T>
               border: Border.all(
                 color: validationError != null ? Colors.red : Colors.grey,
               ),
-              color: isDarkMode(context)
-                  ? AppColors.kContentColor
-                  : AppColors.kInput,
+              color: AppColors.kInput,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(

@@ -16,22 +16,27 @@ class FormCListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, FormC>(
-      pagingController: pagingController,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      builderDelegate: PagedChildBuilderDelegate<FormC>(
-        itemBuilder: (context, formC, index) => GestureDetector(
-            onTap: () => Get.to(() => FormCDetailPage(formC: formC)),
-            child: FormCCard(formC: formC)),
-        firstPageErrorIndicatorBuilder: (context) =>
-            const Center(child: Text('Failed to load data')),
-        noItemsFoundIndicatorBuilder: (context) =>
-            const Center(child: Text('No data available')),
-        newPageProgressIndicatorBuilder: (context) =>
-            const Center(child: CircularProgressIndicator()),
-      ),
-    );
+    return PagingListener<int, FormC>(
+        controller: pagingController,
+        builder: (context, state, fetchNextPage) {
+          return PagedListView<int, FormC>(
+            state: state,
+            fetchNextPage: fetchNextPage,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            builderDelegate: PagedChildBuilderDelegate<FormC>(
+              itemBuilder: (context, formC, index) => GestureDetector(
+                  onTap: () => Get.to(() => FormCDetailPage(formC: formC)),
+                  child: FormCCard(formC: formC)),
+              firstPageErrorIndicatorBuilder: (context) =>
+                  const Center(child: Text('Failed to load data')),
+              noItemsFoundIndicatorBuilder: (context) =>
+                  const Center(child: Text('No data available')),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const Center(child: CircularProgressIndicator()),
+            ),
+          );
+        });
   }
 }
 
@@ -56,7 +61,7 @@ class FormCCard extends StatelessWidget {
               // Circle Avatar for initials
               CircleAvatar(
                 radius: 30.r,
-                backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                backgroundColor: AppColors.kPrimary.withValues(alpha: 0.15),
                 child: const Icon(
                   Icons.campaign,
                   color: AppColors.kPrimary,
@@ -92,7 +97,7 @@ class FormCCard extends StatelessWidget {
           ),
           // Divider
           Divider(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             thickness: 1.h,
             height: 25.h,
           ),
@@ -198,7 +203,7 @@ class FormCSummary extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             spreadRadius: 2,
             blurRadius: 10,
             offset: const Offset(0, 3),
@@ -216,7 +221,7 @@ class FormCSummary extends StatelessWidget {
           _VerticalDivider(),
           _SummaryColumn(
             icon: Icons.currency_rupee_sharp,
-            title: 'Total Expense', //add rupee symbol
+            title: 'Total Value', //add rupee symbol
             value: '₹$totalExpense',
           ),
           _VerticalDivider(),

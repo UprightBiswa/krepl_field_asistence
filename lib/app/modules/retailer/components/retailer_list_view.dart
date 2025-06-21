@@ -19,31 +19,36 @@ class RetailerListView extends StatefulWidget {
 class _RetailerListViewState extends State<RetailerListView> {
   @override
   Widget build(BuildContext context) {
-    return PagedListView.separated(
-      // return PagedListView<int, Farmer>(
-      pagingController: widget.pagingController,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      clipBehavior: Clip.none,
-      builderDelegate: PagedChildBuilderDelegate<Retailer>(
-        itemBuilder: (context, doctor, index) {
-          return RetailerListCard(
-            retailer: doctor,
-            index: index,
-          );
-        },
-        newPageProgressIndicatorBuilder: (_) => const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0),
-          child: Center(
-            child: CircularProgressIndicator(),
+    return PagingListener<int, Retailer>(
+      controller: widget.pagingController,
+      builder: (context, state, fetchNextPage) {
+        return PagedListView<int, Retailer>.separated(
+          state: state,
+          fetchNextPage: fetchNextPage,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          clipBehavior: Clip.none,
+          builderDelegate: PagedChildBuilderDelegate<Retailer>(
+            itemBuilder: (context, doctor, index) {
+              return RetailerListCard(
+                retailer: doctor,
+                index: index,
+              );
+            },
+            newPageProgressIndicatorBuilder: (_) => const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+            noItemsFoundIndicatorBuilder: (_) => const Center(
+              child: Text('No more items to load'),
+            ),
           ),
-        ),
-        noItemsFoundIndicatorBuilder: (_) => const Center(
-          child: Text('No more items to load'),
-        ),
-      ),
-      separatorBuilder: (context, index) => SizedBox(height: 20.h),
+          separatorBuilder: (context, index) => SizedBox(height: 20.h),
+        );
+      }
     );
   }
 }

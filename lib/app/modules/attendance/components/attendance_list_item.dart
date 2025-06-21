@@ -232,7 +232,7 @@ class AttendanceListItem extends StatelessWidget {
       content: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: AppColors.kAccent1.withOpacity(0.1),
+          color: AppColors.kAccent1.withValues(alpha: 0.1),
         ),
         height: 400, // Adjust height as needed
         width: 300, // Adjust width as needed
@@ -275,7 +275,7 @@ class AttendanceListItem extends StatelessWidget {
     );
   }
 
-  Future<void> _openRouteMapWithGetRequest(
+  Future<void> openRouteMapWithGetRequest(
       List<AttendanceSummary> locations) async {
     const String url = 'https://maps.googleapis.com/maps/api/directions/json';
 

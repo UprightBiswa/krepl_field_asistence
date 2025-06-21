@@ -25,8 +25,6 @@ class YTDTabBarData extends StatefulWidget {
 
 class _YTDTabBarDataState extends State<YTDTabBarData> {
   final ActivityController controller = Get.put(ActivityController());
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
 
   // Variable to keep track of whether to show all items or just a few
   bool showAllItems = false;

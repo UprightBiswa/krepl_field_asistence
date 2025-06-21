@@ -24,14 +24,6 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
 
   final TextEditingController textController = TextEditingController();
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-  @override
-  void initState() {
-    super.initState();
-    formDController.fetchFormDData(1);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,15 +32,11 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Demo Management',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -58,8 +46,9 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
             text: 'Add Demo',
             isBorder: true,
             onTap: () {
-              Get.to(() => const CreateFormDpage(),
-                      transition: Transition.rightToLeftWithFade)!
+              Get.to(
+                () => const CreateFormDpage(),
+              )!
                   .then(
                 (value) => formDController.refreshItems(),
               );
@@ -106,7 +95,7 @@ class _FormDManagementPageState extends State<FormDManagementPage> {
                           child: CircleAvatar(
                             radius: 20.w,
                             backgroundColor:
-                                AppColors.kPrimary.withOpacity(0.15),
+                                AppColors.kPrimary.withValues(alpha: 0.15),
                             child: const Icon(
                               Icons.filter_list,
                               color: AppColors.kPrimary,

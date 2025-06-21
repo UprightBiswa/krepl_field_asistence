@@ -24,15 +24,6 @@ class _FormBManagementPageState extends State<FormBManagementPage> {
 
   final TextEditingController textController = TextEditingController();
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
-  @override
-  void initState() {
-    super.initState();
-    formBController.fetchFormBData(1);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,15 +32,11 @@ class _FormBManagementPageState extends State<FormBManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'Jeep Campaign',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -58,12 +45,11 @@ class _FormBManagementPageState extends State<FormBManagementPage> {
             icon: Icons.add,
             text: 'Add Campaign',
             isBorder: true,
-            onTap: () {
-              Get.to(() => const CreateFormBpage(),
-                      transition: Transition.rightToLeftWithFade)!
-                  .then(
-                (value) => formBController.refreshItems(),
+            onTap: () async {
+              await Get.to(
+                () => const CreateFormBpage(),
               );
+              formBController.refreshItems();
             },
           ),
           SizedBox(
@@ -103,7 +89,8 @@ class _FormBManagementPageState extends State<FormBManagementPage> {
                     },
                     child: CircleAvatar(
                       radius: 20.w,
-                      backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                      backgroundColor:
+                          AppColors.kPrimary.withValues(alpha: .15),
                       child: const Icon(
                         Icons.filter_list,
                         color: AppColors.kPrimary,

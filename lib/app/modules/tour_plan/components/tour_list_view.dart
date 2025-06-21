@@ -3,39 +3,53 @@ import 'package:field_asistence/app/data/constrants/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../widgets/containers/primary_container.dart';
+import '../controller/tour_plan_lsit_controller.dart';
 import '../tour_plan_detils_page.dart';
 import '../model/tour_list_model.dart';
 
 class TourPlanListView extends StatelessWidget {
-  final PagingController<int, TourPlan> pagingController;
+  final TourPlanController controller = Get.find();
 
-  const TourPlanListView({super.key, required this.pagingController});
+  TourPlanListView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, TourPlan>(
-      pagingController: pagingController,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      builderDelegate: PagedChildBuilderDelegate<TourPlan>(
-        itemBuilder: (context, tourPlan, index) => GestureDetector(
-          onTap: () {
-            Get.to(() => TourPlanDetailsPage(tourPlan: tourPlan));
-          },
-          child: TourPlanListCard(tourPlan: tourPlan),
-        ),
-        firstPageErrorIndicatorBuilder: (context) =>
-            const Center(child: Text('Failed to load data')),
-        noItemsFoundIndicatorBuilder: (context) =>
-            const Center(child: Text('No data available')),
-        newPageProgressIndicatorBuilder: (context) =>
-            const Center(child: CircularProgressIndicator()),
-      ),
-    );
+    return Obx(() {
+      if (controller.isError.value) {
+        return Center(child: Text(controller.errorMessage.value));
+      }
+
+      if (controller.isLoading.value && controller.tourPlanList.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: controller.tourPlanList.length +
+            (controller.isLoadingMore.value ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index < controller.tourPlanList.length) {
+            final tourPlan = controller.tourPlanList[index];
+            return GestureDetector(
+              onTap: () async {
+                await Get.to(() => TourPlanDetailsPage(tourPlan: tourPlan));
+                controller.fetchTourPlans(refresh: true);
+              },
+              child: TourPlanListCard(tourPlan: tourPlan),
+            );
+          } else {
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+        },
+      );
+    });
   }
 }
 
@@ -58,7 +72,7 @@ class TourPlanListCard extends StatelessWidget {
               // Circle Avatar for initials
               CircleAvatar(
                 radius: 30.r,
-                backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                backgroundColor: AppColors.kPrimary.withValues(alpha: .15),
                 child: Text(
                   tourPlan.employeename.substring(0, 2).toUpperCase(),
                   style: TextStyle(
@@ -98,39 +112,10 @@ class TourPlanListCard extends StatelessWidget {
           ),
           // Divider
           Divider(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: .5),
             thickness: 1.h,
             height: 25.h,
           ),
-          // Status and Total Count
-
-          // Status
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     //show text ststus
-          //     Text(
-          //       'Status:',
-          //       style: AppTypography.kMedium14,
-          //     ),
-          //     Container(
-          //       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-          //       decoration: BoxDecoration(
-          //         color: getStatusColor(tourPlan.status).withOpacity(0.2),
-          //         borderRadius: BorderRadius.circular(8.r),
-          //       ),
-          //       child: Text(
-          //         getStatusText(tourPlan.status),
-          //         style: TextStyle(
-          //           fontSize: 14.sp,
-          //           fontWeight: FontWeight.bold,
-          //           color: getStatusColor(tourPlan.status),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // SizedBox(height: 8.h),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +141,7 @@ class TourPlanListCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withValues(alpha: .2),
                   spreadRadius: 2,
                   blurRadius: 10,
                   offset: const Offset(0, 3),
@@ -171,21 +156,21 @@ class TourPlanListCard extends StatelessWidget {
                 _SummaryColumn(
                   icon: Icons.holiday_village,
                   title: 'Total Village',
-                  value: '${tourPlan.village.length}',
+                  value: '${tourPlan.villageNames.length}',
                 ),
 
                 _VerticalDivider(),
                 _SummaryColumn(
                   icon: Icons.tour,
                   title: 'Total Route',
-                  value: '${tourPlan.route.length}',
+                  value: '${tourPlan.routeNames.length}',
                 ),
 
                 _VerticalDivider(),
                 _SummaryColumn(
                   icon: Icons.local_activity,
                   title: 'Total Activity',
-                  value: '${tourPlan.activity.length}',
+                  value: '${tourPlan.activityNames.length}',
                 ),
               ],
             ),
@@ -196,7 +181,6 @@ class TourPlanListCard extends StatelessWidget {
   }
 
   String getStatusText(int status) {
-    print('${status}');
     switch (status) {
       case 0:
         return "Pending";

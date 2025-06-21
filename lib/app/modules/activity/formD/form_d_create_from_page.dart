@@ -221,7 +221,7 @@
 //         },
 //         iconColor: isDarkMode(context)
 //             ? Colors.black
-//             : AppColors.kPrimary.withOpacity(0.15),
+//             : AppColors.kPrimary.   withValues(alpha:0.15),
 //         title: Text(
 //           'Create Demo',
 //           style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
@@ -1078,11 +1078,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import '../../../controllers/master_controller.dart/crop_controller.dart';
-import '../../../controllers/master_controller.dart/crop_stage_controller.dart';
-import '../../../controllers/master_controller.dart/get_demo_result.dart';
-import '../../../controllers/master_controller.dart/get_demo_status.dart';
-import '../../../controllers/master_controller.dart/pest_controller.dart';
+import '../../../controllers/master_controller/crop_controller.dart';
+import '../../../controllers/master_controller/crop_stage_controller.dart';
+import '../../../controllers/master_controller/get_demo_result.dart';
+import '../../../controllers/master_controller/get_demo_status.dart';
+import '../../../controllers/master_controller/pest_controller.dart';
 import '../../../data/constrants/constants.dart';
 import '../../../data/helpers/data/image_doctor_url.dart';
 import '../../../model/master/crop_model.dart';
@@ -1092,9 +1092,9 @@ import '../../farmer/model/farmer_list.dart';
 import '../../widgets/dialog/confirmation.dart';
 import '../../widgets/dialog/error.dart';
 import '../../widgets/dialog/loading.dart';
-import '../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
-import '../../widgets/form_field.dart/form_field.dart';
-import '../../widgets/form_field.dart/form_hader.dart';
+import '../../widgets/form_field/dynamic_dropdown_input_field.dart';
+import '../../widgets/form_field/form_field.dart';
+import '../../widgets/form_field/form_hader.dart';
 import '../../widgets/texts/custom_header_text.dart';
 import '../../widgets/widgets.dart';
 import '../components/multi_select_dropdown/farmer_selection_dropdown.dart';
@@ -1203,8 +1203,6 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
     );
   }
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
   @override
   void initState() {
     super.initState();
@@ -1279,9 +1277,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Create Demo',
           style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
@@ -1675,9 +1671,8 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                               hintText: 'Enter the dosage',
                               icon: Icons.medication_liquid_outlined,
                               controller: dosageController,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               inputFormatter: [
-                                FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(10),
                               ],
                               validator: (value) {
@@ -1706,8 +1701,8 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                             ),
                             const SizedBox(height: 16),
                             CustomTextField(
-                              labelText: 'Total Area Covered',
-                              hintText: 'Enter the total area covered',
+                              labelText: 'Total Acre of Farmers in Demo',
+                              hintText: 'Enter acre',
                               icon: Icons.area_chart,
                               controller: totalAreaController,
                               keyboardType: TextInputType.number,
@@ -1719,7 +1714,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                               ],
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter the total area covered';
+                                  return 'Please enter the total acre';
                                 }
                                 return null;
                               },
@@ -1727,8 +1722,8 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                             ),
                             const SizedBox(height: 16),
                             CustomTextField(
-                              labelText: 'Expense',
-                              hintText: 'Enter the expense',
+                              labelText: 'Value',
+                              hintText: 'Enter the value',
                               inputFormatter: [
                                 FilteringTextInputFormatter.allow(
                                   RegExp(r'^\d+\.?\d{0,2}'),
@@ -1740,7 +1735,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter the expense';
+                                  return 'Please enter the value';
                                 }
                                 return null;
                               },
@@ -1752,6 +1747,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                       SizedBox(height: 16.h),
                       PrimaryContainer(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomHeaderText(
                               text: 'Other\'s Details',
@@ -1759,7 +1755,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                             ),
                             SizedBox(height: 16.h),
                             CustomDatePicker(
-                              labelText: 'Activity Performed Date',
+                              labelText: 'Demo Date',
                               hintText: 'Select Date',
                               icon: Icons.calendar_today,
                               textEditingController: _activityDateController,
@@ -1792,6 +1788,9 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                               },
                             ),
                             const SizedBox(height: 16),
+                            Text('Demo Application Photo:*'),
+                            const SizedBox(height: 8),
+
                             GestureDetector(
                               onTap: () => _showImagePickerOptions(context),
                               child: Container(
@@ -1799,12 +1798,12 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                                 width: double.infinity,
                                 clipBehavior: Clip.antiAlias,
                                 decoration: BoxDecoration(
-                                  color: isDarkMode(context)
-                                      ? AppColors.kContentColor
-                                      : AppColors.kInput,
+                                  color: AppColors.kInput,
                                   borderRadius: BorderRadius.circular(10.r),
                                   border: Border.all(
-                                    color: Colors.grey,
+                                    color: _selectedImagePath == null
+                                        ? AppColors.kAccent7
+                                        : Colors.grey,
                                   ),
                                 ),
                                 child: _selectedImagePath == null
@@ -1864,6 +1863,12 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                               controller: _remarksController,
                               keyboardType: TextInputType.text,
                               maxLines: 3,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the remarks';
+                                }
+                                return null;
+                              },
                             ),
                           ],
                         ),
@@ -1880,9 +1885,7 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
-          color: isDarkMode(context)
-              ? AppColors.kDarkSurfaceColor
-              : AppColors.kInput,
+          color: AppColors.kInput,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Row(
@@ -1945,6 +1948,12 @@ class _CreateFormDpageState extends State<CreateFormDpage> {
                   if (demoResults.isEmpty) {
                     Get.snackbar(
                         "Error", "Please select at least one demo result.",
+                        backgroundColor: Colors.red, colorText: Colors.white);
+                    return;
+                  }
+
+                  if (_selectedImagePath == null) {
+                    Get.snackbar("Error", "Please upload an attachment.",
                         backgroundColor: Colors.red, colorText: Colors.white);
                     return;
                   }

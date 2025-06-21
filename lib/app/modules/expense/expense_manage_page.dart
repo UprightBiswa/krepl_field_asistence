@@ -22,14 +22,8 @@ class ExpenseManagementPage extends StatefulWidget {
 class _FormBManagementPageState extends State<ExpenseManagementPage> {
   final ExpenseController controller = Get.put(ExpenseController());
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
-  @override
-  void initState() {
-    super.initState();
-    controller.fetchExpenses(1);
-  }
+ 
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -39,15 +33,11 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor:AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'Expense Management',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color:  AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -57,8 +47,9 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
             text: 'Add Expense',
             isBorder: true,
             onTap: () {
-              Get.to(() => const ExpenseCreatePage(),
-                      transition: Transition.rightToLeftWithFade)!
+              Get.to(
+                () => const ExpenseCreatePage(),
+              )!
                   .then((value) => controller.refreshItems());
             },
           ),
@@ -103,7 +94,7 @@ class _FormBManagementPageState extends State<ExpenseManagementPage> {
                           child: CircleAvatar(
                             radius: 20.w,
                             backgroundColor:
-                                AppColors.kPrimary.withOpacity(0.15),
+                                AppColors.kPrimary.withValues(alpha: .15),
                             child: const Icon(
                               Icons.filter_list,
                               color: AppColors.kPrimary,

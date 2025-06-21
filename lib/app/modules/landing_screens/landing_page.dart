@@ -71,15 +71,15 @@ class LandingPageState extends State<LandingPage> {
                 content: Text('Press back again to exit'),
               ),
             );
-            return false; // Prevent the app from exiting
+            return false; 
           } else {
-            return true; // Allow the app to exit
+            return true; 
           }
         } else {
           setState(() {
             _currentIndex = 0;
           });
-          return false; // Prevent the app from exiting
+          return false; 
         }
       },
       child: Scaffold(
@@ -93,13 +93,13 @@ class LandingPageState extends State<LandingPage> {
             boxShadow: [
               if (!isDarkMode(context))
                 BoxShadow(
-                  color: AppColors.kPrimary.withOpacity(0.2),
+                  color: AppColors.kPrimary.withValues(alpha: .2),
                   blurRadius: 7,
                   offset: const Offset(0, -5),
                 )
               else
                 BoxShadow(
-                  color: AppColors.kDarkContiner.withOpacity(0.2),
+                  color: AppColors.kDarkContiner.withValues(alpha:0.2),
                   blurRadius: 7,
                   offset: const Offset(0, -5),
                 ),

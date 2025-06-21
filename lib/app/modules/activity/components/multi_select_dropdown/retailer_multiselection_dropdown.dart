@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../retailer/controller/retailer_controller.dart';
 import '../../../retailer/model/retailer_model_list.dart';
-import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../../../widgets/form_field/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class RetailerSelectionScreen extends StatefulWidget {

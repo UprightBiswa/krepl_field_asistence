@@ -54,7 +54,7 @@ class _LocationPageState extends State<LocationPage> {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withValues(alpha: 0.5),
               spreadRadius: 1,
               blurRadius: 1,
               offset: const Offset(0, -1),
@@ -115,7 +115,7 @@ class _LocationPageState extends State<LocationPage> {
     );
   }
 
-  Future<void> _openRouteMapWithGetRequest() async {
+  Future<void> openRouteMapWithGetRequest() async {
     const String url = 'https://maps.googleapis.com/maps/api/directions/json';
     final List<LocationDataModel> locations = _controller.locations;
 
@@ -198,7 +198,7 @@ class _LocationPageState extends State<LocationPage> {
     }
   }
 
-  Future<void> _openRouteMap() async {
+  Future<void> openRouteMap() async {
     // check  minimum number of routes to open 3
     if (_controller.locations.isEmpty || _controller.locations.length < 3) {
       Get.snackbar('Error', 'No locations to show on the map',

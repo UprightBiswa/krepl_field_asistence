@@ -17,9 +17,9 @@ import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
-import '../widgets/form_field.dart/form_field.dart';
-import '../widgets/form_field.dart/form_hader.dart';
-import '../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../widgets/form_field/form_field.dart';
+import '../widgets/form_field/form_hader.dart';
+import '../widgets/form_field/single_selected_dropdown.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/retailer_controller.dart';
@@ -113,9 +113,6 @@ class _RetailerFormState extends State<RetailerForm> {
     super.dispose();
   }
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,15 +121,11 @@ class _RetailerFormState extends State<RetailerForm> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Retailer Form',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
       ),
@@ -467,9 +460,7 @@ class _RetailerFormState extends State<RetailerForm> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
-          color: isDarkMode(context)
-              ? AppColors.kDarkSurfaceColor
-              : AppColors.kInput,
+          color: AppColors.kInput,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Row(

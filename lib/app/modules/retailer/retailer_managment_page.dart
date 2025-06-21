@@ -24,15 +24,6 @@ class _RetailerManagementPageState extends State<RetailerManagementPage> {
 
   final RetailerController retailerController = Get.put(RetailerController());
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
-  @override
-  void initState() {
-    super.initState();
-    retailerController.fetchFarmers(1, retailerController.pagingController);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,15 +32,11 @@ class _RetailerManagementPageState extends State<RetailerManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'Retailer Management',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -59,8 +46,9 @@ class _RetailerManagementPageState extends State<RetailerManagementPage> {
             text: 'Add Retailer',
             isBorder: true,
             onTap: () {
-              Get.to(() => const RetailerForm(),
-                      transition: Transition.rightToLeftWithFade)!
+              Get.to(
+                () => const RetailerForm(),
+              )!
                   .then((value) {
                 retailerController.refreshItems();
               });
@@ -106,7 +94,8 @@ class _RetailerManagementPageState extends State<RetailerManagementPage> {
                     },
                     child: CircleAvatar(
                       radius: 20.w,
-                      backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                      backgroundColor:
+                          AppColors.kPrimary.withValues(alpha: 0.15),
                       child: const Icon(
                         Icons.filter_list,
                         color: AppColors.kPrimary,
@@ -117,8 +106,7 @@ class _RetailerManagementPageState extends State<RetailerManagementPage> {
               ),
               SizedBox(height: 20.h),
               Obx(() {
-                if (retailerController.isListLoading.value &&
-                    retailerController.pagingController.itemList == null) {
+                if (retailerController.isListLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (retailerController.isListError.value) {
                   return const Error404Screen();

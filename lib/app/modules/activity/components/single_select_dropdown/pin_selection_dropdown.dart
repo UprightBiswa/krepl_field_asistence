@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../farmer/controller/pin_list_controller.dart';
 import '../../../farmer/model/pin_model.dart';
-import '../../../widgets/form_field.dart/single_selected_dropdown.dart';
+import '../../../widgets/form_field/single_selected_dropdown.dart';
 import 'activity_master_dropdown.dart';
 
 class PinSingleSelectionWidget<T> extends StatefulWidget {

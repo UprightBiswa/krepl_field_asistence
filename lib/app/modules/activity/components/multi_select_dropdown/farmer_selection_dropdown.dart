@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../farmer/controller/farmer_list_view_controller.dart';
 import '../../../farmer/model/farmer_list.dart';
-import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../../../widgets/form_field/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class FarmerSelectionScreen extends StatefulWidget {

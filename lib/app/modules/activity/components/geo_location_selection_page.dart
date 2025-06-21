@@ -41,8 +41,6 @@ class _GeoLocationInputFieldState extends State<GeoLocationInputField> {
     await _getCurrentLocation();
   }
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -61,9 +59,7 @@ class _GeoLocationInputFieldState extends State<GeoLocationInputField> {
             prefixIcon:
                 const Icon(Icons.location_on, color: AppColors.kPrimary),
             filled: true,
-            fillColor: isDarkMode(context)
-                ? AppColors.kContentColor
-                : AppColors.kInput,
+            fillColor: AppColors.kInput,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
             border: OutlineInputBorder(

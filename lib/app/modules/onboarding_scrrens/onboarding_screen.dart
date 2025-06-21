@@ -67,7 +67,7 @@
 //               effect: WormEffect(
 //                   dotHeight: 8.h,
 //                   dotWidth: 8.w,
-//                   dotColor: AppColors.kPrimary.withOpacity(0.2)),
+//                   dotColor: AppColors.kPrimary.   withValues(alpha:0.2)),
 //               onDotClicked: (index) {
 //                 setState(() {
 //                   _currentPageIndex = index;
@@ -172,7 +172,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                 effect: WormEffect(
                   dotHeight: 8.h,
                   dotWidth: 8.w,
-                  dotColor: AppColors.kPrimary.withOpacity(0.2),
+                  dotColor: AppColors.kPrimary.withValues(alpha: 0.2),
                 ),
                 onDotClicked: (index) {
                   setState(() {

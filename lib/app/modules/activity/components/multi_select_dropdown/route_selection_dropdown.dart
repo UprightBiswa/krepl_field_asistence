@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../route_plan/controller/route_controller.dart';
 import '../../../route_plan/model/route_list.dart';
-import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../../../widgets/form_field/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart'; // Import ShimmerLoading for a loading effect
 
 class RouteSelectionScreen extends StatefulWidget {

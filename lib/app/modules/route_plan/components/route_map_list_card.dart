@@ -30,7 +30,7 @@ class RouteMapListCard extends StatelessWidget {
               _buildHeader(),
               //add devider
               Divider(
-                color: AppColors.kNeutral04.withOpacity(0.5),
+                color: AppColors.kNeutral04.withValues(alpha: .5),
                 thickness: 1.h,
                 height: 25.h,
               ),
@@ -54,7 +54,7 @@ class RouteMapListCard extends StatelessWidget {
           width: 50.w,
           height: 50.w,
           decoration: BoxDecoration(
-            color: AppColors.kPrimary.withOpacity(0.1),
+            color: AppColors.kPrimary.withValues(alpha: .1),
             borderRadius: BorderRadius.circular(25.r),
           ),
           alignment: Alignment.center,
@@ -81,7 +81,7 @@ class RouteMapListCard extends StatelessWidget {
               Text(
                 "${route.fromDate.day.toString().padLeft(2, '0')}/${route.fromDate.month.toString().padLeft(2, '0')}/${route.fromDate.year} - ${route.toDate.day.toString().padLeft(2, '0')}/${route.toDate.month.toString().padLeft(2, '0')}/${route.toDate.year}",
                 style: AppTypography.kLight16.copyWith(
-                  color: AppColors.kNeutral04.withOpacity(0.75),
+                  color: AppColors.kNeutral04.withValues(alpha: .75),
                 ),
               ),
             ],
@@ -123,63 +123,11 @@ class RouteMapListCard extends StatelessWidget {
           Text(
             label,
             style: AppTypography.kLight16.copyWith(
-              color: AppColors.kNeutral04.withOpacity(0.75),
+              color: AppColors.kNeutral04.withValues(alpha: .75),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDetails(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildInfoRow("Employees",
-            route.employees.map((e) => e.empName).toList(), context),
-        _buildInfoRow("Workplaces",
-            route.workPlaces.map((w) => w.workPlaceName).toList(), context),
-        _buildInfoRow("Villages",
-            route.villages.map((v) => v.villageName).toList(), context),
-      ],
-    );
-  }
-
-  Widget _buildInfoRow(String label, List<String> items, BuildContext context) {
-    int displayLimit = 1;
-
-    return Row(
-      children: [
-        Text(
-          "$label: ",
-          style: AppTypography.kBold16.copyWith(color: AppColors.kDarkContiner),
-        ),
-        Expanded(
-          child: Wrap(
-            spacing: 4.w,
-            children: [
-              ...items.take(displayLimit).map((item) {
-                return Chip(
-                  label: Text(item),
-                );
-              }).toList(),
-              if (items.length > displayLimit)
-                GestureDetector(
-                  onTap: () {
-                    _showModalBottomSheet(context, label, items);
-                  },
-                  child: Text(
-                    "See more...",
-                    style: AppTypography.kBold14.copyWith(
-                      color: AppColors.kPrimary,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
@@ -242,9 +190,7 @@ class RouteMapListCard extends StatelessWidget {
         return "Deactive";
       case RouteStatus.Delete:
         return "Deleted";
-      default:
-        return "";
-    }
+      }
   }
 
   Color getStatusColor(RouteStatus status) {
@@ -255,8 +201,6 @@ class RouteMapListCard extends StatelessWidget {
         return Colors.red;
       case RouteStatus.Delete:
         return Colors.grey;
-      default:
-        return Colors.black;
     }
   }
 }

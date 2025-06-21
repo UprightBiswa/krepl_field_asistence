@@ -67,7 +67,7 @@ class TodayStatusCard extends StatelessWidget {
                     padding: const EdgeInsets.all(4.0),
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      color: AppColors.kAccent1.withOpacity(0.2),
+                      color: AppColors.kAccent1.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -90,7 +90,7 @@ class TodayStatusCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: AppColors.kAccent1.withOpacity(0.1),
+                    color: AppColors.kAccent1.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: AppColors.kAccent1),
                   ),
@@ -98,7 +98,8 @@ class TodayStatusCard extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 16,
-                        backgroundColor: AppColors.kAccent1.withOpacity(0.2),
+                        backgroundColor:
+                            AppColors.kAccent1.withValues(alpha: 0.2),
                         child:
                             const Icon(Icons.check, color: AppColors.kAccent1),
                       ),
@@ -129,7 +130,7 @@ class TodayStatusCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: AppColors.kAccent2.withOpacity(0.1),
+                    color: AppColors.kAccent2.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: AppColors.kAccent2),
                   ),
@@ -137,7 +138,8 @@ class TodayStatusCard extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 16,
-                        backgroundColor: AppColors.kAccent2.withOpacity(0.2),
+                        backgroundColor:
+                            AppColors.kAccent2.withValues(alpha: 0.2),
                         child:
                             const Icon(Icons.check, color: AppColors.kAccent2),
                       ),

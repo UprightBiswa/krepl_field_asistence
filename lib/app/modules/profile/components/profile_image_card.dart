@@ -41,7 +41,7 @@ class ProfileImageCard extends StatelessWidget {
 //       height: size ?? 90.h,
 //       width: size ?? 90.w,
 //       decoration: BoxDecoration(
-//         color: AppColors.kPrimary.withOpacity(0.15),
+//         color: AppColors.kPrimary.   withValues(alpha:0.15),
 //         borderRadius: BorderRadius.circular(10.r),
 //       ),
 //       child: ClipRRect(

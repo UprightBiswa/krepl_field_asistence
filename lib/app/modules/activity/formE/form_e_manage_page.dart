@@ -22,16 +22,6 @@ class FormEManagementPage extends StatefulWidget {
 class _FormEManagementPageState extends State<FormEManagementPage> {
   final FormEController formEController = Get.put(FormEController());
   final TextEditingController textController = TextEditingController();
-
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
-  @override
-  void initState() {
-    super.initState();
-    formEController.fetchFormEData(1);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,15 +30,11 @@ class _FormEManagementPageState extends State<FormEManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'POP Management',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -58,9 +44,11 @@ class _FormEManagementPageState extends State<FormEManagementPage> {
             text: 'Add POP',
             isBorder: true,
             onTap: () {
-              Get.to(() {
-                return const CreateFormEpage();
-              }, transition: Transition.rightToLeftWithFade)!
+              Get.to(
+                () {
+                  return const CreateFormEpage();
+                },
+              )!
                   .then((value) => formEController.fetchFormEData(1));
             },
           ),
@@ -103,7 +91,7 @@ class _FormEManagementPageState extends State<FormEManagementPage> {
                           child: CircleAvatar(
                             radius: 20.w,
                             backgroundColor:
-                                AppColors.kPrimary.withOpacity(0.15),
+                                AppColors.kPrimary.withValues(alpha: 0.15),
                             child: const Icon(
                               Icons.filter_list,
                               color: AppColors.kPrimary,

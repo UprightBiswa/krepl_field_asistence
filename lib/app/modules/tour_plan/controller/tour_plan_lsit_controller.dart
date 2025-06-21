@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../../../data/helpers/utils/dioservice/dio_service.dart';
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../data/helpers/internet/connectivity_services.dart';
 import '../model/tour_list_model.dart';
 
@@ -12,44 +11,55 @@ class TourPlanController extends GetxController {
   final DioService _dioService = DioService();
   final ConnectivityService _connectivityService = ConnectivityService();
 
-  final PagingController<int, TourPlan> pagingController =
-      PagingController(firstPageKey: 1);
-  static const int pageSize = 10;
-  Timer? _debounce;
-  final Set<int> _existingItemIds = <int>{};
-  // final TextEditingController textController = TextEditingController();
-  // make textEditingController
-  final TextEditingController textEditingController = TextEditingController();
+  final scrollController = ScrollController();
+  final List<TourPlan> tourPlanList = <TourPlan>[].obs;
 
-  var searchQuery = ''.obs;
-  var fromDate = Rxn<DateTime>(); // Nullable DateTime
-  var toDate = Rxn<DateTime>();
-  var isListLoading = false.obs;
-  var isListError = false.obs;
-  var listErrorMessage = ''.obs;
+  static const int pageSize = 10;
+  var currentPage = 1;
+  var isLastPage = false.obs;
+  var isLoading = false.obs;
+  var isLoadingMore = false.obs;
+  var isError = false.obs;
+  var errorMessage = ''.obs;
+
+  final TextEditingController textEditingController = TextEditingController();
+  final searchQuery = ''.obs;
+  final fromDate = Rxn<DateTime>();
+  final toDate = Rxn<DateTime>();
 
   @override
   void onInit() {
     super.onInit();
-    pagingController.addPageRequestListener((pageKey) {
-      fetchTourPlans(pageKey);
+    fetchTourPlans();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 100 &&
+          !isLoadingMore.value &&
+          !isLastPage.value) {
+        loadMore();
+      }
     });
   }
 
-  Future<void> fetchTourPlans(int pageKey) async {
-    try {
-      if (pageKey == 1) {
-        isListLoading(true);
-      }
-      isListError(false);
-      listErrorMessage.value = '';
+  Future<void> fetchTourPlans({bool refresh = false}) async {
+    if (isLoading.value) return;
+    if (refresh) {
+      currentPage = 1;
+      isLastPage.value = false;
+      tourPlanList.clear();
+    }
 
+    isLoading.value = true;
+    isError.value = false;
+    errorMessage.value = '';
+
+    try {
       if (!await _connectivityService.checkInternet()) {
         throw Exception('No internet connection');
       }
 
       Map<String, dynamic> parameters = {
-        'page': pageKey,
+        'page': currentPage,
         'limit': pageSize,
         'order_by': 'created_at',
         'order': -1,
@@ -62,99 +72,75 @@ class TourPlanController extends GetxController {
             : null,
       };
 
-      print("API Params: $parameters");
       final response = await _dioService.post(
         'viewFaTour',
         queryParams: parameters,
       );
 
-      print(response.data);
-      if (response.statusCode == 200) {
-        final data = response.data['data'] as List;
-        final tourPlanList =
-            data.map((item) => TourPlan.fromJson(item)).toList();
+      final data = response.data['data'] as List;
+      final newPlans = data.map((e) => TourPlan.fromJson(e)).toList();
 
-        final List<TourPlan> uniqueTourPlanList = tourPlanList.where((plan) {
-          final isDuplicate = _existingItemIds.contains(plan.id);
-          if (!isDuplicate) {
-            _existingItemIds.add(plan.id);
-          }
-          return !isDuplicate;
-        }).toList();
-
-        final isLastPage = pageKey >= response.data['total_pages'];
-        if (isLastPage) {
-          pagingController.appendLastPage(uniqueTourPlanList);
-        } else {
-          final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueTourPlanList, nextPageKey);
-        }
-      } else {
-        listErrorMessage.value = "Failed to load data";
-        pagingController.error = listErrorMessage.value;
-        throw Exception('Failed to load data');
+      if (newPlans.length < pageSize) {
+        isLastPage.value = true;
       }
+
+      tourPlanList.addAll(newPlans);
     } catch (e) {
-      isListError(true);
-      listErrorMessage.value = e.toString();
-      pagingController.error = e;
+      isError.value = true;
+      errorMessage.value = e.toString();
     } finally {
-      isListLoading(false);
+      isLoading.value = false;
     }
+  }
+
+  void loadMore() {
+    if (isLastPage.value || isLoadingMore.value) return;
+
+    isLoadingMore.value = true;
+    currentPage += 1;
+    fetchTourPlans().whenComplete(() => isLoadingMore.value = false);
   }
 
   void setSearchQuery(String query) {
     searchQuery.value = query;
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
-      _existingItemIds.clear();
-      pagingController.refresh();
-    });
-  }
-
-  void refreshItems() {
-    _existingItemIds.clear();
-    pagingController.refresh();
+    currentPage = 1;
+    tourPlanList.clear();
+    fetchTourPlans(refresh: true);
   }
 
   void setFromDate(DateTime date) {
     fromDate.value = date;
     if (toDate.value != null && fromDate.value!.isAfter(toDate.value!)) {
-      toDate.value = fromDate.value; // Adjust toDate if invalid
+      toDate.value = fromDate.value;
     }
   }
 
   void setToDate(DateTime date) {
     if (fromDate.value != null && date.isBefore(fromDate.value!)) {
-      return; // Prevent invalid date selection
+      return;
     }
     toDate.value = date;
   }
 
   void clearFilters() {
-    print("From Date: ${fromDate.value}");
-    print("To Date: ${toDate.value}");
-    fromDate.value = null;
-    toDate.value = null;
     searchQuery.value = '';
     textEditingController.clear();
-    _existingItemIds.clear();
-    pagingController.refresh();
+    fromDate.value = null;
+    toDate.value = null;
+    currentPage = 1;
+    tourPlanList.clear();
+    fetchTourPlans(refresh: true);
   }
 
   void applyDateFilter() {
-    if (fromDate.value != null || toDate.value != null) {
-      print("From Date: ${fromDate.value}");
-      print("To Date: ${toDate.value}");
-      _existingItemIds.clear();
-      pagingController.refresh();
-    }
+    currentPage = 1;
+    tourPlanList.clear();
+    fetchTourPlans(refresh: true);
   }
 
   @override
   void onClose() {
-    pagingController.dispose();
-    _debounce?.cancel();
+    scrollController.dispose();
     super.onClose();
   }
 }

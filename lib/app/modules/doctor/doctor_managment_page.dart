@@ -23,16 +23,6 @@ class _DoctorManagementPageState extends State<DoctorManagementPage> {
   final TextEditingController textController = TextEditingController();
 
   final DoctorController doctorController = Get.put(DoctorController());
-
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
-  @override
-  void initState() {
-    super.initState();
-    doctorController.fetchDoctors(1, doctorController.pagingController);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,15 +31,11 @@ class _DoctorManagementPageState extends State<DoctorManagementPage> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'Doctor Management',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -59,8 +45,9 @@ class _DoctorManagementPageState extends State<DoctorManagementPage> {
             text: 'Add Doctor',
             isBorder: true,
             onTap: () {
-              Get.to(() => const DoctorForm(),
-                      transition: Transition.rightToLeftWithFade)!
+              Get.to(
+                () => const DoctorForm(),
+              )!
                   .then((value) {
                 doctorController.refreshItems();
               });
@@ -106,7 +93,8 @@ class _DoctorManagementPageState extends State<DoctorManagementPage> {
                     },
                     child: CircleAvatar(
                       radius: 20.w,
-                      backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                      backgroundColor:
+                          AppColors.kPrimary.withValues(alpha: 0.15),
                       child: const Icon(
                         Icons.filter_list,
                         color: AppColors.kPrimary,
@@ -117,8 +105,7 @@ class _DoctorManagementPageState extends State<DoctorManagementPage> {
               ),
               SizedBox(height: 20.h),
               Obx(() {
-                if (doctorController.isListLoading.value &&
-                    doctorController.pagingController.itemList == null) {
+                if (doctorController.isListLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (doctorController.isListError.value) {
                   return const Error404Screen();

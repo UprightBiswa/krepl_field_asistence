@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
-import '../widgets/components/Info_row_widget.dart';
+import '../widgets/components/info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
-import '../widgets/form_field.dart/form_hader.dart';
+import '../widgets/form_field/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'model/retailer_model_list.dart';
@@ -38,7 +38,7 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Retailer Details',
           style: AppTypography.kBold20.copyWith(color: AppColors.kWhite),
@@ -92,8 +92,8 @@ class _RetailerDetailViewState extends State<RetailerDetailView> {
                             padding: EdgeInsets.all(8.h),
                             decoration: BoxDecoration(
                               color: widget.retailer.isActive == 'Active'
-                                  ? Colors.green.withOpacity(0.1)
-                                  : Colors.red.withOpacity(0.1),
+                                  ? Colors.green.withValues(alpha: 0.1)
+                                  : Colors.red.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Row(
@@ -230,17 +230,12 @@ class DoctorActionSheet extends StatefulWidget {
 }
 
 class _DoctorActionSheetState extends State<DoctorActionSheet> {
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
-        color: isDarkMode(context)
-            ? AppColors.kDarkSurfaceColor
-            : AppColors.kInput,
+        color: AppColors.kInput,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: Row(

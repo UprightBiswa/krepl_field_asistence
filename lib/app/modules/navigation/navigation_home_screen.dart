@@ -38,18 +38,14 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: drawerIndex == DrawerIndex.HOME,
-      onPopInvoked: (bool didPop) {
-        print("$didPop");
-        // Check if the current screen is not LandingPage
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
         if (drawerIndex != DrawerIndex.HOME) {
-          // Navigate back to the LandingPage
           setState(() {
             drawerIndex = DrawerIndex.HOME;
             screenView = LandingPage(userDetails: widget.userDetails);
           });
         } else {
           if (didPop) {
-            // Optionally log or handle didPop event here
             print("App is closing from home page");
           }
         }
@@ -67,10 +63,8 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
               drawerWidth: MediaQuery.of(context).size.width * 0.75,
               onDrawerCall: (DrawerIndex drawerIndexdata) {
                 changeIndex(drawerIndexdata);
-                //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
               },
               screenView: screenView,
-              //we replace screen view as we need on navigate starting screens like MyHomePage, HelpScreen, FeedbackScreen, etc...
             ),
           ),
         ),
@@ -100,9 +94,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           });
           break;
         case DrawerIndex.Rateing:
-          //give me functionality to
           _openStore();
-
         default:
           break;
       }

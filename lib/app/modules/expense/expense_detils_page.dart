@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
-import '../widgets/components/Info_row_widget.dart';
+import '../widgets/components/info_row_widget.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'components/expense_list_view.dart';
@@ -23,7 +23,7 @@ class ExpenseDetailsPage extends StatelessWidget {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Expense Details',
           style: AppTypography.kBold14.copyWith(

@@ -7,7 +7,7 @@ import '../widgets/appbars/custom_back_appbar.dart';
 import '../widgets/loading/shimmer_activity_card.dart';
 import 'component/customer_sales_continer.dart';
 import 'controllers/activity_controller.dart';
-import 'model/cutomer _sales_data.dart';
+import 'model/cutomer_sales_data.dart';
 
 class CustomerSalesPage extends StatelessWidget {
   final ActivityController activityController = Get.put(ActivityController());

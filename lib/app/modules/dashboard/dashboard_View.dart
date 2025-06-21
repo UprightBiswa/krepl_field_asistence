@@ -20,9 +20,6 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +31,7 @@ class _DashboardViewState extends State<DashboardView> {
         title: Text(
           'Dashboard',
           style: AppTypography.kLight16.copyWith(
-            color: isDarkMode(context) ? AppColors.kWhite : AppColors.kGrey,
+            color: AppColors.kGrey,
           ),
         ),
         centerTitle: true,
@@ -42,14 +39,14 @@ class _DashboardViewState extends State<DashboardView> {
           CustomIconButton(
             onTap: () {
               Get.to<dynamic>(
-                  SettingsView(
-                    userDetails: widget.userDetails,
-                  ),
-                  transition: Transition.rightToLeftWithFade);
+                SettingsView(
+                  userDetails: widget.userDetails,
+                ),
+              );
             },
             icon: AppAssets.kSetting,
             iconColor: AppColors.kWhite,
-            color: AppColors.kWhite.withOpacity(0.15),
+            color: AppColors.kWhite.withValues(alpha: 0.15),
           ),
           SizedBox(width: AppSpacing.twentyHorizontal),
         ],
@@ -61,9 +58,7 @@ class _DashboardViewState extends State<DashboardView> {
             TabBar(
               indicatorSize: TabBarIndicatorSize.tab,
               indicator: BoxDecoration(
-                color: isDarkMode(context)
-                    ? AppColors.kSecondary
-                    : AppColors.kAccent4,
+                color: AppColors.kAccent4,
               ),
               tabs: [
                 Tab(

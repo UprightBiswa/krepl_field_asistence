@@ -22,7 +22,7 @@ class AppTheme {
       backgroundColor: AppColors.kWhite,
       elevation: 0,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelPadding: EdgeInsets.only(
         left: 10,
         right: AppSpacing.tenHorizontal,
@@ -85,7 +85,7 @@ class AppTheme {
       backgroundColor: AppColors.kDarkSurfaceColor,
       elevation: 0,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelPadding: EdgeInsets.only(
         left: 10,
         right: AppSpacing.tenHorizontal,
@@ -136,11 +136,11 @@ class AppTheme {
 
 // Default Overlay.
 SystemUiOverlayStyle defaultOverlay = const SystemUiOverlayStyle(
-  statusBarColor: Colors.transparent,
+  statusBarColor: Colors.white,
   statusBarBrightness: Brightness.dark,
   statusBarIconBrightness: Brightness.dark,
-  systemNavigationBarColor: Colors.black,
-  systemNavigationBarDividerColor: Colors.transparent,
+  systemNavigationBarColor: Colors.white,
+  systemNavigationBarDividerColor: Colors.white,
   systemNavigationBarIconBrightness: Brightness.light,
 );
 

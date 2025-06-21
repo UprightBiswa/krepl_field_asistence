@@ -35,16 +35,11 @@ class _FarmerListState extends State<FarmerList> {
             Text('New Farmers', style: AppTypography.kBold16),
             const Spacer(),
             CustomTextButton(
-              onPressed: () {
-                Get.to<void>(
+              onPressed: () async {
+                await Get.to<void>(
                   () => const FarmerManagementPage(),
-                  transition: Transition.rightToLeftWithFade,
-                )!
-                    .then(
-                  (value) {
-                    _farmerController.fetchRecentFarmers();
-                  },
                 );
+                _farmerController.fetchRecentFarmers();
               },
               text: 'See All',
             ),

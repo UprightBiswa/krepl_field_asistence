@@ -8,9 +8,6 @@ import 'activity_report_controller.dart';
 class ActivityReportPage extends StatelessWidget {
   const ActivityReportPage({super.key});
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     final ActivityReportController controller =
@@ -20,15 +17,11 @@ class ActivityReportPage extends StatelessWidget {
       appBar: CustomBackAppBar(
         spaceBar: true,
         leadingCallback: () => Get.back<void>(),
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Activity Report',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -78,9 +71,7 @@ class ActivityReportPage extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                             border: TableBorder.all(
-                              color: isDarkMode(context)
-                                  ? Colors.grey
-                                  : Colors.black,
+                              color: Colors.black,
                               width: 1,
                             ),
                             columns: const [
@@ -135,18 +126,13 @@ class ActivityReportPage extends StatelessWidget {
                             ],
                             rows: controller.activities.map((activity) {
                               return DataRow(
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                color: WidgetStateProperty.resolveWith<Color?>(
                                   (_) {
                                     return controller.activities
                                             .indexOf(activity)
                                             .isEven
-                                        ? (isDarkMode(context)
-                                            ? Colors.grey[800]
-                                            : Colors.grey[200])
-                                        : (isDarkMode(context)
-                                            ? Colors.grey[700]
-                                            : Colors.white);
+                                        ? (Colors.grey[200])
+                                        : (Colors.white);
                                   },
                                 ),
                                 cells: [
@@ -232,57 +218,6 @@ class ActivityReportPage extends StatelessWidget {
     }
   }
 
-  // /// Date Range Filter
-  // Widget _buildDateFilter(
-  //     BuildContext context, ActivityReportController controller) {
-  //   return GestureDetector(
-  //     onTap: () async {
-  //       final DateTimeRange? picked = await showDateRangePicker(
-  //         context: context,
-  //         firstDate: DateTime(2020),
-  //         lastDate: DateTime.now(),
-  //         initialDateRange: DateTimeRange(
-  //           start: controller.fromDate.value,
-  //           end: controller.toDate.value,
-  //         ),
-  //       );
-  //       if (picked != null) {
-  //         controller.updateDateRange(picked.start, picked.end);
-  //         controller.fetchActivityReport();
-  //       }
-  //     },
-  //     child: Obx(() {
-  //       final DateFormat dateFormat = DateFormat('dd-MMM-yyyy');
-  //       return Container(
-  //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               'Select date range',
-  //               style: TextStyle(fontSize: 14.0, color: Colors.teal.shade700),
-  //             ),
-  //             const SizedBox(height: 8.0),
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 Text(
-  //                   'From: ${dateFormat.format(controller.fromDate.value)}',
-  //                   style: const TextStyle(fontSize: 16),
-  //                 ),
-  //                 Text(
-  //                   'To: ${dateFormat.format(controller.toDate.value)}',
-  //                   style: const TextStyle(fontSize: 16),
-  //                 ),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     }),
-  //   );
-  // }
-  /// Date Picker Fields (From Date & To Date)
   Widget _buildDateFilter(
       BuildContext context, ActivityReportController controller) {
     final DateFormat dateFormat = DateFormat('dd-MMM-yy');

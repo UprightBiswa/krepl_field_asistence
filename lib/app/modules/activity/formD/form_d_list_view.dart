@@ -16,23 +16,28 @@ class FormDListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, FormD>(
-      pagingController: pagingController,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      builderDelegate: PagedChildBuilderDelegate<FormD>(
-        itemBuilder: (context, formD, index) => GestureDetector(
-          onTap: () => Get.to(() => FormDDetailPage(formD: formD)),
-          child: FormDCard(formD: formD),
-        ),
-        firstPageErrorIndicatorBuilder: (context) =>
-            const Center(child: Text('Failed to load data')),
-        noItemsFoundIndicatorBuilder: (context) =>
-            const Center(child: Text('No data available')),
-        newPageProgressIndicatorBuilder: (context) =>
-            const Center(child: CircularProgressIndicator()),
-      ),
-    );
+    return PagingListener<int, FormD>(
+        controller: pagingController,
+        builder: (context, state, fetchNextPage) {
+          return PagedListView<int, FormD>(
+            state: state,
+            fetchNextPage: fetchNextPage,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            builderDelegate: PagedChildBuilderDelegate<FormD>(
+              itemBuilder: (context, formD, index) => GestureDetector(
+                onTap: () => Get.to(() => FormDDetailPage(formD: formD)),
+                child: FormDCard(formD: formD),
+              ),
+              firstPageErrorIndicatorBuilder: (context) =>
+                  const Center(child: Text('Failed to load data')),
+              noItemsFoundIndicatorBuilder: (context) =>
+                  const Center(child: Text('No data available')),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const Center(child: CircularProgressIndicator()),
+            ),
+          );
+        });
   }
 }
 
@@ -54,7 +59,7 @@ class FormDCard extends StatelessWidget {
               // Circle Avatar for initials
               CircleAvatar(
                 radius: 30.r,
-                backgroundColor: AppColors.kPrimary.withOpacity(0.15),
+                backgroundColor: AppColors.kPrimary.withValues(alpha: 0.15),
                 child: const Icon(
                   Icons.campaign,
                   color: AppColors.kPrimary,
@@ -90,7 +95,7 @@ class FormDCard extends StatelessWidget {
           ),
           // Divider
           Divider(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             thickness: 1.h,
             height: 25.h,
           ),

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../doctor/controller/doctor_controller.dart';
 import '../../../doctor/model/doctor_list.dart';
-import '../../../widgets/form_field.dart/dynamic_dropdown_input_field.dart';
+import '../../../widgets/form_field/dynamic_dropdown_input_field.dart';
 import '../single_select_dropdown/activity_master_dropdown.dart';
 
 class DoctorSelectionScreen extends StatefulWidget {

@@ -74,6 +74,48 @@ class TourPlanCreateController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> editTourPlan(TourItem tourItem, int tourId) async {
+    isLoading.value = true;
+
+    try {
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      final formattedDate = DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MMM-yyyy').parse(tourItem.tourDateController.text));
+
+      final dio.FormData formData = dio.FormData.fromMap({
+        "tour_id": tourId.toString(),
+        "tour_date": formattedDate,
+        "remarks": tourItem.remarksController.text,
+        "village[]":
+            tourItem.selectedVillages.map((e) => e.id.toString()).toList(),
+        "route[]": tourItem.selectedRoutes.map((e) => e.id.toString()).toList(),
+        "activity[]":
+            tourItem.selectedActivities.map((e) => e.id.toString()).toList(),
+      });
+
+      final response = await _dioService.postFormData(
+        "updateFaTourPlan", // ✅ Edit endpoint
+        formData,
+      );
+
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.snackbar('Success', 'Tour plan updated successfully.',
+            snackPosition: SnackPosition.BOTTOM);
+      } else {
+        throw Exception(response.data['message'] ?? 'Update failed.');
+      }
+    } catch (e) {
+      isError.value = true;
+      errorMessage.value = e.toString();
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
 
 class TourItem {

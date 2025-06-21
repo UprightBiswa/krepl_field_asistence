@@ -8,9 +8,6 @@ import 'demo_report_controller.dart';
 class DemoReportPage extends StatelessWidget {
   const DemoReportPage({super.key});
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     final DemoReportController controller = Get.put(DemoReportController());
@@ -19,15 +16,11 @@ class DemoReportPage extends StatelessWidget {
       appBar: CustomBackAppBar(
         spaceBar: true,
         leadingCallback: () => Get.back<void>(),
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Demo Report',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -64,63 +57,6 @@ class DemoReportPage extends StatelessWidget {
     );
   }
 
-  // /// Date Range Filter Widget
-  // Widget _buildDateFilter(
-  //     BuildContext context, DemoReportController controller) {
-  //   return GestureDetector(
-  //     onTap: () async {
-  //       final DateTimeRange? picked = await showDateRangePicker(
-  //         context: context,
-  //         firstDate: DateTime(2020),
-  //         lastDate: DateTime.now(),
-  //         initialDateRange: DateTimeRange(
-  //           start: controller.fromDate.value,
-  //           end: controller.toDate.value,
-  //         ),
-  //       );
-  //       if (picked != null) {
-  //         controller.updateDateRange(picked.start, picked.end);
-  //         controller.fetchDemoReport();
-  //       }
-  //     },
-  //     child: Obx(() {
-  //       final DateFormat dateFormat = DateFormat('dd-MMM-yyyy');
-  //       return Container(
-  //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-  //         color: isDarkMode(context) ? Colors.grey[900] : Colors.grey[200],
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               'Select date range',
-  //               style: TextStyle(
-  //                 fontSize: 14.0,
-  //                 color:
-  //                     isDarkMode(context) ? Colors.teal[100] : Colors.teal[700],
-  //               ),
-  //             ),
-  //             const SizedBox(height: 8.0),
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 Text(
-  //                   'From: ${dateFormat.format(controller.fromDate.value)}',
-  //                   style: const TextStyle(fontSize: 16),
-  //                 ),
-  //                 Text(
-  //                   'To: ${dateFormat.format(controller.toDate.value)}',
-  //                   style: const TextStyle(fontSize: 16),
-  //                 ),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     }),
-  //   );
-  // }
-
-  /// Error State Widget
   Widget _buildErrorState(DemoReportController controller) {
     return Center(
       child: Column(
@@ -148,7 +84,7 @@ class DemoReportPage extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: DataTable(
             border: TableBorder.all(
-              color: isDarkMode(context) ? Colors.grey : Colors.black,
+              color: Colors.black,
               width: 1,
             ),
             columns: const [
@@ -166,10 +102,8 @@ class DemoReportPage extends StatelessWidget {
               return DataRow(
                 color: WidgetStateProperty.resolveWith<Color?>(
                   (_) => controller.demoReports.indexOf(demoReport).isEven
-                      ? (isDarkMode(context)
-                          ? Colors.grey[800]
-                          : Colors.grey[200])
-                      : (isDarkMode(context) ? Colors.grey[700] : Colors.white),
+                      ? (Colors.grey[200])
+                      : (Colors.white),
                 ),
                 cells: [
                   DataCell(Text((controller.demoReports.indexOf(demoReport) + 1)

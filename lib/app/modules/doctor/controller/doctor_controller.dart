@@ -14,8 +14,7 @@ class DoctorController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
-  final PagingController<int, Doctor> pagingController =
-      PagingController(firstPageKey: 1);
+  late final PagingController<int, Doctor> pagingController;
 
   static const int pageSize = 10;
   var searchQuery = ''.obs;
@@ -46,26 +45,16 @@ class DoctorController extends GetxController {
       initialOrderBy: 'doctor_name',
     );
 
-    pagingController.addPageRequestListener((pageKey) {
-      print(
-          "Page Request Listener Triggered: ${filterController!.selectedOrderBy.value}");
-      fetchDoctors(pageKey, pagingController);
-    });
-
-    // Log and refresh items when filter changes
-    filterController!.selectedOrderBy.listen((value) {
-      print('Order By changed: $value');
-      // refreshItems();
-    });
-
-    filterController!.order.listen((value) {
-      print('Order changed: $value');
-      // refreshItems();
-    });
+    pagingController = PagingController<int, Doctor>(
+      getNextPageKey: (state) =>
+          state.lastPageIsEmpty ? null : state.nextIntPageKey,
+      fetchPage: (pageKey) => fetchDoctors(pageKey),
+    );
   }
 
-  void fetchDoctors(
-      int pageKey, PagingController<int, Doctor> pagingController) async {
+  Future<List<Doctor>> fetchDoctors(
+    int pageKey,
+  ) async {
     print("Fetching Doctors for page: $pageKey");
     try {
       if (pageKey == 1) {
@@ -103,21 +92,15 @@ class DoctorController extends GetxController {
           return !isDuplicate;
         }).toList();
 
-        final isLastPage = pageKey >= response.data['total_pages'];
-        if (isLastPage) {
-          pagingController.appendLastPage(uniqueDoctors);
-        } else {
-          final nextPageKey = pageKey + 1;
-          pagingController.appendPage(uniqueDoctors, nextPageKey);
-        }
+        return uniqueDoctors;
       } else {
         throw Exception('Failed to load doctors');
       }
     } catch (e) {
       isListError(true);
       listErrorMessage.value = e.toString();
-      pagingController.error = e;
       print('Error fetching doctors: $e');
+      rethrow;
     } finally {
       isListLoading(false);
     }

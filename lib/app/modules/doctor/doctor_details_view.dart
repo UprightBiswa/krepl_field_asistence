@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../data/helpers/data/image_doctor_url.dart';
-import '../widgets/components/Info_row_widget.dart';
+import '../widgets/components/info_row_widget.dart';
 import '../widgets/containers/primary_container.dart';
 import '../widgets/dialog/confirmation.dart';
 import '../widgets/dialog/error.dart';
 import '../widgets/dialog/loading.dart';
-import '../widgets/form_field.dart/form_hader.dart';
+import '../widgets/form_field/form_hader.dart';
 import '../widgets/texts/custom_header_text.dart';
 import '../widgets/widgets.dart';
 import 'controller/doctor_controller.dart';
@@ -26,8 +26,7 @@ class DoctorDetailView extends StatefulWidget {
 
 class _DoctorDetailViewState extends State<DoctorDetailView> {
   final DoctorController _doctorController = Get.put(DoctorController());
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,9 +35,7 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: .15),
         title: Text(
           'doctor Details',
           style: AppTypography.kBold24.copyWith(color: AppColors.kWhite),
@@ -155,16 +152,13 @@ class _DoctorDetailViewState extends State<DoctorDetailView> {
         ),
       ),
       bottomNavigationBar: DoctorActionSheet(
-        editCallback: () {
-          Get.to<dynamic>(
+        editCallback: () async {
+          await Get.to<dynamic>(
             EditDoctorForm(
               doctor: widget.doctor,
             ),
-            transition: Transition.rightToLeftWithFade,
-          )!
-              .then((value) {
-            Get.back();
-          });
+          );
+          Get.back();
         },
         deleteCallback: () {
           _showConfirmationDialog(context);
@@ -229,17 +223,12 @@ class DoctorActionSheet extends StatefulWidget {
 }
 
 class _DoctorActionSheetState extends State<DoctorActionSheet> {
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
-        color: isDarkMode(context)
-            ? AppColors.kDarkSurfaceColor
-            : AppColors.kInput,
+        color: AppColors.kInput,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: Row(

@@ -9,9 +9,6 @@ import 'customer_report_controller.dart';
 class CustomerReportPage extends StatelessWidget {
   const CustomerReportPage({super.key});
 
-  bool isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   @override
   Widget build(BuildContext context) {
     final CustomerReportController controller =
@@ -21,15 +18,11 @@ class CustomerReportPage extends StatelessWidget {
       appBar: CustomBackAppBar(
         spaceBar: true,
         leadingCallback: () => Get.back<void>(),
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Customer Report',
           style: AppTypography.kBold14.copyWith(
-            color: isDarkMode(context)
-                ? AppColors.kWhite
-                : AppColors.kDarkContiner,
+            color: AppColors.kDarkContiner,
           ),
         ),
         centerTitle: false,
@@ -83,9 +76,7 @@ class CustomerReportPage extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           border: TableBorder.all(
-                            color: isDarkMode(context)
-                                ? Colors.grey
-                                : Colors.black,
+                            color: Colors.black,
                             width: 1,
                           ),
                           columns: const [
@@ -125,16 +116,11 @@ class CustomerReportPage extends StatelessWidget {
                                 i < controller.customers.length;
                                 i++)
                               DataRow(
-                                color:
-                                    MaterialStateProperty.resolveWith<Color?>(
+                                color: WidgetStateProperty.resolveWith<Color?>(
                                   (_) {
                                     return i.isEven
-                                        ? (isDarkMode(context)
-                                            ? Colors.grey[800]
-                                            : Colors.grey[200])
-                                        : (isDarkMode(context)
-                                            ? Colors.grey[700]
-                                            : Colors.white);
+                                        ? (Colors.grey[200])
+                                        : (Colors.white);
                                   },
                                 ),
                                 cells: [

@@ -41,7 +41,7 @@ class _SettingTileState extends State<SettingTile> {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: AppColors.kPrimary.withOpacity(0.5),
+          color: AppColors.kPrimary.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
@@ -67,7 +67,7 @@ class _SettingTileState extends State<SettingTile> {
                 )
               : Icon(
                   AppAssets.kArrowForward,
-                  color: AppColors.kDarkContiner.withOpacity(0.4),
+                  color: AppColors.kDarkContiner.withValues(alpha: 0.4),
                 ))
           : null,
       contentPadding: EdgeInsets.zero,

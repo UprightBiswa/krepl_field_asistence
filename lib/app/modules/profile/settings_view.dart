@@ -45,7 +45,7 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
-  _loadInitialData() async {
+  Future<void> _loadInitialData() async {
     try {
       if (mounted) {
         await Future.wait([
@@ -180,9 +180,7 @@ class _SettingsViewState extends State<SettingsView> {
         leadingCallback: () {
           Get.back<void>();
         },
-        iconColor: isDarkMode(context)
-            ? Colors.black
-            : AppColors.kPrimary.withOpacity(0.15),
+        iconColor: AppColors.kPrimary.withValues(alpha: 0.15),
         title: Text(
           'Settings',
           style: AppTypography.kBold14.copyWith(

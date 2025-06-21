@@ -38,7 +38,8 @@ class ActivityCard extends StatelessWidget {
                     //   gradient: activity.gradientColor,
                     //   borderRadius: BorderRadius.circular(10.h),
                     // ),
-                    color: activity.achievedActivityColor.withOpacity(0.1),
+                    color:
+                        activity.achievedActivityColor.withValues(alpha: 0.1),
                     height: 40.h,
                     width: 40.h,
                     child: Icon(
@@ -150,7 +151,7 @@ class ProgressLine extends StatelessWidget {
           width: double.infinity,
           height: 8,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
         ),

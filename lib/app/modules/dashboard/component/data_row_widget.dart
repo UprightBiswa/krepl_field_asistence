@@ -12,12 +12,12 @@ class DataRowWidget extends StatelessWidget {
   final String ly;
 
   const DataRowWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.current,
     required this.target,
     required this.ly,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -29,9 +29,7 @@ class CustomButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
-            color: isDarkMode(context)
-                ? AppColors.kContentColor
-                : AppColors.kWhite,
+            color: AppColors.kWhite,
             borderRadius: BorderRadius.circular(AppSpacing.radiusThirty),
             border: isBorder ? Border.all(color: AppColors.kHint) : null),
         child: Row(

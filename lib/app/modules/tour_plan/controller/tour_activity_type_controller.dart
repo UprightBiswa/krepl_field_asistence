@@ -50,4 +50,8 @@ class TourActivityController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  List<TourActivity> getActivitiesByIds(List<int> id) {
+    return activities.where((a) => id.contains(a.id)).toList();
+  }
 }

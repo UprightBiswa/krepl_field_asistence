@@ -36,8 +36,8 @@ class CustomMenuCard extends StatelessWidget {
               color: isSelected
                   ? (isDarkMode(context) ? Colors.black : AppColors.kWhite)
                   : (isDarkMode(context)
-                      ? Colors.black.withOpacity(0.15)
-                      : AppColors.kPrimary.withOpacity(0.15)),
+                      ? Colors.black.withValues(alpha: 0.15)
+                      : AppColors.kPrimary.withValues(alpha: 0.15)),
               boxShadow: isSelected ? [AppColors.defaultShadow] : null,
             ),
             child: Icon(
