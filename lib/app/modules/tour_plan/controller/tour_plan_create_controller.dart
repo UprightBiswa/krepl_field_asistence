@@ -22,54 +22,46 @@ class TourPlanCreateController extends GetxController {
   final String _endpoint = "createFaTourPlan";
 
   // Submit the form
-  Future<void> submitTourPlan(TourItem tourItem) async {
+  Future<bool> submitTourPlan(TourItem tourItem) async {
     isLoading.value = true;
 
     try {
-      // Check connectivity
       if (!await _connectivityService.checkInternet()) {
         throw Exception('No internet connection');
       }
-      // Prepare form data
-      dio.FormData formData = dio.FormData();
+
       final formattedDate = DateFormat('yyyy-MM-dd').format(
           DateFormat('dd-MMM-yyyy').parse(tourItem.tourDateController.text));
-      formData.fields.add(MapEntry("tour_date", formattedDate));
 
-      // Add remarks
+      final dio.FormData formData = dio.FormData();
+
+      formData.fields.add(MapEntry("tour_date", formattedDate));
       formData.fields.add(MapEntry("remarks", tourItem.remarksController.text));
 
-      // Add villages
       for (var village in tourItem.selectedVillages) {
         formData.fields.add(MapEntry("village[]", village.id.toString()));
       }
-
-      // Add routes
       for (var route in tourItem.selectedRoutes) {
         formData.fields.add(MapEntry("route[]", route.id.toString()));
       }
-
-      // Add activities
       for (var activity in tourItem.selectedActivities) {
         formData.fields.add(MapEntry("activity[]", activity.id.toString()));
       }
 
-      // Make the API call
       final response = await _dioService.postFormData(_endpoint, formData);
+      print('Status Code: ${response.statusCode}');
+      print('Response Data: ${response.data}');
 
-      // Handle the response
-      if (response.statusCode == 200 && response.data['success'] == true) {
-        Get.snackbar('Success', 'Tour plan submitted successfully.',
-            snackPosition: SnackPosition.BOTTOM);
+      if (response.statusCode == 200 &&
+          response.data['success'].toString() == 'true') {
+        return true; // ✅ Success
       } else {
         throw Exception(response.data['message'] ?? 'Submission failed.');
       }
     } catch (e) {
-      // Exception handling
-      isError.value = true;
-      errorMessage.value = e.toString();
-
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Error', e.toString(),
+          backgroundColor: Colors.red, colorText: Colors.white);
+      return false; // ❌ Failure
     } finally {
       isLoading.value = false;
     }

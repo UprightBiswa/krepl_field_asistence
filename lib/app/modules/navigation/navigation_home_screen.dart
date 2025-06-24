@@ -1,8 +1,5 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/constrants/constants.dart';
 import '../../model/login/user_details_reponse.dart';
@@ -93,37 +90,11 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             );
           });
           break;
-        case DrawerIndex.Rateing:
-          _openStore();
         default:
           break;
       }
     }
   }
 
-  Future<void> _openStore() async {
-    Uri appStoreUrl =
-        Uri.parse('https://apps.apple.com/in/app/krishaj-sarthi/id6504442750');
-    Uri playStoreUrl = Uri.parse(
-        'https://play.google.com/store/apps/details?id=com.krepl.kreplemployee');
-
-    try {
-      if (Platform.isIOS) {
-        if (await canLaunchUrl((appStoreUrl))) {
-          await launchUrl(appStoreUrl);
-        } else {
-          throw 'Could not launch App Store';
-        }
-      } else if (Platform.isAndroid) {
-        if (await canLaunchUrl(playStoreUrl)) {
-          await launchUrl(playStoreUrl);
-        } else {
-          throw 'Could not launch Play Store';
-        }
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to open store: $e',
-          snackPosition: SnackPosition.BOTTOM);
-    }
-  }
+  
 }

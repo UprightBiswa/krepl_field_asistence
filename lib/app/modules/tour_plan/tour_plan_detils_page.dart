@@ -2,6 +2,7 @@ import 'package:field_asistence/app/modules/widgets/containers/primary_container
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../../data/constrants/constants.dart';
 import '../widgets/buttons/custom_button.dart';
@@ -69,6 +70,12 @@ class TourPlanDetailsPage extends StatelessWidget {
             ),
             SizedBox(height: 12.h),
 
+            BuildInfoCard(
+              title: 'Tour Date:',
+              content: formatDate(tourPlan.tourDate),
+            ),
+            SizedBox(height: 16.h),
+
             // Village Details
             _buildListSection(
               title: 'Villages Covered:',
@@ -100,6 +107,16 @@ class TourPlanDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Helper: Format the Date
+  String formatDate(String dateStr) {
+    try {
+      final DateTime date = DateTime.parse(dateStr);
+      return DateFormat('dd-MMM-yyyy').format(date);
+    } catch (_) {
+      return dateStr; // Return as-is if parsing fails
+    }
   }
 
   /// Builds a section for displaying lists of strings

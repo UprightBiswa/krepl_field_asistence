@@ -175,7 +175,7 @@ class FormDCard extends StatelessWidget {
                   ),
                   SizedBox(width: 5.w),
                   Text(
-                    'Activity Performed Date:',
+                    'Demo Date:',
                     style: AppTypography.kMedium14,
                   ),
                 ],

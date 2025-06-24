@@ -278,9 +278,9 @@ class FormDDetailPage extends StatelessWidget {
                   _buildDetailCard('Party Type', formD.partyType),
                   _buildDetailCard('Dosage', formD.dosages),
                   _buildDetailCard('Demo Area', formD.areaOfDemo),
-                  _buildDetailCard('Total Acre', formD.totalAreaCover),
+                  _buildDetailCard('Total Acre of Farmers', formD.totalAreaCover),
                   _buildDetailCard('Value', formD.expense),
-                  _buildDetailCard('Activity Performed Date',
+                  _buildDetailCard('Demo Date',
                       formDtDate(formD.activityPerformedDate)),
                   _buildDetailCard(
                       'Next Demo Date', formDtDate(formD.nextDemoDate)),

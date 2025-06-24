@@ -416,69 +416,51 @@ class _TourPlanCreatePageState extends State<TourPlanCreatePage> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     // Show loading dialog
     Get.dialog(
       const Center(child: CircularProgressIndicator()),
       barrierDismissible: false,
     );
 
-    controller.submitTourPlan(tourItem).then((_) {
-      // Close loading dialog
-      Get.back();
+    bool isSuccess = await controller.submitTourPlan(tourItem);
 
-      if (controller.isError.value) {
-        // Show error dialog
-        Get.dialog(
-          AlertDialog(
-            title: const Text('Error'),
-            content: Text(controller.errorMessage.value),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Get.back(); // Close dialog
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      } else {
-        // Show success dialog
-        Get.dialog(
-          AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Tour submitted successfully.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Get.back(); // Close dialog
-                  Get.back(); // Return to previous screen
-                  Get.back();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      }
-    }).catchError((error) {
-      Get.back(); // Close loading dialog
-      // Handle unexpected errors
+    // Close loading dialog
+    Get.back();
+
+    if (isSuccess) {
+      // ✅ Success Dialog
       Get.dialog(
         AlertDialog(
-          title: const Text('Error'),
-          content: Text('An unexpected error occurred: $error'),
+          title: const Text('Success'),
+          content: const Text('Tour submitted successfully.'),
           actions: [
             TextButton(
               onPressed: () {
-                Get.back(); // Close dialog
+                Get.back(); // Close success dialog
+                Get.back(); // Go back to previous screen
               },
               child: const Text('OK'),
             ),
           ],
         ),
       );
-    });
+    } else {
+      // ❌ Optional: Error dialog (already shown via Get.snackbar in controller)
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Failed to submit tour plan. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back(); // Close error dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

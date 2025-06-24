@@ -146,12 +146,12 @@ class CustomerSalesCard extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                radius: 30.r,
+                radius: 20.r,
                 backgroundColor: Colors.blueAccent.withAlpha(50),
                 child: Text(
                   salesData.customerName[0].toUpperCase(),
                   style: TextStyle(
-                    fontSize: 24.sp,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.blueAccent,
                   ),
@@ -165,7 +165,7 @@ class CustomerSalesCard extends StatelessWidget {
                     Text(
                       salesData.customerName,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : Colors.black,
                       ),
@@ -173,7 +173,7 @@ class CustomerSalesCard extends StatelessWidget {
                     Text(
                       'Customer No: ${salesData.customerNo}',
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         color: isDark ? Colors.grey[400] : Colors.grey[700],
                       ),
                     ),
@@ -211,14 +211,14 @@ class CustomerSalesCard extends StatelessWidget {
                     Text(
                       isYtd ? 'Current Year' : 'Current Month',
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 12.sp,
                         color: isDark ? Colors.grey[400] : Colors.grey[700],
                       ),
                     ),
                     Text(
                       '\u{20B9}${isYtd ? salesData.currentYearTotal.toStringAsFixed(2) : salesData.currentMonthTotal.toStringAsFixed(2)}',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),
@@ -248,14 +248,14 @@ class CustomerSalesCard extends StatelessWidget {
                     Text(
                       isYtd ? 'Last Year' : 'Last Month',
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 12.sp,
                         color: isDark ? Colors.grey[400] : Colors.grey[700],
                       ),
                     ),
                     Text(
                       '\u{20B9}${isYtd ? salesData.previousYearTotal.toStringAsFixed(2) : salesData.previousMonthTotal.toStringAsFixed(2)}',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                       ),

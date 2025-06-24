@@ -191,7 +191,7 @@ class _SignInState extends State<SignIn> {
             Text('Sign in', style: AppTypography.kMedium32),
             SizedBox(height: 24.h),
             if (!isOtpVisible) ...[
-              Text('Phone Number / User Id', style: AppTypography.kMedium15),
+              Text('Phone Number', style: AppTypography.kMedium15),
               SizedBox(height: 8.h),
               // Number Field.
               PrimaryContainer(
@@ -231,7 +231,7 @@ class _SignInState extends State<SignIn> {
                             return value;
                           }
                         },
-                        hintText: 'Phone Number / User Id',
+                        hintText: 'Phone Number',
                         keyboardType: TextInputType.text,
                         padding: EdgeInsets.symmetric(horizontal: 15.w),
                         inputFormatters: [

@@ -48,11 +48,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
         labelName: 'Notification',
         icon: const Icon(Icons.notifications_active),
       ),
-      DrawerList(
-        index: DrawerIndex.Rateing,
-        labelName: 'Rate the app',
-        icon: const Icon(Icons.share),
-      ),
     ];
   }
 
@@ -281,7 +276,6 @@ enum DrawerIndex {
   HOME,
   Notification,
   Support,
-  Rateing,
 }
 
 class DrawerList {
