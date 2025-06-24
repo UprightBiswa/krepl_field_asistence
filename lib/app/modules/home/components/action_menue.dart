@@ -5,12 +5,12 @@ import '../../../data/constrants/constants.dart';
 import '../../widgets/containers/primary_container.dart';
 
 class ActionMenuIcon extends StatelessWidget {
-  final Function onEdit;
-  final Function onDelete;
+  final Function? onEdit;
+  final Function? onDelete;
 
   const ActionMenuIcon({
-    required this.onEdit,
-    required this.onDelete,
+    this.onEdit,
+    this.onDelete,
     super.key,
   });
 
@@ -25,16 +25,29 @@ class ActionMenuIcon extends StatelessWidget {
         ),
       ),
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        PopupMenuItem(
-          value: 'edit',
-          child: ListTile(
-            leading: const Icon(Icons.edit),
-            title: const Text('Edit'),
-            onTap: () {
-              onEdit();
-            },
+        if (onEdit != null)
+          PopupMenuItem(
+            value: 'edit',
+            child: ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text('Edit'),
+              onTap: () {
+                onEdit!();
+              },
+            ),
           ),
-        ),
+        if (onDelete != null)
+          PopupMenuItem(
+            value: 'delete',
+            child: ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Delete'),
+              onTap: () {
+                Navigator.pop(context);
+                onDelete!();
+              },
+            ),
+          ),
         // const PopupMenuDivider(),
         // PopupMenuItem(
         //   value: 'delete',

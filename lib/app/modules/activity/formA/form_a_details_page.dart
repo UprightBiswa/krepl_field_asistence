@@ -489,6 +489,8 @@ class FormADetailPage extends StatelessWidget {
                       formatDate(formA.activityPerformedDate)),
                   _buildDetailCard('Activity Performed Location',
                       formA.activityPerformedLocation),
+                  _buildDetailCard(
+                      'Total KM Travelled', '${formA.totalKmTravelled} KM'),
                   _buildDetailCard('Remarks', formA.remarks),
                   SizedBox(height: 16.h),
                   _buildUserDetails(),
@@ -515,7 +517,7 @@ class FormADetailPage extends StatelessWidget {
           clipper: HeaderClipper(),
           child: Container(
             width: double.infinity,
-            height: 200.h,
+            height: 140.h,
             color: AppColors.kPrimary.withValues(alpha: 0.9),
             child: Center(
               child: Text(

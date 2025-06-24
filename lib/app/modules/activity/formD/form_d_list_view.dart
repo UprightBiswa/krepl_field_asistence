@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/constrants/constants.dart';
+import '../../home/components/action_menue.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../../widgets/dialog/confirmation.dart';
+import '../controller/form_d_controller.dart';
 import '../model/form_d_model.dart';
 import 'form_d_details_page.dart';
 
@@ -44,7 +47,8 @@ class FormDListView extends StatelessWidget {
 class FormDCard extends StatelessWidget {
   final FormD formD;
 
-  const FormDCard({super.key, required this.formD});
+  FormDCard({super.key, required this.formD});
+  final FormDController formDController = Get.find<FormDController>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +94,11 @@ class FormDCard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ActionMenuIcon(
+                onDelete: () {
+                  _showConfirmationDialog(context, formD.id);
+                },
               ),
             ],
           ),
@@ -235,6 +244,34 @@ class FormDCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context, int formDId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Confirm Delete',
+          content: 'Are you sure you want to delete this?',
+          onConfirm: () async {
+            Get.back();
+            // Show loading dialog
+            if (formDController.isDeleteLoading.value) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) =>
+                    const Center(child: CircularProgressIndicator()),
+              );
+            }
+            await formDController.deleteFormD(formDId);
+          },
+          onCancel: () {
+            Get.back();
+          },
+        );
+      },
     );
   }
 

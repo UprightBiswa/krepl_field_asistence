@@ -312,7 +312,7 @@ class FormDDetailPage extends StatelessWidget {
           clipper: HeaderClipper(),
           child: Container(
             width: double.infinity,
-            height: 200.h,
+            height: 140.h,
             color: AppColors.kPrimary.withValues(alpha: 0.9),
             child: Center(
               child: Text(

@@ -45,13 +45,11 @@ class _FormAManagementPageState extends State<FormAManagementPage> {
             icon: Icons.add,
             text: 'Add Activity',
             isBorder: true,
-            onTap: () {
-              Get.to(
+            onTap: () async {
+              await Get.to(
                 () => const CreateFormApage(),
-              )!
-                  .then(
-                (value) => formAController.refreshItems(),
               );
+              formAController.refreshItems();
             },
           ),
           SizedBox(

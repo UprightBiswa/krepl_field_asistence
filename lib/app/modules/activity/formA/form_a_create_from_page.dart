@@ -63,6 +63,8 @@ class _CreateFormApageState extends State<CreateFormApage> {
   final TextEditingController _activityLocationController =
       TextEditingController();
   final TextEditingController expenseController = TextEditingController();
+  final TextEditingController _totalKmTravelledController =
+      TextEditingController();
 
   ActivityMaster? _selectedActivity;
   String? selectedPartyType;
@@ -625,6 +627,28 @@ class _CreateFormApageState extends State<CreateFormApage> {
                             ),
                             const SizedBox(height: 16),
 
+                            CustomTextField(
+                              labelText: 'Total KM Travelled',
+                              hintText: 'Enter total kilometers',
+                              inputFormatter: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}'),
+                                ),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              icon: Icons.map_outlined,
+                              controller: _totalKmTravelledController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter total kilometers';
+                                }
+                                return null;
+                              },
+                              maxLines: 1,
+                            ),
+                            const SizedBox(height: 16),
+
                             Text('Upload Image:*'),
                             SizedBox(height: 8.h),
                             GestureDetector(
@@ -855,6 +879,7 @@ class _CreateFormApageState extends State<CreateFormApage> {
         'activity_performed_date':
             DateFormat('yyyy-MM-dd').format(selectedDate),
         'activity_performed_location': _activityLocationController.text,
+        'total_km_travelled': _totalKmTravelledController.text,
       };
       List<MapEntry<String, String>> fields = [];
 
@@ -913,6 +938,8 @@ class _CreateFormApageState extends State<CreateFormApage> {
       expenseController.clear();
       _remarksController.clear();
       _selectionCountController.clear();
+      _totalKmTravelledController.clear();
+
       _selectedImagePath = null;
       attachment = null;
       gioLocation = null;

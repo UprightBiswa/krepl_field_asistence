@@ -84,8 +84,8 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           CustomIconButton(
             onTap: () {
-              Get.to<dynamic>(
-                SettingsView(
+              Get.to(
+                () => SettingsView(
                   userDetails: widget.userDetails,
                 ),
               );
@@ -108,9 +108,8 @@ class _HomeViewState extends State<HomeView> {
                 SizedBox(height: 10.h),
                 GestureDetector(
                   onTap: () {
-                    Get.to<void>(
+                    Get.to(
                       () => const SearchView(),
-                      transition: Transition.cupertino,
                     );
                   },
                   child: SearchField(

@@ -5,7 +5,10 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/constrants/constants.dart';
+import '../../home/components/action_menue.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../../widgets/dialog/confirmation.dart';
+import '../controller/form_b_controller.dart';
 import '../model/form_b_model.dart';
 import 'form_b_details_page.dart';
 
@@ -44,7 +47,8 @@ class FormBListView extends StatelessWidget {
 class FormBCard extends StatelessWidget {
   final FormB formB;
 
-  const FormBCard({super.key, required this.formB});
+  FormBCard({super.key, required this.formB});
+  final FormBController formBController = Get.find<FormBController>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +94,12 @@ class FormBCard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ActionMenuIcon(
+                onDelete: () {
+                  _showConfirmationDialog(context, formB.id);
+                  print('delte');
+                },
               ),
             ],
           ),
@@ -179,6 +189,34 @@ class FormBCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context, int formBId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Confirm Delete',
+          content: 'Are you sure you want to delete this?',
+          onConfirm: () async {
+            Get.back();
+            // Show loading dialog
+            if (formBController.isDeleteLoading.value) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) =>
+                    const Center(child: CircularProgressIndicator()),
+              );
+            }
+            await formBController.deleteFormB(formBId);
+          },
+          onCancel: () {
+            Get.back();
+          },
+        );
+      },
     );
   }
 

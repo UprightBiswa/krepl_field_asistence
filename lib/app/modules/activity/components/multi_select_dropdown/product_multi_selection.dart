@@ -295,17 +295,8 @@ class _ProductMasterSelectionBottomSheetState<T>
                       selected.materialNumber == item.materialNumber);
                   return CheckboxListTile(
                     title: Text(item.brandName, style: AppTypography.kBold14),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(item.materialDescription,
-                            style: AppTypography.kBold12),
-                        Text(item.materialNumber,
-                            style: AppTypography.kMedium12),
-                        Text(item.technicalName,
-                            style: AppTypography.kMedium12),
-                      ],
-                    ),
+                    subtitle: Text(item.technicalName,
+                        style: AppTypography.kMedium12),
                     value: isSelected,
                     onChanged: (value) {
                       setState(() {

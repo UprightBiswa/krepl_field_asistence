@@ -36,7 +36,7 @@ class _FarmerListState extends State<FarmerList> {
             const Spacer(),
             CustomTextButton(
               onPressed: () async {
-                await Get.to<void>(
+                await Get.to(
                   () => const FarmerManagementPage(),
                 );
                 _farmerController.fetchRecentFarmers();

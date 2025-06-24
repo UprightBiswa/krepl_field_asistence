@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +20,11 @@ class FormBController extends GetxController {
   var isListLoading = false.obs;
   var isListError = false.obs;
   var listErrorMessage = ''.obs;
+
+  //delete loading
+  var isDeleteLoading = false.obs;
+  var isDeleteError = false.obs;
+  var deleteErrorMessage = ''.obs;
 
   var fromDate = Rxn<DateTime>(); // Nullable DateTime
   var toDate = Rxn<DateTime>(); // Nullable DateTime
@@ -91,6 +97,46 @@ class FormBController extends GetxController {
       isListLoading(false);
     }
   }
+
+
+   //deltefroma
+  Future<void> deleteFormB(int formBId) async {
+    try {
+      isDeleteLoading(true);
+      isDeleteError(false);
+      deleteErrorMessage.value = '';
+
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      final response = await _dioService.post(
+        'deleteFormB',
+        queryParams: {'form_b_id': formBId},
+      );
+
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Success',
+            message: response.data['message'] ?? 'Deleted successfully',
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.green,
+          ),
+        );
+        refreshItems();
+      } else {
+        throw Exception(response.data['message'] ?? 'Delete failed');
+      }
+    } catch (e) {
+      isDeleteError(true);
+      deleteErrorMessage.value = e.toString();
+       Get.snackbar('Error', e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+    } finally {
+      isDeleteLoading(false);
+    }
+  }
+
 
   void setSearchQuery(String query) {
     searchQuery.value = query;

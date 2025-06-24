@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
+import '../../home/components/action_menue.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../../widgets/dialog/confirmation.dart';
+import '../controller/form_c_controller.dart';
 import '../model/form_c_model.dart';
 import 'form_c_details_page.dart';
 import '../../../data/constrants/constants.dart';
@@ -46,7 +49,8 @@ bool isDarkMode(BuildContext context) =>
 class FormCCard extends StatelessWidget {
   final FormC formC;
 
-  const FormCCard({super.key, required this.formC});
+  FormCCard({super.key, required this.formC});
+  final FormCController formCController = Get.find<FormCController>();
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +96,11 @@ class FormCCard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ActionMenuIcon(
+                onDelete: () {
+                  _showConfirmationDialog(context, formC.id);
+                },
               ),
             ],
           ),
@@ -162,6 +171,33 @@ class FormCCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context, int formCId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Confirm Delete',
+          content: 'Are you sure you want to delete this?',
+          onConfirm: () async {
+            Get.back();
+            if (formCController.isDeleteLoading.value) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) =>
+                    const Center(child: CircularProgressIndicator()),
+              );
+            }
+            await formCController.deleteFormC(formCId);
+          },
+          onCancel: () {
+            Get.back();
+          },
+        );
+      },
     );
   }
 

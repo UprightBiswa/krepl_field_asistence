@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,6 +32,11 @@ class FormAController extends GetxController {
   var toDate = Rxn<DateTime>(); // Nullable DateTime
   var partyType = Rxn<String>(); // Nullable partyType (Village, Doctor, Farmer)
 
+  //delete loading
+  var isDeleteLoading = false.obs;
+  var isDeleteError = false.obs;
+  var deleteErrorMessage = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -40,7 +46,6 @@ class FormAController extends GetxController {
       fetchPage: (pageKey) => fetchFormAData(pageKey),
     );
   }
-
 
   Future<List<FormA>> fetchFormAData(int pageKey) async {
     try {
@@ -97,6 +102,44 @@ class FormAController extends GetxController {
       rethrow;
     } finally {
       isListLoading(false);
+    }
+  }
+
+  //deltefroma
+  Future<void> deleteFormA(int formAId) async {
+    try {
+      isDeleteLoading(true);
+      isDeleteError(false);
+      deleteErrorMessage.value = '';
+
+      if (!await _connectivityService.checkInternet()) {
+        throw Exception('No internet connection');
+      }
+
+      final response = await _dioService.post(
+        'deleteFormA',
+        queryParams: {'form_a_id': formAId},
+      );
+
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Success',
+            message: response.data['message'] ?? 'Deleted successfully',
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.green,
+          ),
+        );
+        refreshItems();
+      } else {
+        throw Exception(response.data['message'] ?? 'Delete failed');
+      }
+    } catch (e) {
+      isDeleteError(true);
+      deleteErrorMessage.value = e.toString();
+       Get.snackbar('Error', e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+    } finally {
+      isDeleteLoading(false);
     }
   }
 

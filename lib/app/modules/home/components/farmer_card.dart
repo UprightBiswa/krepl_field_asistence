@@ -67,18 +67,13 @@ class FarmerCard extends StatelessWidget {
                 top: 10.h,
                 right: 10.w,
                 child: ActionMenuIcon(
-                  onEdit: () {
-                    Get.to(() => FarmerEditForm(
-                              farmer: farmer,
-                              tag: farmer.id.toString(),
-                            ))!
-                        .then((value) {
-                      farmerController.fetchRecentFarmers();
-                      Get.back();
-                    });
-                  },
-                  onDelete: () {
-                    // Add logic to delete the farmer
+                  onEdit: () async {
+                    await Get.to(() => FarmerEditForm(
+                          farmer: farmer,
+                          tag: farmer.id.toString(),
+                        ));
+                    farmerController.fetchRecentFarmers();
+                    Get.back();
                   },
                 ),
               ),

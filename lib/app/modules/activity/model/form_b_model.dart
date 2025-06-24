@@ -94,6 +94,8 @@ class FormB {
   final String promotionActivityType;
   final String partyType;
   final String remarks;
+  final String totalKmTravelled;
+
   final String activityPerformedLocation;
   final String activityPerformedDate;
   final int totalPartyNo;
@@ -114,6 +116,7 @@ class FormB {
     required this.promotionActivityType,
     required this.partyType,
     required this.remarks,
+    required this.totalKmTravelled,
     required this.activityPerformedLocation,
     required this.activityPerformedDate,
     required this.totalPartyNo,
@@ -123,7 +126,6 @@ class FormB {
     required this.productDetails,
     required this.cropDetails,
     required this.cropStageDetails,
-
     required this.pestDetails,
     required this.routeDetails,
     required this.formBUserDetails,
@@ -135,6 +137,7 @@ class FormB {
       promotionActivityType: json['promotion_activity_type'],
       partyType: json['party_type'],
       remarks: json['remarks'] ?? '',
+      totalKmTravelled: json['total_km_travelled'] ?? '',
       activityPerformedLocation: json['activity_performed_location'],
       activityPerformedDate: json['activity_performed_date'],
       totalPartyNo: json['total_party_no'],

@@ -5,7 +5,10 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/constrants/constants.dart';
+import '../../home/components/action_menue.dart';
 import '../../widgets/containers/primary_container.dart';
+import '../../widgets/dialog/confirmation.dart';
+import '../controller/form_a_controller.dart';
 import '../model/form_a_model.dart';
 import 'form_a_details_page.dart';
 
@@ -45,7 +48,8 @@ class FormAListView extends StatelessWidget {
 class FormACard extends StatelessWidget {
   final FormA formA;
 
-  const FormACard({super.key, required this.formA});
+  FormACard({super.key, required this.formA});
+  final FormAController formAController = Get.find<FormAController>();
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +95,12 @@ class FormACard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ActionMenuIcon(
+                onDelete: () {
+                  _showConfirmationDialog(context, formA.id);
+                  print('delte');
+                },
               ),
             ],
           ),
@@ -206,6 +216,35 @@ class FormACard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context, int formAId) {
+    print('sdha');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Confirm Delete',
+          content: 'Are you sure you want to delete this?',
+          onConfirm: () async {
+            Get.back();
+            // Show loading dialog
+            if (formAController.isDeleteLoading.value) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) =>
+                    const Center(child: CircularProgressIndicator()),
+              );
+            }
+            await formAController.deleteFormA(formAId);
+          },
+          onCancel: () {
+            Get.back();
+          },
+        );
+      },
     );
   }
 

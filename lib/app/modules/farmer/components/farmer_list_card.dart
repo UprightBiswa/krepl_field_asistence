@@ -86,7 +86,6 @@ class _FarmerListCardState extends State<FarmerListCard> {
                     farmerController.refreshItems();
                     Get.back();
                   },
-                  onDelete: () {},
                 ),
               ],
             ),

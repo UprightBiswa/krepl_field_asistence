@@ -4,6 +4,7 @@ import 'package:field_asistence/app/model/master/product_master.dart';
 import 'package:field_asistence/app/model/master/season_model.dart';
 import 'package:field_asistence/app/modules/widgets/containers/primary_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,6 +54,9 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
   final TextEditingController _activityDateController = TextEditingController();
   final TextEditingController _activityLocationController =
       TextEditingController();
+  final TextEditingController _totalKmTravelledController =
+      TextEditingController();
+
   final TextEditingController _remarksController = TextEditingController();
 
   ActivityMaster? _selectedActivity;
@@ -362,6 +366,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                               itemAsString: (product) =>
                                   product.materialDescription,
                             ),
+                            SizedBox(height: 16.h),
                             if (selectedSeasons.isNotEmpty)
                               Obx(() {
                                 if (_cropController.isLoading.value) {
@@ -549,6 +554,27 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
                               icon: Icons.location_on,
                               controller: _activityLocationController,
                               keyboardType: TextInputType.text,
+                            ),
+                            SizedBox(height: 16.h),
+                            CustomTextField(
+                              labelText: 'Total KM Travelled',
+                              hintText: 'Enter total kilometers',
+                              inputFormatter: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}'),
+                                ),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              icon: Icons.map_outlined,
+                              controller: _totalKmTravelledController,
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter total kilometers';
+                                }
+                                return null;
+                              },
+                              maxLines: 1,
                             ),
                             SizedBox(height: 16.h),
                             Text('Upload Image:*'),
@@ -752,6 +778,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
         'activity_performed_date':
             DateFormat('yyyy-MM-dd').format(selectedDate),
         'activity_performed_location': _activityLocationController.text,
+        'total_km_travelled': _totalKmTravelledController.text,
       };
       List<MapEntry<String, String>> fields = [];
 
@@ -812,6 +839,7 @@ class _CreateFormBpageState extends State<CreateFormBpage> {
       cropStages.clear();
       pests.clear();
       _remarksController.clear();
+      _totalKmTravelledController.clear();
       _selectedImagePath = null;
       attachment = null;
       Get.back();

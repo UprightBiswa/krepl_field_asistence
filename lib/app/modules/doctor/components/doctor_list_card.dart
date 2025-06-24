@@ -79,7 +79,6 @@ class DoctorListCard extends StatelessWidget {
                       Get.back();
                       doctorController.refreshItems();
                     },
-                    onDelete: () {},
                   ),
                 ],
               ),

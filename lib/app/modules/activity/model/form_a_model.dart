@@ -143,6 +143,7 @@ class FormA {
   final String partyType;
   final String latitude;
   final String longitude;
+  final String totalKmTravelled;
   final String remarks;
   final String expense;
   final String activityPerformedLocation;
@@ -164,6 +165,7 @@ class FormA {
     required this.latitude,
     required this.longitude,
     required this.remarks,
+    required this.totalKmTravelled,
     required this.expense,
     required this.activityPerformedLocation,
     required this.activityPerformedDate,
@@ -186,6 +188,7 @@ class FormA {
       latitude: json['latitude'] ?? '',
       longitude: json['longitude'] ?? '',
       remarks: json['remarks'] ?? '',
+      totalKmTravelled: json['total_km_travelled'] ?? '',
       expense: json['expense'] ?? '',
       activityPerformedLocation: json['activity_performed_location'] ?? '',
       activityPerformedDate: json['activity_performed_date'] ?? '',
