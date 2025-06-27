@@ -31,9 +31,7 @@ class AppInfoController extends GetxController {
     print('Device Token set in DioService: $_deviceToken');
   }
 
-  Future<void> getAppInfo({
-    required BuildContext context,
-  }) async {
+  Future<void> getAppInfo() async {
     isLoading(true);
     try {
       bool isConnected = await _connectivityService.checkInternet();

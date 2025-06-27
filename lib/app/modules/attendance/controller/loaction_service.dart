@@ -64,7 +64,7 @@ class BackgroundService {
       throw Exception('Location permissions are permanently denied.');
     }
 
-    const locationUpdateInterval = Duration(minutes: 20);
+    const locationUpdateInterval = Duration(seconds: 5);
     Timer.periodic(locationUpdateInterval, (timer) async {
       if (!_isTracking) {
         timer.cancel(); // Stop the timer if tracking is disabled
