@@ -61,10 +61,15 @@ class MyApp extends StatelessWidget {
               theme: AppTheme.lightTheme,
               home: const SplashScreen(),
               builder: (context, child) {
-                return SafeArea(
-                  bottom: true,
-                  top: false,
-                  child: child ?? const SizedBox(),
+                return MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.noScaling),
+                  child: SafeArea(
+                    bottom: true,
+                    top: false,
+                    child: child ?? const SizedBox(),
+                  ),
                 );
               },
             ),
